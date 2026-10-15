@@ -1,9 +1,9 @@
 <!-- bmad:context -->
-<!-- Verified 2026-10-15 against the working tree; no git commit yet. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
+<!-- Verified 2026-10-15 against the working tree; HEAD is 94570ed. Managed by bmad-project-context; edits inside this block are replaced on refresh. Keep anything you want preserved outside the markers. -->
 
 ## BM-PM
 
-需求文档和静态 HTML Demo 仓。规划在 `_bmad-output/planning-artifacts/`，项目知识在 `docs/`。
+需求文档和静态 HTML Demo 仓。一条需求的文档在 `_bmad-output/{业务线}/fr-0xx-{需求名}/`，项目知识在 `docs/`。
 
 ## Policy
 
@@ -17,8 +17,7 @@
 ## Where things are
 
 - 同事的新需求以 `docs/需求单.md` 为输入；落地步骤见 `docs/需求输出规范.md`。写 FR Demo 时先读 `docs/ITERATION-FR-GUIDE.md`。
-- 新 PRD 放 `_bmad-output/planning-artifacts/prds/prd-{项目名}-日期/prd.md`；视觉与行为放同日期的 `ux-designs/ux-{项目名}-日期/DESIGN.md` 与 `EXPERIENCE.md`。这两份和 Demo 冲突时，以这两份为准，改 Demo。写法见 `docs/需求输出规范.md`。
-- 需求合同写到 `_bmad-output/specs/spec-{slug}/SPEC.md`。目录还没有，写的时候建。
+- 占号之后，把这条需求的 `prd.md`、`DESIGN.md`、`EXPERIENCE.md`、`SPEC.md` 写进 `_bmad-output/{业务线}/fr-0xx-{需求名}/`。业务线目录：右豹主业务 `youbao`，导师商务 `mentor`，企业号 `enterprise`。目录没有就建。新需求不要写进 `_bmad-output/planning-artifacts/` 或 `_bmad-output/specs/`。已定的 `DESIGN.md` 与 `EXPERIENCE.md` 优先于本需求的 `prd.md`，再优先于 Demo；不一致时改 Demo。写法见 `docs/需求输出规范.md`。
 - 需求规则抽屉只写当前 FR。流程说明只指向页内「业务流程」Tab。
 - 登记写两处，不拷旧仓 FR 清单。文件没有就先建空壳。根目录 `README.md` 的「迭代需求」表加一行，并写上业务线。总览页先切到该业务线，再在进行中列表加一行，行上 `data-line` 为 `youbao`、`mentor` 或 `enterprise`。已上线进归档，已暂停进废纸篓。业务线是顶部一级菜单。点开后左侧同一组是「概览 / 组件规范」，不按业务线拆成不同菜单。页头保持当前业务线，切换左侧这两项不改页头。新需求先写明业务线，再做设计。
 

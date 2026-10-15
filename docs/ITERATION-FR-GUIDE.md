@@ -129,7 +129,7 @@
 
 45. **主入口**：`demo/iteration/fr-{模块}-{需求}.html`（三 Tab 合一）。
 46. **C 端 Mockup 独立文件**：支持 embed 参数，供 iframe 加载（如 `*-demo.html?embed=1&screen=xxx`）。
-47. **与 UX mockups 同步**：`_bmad-output/planning-artifacts/ux-designs/.../mockups/` 保持副本一致。
+47. **与 UX mockups 同步**：这条需求的 `_bmad-output/{业务线}/fr-0xx-{需求名}/mockups/` 与页内 iframe 用的 C 端 Mockup 保持副本一致。右豹主业务写 `youbao`，导师商务写 `mentor`，企业号写 `enterprise`。不要写到 `_bmad-output/planning-artifacts/ux-designs/`。
 48. **URL 深链**：`?tab=fe|admin|flow`；仅拆出多张流程图时再加 `&flow=1|2|3`。
 49. **Sprint 概览**：`framework-shell.html`；旧分散入口改为跳转统一页 + Tab 参数。FR 状态：待开始 / 开发中 / 已上线 / 已暂停；「已上线」归入归档需求，「已暂停」归入废纸篓。
 

@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-gate-continue="framework-shell.html">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=framework-shell.html" />
   <title>BM-PM</title>
-  <script>location.replace("framework-shell.html");</script>
+  <script src="gate.js?v=2"></script>
+  <script>
+    try {
+      if (localStorage.getItem("bm-pm-demo-gate") === "1") location.replace("framework-shell.html");
+    } catch (err) {}
+  </script>
 </head>
 <body>
   <p><a href="framework-shell.html">打开总览</a></p>
