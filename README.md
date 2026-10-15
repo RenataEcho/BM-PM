@@ -1,10 +1,12 @@
 # BM-PM
 
-需求文档和静态 HTML Demo。
+不鸣各业务线需求记录。需求文档和静态 HTML Demo。
 
 ## 预览
 
-在项目文件夹执行：
+公开总览：<https://renataecho.github.io/BM-PM/>
+
+本地预览在项目文件夹执行：
 
 ```bash
 python3 -m http.server 19889 --directory demo/iteration
