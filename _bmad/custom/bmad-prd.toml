@@ -1,0 +1,8 @@
+[workflow]
+persistent_facts = [
+  "file:{project-root}/docs/需求输出规范.md",
+  "需求文档用中文。未确认口径标 [ASSUMPTION]。",
+  "PRD 正文 FR-n 只表示本增量第 n 条；全局编号是 FR-0xx，写在 iteration_id。",
+  "本增量另开 prd 文件夹。不要把无关历史 PRD 改写成当前需求。",
+  "Demo 与已定 DESIGN.md / EXPERIENCE.md 冲突时，spines 优先。",
+]

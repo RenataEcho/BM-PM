@@ -1,0 +1,15 @@
+[workflow]
+persistent_facts = [
+  "file:{project-root}/docs/design/移动端设计规范.md",
+  "file:{project-root}/docs/design/iteration-shell/DESIGN.md",
+  "C 端不另起配色，沿用 docs/design/移动端设计规范.md。",
+  "迭代 Demo 外壳沿用 docs/design/iteration-shell/。管理后台沿用 docs/design/admin-ui-spec.md。",
+  "按钮、弹窗、抽屉、Tag、流程图 class 从 demo/iteration/component-spec-demo.html 复制。",
+]
+design_md_examples = [
+  "file:{project-root}/docs/design/移动端设计规范.md",
+  "file:{project-root}/docs/design/iteration-shell/DESIGN.md",
+]
+experience_md_examples = [
+  "file:{project-root}/docs/design/iteration-shell/EXPERIENCE.md",
+]

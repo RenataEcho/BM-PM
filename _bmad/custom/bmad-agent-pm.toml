@@ -1,0 +1,5 @@
+[agent]
+persistent_facts = [
+  "file:{project-root}/docs/需求输出规范.md",
+  "先读 docs/ 里的规范再写需求。全局编号 FR-0xx 先占号。",
+]

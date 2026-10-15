@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>组件规范 · BM-PM</title>
+  <script>
+    if (location.search.indexOf('embed=1') === -1 && window.top === window.self) {
+      location.replace('framework-shell.html#components');
+    }
+    if (location.search.indexOf('embed=1') !== -1) {
+      document.documentElement.classList.add('is-embed');
+    }
+  </script>
+  <style>
+    html.is-embed .sidebar,
+    html.is-embed .breadcrumb,
+    html.is-embed .page-header { display: none; }
+    html.is-embed body { background: transparent; min-height: 0; }
+    html.is-embed .main { margin: 0; padding: 0 0 24px; min-height: 0; }
+  </style>
+  <style>
+    :root {
+      --primary: #2563eb; --primary-hover: #1d4ed8; --primary-light: #eff6ff; --primary-border: #bfdbfe;
+      --accent-rule: #0891b2; --accent-version: #7c3aed; --accent-fr: #d97706;
+      --success: #16a34a; --success-bg: #f0fdf4; --warning: #d97706; --warning-bg: #fffbeb;
+      --danger: #dc2626; --danger-hover: #b91c1c; --danger-bg: #fef2f2; --danger-border: #fecaca;
+      --bg: #f0f4f8; --surface: #fff; --surface-glass: rgba(255,255,255,0.72);
+      --surface-hover: #f8fafc; --border: #e8edf3;
+      --text-primary: #18222f; --text-secondary: #4a5568; --text-muted: #9aa5b4;
+      --sidebar-w: 240px; --drawer-w: 480px;
+      --radius-sm: 7px; --radius-lg: 14px;
+      --shadow: 0 8px 32px rgba(30,40,80,0.10);
+      --shadow-modal: 0 20px 60px rgba(30,40,80,0.18);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 13px;
+      color: var(--text-primary);
+      background: linear-gradient(135deg, #e0e7ff 0%, #f0f4f8 40%, #e0f2fe 100%);
+      background-attachment: fixed; min-height: 100vh;
+    }
+    .sidebar {
+      position: fixed; inset: 0 auto 0 0; width: var(--sidebar-w); z-index: 200;
+      display: flex; flex-direction: column;
+      background: rgba(240,244,255,0.95); backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(148,163,196,0.22);
+    }
+    .sidebar-brand { padding: 16px 14px 12px; border-bottom: 1px solid rgba(148,163,196,0.22); }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+    .brand-text { font-size: 14px; font-weight: 700; }
+    .brand-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .sprint-pill {
+      display: inline-block; margin-top: 10px; font-size: 11px; font-weight: 600;
+      padding: 3px 8px; border-radius: 999px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;
+    }
+    .sidebar-scroll { flex: 1; overflow-y: auto; padding: 8px 0 16px; }
+    .nav-group-label { padding: 12px 16px 6px; font-size: 11px; font-weight: 600; color: var(--text-muted); }
+    .nav-item {
+      position: relative; display: flex; align-items: center; height: 40px;
+      padding: 0 12px 0 14px; margin: 1px 8px; width: calc(100% - 16px);
+      border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary);
+      text-decoration: none; transition: all 0.18s;
+    }
+    .nav-item:hover { background: rgba(99,102,241,0.06); color: var(--text-primary); }
+    .nav-item.active { color: var(--primary); background: rgba(37,99,235,0.12); font-weight: 600; }
+    .nav-item.active::before {
+      content: ''; position: absolute; left: 0; top: 7px; bottom: 7px;
+      width: 3px; border-radius: 0 2px 2px 0; background: var(--primary);
+    }
+    .sidebar-foot { padding: 10px 14px 14px; border-top: 1px solid rgba(148,163,196,0.22); font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+    .main { margin-left: var(--sidebar-w); padding: 16px 20px 48px; min-height: 100vh; }
+    .breadcrumb { padding: 4px 0 12px; font-size: 12px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .page-header { margin-bottom: 16px; }
+    .page-header h1 { font-size: 19px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .page-desc { font-size: 12px; color: var(--text-muted); max-width: 820px; line-height: 1.55; }
+    .badge { display: inline-flex; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: var(--radius-sm); }
+    .badge-spec { background: #ecfeff; color: var(--accent-rule); border: 1px solid #a5f3fc; }
+    .spec-nav {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;
+      background: var(--surface-glass); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.55); border-radius: var(--radius-lg);
+      padding: 10px 12px; box-shadow: var(--shadow);
+    }
+    .spec-nav a {
+      padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;
+      color: var(--text-secondary); text-decoration: none; border: 1px solid var(--border); background: var(--surface);
+    }
+    .spec-nav a:hover { border-color: var(--primary-border); color: var(--primary); background: var(--primary-light); }
+    .glass-card {
+      background: var(--surface-glass); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.55); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow); overflow: hidden; margin-bottom: 16px; scroll-margin-top: 16px;
+    }
+    .spec-section-head {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;
+    }
+    .spec-section-head h2 { font-size: 15px; font-weight: 700; }
+    .spec-section-head p { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; max-width: 640px; }
+    .spec-body { padding: 16px 18px 20px; }
+    .spec-row { display: grid; grid-template-columns: 140px 1fr; gap: 16px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .spec-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .spec-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); padding-top: 8px; }
+    .spec-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.45; }
+    .spec-demo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .spec-code { font-family: ui-monospace, monospace; font-size: 11px; color: var(--accent-rule); background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
+
+    /* —— 按钮 —— */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      height: 34px; padding: 0 14px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s; white-space: nowrap;
+    }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+    .btn-ghost { background: var(--surface); color: var(--text-secondary); border-color: var(--border); }
+    .btn-ghost:hover:not(:disabled) { background: var(--surface-hover); color: var(--text-primary); }
+    .btn-rule { background: var(--primary-light); color: var(--primary); border-color: var(--primary-border); }
+    .btn-rule:hover:not(:disabled) { background: #dbeafe; }
+    .btn-rule.active, .btn-rule[aria-expanded="true"] {
+      background: var(--primary); color: #fff; border-color: var(--primary);
+    }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover:not(:disabled) { background: var(--danger-hover); }
+    .btn-danger-ghost { background: var(--surface); color: var(--danger); border-color: var(--danger-border); }
+    .btn-danger-ghost:hover:not(:disabled) { background: var(--danger-bg); }
+    .btn-sm { height: 32px; padding: 0 12px; font-size: 12px; }
+
+    /* —— 文字链 / 表格操作 —— */
+    .link {
+      display: inline-flex; align-items: center; min-height: 28px; padding: 0 2px;
+      color: var(--primary); font-size: 12px; font-weight: 500; cursor: pointer;
+      text-decoration: none; border: none; background: none; transition: color 0.15s;
+    }
+    .link:hover { color: var(--primary-hover); text-decoration: underline; }
+    .link + .link { margin-left: 12px; }
+    .link-danger { color: var(--danger); }
+    .link-danger:hover { color: var(--danger-hover); }
+    .link-muted { color: var(--text-muted); font-weight: 400; }
+    .link-muted:hover { color: var(--text-secondary); }
+    .action-group { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0; }
+
+    /* —— Tag —— */
+    .tag { display: inline-flex; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .tag-ok { background: var(--success-bg); color: var(--success); }
+    .tag-warn { background: var(--warning-bg); color: var(--warning); }
+    .tag-del { background: var(--danger-bg); color: var(--danger); }
+
+    /* —— 表格操作列示例 —— */
+    .mini-table { width: 100%; border-collapse: collapse; }
+    .mini-table th, .mini-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .mini-table th { font-size: 11px; font-weight: 600; color: var(--text-muted); background: rgba(248,250,252,0.9); }
+    .mini-table tr:hover td { background: var(--surface-hover); }
+
+    /* —— 居中 Modal（确认 / 编辑） —— */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.4); z-index: 600;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity 0.22s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      width: 100%; max-width: 400px; background: var(--surface);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-modal);
+      transform: translateY(12px) scale(0.98); transition: transform 0.22s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal.modal-md { max-width: 480px; }
+    .modal-header { padding: 16px 20px 0; }
+    .modal-header h3 { font-size: 15px; font-weight: 700; }
+    .modal-header p { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.55; }
+    .modal-body { padding: 16px 20px; }
+    .modal-footer {
+      padding: 12px 20px 16px; display: flex; justify-content: flex-end; gap: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .form-field { margin-bottom: 12px; }
+    .form-field:last-child { margin-bottom: 0; }
+    .form-field label { display: block; font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 4px; }
+    .form-field input, .form-field select {
+      width: 100%; height: 34px; padding: 0 10px; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 13px;
+    }
+    .form-field input:focus, .form-field select:focus {
+      outline: none; border-color: var(--primary-border); box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    }
+
+    /* —— 右侧详情 Drawer —— */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.35); z-index: 500;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: var(--drawer-w); z-index: 501;
+      background: rgba(255,255,255,0.98); backdrop-filter: blur(12px);
+      box-shadow: -8px 0 40px rgba(30,40,60,0.18);
+      transform: translateX(100%); transition: transform 0.28s ease;
+      display: flex; flex-direction: column;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+    }
+    .drawer-header h2 { font-size: 15px; font-weight: 700; }
+    .drawer-close {
+      width: 28px; height: 28px; border: none; background: #f1f5f9;
+      border-radius: 6px; cursor: pointer; font-size: 16px; color: var(--text-secondary);
+    }
+    .drawer-close:hover { background: #e2e8f0; }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 16px 20px 24px; font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .drawer-meta { display: grid; grid-template-columns: 100px 1fr; gap: 8px 12px; font-size: 12px; margin-bottom: 16px; }
+    .drawer-meta dt { color: var(--text-muted); }
+    .drawer-meta dd { color: var(--text-primary); }
+
+    /* —— Toast —— */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #1e293b; color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 13px;
+      opacity: 0; transition: all 0.25s; z-index: 700; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .usage-note {
+      margin-top: 14px; padding: 10px 12px; border-radius: var(--radius-sm);
+      background: #fffbeb; border: 1px solid #fde68a; font-size: 12px; color: #92400e; line-height: 1.55;
+    }
+    .limit-note {
+      margin-top: 14px; padding: 10px 12px; border-radius: var(--radius-sm);
+      background: #fef2f2; border: 1px solid #fecaca; font-size: 12px; color: #991b1b; line-height: 1.55;
+    }
+    .spec-list { padding-left: 18px; font-size: 12px; color: var(--text-secondary); line-height: 1.7; }
+    .spec-list li { margin-bottom: 6px; }
+    .spec-list code { font-family: ui-monospace, monospace; font-size: 11px; color: var(--accent-rule); background: #f1f5f9; padding: 1px 5px; border-radius: 4px; }
+    .spec-subh { font-size: 13px; font-weight: 700; margin: 18px 0 8px; }
+    .spec-subh:first-child { margin-top: 0; }
+
+    .rule-tab-bar { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .rule-tab-bar button {
+      padding: 10px 18px; border: none; background: none; cursor: pointer;
+      font-size: 13px; color: var(--text-secondary); border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    .rule-tab-bar button.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
+    .rule-panel { display: none; padding: 16px 20px 24px; }
+    .rule-panel.active { display: block; }
+    .rule-section { margin-bottom: 20px; }
+    .rule-section h3 { font-size: 14px; font-weight: 700; color: var(--accent-rule); margin-bottom: 8px; }
+    .rule-content { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .rule-content ul { padding-left: 18px; }
+    .rule-content li { margin-bottom: 5px; }
+    .drawer.rule { width: var(--drawer-w); }
+
+    .onescreen-frame {
+      display: grid; grid-template-columns: 88px 1fr; height: 380px;
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff;
+    }
+    .onescreen-side { background: rgba(240,244,255,0.95); border-right: 1px solid var(--border); padding: 10px 8px; }
+    .onescreen-side b { display: block; font-size: 10px; margin-bottom: 10px; }
+    .onescreen-side span { display: block; height: 22px; border-radius: 6px; background: rgba(37,99,235,0.12); color: var(--primary); font-size: 10px; line-height: 22px; padding: 0 8px; margin-bottom: 4px; }
+    .onescreen-main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+    .onescreen-chrome { flex-shrink: 0; padding: 8px 10px 0; border-bottom: 1px solid var(--border); }
+    .onescreen-chrome .h { font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+    .onescreen-chrome .t { display: inline-flex; gap: 4px; margin: 8px 0; padding: 3px; border-radius: 8px; background: #f8fafc; }
+    .onescreen-chrome .t i { font-style: normal; font-size: 10px; padding: 4px 8px; border-radius: 6px; background: var(--primary); color: #fff; }
+    .onescreen-chrome .t em { font-style: normal; font-size: 10px; padding: 4px 8px; color: var(--text-muted); }
+    .onescreen-stage { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 8px; gap: 8px; background: #f8fafc; }
+    .onescreen-scenes { flex-shrink: 0; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 8px; font-size: 10px; color: var(--text-muted); }
+    .onescreen-scenes strong { color: var(--text-primary); }
+    .onescreen-board { flex: 1; min-height: 0; overflow: auto; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: flex; gap: 12px; }
+    .onescreen-phone { width: 92px; flex-shrink: 0; aspect-ratio: 375/812; border-radius: 12px; background: #1c1c1e; box-shadow: 0 6px 16px rgba(0,0,0,.12); position: relative; }
+    .onescreen-phone::after { content: ''; position: absolute; inset: 6px; border-radius: 8px; background: linear-gradient(180deg, #fff1ec, #fff); }
+    .onescreen-cap { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+
+    .flow-page { padding: 0; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); }
+    .flow-page-intro { padding: 12px 14px 0; font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+    .flow-tab-bar {
+      display: flex; gap: 4px; padding: 10px 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .flow-tab-bar span, .flow-tab-bar button {
+      padding: 8px 14px; border: none; background: none; white-space: nowrap;
+      font-size: 13px; color: var(--text-secondary); border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    .flow-tab-bar .active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
+    .flow-svg-wrap { overflow: auto; padding: 8px 8px 4px; }
+    .flow-svg-wrap svg { display: block; margin: 0 auto; }
+    .flow-edges line, .flow-edges polyline { stroke: #94a3b8; stroke-width: 1.5; fill: none; }
+    .flow-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 4px 14px 14px; font-size: 11px; color: var(--text-muted); }
+    .flow-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: -2px; }
+    .swatch { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+    .swatch b { width: 14px; height: 14px; border-radius: 3px; border: 1px solid; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand">
+        <div class="brand-icon">迭</div>
+        <div>
+          <div class="brand-text">BM-PM</div>
+          <div class="brand-sub">迭代需求</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-scroll" data-iteration-sidebar></div>
+    <div class="sidebar-foot">全站交互组件样式基准<br />后续 FR Demo 须复用</div>
+  </aside>
+
+  <main class="main">
+    <nav class="breadcrumb">
+      <a href="framework-shell.html">概览</a>
+      <span> / 组件规范</span>
+    </nav>
+
+    <header class="page-header">
+      <h1>组件规范 <span class="badge badge-spec">Design System</span></h1>
+      <p class="page-desc">迭代需求 Demo 内按钮、文字链、弹窗、抽屉、Toast、流程图，以及<strong>需求规则抽屉</strong>和<strong>Demo 一屏展示</strong>的统一规范。所有 FR 页须复用以下 class 与布局，保证全站一致。</p>
+    </header>
+
+    <nav class="spec-nav" aria-label="规范章节">
+      <a href="#sec-btn">Button</a>
+      <a href="#sec-link">文字链</a>
+      <a href="#sec-table">表格操作</a>
+      <a href="#sec-confirm">确认弹窗</a>
+      <a href="#sec-edit">编辑弹窗</a>
+      <a href="#sec-detail">详情抽屉</a>
+      <a href="#sec-rule">需求规则</a>
+      <a href="#sec-onescreen">一屏展示</a>
+      <a href="#sec-toast">Toast</a>
+      <a href="#sec-tag">Tag</a>
+      <a href="#sec-flow">业务流程图</a>
+    </nav>
+
+    <!-- Button -->
+    <section class="glass-card" id="sec-btn">
+      <div class="spec-section-head">
+        <div>
+          <h2>1 · Button 按钮</h2>
+          <p>高度 34px（筛选区 32px）；圆角 7px。主操作每区域仅一个 Primary。</p>
+        </div>
+      </div>
+      <div class="spec-body">
+        <div class="spec-row">
+          <div>
+            <div class="spec-label">Primary</div>
+            <div class="spec-meta">查询、提交、保存、确认</div>
+            <div class="spec-code">.btn .btn-primary</div>
+          </div>
+          <div class="spec-demo">
+            <button class="btn btn-primary" type="button">查询</button>
+            <button class="btn btn-primary" type="button">保存</button>
+            <button class="btn btn-primary" type="button" disabled>禁用</button>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div>
+            <div class="spec-label">Ghost</div>
+            <div class="spec-meta">取消、重置、次要操作</div>
+            <div class="spec-code">.btn .btn-ghost</div>
+          </div>
+          <div class="spec-demo">
+            <button class="btn btn-ghost" type="button">取消</button>
+            <button class="btn btn-ghost btn-sm" type="button">重置</button>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div>
+            <div class="spec-label">Rule</div>
+            <div class="spec-meta">Page Header「需求规则」入口</div>
+            <div class="spec-code">.btn .btn-rule</div>
+          </div>
+          <div class="spec-demo">
+            <button class="btn btn-rule" type="button" onclick="openRule()">📋 需求规则</button>
+            <button class="btn btn-rule active" type="button" aria-expanded="true">打开态</button>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div>
+            <div class="spec-label">Danger</div>
+            <div class="spec-meta">确认弹窗内 destructive 主按钮；慎用大面积使用</div>
+            <div class="spec-code">.btn-danger / .btn-danger-ghost</div>
+          </div>
+          <div class="spec-demo">
+            <button class="btn btn-danger" type="button">确认删除</button>
+            <button class="btn btn-danger-ghost" type="button">删除</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Link -->
+    <section class="glass-card" id="sec-link">
+      <div class="spec-section-head">
+        <div>
+          <h2>2 · 文字链（Text Link）</h2>
+          <p>表格操作列、行内轻量操作。不用 Button 样式，保持信息密度。</p>
+        </div>
+      </div>
+      <div class="spec-body">
+        <div class="spec-row">
+          <div>
+            <div class="spec-label">Default</div>
+            <div class="spec-meta">详情、编辑、导出等常规操作</div>
+            <div class="spec-code">.link</div>
+          </div>
+          <div class="spec-demo action-group">
+            <button class="link" type="button">详情</button>
+            <button class="link" type="button">编辑</button>
+            <button class="link" type="button">导出</button>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div>
+            <div class="spec-label">Muted</div>
+            <div class="spec-meta">日志、次要查看类</div>
+            <div class="spec-code">.link .link-muted</div>
+          </div>
+          <div class="spec-demo">
+            <button class="link link-muted" type="button">日志</button>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div>
+            <div class="spec-label">Danger</div>
+            <div class="spec-meta">删除、下架等；点击后须出确认弹窗</div>
+            <div class="spec-code">.link .link-danger</div>
+          </div>
+          <div class="spec-demo">
+            <button class="link link-danger" type="button" onclick="openConfirm('delete')">删除</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table -->
+    <section class="glass-card" id="sec-table">
+      <div class="spec-section-head">
+        <div>
+          <h2>3 · 表格操作列组合</h2>
+          <p>顺序建议：详情 → 编辑 → 日志 → 删除。链接间距 12px；危险操作置末。</p>
+        </div>
+      </div>
+      <div class="spec-body">
+        <table class="mini-table">
+          <thead>
+            <tr><th>ID</th><th>名称</th><th>状态</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PA-10021</td><td>示例名称</td><td><span class="tag tag-ok">正常</span></td>
+              <td>
+                <span class="action-group">
+                  <button class="link" type="button" onclick="openDetail()">详情</button>
+                  <button class="link" type="button" onclick="openEdit()">编辑</button>
+                  <button class="link link-muted" type="button" onclick="showToast('Demo：打开日志')">日志</button>
+                  <button class="link link-danger" type="button" onclick="openConfirm('delete')">删除</button>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="usage-note">列表区右上角「新增」使用 <code class="spec-code">.btn-primary</code>，不与行内文字链混用。</div>
+      </div>
+    </section>
+
+    <!-- Confirm -->
+    <section class="glass-card" id="sec-confirm">
+      <div class="spec-section-head">
+        <div>
+          <h2>4 · 确认弹窗（Confirm Modal）</h2>
+          <p>居中 overlay；宽 400px。删除/撤回/不可逆操作用 Danger 主按钮；可取消操作用 Ghost + Primary。</p>
+        </div>
+        <button class="btn btn-primary" type="button" onclick="openConfirm('generic')">预览确认弹窗</button>
+      </div>
+      <div class="spec-body">
+        <div class="spec-row">
+          <div class="spec-label">使用场景</div>
+          <div>
+            <ul style="padding-left:18px;font-size:12px;color:var(--text-secondary);line-height:1.65;">
+              <li>删除等<strong>不可逆</strong>操作</li>
+              <li>二次确认提交（如批量操作）</li>
+              <li><strong>不用</strong>于详情/编辑（详情→Drawer，编辑→Modal 表单）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Edit -->
+    <section class="glass-card" id="sec-edit">
+      <div class="spec-section-head">
+        <div>
+          <h2>5 · 编辑弹窗（Edit Modal）</h2>
+          <p>居中 overlay；宽 480px。Footer：取消 Ghost + 保存 Primary。Demo 提交后 Toast + 关闭。</p>
+        </div>
+        <button class="btn btn-primary" type="button" onclick="openEdit()">预览编辑弹窗</button>
+      </div>
+    </section>
+
+    <!-- Detail Drawer -->
+    <section class="glass-card" id="sec-detail">
+      <div class="spec-section-head">
+        <div>
+          <h2>6 · 详情抽屉（Detail Drawer）</h2>
+          <p>右侧滑入 overlay；宽 480px。关键词详情、只读 list。不挤压主列表宽度。需求规则用独立抽屉（见下节），不要和详情抽屉共用一份内容。</p>
+        </div>
+        <button class="btn btn-primary" type="button" onclick="openDetail()">预览详情抽屉</button>
+      </div>
+    </section>
+
+    <!-- Rule drawer -->
+    <section class="glass-card" id="sec-rule">
+      <div class="spec-section-head">
+        <div>
+          <h2>7 · 需求规则抽屉</h2>
+          <p>Page Header 右上角打开。独立于页内 Tab。Demo 仍在左侧完整可见，便于对照。默认宽 480px。</p>
+        </div>
+        <button class="btn btn-rule" id="specRuleBtn" type="button" onclick="openRule()">预览需求规则</button>
+      </div>
+      <div class="spec-body">
+        <h3 class="spec-subh">展示结构</h3>
+        <ol class="spec-list">
+          <li><strong>入口</strong>：仅 Page Header 右侧 <code>.btn .btn-rule</code>。打开后按钮加 <code>.active</code> / <code>aria-expanded="true"</code>。</li>
+          <li><strong>壳</strong>：<code>.drawer-overlay</code> + <code>.drawer.rule</code>。从右侧滑入，不挤压 Demo 宽度。</li>
+          <li><strong>顶栏</strong>：标题写 <code>FR-0xx · vN 需求规则</code>，与页头编号/版本同步；右侧只有关闭。</li>
+          <li><strong>内 Tab</strong>：<code>.rule-tab-bar</code> 仅「前端需求 / 后台需求」。打开时按当前页内 Tab 定位：前端交互、业务流程 → 前端需求；管理后台 → 后台需求。</li>
+          <li><strong>正文</strong>：<code>.rule-section</code> + <code>h3</code> 用 <code>--accent-rule</code>。前端：业务目标、页面与入口、交互规则、边界规则、业务流程（只写「见本页业务流程」）。后台：业务目标、数据表与字段、列表与筛选、边界规则。</li>
+          <li><strong>滚动</strong>：抽屉 <code>flex</code> 列；Header / Tab 不滚，<code>.drawer-body</code> 独立滚。</li>
+          <li><strong>关闭</strong>：关闭钮、遮罩、Esc、再次点「需求规则」。关闭后 Demo 可继续点。</li>
+        </ol>
+        <h3 class="spec-subh">同屏对照</h3>
+        <ol class="spec-list">
+          <li>遮罩半透明，Demo 整页仍看得到。不要改成全屏文档站，也不要用角标浮窗替代抽屉。</li>
+          <li>遮罩打开时 Demo 不可点，避免抽屉和表格同时操作。这不是阻断阅读，只挡误点。</li>
+          <li>规则只写<strong>当前 FR</strong>。不写 Sidebar 架构、全局组件说明、Swagger。</li>
+          <li>不在抽屉里嵌流程图或复述文字版全流程。图只在页内「业务流程」Tab。</li>
+          <li>内容特别长、双栏对照时可用 <code>.drawer.wide</code>（720px）。默认不要开到 960px。</li>
+        </ol>
+        <div class="usage-note">class：<code class="spec-code">.btn-rule</code> <code class="spec-code">.drawer.rule</code> <code class="spec-code">.rule-tab-bar</code> <code class="spec-code">.rule-panel</code> <code class="spec-code">.rule-section</code>。正文结构见 <code class="spec-code">ITERATION-FR-GUIDE.md</code> 第五节。</div>
+      </div>
+    </section>
+
+    <!-- One-screen demo -->
+    <section class="glass-card" id="sec-onescreen">
+      <div class="spec-section-head">
+        <div>
+          <h2>8 · Demo 一屏展示</h2>
+          <p>评审时一屏内同时看到：侧栏 + 页头/页签 + Demo 台。整页不跟着滚；只有 Demo 台内部滚。</p>
+        </div>
+      </div>
+      <div class="spec-body">
+        <h3 class="spec-subh">目标布局（示意）</h3>
+        <div class="onescreen-frame" aria-label="一屏布局示意">
+          <div class="onescreen-side">
+            <b>Sidebar</b>
+            <span>当前 FR</span>
+          </div>
+          <div class="onescreen-main">
+            <div class="onescreen-chrome">
+              <div class="h">FR-0xx · 需求名 · v1 当前 <button class="btn btn-rule btn-sm" type="button" onclick="openRule()">需求规则</button></div>
+              <div class="t"><i>前端交互</i><em>管理后台</em><em>业务流程</em></div>
+            </div>
+            <div class="onescreen-stage">
+              <div class="onescreen-scenes"><strong>场景</strong> · 主流程 / 空态 / 失败 —— 本条不滚出视口</div>
+              <div class="onescreen-board">
+                <div>
+                  <div class="onescreen-cap">主流程</div>
+                  <div class="onescreen-phone" title="手机画布"></div>
+                </div>
+                <div>
+                  <div class="onescreen-cap">空态</div>
+                  <div class="onescreen-phone" title="第二台在台内横滑"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="spec-subh">高度与滚动</h3>
+        <ol class="spec-list">
+          <li><strong>Chrome 钉住</strong>：Sidebar、面包屑、Page Header、页内 Tab 占视口顶部。经验高度约 <code>188px</code>（页头描述最多两行）。</li>
+          <li><strong>Demo 台吃剩余高度</strong>：<code>#view-fe.page-view.active { height: calc(100vh - 188px); min-height: 560px; display: flex; flex-direction: column; }</code></li>
+          <li><strong>内部分层</strong>：<code>.demo-layout { flex: 1; min-height: 0; }</code>；<code>.scene-panel { flex-shrink: 0 }</code>；<code>.mockup-board { flex: 1; min-height: 0; overflow: hidden }</code>；<code>.board-scroll { overflow: auto }</code>。</li>
+          <li><strong>后台 Tab</strong>：表区域 <code>min-height: calc(100vh - 188px)</code>；<code>.table-wrap { overflow: auto }</code>。详情抽屉 overlay，不把表顶出视口。</li>
+          <li><strong>流程 Tab</strong>：<code>.flow-svg-wrap { max-height: 72vh; overflow: auto }</code>。图在面板内滚，不要靠 body 滚。</li>
+        </ol>
+
+        <h3 class="spec-subh">前端交互（模板 B）</h3>
+        <ol class="spec-list">
+          <li>默认 <strong>上场景 / 下手机墙</strong>，或 <strong>左场景 / 右手机</strong>（≥1280px 约 5:7）。一屏内必须同时看到场景列表和至少一台完整手机。</li>
+          <li>多场景：点场景按钮把对应手机滚进 <code>.board-scroll</code>，不要让整页跳走。</li>
+          <li>C 端 Mockup 用页内 iframe：<code>?embed=1&amp;screen=</code>。不提供「新窗口打开」作为主入口。</li>
+          <li>手机画布逻辑宽 390px；iframe 画 375×812，按框做 <code>transform-origin: 0 0</code> 缩放。</li>
+        </ol>
+
+        <h3 class="spec-subh">硬限制</h3>
+        <ol class="spec-list">
+          <li>不要让 <code>body</code> 跟着 Demo 变长：评审要滚整页才能看到手机，算不合格。</li>
+          <li>不要把场景说明写成大段把 Demo 台顶出视口；长说明放需求规则。</li>
+          <li>不要在 Demo 台外再挂第二份手机或后台表。</li>
+          <li>打开需求规则后 Demo 仍完整露在左侧，不要改成规则独占一屏。</li>
+        </ol>
+        <div class="limit-note">改完用 1280×800 视口目视：不滚 body 就能点场景、看到一台完整手机、打开需求规则后 Demo 仍在。</div>
+        <div class="usage-note">参考实现：<code class="spec-code">fr-alias-bind.html</code>、<code class="spec-code">fr-creator-home-2-opt.html</code> 的 <code>#view-fe</code> 高度写法。</div>
+      </div>
+    </section>
+
+    <!-- Toast -->
+    <section class="glass-card" id="sec-toast">
+      <div class="spec-section-head">
+        <div>
+          <h2>9 · Toast 反馈</h2>
+          <p>底部居中；深色胶囊。Mock 提交成功、筛选重置等轻量反馈，2.5s 自动消失。</p>
+        </div>
+        <button class="btn btn-ghost" type="button" onclick="showToast('Demo：保存成功')">预览 Toast</button>
+      </div>
+    </section>
+
+    <!-- Tag -->
+    <section class="glass-card" id="sec-tag">
+      <div class="spec-section-head">
+        <div>
+          <h2>10 · 状态 Tag</h2>
+          <p>仅用于表格内业务状态，不用于框架 chrome（FR 徽章除外）。</p>
+        </div>
+      </div>
+      <div class="spec-body">
+        <div class="spec-demo">
+          <span class="tag tag-ok">正常</span>
+          <span class="tag tag-warn">待审核</span>
+          <span class="tag tag-del">已删除</span>
+        </div>
+        <div class="spec-meta" style="margin-top:10px;">class：<code class="spec-code">.tag-ok</code> <code class="spec-code">.tag-warn</code> <code class="spec-code">.tag-del</code></div>
+      </div>
+    </section>
+
+    <!-- Flowchart -->
+    <section class="glass-card" id="sec-flow">
+      <div class="spec-section-head">
+        <div>
+          <h2>11 · 业务流程图（SVG Flow）</h2>
+          <p>FR Demo「业务流程」Tab 的研发对照图。默认一张图闭环；拆第二张是例外。手写 SVG，正交折线。</p>
+        </div>
+      </div>
+      <div class="spec-body">
+        <h3 class="spec-subh">结构与色板</h3>
+        <div class="flow-page" aria-label="流程图结构示例">
+          <p class="flow-page-intro">默认一张图走完：提交 → 写入 → 审核分支，驳回闭环回到起点。能在本图闭环就不要再拆第二张。菱形只问一个是/否。</p>
+          <div class="flow-svg-wrap">
+            <svg width="800" height="300" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="spec-arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8" />
+                </marker>
+              </defs>
+              <g class="flow-edges" marker-end="url(#spec-arr)">
+                <polyline points="400,48 400,72" />
+                <polyline points="400,108 400,132" />
+                <polyline points="330,168 188,168" />
+                <polyline points="470,168 590,168" />
+                <polyline points="118,190 118,220" />
+                <polyline points="48,238 16,238 16,6 400,6 400,12" />
+              </g>
+              <g class="flow-nodes" font-family="Inter, PingFang SC, sans-serif">
+                <text x="28" y="130" font-size="10" fill="#64748b" transform="rotate(-90 28 130)">重新提交</text>
+                <rect x="300" y="12" width="200" height="36" rx="8" fill="#eff6ff" stroke="#2563eb" />
+                <text x="400" y="35" text-anchor="middle" font-size="12" fill="#18222f">前端：提交资料</text>
+                <rect x="280" y="72" width="240" height="36" rx="8" fill="#f0fdf4" stroke="#16a34a" />
+                <text x="400" y="95" text-anchor="middle" font-size="12" fill="#18222f">后端：写入 · 状态=待审核</text>
+                <polygon points="400,132 470,168 400,204 330,168" fill="#fffbeb" stroke="#d97706" />
+                <text x="400" y="172" text-anchor="middle" font-size="11" fill="#92400e">审核通过?</text>
+                <text x="220" y="160" font-size="11" fill="#dc2626">驳回</text>
+                <rect x="48" y="146" width="140" height="44" rx="8" fill="#fef2f2" stroke="#dc2626" />
+                <text x="118" y="165" text-anchor="middle" font-size="11" fill="#991b1b">状态=已驳回</text>
+                <text x="118" y="181" text-anchor="middle" font-size="10" fill="#64748b">必填原因</text>
+                <rect x="48" y="220" width="140" height="36" rx="8" fill="#eff6ff" stroke="#2563eb" />
+                <text x="118" y="243" text-anchor="middle" font-size="11" fill="#18222f">修订后重提</text>
+                <text x="500" y="160" font-size="11" fill="#16a34a">通过</text>
+                <rect x="590" y="146" width="170" height="44" rx="8" fill="#f0fdf4" stroke="#16a34a" />
+                <text x="675" y="165" text-anchor="middle" font-size="11" fill="#18222f">状态=已通过</text>
+                <text x="675" y="181" text-anchor="middle" font-size="10" fill="#64748b">写入审核时间</text>
+              </g>
+            </svg>
+          </div>
+          <div class="flow-legend">
+            <span><i style="background:#eff6ff;border:1px solid #2563eb"></i>前端 / 操作</span>
+            <span><i style="background:#f0fdf4;border:1px solid #16a34a"></i>后端 / 写入</span>
+            <span><i style="background:#fff7ed;border:1px solid #ea580c"></i>异步 / 任务</span>
+            <span><i style="background:#fffbeb;border:1px solid #d97706"></i>校验 / 分支</span>
+            <span><i style="background:#fef2f2;border:1px solid #dc2626"></i>阻断 / 驳回</span>
+          </div>
+        </div>
+        <div class="spec-meta" style="margin-top:10px;">
+          容器：<code class="spec-code">.flow-page</code>
+          <code class="spec-code">.flow-tab-bar</code>
+          <code class="spec-code">.flow-svg-wrap</code>
+          <code class="spec-code">.flow-edges</code>
+          <code class="spec-code">.flow-nodes</code>
+          <code class="spec-code">.flow-legend</code>
+        </div>
+        <div class="spec-demo" style="margin-top:12px;">
+          <span class="swatch"><b style="background:#eff6ff;border-color:#2563eb"></b>前端 / 操作</span>
+          <span class="swatch"><b style="background:#f0fdf4;border-color:#16a34a"></b>后端 / 写入</span>
+          <span class="swatch"><b style="background:#fff7ed;border-color:#ea580c"></b>异步 / 任务</span>
+          <span class="swatch"><b style="background:#fffbeb;border-color:#d97706"></b>校验菱形</span>
+          <span class="swatch"><b style="background:#fef2f2;border-color:#dc2626"></b>阻断 / 驳回</span>
+          <span class="swatch"><b style="background:#f1f5f9;border-color:#94a3b8"></b>跳过 / 中性</span>
+        </div>
+
+        <h3 class="spec-subh">实现要点</h3>
+        <ol class="spec-list">
+          <li><strong>分层渲染</strong>：先画 <code>flow-edges</code>，再画 <code>flow-nodes</code>。连线层在下，避免折线横穿线框。</li>
+          <li><strong>正交折线</strong>：只用水平 / 垂直 <code>line</code> 或 <code>polyline</code>。分叉与汇聚走节点间隙的专用通道，禁止斜线穿框。</li>
+          <li><strong>端点落边</strong>：折线起止落在节点顶 / 底 / 左 / 右边，悬空端点视为断流。</li>
+          <li><strong>能闭环就只用一张图</strong>：主路径、校验分支、驳回/失败回环能画进同一张 SVG 并接到起点，则只保留一个业务流程，<strong>不要</strong>预置流程 2。只有两条互不汇合的主链（例如收益达标 vs 指定用户），或单图闭环后通道必然打架、线穿框、节点被裁切时，才启用第二张，并用横向 Tab 切换。</li>
+          <li><strong>闭环</strong>：驳回、失败、重提必须接到起点顶边。回环走外侧通道，禁止贴画布边缘停住（看起来像断线）。</li>
+          <li><strong>间距</strong>：相邻节点纵向 ≥24px；菱形与上下节点 ≥30px；左右分支框与菱形顶点 ≥16px。</li>
+          <li><strong>一菱形一问题</strong>：菱形只问一个是 / 否。判定公式、口径、比较符写在菱形内或紧邻副文案，禁止把「收益达标」合成一步。</li>
+          <li><strong>文本</strong>：主文案 11–13px；副文案 10px + muted。超 12 字用 <code>tspan</code> 换行，线框留足内边距。</li>
+          <li><strong>分支标注</strong>：「是 / 通过」贴对应折线旁用绿色；「否 / 驳回」用红色。</li>
+          <li><strong>多图才出 Tab</strong>：仅在按上条拆出第二张时才出现 <code>.flow-tab-bar</code>，单面板只展示一张，禁止纵向堆叠。图例仍放面板底部共用。只有一张图时不要空挂「流程1」。</li>
+          <li><strong>画布可滚</strong>：<code>.flow-svg-wrap { overflow:auto; max-height:72vh }</code>。svg 写死 <code>width</code> + <code>viewBox</code>，窄屏横向滚，不重排。</li>
+          <li><strong>箭头 id 隔离</strong>：每张 SVG 独立 <code>marker id</code>（如 <code>flow-arrow-1</code>），同页复用同一 id 会串箭头。</li>
+          <li><strong>虚线旁路</strong>：可选、汇总、异步旁路用 <code>stroke-dasharray="4 3"</code>。</li>
+          <li><strong>深链</strong>：<code>?tab=flow</code>；仅多图时再加 <code>&amp;flow=1|2|3</code>。</li>
+          <li><strong>规则抽屉只指向</strong>：写「见页内业务流程 Tab」，不在抽屉里复述文字版全流程，也不嵌第二份图。</li>
+        </ol>
+
+        <h3 class="spec-subh">硬限制（做不到 / 不要做）</h3>
+        <ol class="spec-list">
+          <li><strong>手写绝对坐标，无布局引擎</strong>。移动或加高一个节点，必须重算所有相连折线与通道；改一处容易漏改边。</li>
+          <li><strong>无自动避让</strong>。折线不会绕开节点，线穿框是最高频事故。先定节点框，再对端点。</li>
+          <li><strong>菱形是写死 polygon</strong>。改文案不能只改 height，必须重算四个顶点，否则字溢出。</li>
+          <li><strong>SVG 文本不自动折行</strong>。超长必须手写 <code>tspan</code>，不会像 HTML 那样 wrap。</li>
+          <li><strong>viewBox 写死</strong>。加节点必须同步加大 <code>width / height / viewBox</code>，否则节点被裁切。</li>
+          <li><strong>不做响应式重排</strong>。窄屏只横向滚动，不会像 Grid 那样回流节点。</li>
+          <li><strong>静态图，不交互</strong>。节点不能点、不能高亮当前态、不跟 Demo 表数据联动。</li>
+          <li><strong>拆图是例外，不是默认</strong>。优先扩画布、走外侧回环，把同一条业务画闭环。只有确认无法在一张图内闭环（互不汇合的第二条主链，或闭环后必然线穿框 / 通道打架）才拆流程 2。禁止因为「节点有点多」就先拆。</li>
+          <li><strong>不表达并发与时序</strong>。并行、等待、超时只能靠橙色节点或虚线示意，没有泳道 / 甘特。</li>
+          <li><strong>色值写死 hex</strong>。未接 CSS 变量，也没有暗色主题适配。</li>
+          <li><strong>禁用 Mermaid / 流程图库</strong>。颜色、正交通道、分层渲染、图例对不齐，视觉不可控。</li>
+          <li><strong>不进抽屉、不进规则正文</strong>。第二份图会和页内 Tab 漂移。</li>
+          <li><strong>不接真实状态机</strong>。图是研发说明，不驱动后台表状态，也不做权限 / 持久化。</li>
+        </ol>
+        <div class="limit-note">新增或改流程图时：先改节点框，再对折线端点；有驳回 / 失败必须画回环并接到起点边。改完用 <code>?tab=flow</code> 目视检查：无线穿框、无悬空端点、无贴边假断线。</div>
+        <div class="usage-note">新 FR 从本页复制结构与色板，不要另起 Mermaid 或自定义连线样式。完整写入约定见 <code class="spec-code">ITERATION-FR-GUIDE.md</code> 第四节。</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 确认弹窗 -->
+  <div class="modal-overlay" id="confirmOverlay" onclick="if(event.target===this)closeConfirm()">
+    <div class="modal" role="dialog" aria-labelledby="confirmTitle">
+      <div class="modal-header">
+        <h3 id="confirmTitle">确认操作</h3>
+        <p id="confirmDesc">确定要执行此操作吗？此操作在 Demo 中仅为 Mock 反馈。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" type="button" onclick="closeConfirm()">取消</button>
+        <button class="btn btn-primary" type="button" id="confirmOkBtn" onclick="confirmAction()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 编辑弹窗 -->
+  <div class="modal-overlay" id="editOverlay" onclick="if(event.target===this)closeEdit()">
+    <div class="modal modal-md" role="dialog" aria-labelledby="editTitle">
+      <div class="modal-header">
+        <h3 id="editTitle">编辑</h3>
+        <p>Demo 表单提交后 Toast 提示，不持久化。</p>
+      </div>
+      <div class="modal-body">
+        <div class="form-field">
+          <label>名称</label>
+          <input type="text" value="示例名称" />
+        </div>
+        <div class="form-field">
+          <label>帐号平台</label>
+          <select><option>抖音</option><option>快手</option><option>TK</option></select>
+        </div>
+        <div class="form-field">
+          <label>状态</label>
+          <select><option>正常</option><option>已删除</option></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" type="button" onclick="closeEdit()">取消</button>
+        <button class="btn btn-primary" type="button" onclick="submitEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 详情抽屉 -->
+  <div class="drawer-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+  <aside class="drawer" id="detailDrawer">
+    <div class="drawer-header">
+      <h2>详情</h2>
+      <button class="drawer-close" type="button" onclick="closeDetail()" aria-label="关闭">×</button>
+    </div>
+    <div class="drawer-body">
+      <dl class="drawer-meta">
+        <dt>名称</dt><dd>示例条目</dd>
+        <dt>来源</dt><dd>示例</dd>
+        <dt>累计分配</dt><dd>777.28</dd>
+      </dl>
+      <table class="mini-table">
+        <thead>
+          <tr><th>分配金额</th><th>分配时间</th><th>分配批次</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>520.00</td><td>2023.12.24 13:00</td><td>示例批次 20231224</td></tr>
+          <tr><td>257.28</td><td>2023.12.20 11:15</td><td>示例批次 20231220</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </aside>
+
+  <div class="drawer-overlay" id="ruleOverlay" onclick="closeRule()"></div>
+  <aside class="drawer rule" id="ruleDrawer" role="dialog" aria-labelledby="ruleTitle">
+    <div class="drawer-header">
+      <h2 id="ruleTitle">FR-000 · v1 需求规则</h2>
+      <button class="drawer-close" type="button" onclick="closeRule()" aria-label="关闭">×</button>
+    </div>
+    <div class="rule-tab-bar">
+      <button type="button" class="active" data-rule="fe" onclick="showRulePanel('fe')">前端需求</button>
+      <button type="button" data-rule="admin" onclick="showRulePanel('admin')">后台需求</button>
+    </div>
+    <div class="drawer-body" style="padding:0;">
+      <div class="rule-panel active" id="rule-fe">
+        <div class="rule-section">
+          <h3>1 业务目标</h3>
+          <div class="rule-content">本 FR 只写当前增量要解决的事，不写迭代台通用规则。</div>
+        </div>
+        <div class="rule-section">
+          <h3>2 页面与入口</h3>
+          <div class="rule-content">列出页面/入口和核心字段。</div>
+        </div>
+        <div class="rule-section">
+          <h3>3 交互规则</h3>
+          <div class="rule-content">浮层、跳转、统计口径。</div>
+        </div>
+        <div class="rule-section">
+          <h3>4 边界规则</h3>
+          <div class="rule-content">不可撤回、可见范围、必填。</div>
+        </div>
+        <div class="rule-section">
+          <h3>5 业务流程</h3>
+          <div class="rule-content">见本页「业务流程」Tab。此处不复述、不嵌图。</div>
+        </div>
+      </div>
+      <div class="rule-panel" id="rule-admin">
+        <div class="rule-section">
+          <h3>1 业务目标</h3>
+          <div class="rule-content">数据面 / 运营排查要看什么。</div>
+        </div>
+        <div class="rule-section">
+          <h3>2 数据表与字段</h3>
+          <div class="rule-content">各表字段；仅规则、不进 Mockup 的扩展字段也写在这里。</div>
+        </div>
+        <div class="rule-section">
+          <h3>3 列表与筛选</h3>
+          <div class="rule-content">筛选项与详情展示方式。</div>
+        </div>
+        <div class="rule-section">
+          <h3>4 边界规则</h3>
+          <div class="rule-content">删除保留、更新时间口径、枚举值。</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let confirmMode = 'generic';
+
+    function openConfirm(mode) {
+      confirmMode = mode;
+      const title = document.getElementById('confirmTitle');
+      const desc = document.getElementById('confirmDesc');
+      const ok = document.getElementById('confirmOkBtn');
+      if (mode === 'delete') {
+        title.textContent = '确认删除';
+        desc.textContent = '删除后帐号状态变为「已删除」，历史记录保留。Demo 中不会真实删除数据。';
+        ok.className = 'btn btn-danger';
+        ok.textContent = '确认删除';
+      } else {
+        title.textContent = '确认提交';
+        desc.textContent = '确定要执行此操作吗？';
+        ok.className = 'btn btn-primary';
+        ok.textContent = '确定';
+      }
+      document.getElementById('confirmOverlay').classList.add('open');
+    }
+
+    function closeConfirm() {
+      document.getElementById('confirmOverlay').classList.remove('open');
+    }
+
+    function confirmAction() {
+      closeConfirm();
+      showToast(confirmMode === 'delete' ? 'Demo：已删除（Mock）' : 'Demo：操作已确认');
+    }
+
+    function openEdit() {
+      document.getElementById('editOverlay').classList.add('open');
+    }
+
+    function closeEdit() {
+      document.getElementById('editOverlay').classList.remove('open');
+    }
+
+    function submitEdit() {
+      closeEdit();
+      showToast('Demo：保存成功');
+    }
+
+    function openDetail() {
+      document.getElementById('detailOverlay').classList.add('open');
+      document.getElementById('detailDrawer').classList.add('open');
+    }
+
+    function closeDetail() {
+      document.getElementById('detailOverlay').classList.remove('open');
+      document.getElementById('detailDrawer').classList.remove('open');
+    }
+
+    function setRuleOpen(open) {
+      document.getElementById('ruleOverlay').classList.toggle('open', open);
+      document.getElementById('ruleDrawer').classList.toggle('open', open);
+      var btn = document.getElementById('specRuleBtn');
+      if (btn) {
+        btn.classList.toggle('active', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+    }
+
+    function openRule() {
+      closeDetail();
+      setRuleOpen(true);
+    }
+
+    function closeRule() {
+      setRuleOpen(false);
+    }
+
+    function showRulePanel(which) {
+      document.querySelectorAll('.rule-tab-bar button').forEach(function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-rule') === which);
+      });
+      document.getElementById('rule-fe').classList.toggle('active', which === 'fe');
+      document.getElementById('rule-admin').classList.toggle('active', which === 'admin');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeConfirm(); closeEdit(); closeDetail(); closeRule(); }
+    });
+  </script>
+  <script src="sidebar-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# Team overrides. Installer never touches this file.
+
+[core]
+communication_language = "Chinese"
+document_output_language = "Chinese"
+
+[modules.bmm]
+project_knowledge = "{project-root}/docs"
