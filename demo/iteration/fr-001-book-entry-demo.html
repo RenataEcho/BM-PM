@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FR-001 · 上传稿件</title><link rel="stylesheet" href="fr-001-book-entry.css"><script src="fr-001-book-entry.js" defer></script></head>
+<body data-page="mockup" class="mockup-body">
+  <main id="product" class="product-page">
+    <nav class="breadcrumb">剪辑供稿 / 上传稿件</nav><div class="product-heading"><h1>上传稿件</h1><span id="project-label" class="tag tag-ok"></span></div>
+    <ol class="stepper" aria-label="上传步骤"><li class="complete"><span>1</span>选择项目</li><li id="step-two" class="active" aria-current="step"><span>2</span>填写并选成片流程</li><li id="step-three"><span>3</span>最终提交</li></ol>
+    <section id="form-step" class="product-card"><div class="section-heading"><h2>书籍信息</h2><p class="muted" id="form-hint">支持按书籍名称或书籍 ID 模糊搜索，点选只补空字段</p></div>
+      <form id="book-form" autocomplete="off"><div class="book-grid">
+        <div class="form-field search-field"><label for="book-name">书籍名称</label><input class="form-input" id="book-name" name="name" placeholder="输入书籍名称搜索" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="candidates-name" aria-describedby="form-hint"><div id="candidates-name" class="candidates" role="listbox" aria-label="书籍名称搜索结果" hidden></div><span id="loading-name" class="field-status" role="status"></span></div>
+        <div class="form-field search-field"><label for="book-id">书籍 ID</label><input class="form-input mono" id="book-id" name="id" placeholder="输入书籍 ID 搜索" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="candidates-id" aria-describedby="form-hint"><div id="candidates-id" class="candidates" role="listbox" aria-label="书籍ID搜索结果" hidden></div><span id="loading-id" class="field-status" role="status"></span></div>
+        <div class="form-field"><label for="book-type">书籍类型</label><input class="form-input" id="book-type" name="type" placeholder="可补空或手动填写"><span class="field-status">选后可手改 [待确认]</span></div>
+        <div class="form-field link-field"><label for="book-link">书籍链接</label><input class="form-input mono" id="book-link" name="link" placeholder="填写书籍链接"></div>
+      </div><p id="fill-status" class="muted feedback" role="status" aria-live="polite"></p>
+      <div class="film-section"><h2>成片流程</h2><label for="film-mode">成片方式</label><select id="film-mode" class="form-input"><option>按当前项目默认流程</option><option>自行剪辑成片（示例）</option></select><p class="muted">沿用已有成片流程，本次仅演示书籍填写。</p></div>
+      <div class="product-actions"><span class="muted" id="check-hint"></span><button type="submit" id="next" class="btn btn-primary">下一步</button></div></form>
+    </section>
+    <section id="submit-step" class="product-card" hidden><span class="tag tag-ok">已进入第三步</span><h2>确认并提交稿件</h2><p class="muted">以下为本次填写的书籍信息。</p><dl class="drawer-meta" id="submit-summary"></dl><div class="product-actions"><button class="btn btn-ghost" id="back">返回第二步</button><button class="btn btn-primary" id="final-submit">最终提交</button></div><p id="submit-feedback" role="status" class="feedback"></p></section>
+    <p class="product-footnote">示例数据演示 · 首尾空格暂不去除 [待确认] · 名称是否额外参与匹配 [待确认]</p>
+  </main>
+  <div class="modal-overlay" id="validation-overlay" hidden><section class="modal modal-md" role="dialog" aria-modal="true" aria-labelledby="validation-title" aria-describedby="validation-message" tabindex="-1"><div class="modal-header"><h3 id="validation-title"></h3></div><div class="modal-body"><p id="validation-message"></p><p id="validation-note" class="muted"></p></div><footer class="modal-footer" id="validation-actions"></footer></section></div>
+</body></html>

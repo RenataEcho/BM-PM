@@ -1,0 +1,50 @@
+---
+title: FR-001 静态 Demo 实现
+type: feature
+created: 2026-10-19
+status: done
+route: oneshot
+review_loop_iteration: 0
+context:
+  - SPEC.md
+  - prd.md
+  - DESIGN.md
+  - EXPERIENCE.md
+---
+
+<frozen-after-approval reason="用户已要求按本目录 PRD、UX 和 SPEC 继续实现">
+
+## Intent
+
+为右豹主业务 FR-001「剪辑手供稿书籍填写优化」交付静态 Demo。新建 `demo/iteration/fr-001-book-entry.html` 作为三 Tab 主入口，`fr-001-book-entry-demo.html` 为页内 PC 表单，支持 embed、screen、同源 postMessage 切场景；复制组件规范 CSS 到本 FR 专用样式文件。mockups 目录同步一份自包含表单副本。已有页面和总览不改。
+
+逐项实现 SPEC CAP-1～CAP-10：名称/ID 模糊检索、最多20条、暂无结果；仅补点选瞬间空字段、已有关键词不替换；字段可改；项目由场景模拟第一步结果，字节与海外精确比较 ID，知乎精确比较链接；只在下一步校验，国内异常可继续、海外异常仅关闭，第三步不再拦截；其他项目跳过本 FR 校验；查询故障独立系统异常，关闭留第二步；只读后台筛选与详情抽屉；单张手写 SVG 闭环图；独立需求规则抽屉。按 SPEC 暂定口径演示并标 [待确认]，不擅定业务规则。
+
+复用 `component-spec-demo.html` 的按钮、Tag、Modal、Drawer、规则与流程 class。支持键盘候选、弹窗焦点限制/恢复、Esc、遮罩关闭、200%缩放和减少动效。Demo 不接真实接口、登录、权限、持久化。仅新增本 FR 文件，不改动上轮技能修复或既有文档。预览端口19889。实施无不可逆操作，不推送远端。
+
+</frozen-after-approval>
+
+## Implementation Notes
+
+- 已核对现有工作区：上轮技能修复与本需求文档未提交；用户已明确继续本需求，保留这些工作，不覆盖或混入提交。
+- 本需求使用既定 PC UX，指南中的通用手机框示例由 PC iframe 取代；三 Tab 均有实际用途。
+- 单一静态需求，无后端或数据迁移；以既定 SPEC 的暂定口径及 [待确认] 标识处理业务待决，不新增产品决策。
+- 新增主入口、嵌入表单、专用 CSS / JS；样式中的通用组件段从组件规范原样复制，追加的仅为 FR 布局与既定 PC 模态框宽度、遮罩。
+- 13 个场景覆盖检索 / 补空、五类项目分流、故障、空态及四类有书库项目的成功路径；查库示意等待期间禁用表单，切场景使旧校验失效。
+- UX mockup 为自包含副本，内嵌与运行页相同的 CSS / JS；运行页本身使用同一套共享脚本，避免后台与前端示例数据漂移。
+- 浏览器以 Edge headless 验证：名称和 ID 搜索、20条上限、空态、只补空、已有关键词保留、键盘选择与焦点恢复、中文输入法、触屏点选、国内取消 / 继续、两类海外阻断 / 修正、其他项目跳过、系统异常、首尾空格严格比较、知乎链接匹配、第三步提交、只读后台查询 / 详情、规则定位与焦点限制、三 Tab 深链、切场景时的异步校验失效。
+- 1600×1000、800×600、375×812 布局截图已检查；SVG 正交连线检查通过，流程画布在 Tab 内滚动。JavaScript 语法和 git diff --check 通过。
+
+## Review Triage Log
+
+- low / patch：首次 ArrowUp 从未选中态错误落到倒数第二条，改为最后一条，并验证 option-name-19。
+- medium / patch：输入法 Enter 可能误选候选，忽略 isComposing / 229，浏览器组合键事件验证未补值。
+- medium / patch：触屏失焦可能清除候选，用 pointerdown 防默认失焦，触屏 tap 已验证补空成功。
+- medium / patch：场景初始化和切换抢走外层焦点，场景切换不聚焦下一步，键盘触发后焦点仍在场景按钮；产品内部返回仍恢复焦点。
+- false / reject：不需要另增 ready/ack；iframe load 回调始终读取最新 currentScene 并重发，同源 postMessage 按顺序处理；切换时旧异步校验通过 checkToken 失效，已验证切换期间不会跳入旧场景第三步。
+- low / patch：候选宽度原设最小310px，改为跟随字段宽度并内部换行，与既定 EXPERIENCE 一致。
+- medium / patch：窄屏横排挤压 iframe，620px 以下场景区改为顶部可滚动网格，375px 下 iframe 大于300px，表单可滚动查看。
+- low / patch：补充知乎、海外短剧、海外小说正确匹配快捷场景；三个入口均验证直接进入第三步。
+- low / patch：其他项目不进行无意义搜索，明确无书库并提示手填，保留编辑能力。
+- low / patch：SVG 空值 / 无记录未匹配副文案补 [待确认]，与规则抽屉和 SPEC 一致。
+- low / patch（自查）：清除关闭候选的旧 DOM，避免保留不可见旧选项；最终进入第三步的侧边连线改为水平落到节点边，避免沿边框行进。
