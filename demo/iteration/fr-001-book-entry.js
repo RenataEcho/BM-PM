@@ -20,8 +20,8 @@
     {group:'novel',name:'漫长归途',id:'NV4002',type:'小说',link:''}
   ];
   const scenes = {
-    name:{label:'按书名搜索',desc:'关键词保留，只补空字段',group:'byte',project:'番茄小说',values:{name:'山海'}},
-    id:{label:'按 ID 搜索',desc:'已填书名与 ID 片段不覆盖',group:'byte',project:'番茄畅听',values:{name:'我的手填书名',id:'100'}},
+    name:{label:'按书名搜索',desc:'更新书名，其他字段只补空',group:'byte',project:'番茄小说',values:{name:'山海'}},
+    id:{label:'按 ID 搜索',desc:'更新 ID，保留已填书名',group:'byte',project:'番茄畅听',values:{name:'我的手填书名',id:'100'}},
     byte:{label:'字节系异常',desc:'书库不全，确认后可继续',group:'byte',project:'红果短剧APP',values:{name:'书库外的作品',id:'99999'}},
     zhihu:{label:'知乎系异常',desc:'链接不匹配，确认后可继续',group:'zhihu',project:'知乎故事',values:{name:'长夜有回声',id:'ZH2001',link:'https://zhihu.example/story/unknown'}},
     drama:{label:'海外短剧异常',desc:'只能关闭，修正后再下一步',group:'drama',project:'海外短剧',values:{name:'重逢在黎明',id:'DR0000'}},
@@ -52,6 +52,7 @@
   if (document.body.dataset.page === 'workspace') workspace(); else mockup();
 
   function workspace() {
+    if(new URLSearchParams(location.search).get('embed')==='1')document.body.classList.add('embedded');
     let currentTab='fe', currentScene='name', openDrawer=null, returnFocus=null;
     const frame=$('mockup');
     function tab(name) {
@@ -120,16 +121,37 @@
     let scene,modalOpen=false,searchToken=0,checkToken=0,activeKey=null,candidates=[],selected=-1,suppressFocus=false;
     const inputs=Object.fromEntries(Object.keys(fieldNames).map(key=>[key,$('book-'+key)]));
     const getValues=()=>Object.fromEntries(Object.entries(inputs).map(([key,input])=>[key,input.value]));
+    let materials=[];
+    const demoMaterial={name:'示例成片.mp4',size:1677722,path:'示例成片.mp4'};
+    function renderMaterials(){
+      $('material-count').textContent=materials.length?`已选择 ${materials.length} 个成片素材`:'尚未选择成片素材';
+      $('material-list').innerHTML=materials.length?materials.map(file=>`<div class="material-item"><span class="tag tag-ok">成片素材</span><strong>${esc(file.name)}</strong><span class="muted">${esc(file.path)} · ${(file.size/1048576).toFixed(1)} MB</span></div>`).join(''):'<p class="muted">请选择文件夹或文件，添加要上传的成片。</p>';
+      $('clear-materials').disabled=!materials.length;
+    }
+    function resetMaterials(){materials=[{...demoMaterial}];$('editor-note').value='';$('publish-note').value='';renderMaterials();}
+    for(const [button,input] of [['choose-files','material-files'],['choose-folder','material-folder']]){
+      $(button).addEventListener('click',()=>$(input).click());
+      $(input).addEventListener('change',()=>{materials.push(...Array.from($(input).files,file=>({name:file.name,size:file.size,path:file.webkitRelativePath||file.name})));$(input).value='';renderMaterials();});
+    }
+    let materialReturnFocus=null;
+    function closeMaterialConfirm(){ $('material-confirm').hidden=true;$('material-confirm').classList.remove('open');$('product').inert=false;materialReturnFocus?.focus(); }
+    $('clear-materials').addEventListener('click',()=>{closeCandidates();materialReturnFocus=document.activeElement;$('product').inert=true;$('material-confirm').hidden=false;$('material-confirm').classList.add('open');$('material-cancel').focus();});
+    $('material-cancel').addEventListener('click',closeMaterialConfirm);
+    $('material-clear-confirm').addEventListener('click',()=>{materials=[];closeMaterialConfirm();renderMaterials();$('choose-files').focus();});
+    $('material-confirm').addEventListener('click',e=>{if(e.target===$('material-confirm'))closeMaterialConfirm();});
+    document.addEventListener('keydown',e=>{if($('material-confirm').hidden)return;if(e.key==='Escape'){e.preventDefault();closeMaterialConfirm();}else trap(e,$('material-confirm'));});
+
     function closeCandidates() {
       searchToken++;activeKey=null;candidates=[];selected=-1;
       for(const key of ['name','id']){$('candidates-'+key).hidden=true;$('candidates-'+key).replaceChildren();inputs[key].setAttribute('aria-expanded','false');inputs[key].removeAttribute('aria-activedescendant');$('loading-'+key).textContent='';}
     }
     function choose(index) {
-      const candidate=candidates[index],trigger=inputs[activeKey];if(!candidate||!trigger)return;
+      const candidate=candidates[index],triggerKey=activeKey,trigger=inputs[triggerKey];if(!candidate||!trigger)return;
+      trigger.value=candidate[triggerKey];
       const filled=[];
-      for(const key of Object.keys(fieldNames))if(inputs[key].value===''&&candidate[key]){inputs[key].value=candidate[key];filled.push(fieldNames[key]);}
+      for(const key of Object.keys(fieldNames))if(key!==triggerKey&&inputs[key].value===''&&candidate[key]){inputs[key].value=candidate[key];filled.push(fieldNames[key]);}
       closeCandidates();suppressFocus=true;trigger.focus();suppressFocus=false;
-      $('fill-status').textContent=filled.length?`已补入${filled.join('、')}；已有内容保持不变，仍可手动修改。`:'四个字段均已有内容，保持原值。';
+      $('fill-status').textContent=`已更新${fieldNames[triggerKey]}${filled.length?'，补入'+filled.join('、'):''}；其他已填字段保持不变，仍可手动修改。`;
     }
     function markSelection() {
       const list=$('candidates-'+activeKey);
@@ -174,7 +196,7 @@
       $('validation-title').textContent=kind==='fault'?'书库查询失败':`${g.label} · ${g.field}校验异常`;
       $('validation-message').textContent=kind==='fault'?'系统异常，暂时无法查询书库。已保留填写内容。':scene.group==='byte'?'书籍ID与书籍不匹配，确认要继续提交吗？':scene.group==='zhihu'?'书籍链接与书籍名称不匹配，确认要继续提交吗？':'书籍ID与书籍名称不匹配，请填写正确后再提交！';
       $('validation-message').style.color=kind==='fault'?'var(--text-primary)':domestic?'var(--warning)':'var(--danger)';
-      $('validation-note').textContent=kind==='fault'?'[待确认] 查询失败不视为填写错误；关闭后留在第二步，故障放行方式待定。':domestic?'书库可能不完整，可确认后继续。':'请修正书籍 ID 后重新点下一步。';
+      $('validation-note').textContent=kind==='fault'?'查询失败不视为填写错误；已保留填写内容，关闭后留在第二步。':domestic?'书库可能不完整，可确认后继续。':'请修正书籍 ID 后重新点下一步。';
       $('validation-actions').replaceChildren();
       for(const label of kind==='fault'||!domestic?['关闭']:['取消','继续提交']){
         const button=document.createElement('button');button.type='button';button.className=`btn ${label==='继续提交'?'btn-primary':'btn-ghost'}`;button.textContent=label;
@@ -188,7 +210,7 @@
       $('book-form').querySelectorAll('input,select,button').forEach(el=>{el.disabled=busy;});$('next').textContent=busy?'校验中…':'下一步';
     }
     function goThird() {
-      closeCandidates();$('form-step').hidden=true;$('submit-step').hidden=false;$('submit-summary').innerHTML=summary(getValues());$('submit-feedback').textContent='';
+      closeCandidates();$('form-step').hidden=true;$('submit-step').hidden=false;$('submit-summary').innerHTML=summary(getValues());$('submit-feedback').textContent='';$('material-summary').innerHTML=`<h2>待上传成片 · ${materials.length} 个</h2>`+$('material-list').innerHTML+`<p class="muted">发布技巧：${esc($('publish-note').value||'未填写')}</p>`;
       $('step-two').className='complete';$('step-two').removeAttribute('aria-current');$('step-three').className='active';$('step-three').setAttribute('aria-current','step');$('final-submit').focus();
     }
     function goSecond(restoreFocus=true) {
@@ -199,18 +221,19 @@
       if(!group.key){goThird();return;}
       setBusy(true);await new Promise(resolve=>setTimeout(resolve,280));if(token!==checkToken)return;setBusy(false);
       if(scene.fault){openModal('fault');return;}
-      const matched=values[group.key]!==''&&records.some(r=>r.group===scene.group&&r[group.key]===values[group.key]);
+      const comparedValue=values[group.key].trim();
+      const matched=comparedValue!==''&&records.some(r=>r.group===scene.group&&r[group.key].trim()===comparedValue);
       if(matched)goThird();else openModal('mismatch');
     });
     $('back').addEventListener('click',()=>goSecond());
     $('final-submit').addEventListener('click',()=>{$('submit-feedback').textContent='模拟提交成功。本 FR 未在第三步再次校验或拦截。';});
     function loadScreen(name) {
-      scene=scenes[name]||scenes.name;checkToken++;closeCandidates();closeModal(false);setBusy(false);
+      closeMaterialConfirm();scene=scenes[name]||scenes.name;checkToken++;closeCandidates();closeModal(false);setBusy(false);
       for(const key of Object.keys(inputs))inputs[key].value=scene.values[key]||'';
-      $('film-mode').selectedIndex=0;$('fill-status').textContent='';goSecond(false);
+      resetMaterials();$('fill-status').textContent='';goSecond(false);
       $('project-label').textContent=`${scene.project} · ${groups[scene.group].label}`;
       $('check-hint').textContent=scene.group==='other'?'此项目不做书籍校验':`下一步校验：${groups[scene.group].field}`;
-      $('form-hint').textContent=scene.group==='other'?'当前项目暂无书库，请手动填写书籍信息。':'支持按书籍名称或书籍 ID 模糊搜索，点选只补空字段';
+      $('form-hint').textContent=scene.group==='other'?'当前项目暂无书库，请手动填写书籍信息。':'支持按书籍名称或书籍 ID 模糊搜索';
       for(const key of ['name','id'])inputs[key].placeholder=scene.group==='other'?'请手动填写'+fieldNames[key]:'输入'+fieldNames[key]+'搜索';
     }
     window.addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==window.parent||event.data?.type!=='fr001-screen')return;loadScreen(event.data.screen);});
@@ -238,14 +261,14 @@
       <g class="flow-edges"><text class="yes" x="542" y="518">是</text><text class="no" x="770" y="420">否</text><text class="no" x="340" y="690">否</text><text class="yes" x="542" y="790">是</text><text class="yes" x="542" y="1160">是 / 完全一致</text><text class="no" x="730" y="870">否</text><text class="yes" x="970" y="975">是</text><text class="no" x="1130" y="870">否</text><text class="yes" x="1040" y="1290">是</text><text class="no" x="1202" y="1330">否 / 取消</text><text x="105" y="1098">关闭后修改，再点下一步</text><text x="90" y="1370">取消后保留第二步填写</text><text x="50" y="380">关闭异常提示，保留填写</text></g>
       <g class="flow-nodes">
         <rect x="400" y="50" width="260" height="60" rx="7" fill="#dbeafe" stroke="#93c5fd"/><text x="530" y="76"><tspan x="530">第二步填写书籍信息</tspan><tspan x="530" dy="18" class="sub">项目沿用第一步选择</tspan></text>
-        <rect x="400" y="150" width="260" height="80" rx="7" fill="#dbeafe" stroke="#93c5fd"/><text x="530" y="174"><tspan x="530">名称 / ID 模糊搜索</tspan><tspan x="530" dy="19">点选只补空，字段仍可改</tspan><tspan x="530" dy="17" class="sub">至多20条；空态「暂无结果」</tspan></text>
+        <rect x="400" y="150" width="260" height="80" rx="7" fill="#dbeafe" stroke="#93c5fd"/><text x="530" y="174"><tspan x="530">名称 / ID 模糊搜索</tspan><tspan x="530" dy="19">更新触发字段，其他只补空</tspan><tspan x="530" dy="17" class="sub">至多20条；选后仍可手改</tspan></text>
         <rect x="400" y="270" width="260" height="60" rx="7" fill="#dbeafe" stroke="#93c5fd"/><text x="530" y="305">点击第二步「下一步」</text>
         <polygon points="530,370 650,430 530,490 410,430" fill="#fef3c7" stroke="#fbbf24"/><text x="530" y="434">当前项目有书库？</text>
         <rect x="1120" y="400" width="220" height="60" rx="7" fill="#f1f5f9" stroke="#cbd5e1"/><text x="1230" y="426"><tspan x="1230">其他项目跳过</tspan><tspan x="1230" dy="18" class="sub">仍沿用原有其他校验</tspan></text>
         <rect x="400" y="540" width="260" height="60" rx="7" fill="#dcfce7" stroke="#86efac"/><text x="530" y="565"><tspan x="530">按项目系查询对应书库</tspan><tspan x="530" dy="18" class="sub">字节 / 海外比 ID；知乎比链接</tspan></text>
         <polygon points="530,640 650,700 530,760 410,700" fill="#fef3c7" stroke="#fbbf24"/><text x="530" y="704">书库查询成功？</text>
-        <rect x="90" y="670" width="220" height="60" rx="7" fill="#ffedd5" stroke="#fdba74"/><text x="200" y="695"><tspan x="200">显示系统异常，非填写错误</tspan><tspan x="200" dy="18" class="sub">故障放行方式 [待确认]</tspan></text>
-        <polygon points="530,820 650,880 530,940 410,880" fill="#fef3c7" stroke="#fbbf24"/><text x="530" y="875"><tspan x="530">对照字段完全一致？</tspan><tspan x="530" dy="18" class="sub">空值 / 无记录未匹配 [待确认]</tspan></text>
+        <rect x="90" y="670" width="220" height="60" rx="7" fill="#ffedd5" stroke="#fdba74"/><text x="200" y="695"><tspan x="200">显示系统异常，非填写错误</tspan><tspan x="200" dy="18" class="sub">保留内容，关闭后回第二步</tspan></text>
+        <polygon points="530,820 650,880 530,940 410,880" fill="#fef3c7" stroke="#fbbf24"/><text x="530" y="869"><tspan x="530">去首尾空格后完全一致？</tspan><tspan x="530" dy="16" class="sub">协议 / query / 尾斜杠 / 大小写不忽略</tspan><tspan x="530" dy="16" class="sub">空值 / 无记录未匹配 [待确认]</tspan></text>
         <polygon points="960,820 1080,880 960,940 840,880" fill="#fef3c7" stroke="#fbbf24"/><text x="960" y="884">属于海外项目系？</text>
         <rect x="850" y="1000" width="220" height="60" rx="7" fill="#fee2e2" stroke="#fca5a5"/><text x="960" y="1026"><tspan x="960">海外异常阻断</tspan><tspan x="960" dy="18">弹窗仅「关闭」</tspan></text>
         <rect x="1100" y="1000" width="220" height="60" rx="7" fill="#dbeafe" stroke="#93c5fd"/><text x="1210" y="1026"><tspan x="1210">字节 / 知乎异常确认</tspan><tspan x="1210" dy="18" class="sub">取消 / 继续提交</tspan></text>

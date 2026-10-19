@@ -2,16 +2,16 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>FR-001 · 剪辑手供稿书籍填写优化 · v1 当前</title>
-  <link rel="stylesheet" href="fr-001-book-entry.css">
-  <script src="fr-001-book-entry.js" defer></script>
+  <title>FR-001 · 剪辑手供稿书籍填写优化 · v2 当前</title>
+  <link rel="stylesheet" href="fr-001-book-entry.css?v=nav3">
+  <script src="fr-001-book-entry.js?v=nav3" defer></script>
 </head>
 <body data-page="workspace">
   <header class="topnav"><a class="brand-text" href="framework-shell.html#youbao/overview">BM-PM · 迭代需求</a><span class="business-line">右豹主业务</span><span class="topnav-note">产品交互演示</span></header>
   <aside class="sidebar"><div class="sidebar-brand"><div class="brand-text">右豹主业务</div><div class="brand-sub">需求与设计</div></div><nav class="sidebar-scroll" aria-label="项目导航"><a class="nav-item" href="framework-shell.html#youbao/overview">概览</a><a class="nav-item" href="framework-shell.html#youbao/components">组件规范</a></nav><div class="sidebar-foot">FR-001<br>剪辑手供稿书籍填写优化</div></aside>
   <main class="main" id="workspace">
     <nav class="breadcrumb"><a href="framework-shell.html#youbao/overview">右豹主业务</a> / 剪辑手供稿书籍填写优化</nav>
-    <header class="page-header fr-header"><div><h1>FR-001 · 剪辑手供稿书籍填写优化 · v1 当前</h1><p class="page-desc">上传稿件第二步：名称 / ID 搜索、只补空、按项目系校验。</p></div><button class="btn btn-rule" id="rules-open" aria-expanded="false" aria-controls="rules-drawer">需求规则</button></header>
+    <header class="page-header fr-header"><div><h1>FR-001 · 剪辑手供稿书籍填写优化 · v2 当前</h1><p class="page-desc">上传稿件第二步：名称 / ID 搜索、更新触发字段、其他只补空、按项目系校验。</p></div><button class="btn btn-rule" id="rules-open" aria-expanded="false" aria-controls="rules-drawer">需求规则</button></header>
     <nav class="page-tabs" aria-label="需求视图"><button class="btn btn-ghost" data-tab="fe" aria-controls="view-fe">前端交互</button><button class="btn btn-ghost" data-tab="admin" aria-controls="view-admin">管理后台</button><button class="btn btn-ghost" data-tab="flow" aria-controls="view-flow">业务流程</button></nav>
     <section id="view-fe" class="view" aria-label="前端交互">
       <aside class="scene-panel"><div class="scene-heading">场景演示 <span class="tag tag-warn">示例数据</span></div><div id="scenes"></div><p class="scene-help">切换场景会重置该表单。项目代表第一步已有选择。</p></aside>
@@ -24,11 +24,11 @@
   </main>
   <div class="drawer-overlay" id="rules-overlay" hidden></div>
   <aside class="drawer rule" id="rules-drawer" role="dialog" aria-modal="true" aria-labelledby="rules-title" hidden tabindex="-1">
-    <header class="drawer-header"><h2 id="rules-title">FR-001 · v1 当前 · 需求规则</h2><button class="drawer-close" data-close="rules" title="关闭需求规则" aria-label="关闭需求规则">×</button></header><nav class="rule-tab-bar" aria-label="需求规则分类"><button data-rule="fe">前端需求</button><button data-rule="admin">后台需求</button></nav>
+    <header class="drawer-header"><h2 id="rules-title">FR-001 · v2 当前 · 需求规则</h2><button class="drawer-close" data-close="rules" title="关闭需求规则" aria-label="关闭需求规则">×</button></header><nav class="rule-tab-bar" aria-label="需求规则分类"><button data-rule="fe">前端需求</button><button data-rule="admin">后台需求</button></nav>
     <div class="drawer-body"><div class="rule-panel" id="rule-fe">
       <section class="rule-section"><h3>1 业务目标与入口</h3><div class="rule-content">代发剪辑手在 PC 端「剪辑供稿 / 上传稿件」第二步「填写并选成片流程」检索书籍、补齐空字段；不改第一步交互。</div></section>
-      <section class="rule-section"><h3>2 检索与补空</h3><div class="rule-content"><ul><li>名称、ID 均支持当前项目系书库模糊检索，最多20条；空态「暂无结果」。</li><li>点选瞬间只补空的名称、ID、类型、链接，同一记录补出。已有关键词和 ID 片段也保留，不用候选覆盖。</li><li>名称、ID、链接选后仍可修改；类型可手改 [待确认]。</li></ul></div></section>
-      <section class="rule-section"><h3>3 校验与边界</h3><div class="rule-content"><ul><li>仅第二步点「下一步」校验；无异常直接进入第三步，输入 / 失焦 / 点选不弹校验窗。</li><li>字节系、知乎系异常可「取消」或「继续提交」；海外短剧、海外小说异常只能「关闭」并留第二步。</li><li>其他项目不做本 FR 书籍校验。第三步最终提交不再次拦截。</li><li>字符串完全一致，不折叠大小写，不归一化链接；首尾空格暂不去除 [待确认]。空值 / 无记录暂按未匹配 [待确认]。</li><li>名称是否额外参与匹配 [待确认]；当前按项目系只校验 ID 或链接。</li><li>查库失败独立显示系统异常，不视为填错；关闭留第二步。海外故障放行方式 [待确认]。</li></ul></div></section>
+      <section class="rule-section"><h3>2 检索与补空</h3><div class="rule-content"><ul><li>名称、ID 均支持当前项目系书库模糊检索，最多20条；空态「暂无结果」。</li><li>点选时当前搜索字段（名称或 ID）直接更新为候选对应值；其他字段仅为空时补入，同一记录补出，其他已有值不覆盖。</li><li>名称、ID、类型、链接选后均可手动修改。</li></ul></div></section>
+      <section class="rule-section"><h3>3 校验与边界</h3><div class="rule-content"><ul><li>仅第二步点「下一步」校验；无异常直接进入第三步，输入 / 失焦 / 点选不弹校验窗。</li><li>字节系、知乎系异常可「取消」或「继续提交」；海外短剧、海外小说异常只能「关闭」并留第二步。</li><li>其他项目不做本 FR 书籍校验。第三步最终提交不再次拦截。</li><li>比较前去掉首尾空格，其他字符完全一致；不忽略大小写、协议、query 或尾斜杠差异。空值 / 无记录暂按未匹配 [待确认]。</li><li>名称是否额外参与匹配 [待确认]；当前按项目系只校验 ID 或链接。</li><li>查库失败独立显示系统异常，不视为填错；保留已填内容，关闭后留在第二步，海外项目不因查库失败按错填拦截。</li></ul></div></section>
       <section class="rule-section"><h3>4 业务流程</h3><div class="rule-content">见本页业务流程。</div></section>
     </div><div class="rule-panel" id="rule-admin">
       <section class="rule-section"><h3>1 业务目标</h3><div class="rule-content">只读核对校验源、字段及示例行；不新增配置台，不编辑书库规则。</div></section>
