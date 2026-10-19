@@ -17,6 +17,7 @@
     else if (raw && raw !== 'overview') {
       var parts = raw.split('/');
       if (LINES.some(function (item) { return item.id === parts[0]; })) line = parts[0];
+      if (line === 'youbao' && parts[1] === 'fr-001') view = 'fr-001';
       if (parts[1] === 'components' || raw === 'components') view = 'components';
     }
     return { line: line, view: view };
@@ -39,6 +40,9 @@
         (current ? ' aria-current="page"' : '') + '>' + item.label + '</a>'
       );
     });
+    if (state.line === 'youbao') {
+      html.push('<div class="nav-group-label">迭代需求</div><a class="nav-item' + (state.view === 'fr-001' ? ' active' : '') + '" href="#youbao/fr-001"' + (state.view === 'fr-001' ? ' aria-current="page"' : '') + '>剪辑手供稿书籍填写优化</a>');
+    }
     container.innerHTML = html.join('');
   }
 
