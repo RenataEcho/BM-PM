@@ -56,7 +56,7 @@
     let currentTab='fe', currentScene='name', openDrawer=null, returnFocus=null;
     const frame=$('mockup');
     function tab(name) {
-      currentTab=['fe','admin','flow'].includes(name) ? name : 'fe';
+      currentTab=['fe','flow'].includes(name) ? name : 'fe';
       document.querySelectorAll('.view').forEach(el => {el.hidden=el.id!==`view-${currentTab}`;});
       document.querySelectorAll('[data-tab]').forEach(el => {const active=el.dataset.tab===currentTab;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
       const url=new URL(location.href); url.searchParams.set('tab',currentTab);history.replaceState(null,'',url);
@@ -91,30 +91,16 @@
       const panel=$(name+'-drawer'), backdrop=$(name+'-overlay');
       panel.hidden=false;backdrop.hidden=false;panel.classList.add('open');backdrop.classList.add('open');
       $('workspace').inert=true;document.querySelector('.sidebar').inert=true;document.querySelector('.topnav').inert=true;
-      if(name==='rules'){$('rules-open').setAttribute('aria-expanded','true');ruleTab(currentTab==='admin'?'admin':'fe');}
+      if(name==='rules'){$('rules-open').setAttribute('aria-expanded','true');ruleTab('fe');}
       panel.querySelector('button').focus();
     }
     $('rules-open').addEventListener('click',()=>drawer('rules'));
-    for (const name of ['rules','detail']) $(name+'-overlay').addEventListener('click',closeDrawer);
+    $('rules-overlay').addEventListener('click',closeDrawer);
     document.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',closeDrawer));
     document.querySelectorAll('[data-rule]').forEach(el=>el.addEventListener('click',()=>ruleTab(el.dataset.rule)));
     document.addEventListener('keydown',event=>{if(!openDrawer)return;if(event.key==='Escape'){event.preventDefault();closeDrawer();}else trap(event,$(openDrawer+'-drawer'));});
-    function renderRows() {
-      const group=$('admin-group').value,keyword=$('admin-keyword').value.toLocaleLowerCase();
-      const result=records.filter(r=>(group==='all'||r.group===group)&&[r.name,r.id,r.link].some(v=>v.toLocaleLowerCase().includes(keyword)));
-      $('admin-count').textContent=`共 ${result.length} 条示例记录`;
-      $('admin-rows').innerHTML=result.length?result.map(r=>`<tr><td>${groups[r.group].label}<br><code>${groups[r.group].table}</code></td><td>${esc(r.name)}</td><td class="mono">${r.id}</td><td>${r.type}</td><td>${esc(r.link||'—')}</td><td>${groups[r.group].field}</td><td><button class="link" data-detail="${r.group}:${r.id}">详情</button></td></tr>`).join(''):'<tr><td colspan="7">暂无结果</td></tr>';
-      document.querySelectorAll('[data-detail]').forEach(el=>el.addEventListener('click',()=>{
-        const record=records.find(r=>`${r.group}:${r.id}`===el.dataset.detail),g=groups[record.group];
-        $('detail-content').innerHTML=`<span class="tag tag-ok">只读示例</span><h3 class="spec-subh">${esc(record.name)}</h3><dl class="drawer-meta"><dt>项目系</dt><dd>${g.label}</dd><dt>对照表</dt><dd>${g.table}</dd><dt>校验字段</dt><dd>${g.field}</dd>${summary(record)}</dl><p class="muted">仅展示同一记录；不提供编辑、删除或运营规则配置。海外链接为空时不补入。</p>`;
-        drawer('detail');
-      }));
-    }
-    $('admin-search').addEventListener('click',renderRows);$('admin-group').addEventListener('change',renderRows);
-    $('admin-keyword').addEventListener('keydown',event=>{if(event.key==='Enter')renderRows();});
-    $('admin-reset').addEventListener('click',()=>{$('admin-group').value='all';$('admin-keyword').value='';renderRows();});
     $('flow-chart').innerHTML=flowSvg();
-    renderRows();scene('name');tab(new URLSearchParams(location.search).get('tab'));
+    scene('name');tab(new URLSearchParams(location.search).get('tab'));
   }
 
   function mockup() {

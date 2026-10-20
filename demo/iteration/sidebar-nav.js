@@ -8,6 +8,14 @@
     { id: 'overview', label: '概览' },
     { id: 'components', label: '组件规范' }
   ];
+  var DEMOS = [
+    { id: 'fr-001', line: 'youbao', label: '剪辑手供稿书籍填写优化', status: '开发中' }
+  ];
+  var STATUS_BUCKET = { '待开始': '进行中', '开发中': '进行中', '已上线': '归档', '已暂停': '废纸篓' };
+  var STATUS_KEY = 'bm-pm-fr-statuses';
+  function currentStatuses() {
+    try { return JSON.parse(localStorage.getItem(STATUS_KEY) || '{}'); } catch (e) { return {}; }
+  }
 
   function parseHash() {
     var raw = (location.hash || '').replace(/^#/, '');
@@ -40,9 +48,22 @@
         (current ? ' aria-current="page"' : '') + '>' + item.label + '</a>'
       );
     });
-    if (state.line === 'youbao') {
-      html.push('<div class="nav-group-label">迭代需求</div><a class="nav-item' + (state.view === 'fr-001' ? ' active' : '') + '" href="#youbao/fr-001"' + (state.view === 'fr-001' ? ' aria-current="page"' : '') + '>剪辑手供稿书籍填写优化</a>');
-    }
+    var statuses = currentStatuses();
+    var lineDemos = DEMOS.filter(function (demo) { return demo.line === state.line; });
+    var groups = {};
+    lineDemos.forEach(function (demo) {
+      var status = statuses[demo.id] || demo.status;
+      var group = STATUS_BUCKET[status] || '进行中';
+      (groups[group] || (groups[group] = [])).push({ demo: demo, status: status });
+    });
+    ['进行中', '归档', '废纸篓'].forEach(function (group) {
+      if (!groups[group]) return;
+      html.push('<div class="nav-group-label">' + group + '</div>');
+      groups[group].forEach(function (entry) {
+        var demo = entry.demo;
+        html.push('<a class="nav-item' + (state.view === demo.id ? ' active' : '') + '" href="#' + demo.line + '/' + demo.id + '"' + (state.view === demo.id ? ' aria-current="page"' : '') + '>' + demo.label + '</a>');
+      });
+    });
     container.innerHTML = html.join('');
   }
 
