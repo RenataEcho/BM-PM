@@ -235,6 +235,10 @@
       $('check-hint').textContent=scene.group==='other'?'此项目不做书籍校验':`下一步校验：${groups[scene.group].field}`;
       $('form-hint').textContent=scene.group==='other'?'当前项目暂无书库，请手动填写书籍信息。':'支持按书籍名称或书籍 ID 模糊搜索';
       for(const key of ['name','id'])inputs[key].placeholder=scene.group==='other'?'请手动填写'+fieldNames[key]:'输入'+fieldNames[key]+'搜索';
+      // 异常场景进入后自动走一次下一步，直接展示校验弹窗。
+      if(['byte','zhihu','drama','novel','fault'].includes(name)){
+        setTimeout(()=>{if(scene===scenes[name]&&!modalOpen&&!$('form-step').hidden)$('book-form').requestSubmit();},80);
+      }
     }
     window.addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==window.parent||event.data?.type!=='fr001-screen')return;loadScreen(event.data.screen);});
     loadScreen(new URLSearchParams(location.search).get('screen')||'name');
