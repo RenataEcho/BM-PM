@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FR-001 · 员工离职操作优化 · v1 当前</title>
+  <link rel="stylesheet" href="fr-enterprise-001-leaving.css?v=1">
+  <script src="fr-enterprise-001-leaving.js?v=1" defer></script>
+</head>
+<body data-page="workspace">
+  <header class="topnav"><a class="brand-text" href="framework-shell.html#enterprise/overview">BM-PM · 迭代需求</a><span class="business-line">企业号</span><span class="topnav-note">产品交互演示</span></header>
+  <aside class="sidebar"><div class="sidebar-brand"><div class="brand-text">企业号</div><div class="brand-sub">需求与设计</div></div><nav class="sidebar-scroll" aria-label="项目导航"><a class="nav-item" href="framework-shell.html#enterprise/overview">概览</a><a class="nav-item" href="framework-shell.html#enterprise/components">组件规范</a></nav><div class="sidebar-foot">FR-001<br>员工离职操作优化</div></aside>
+  <main class="main" id="workspace">
+    <nav class="breadcrumb"><a href="framework-shell.html#enterprise/overview">企业号</a> / 员工离职操作优化</nav>
+    <header class="page-header fr-header"><div><h1>FR-001 · 员工离职操作优化 · v1 当前</h1><p class="page-desc">企业主发起申请，员工确认或拒绝，双端消息同步结果。</p></div><button class="btn btn-rule" id="rules-open" aria-expanded="false" aria-controls="rules">需求规则</button></header>
+    <nav class="page-tabs" aria-label="需求视图"><button class="btn btn-ghost" data-tab="fe" aria-controls="view-fe">前端交互</button><button class="btn btn-ghost" data-tab="flow" aria-controls="view-flow">业务流程 · 路径图</button></nav>
+    <section id="view-fe" class="view"><aside class="scene-panel"><div class="scene-heading">场景演示 · 示例数据</div><div id="scenes"></div><p class="scene-help">场景使用示例数据；从员工列表开始可完整体验企业主、员工两端。</p></aside><div class="mockup-board"><div class="board-caption"><b>员工离职操作</b><span>示例数据 · 切换场景重置演示</span><button class="btn btn-ghost btn-sm" id="reset">重置场景</button></div><div class="board-scroll"><div class="phone-stage"><iframe id="mockup" title="员工离职手机交互" src="fr-enterprise-001-leaving-demo.html?embed=1&amp;screen=management"></iframe></div></div></div></section><section id="view-flow" class="view" hidden><div class="flow-page"><div id="chart" class="flow-svg-wrap"></div><div class="flow-legend"><span><i style="background:#dbeafe"></i>前端</span><span><i style="background:#dcfce7"></i>后端</span><span><i style="background:#ffedd5"></i>异步通知</span><span><i style="background:#fef3c7"></i>校验</span><span><i style="background:#fee2e2"></i>阻断 / 拒绝</span><span><i style="background:#f1f5f9"></i>取消 / 保留</span></div></div></section></main>
+  <div class="drawer-overlay" id="overlay"></div><aside class="drawer rule" id="rules" role="dialog" aria-modal="true" aria-label="需求规则" inert><div class="drawer-header"><h2>FR-001 · v1 当前 · 需求规则</h2><button class="drawer-close" id="close" aria-label="关闭">×</button></div><div class="rule-tab-bar"><button data-rule="fe">前端需求</button><button data-rule="backend">后台需求</button></div><div class="drawer-body rule-copy" id="rule-copy"></div></aside></body></html>
