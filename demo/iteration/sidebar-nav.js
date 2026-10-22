@@ -10,7 +10,7 @@
   ];
   var DEMOS = [
     { id: 'fr-001', line: 'youbao', label: '剪辑手供稿书籍填写优化', status: '开发中', url: 'fr-001-book-entry.html?embed=1&tab=fe&v=nav3' },
-    { id: 'fr-002', line: 'youbao', label: '新增登录设备', status: '待开始', url: 'fr-002.html?embed=1&tab=fe&v=nav2' }
+    { id: 'fr-002', line: 'youbao', label: '新增登录设备', status: '待开始', url: 'fr-002.html?embed=1&tab=fe&v=rules3' }
   ];
   var STATUS_BUCKET = { '待开始': '进行中', '开发中': '进行中', '已上线': '归档', '已暂停': '废纸篓' };
   var STATUS_KEY = 'bm-pm-fr-statuses';
