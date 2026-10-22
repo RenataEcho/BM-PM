@@ -381,3 +381,5 @@ body.embedded .main { margin-left: 0; padding-top: 16px; }
 body.embedded #view-fe { height: calc(100vh - 138px); }
 
 #mockup{width:375px;height:770px;min-width:375px;border:0;border-radius:24px}.board-scroll{display:flex;justify-content:center;align-items:flex-start} .flow-svg-wrap svg{max-width:none} .rule-copy h3{margin-top:18px}.rule-copy p{margin:10px 0}[hidden]{display:none!important}
+
+.scene-button strong{font-size:13px;font-weight:700;line-height:1.6}.scene-button small{display:block;line-height:1.6}.scene-button{border-radius:7px;min-height:62px;display:flex}.scene-button.active{border-color:var(--primary-border);background:var(--primary-light);color:var(--primary)}
