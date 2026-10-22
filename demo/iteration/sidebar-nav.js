@@ -9,7 +9,8 @@
     { id: 'components', label: '组件规范' }
   ];
   var DEMOS = [
-    { id: 'fr-001', line: 'youbao', label: '剪辑手供稿书籍填写优化', status: '开发中' }
+    { id: 'fr-001', line: 'youbao', label: '剪辑手供稿书籍填写优化', status: '开发中', url: 'fr-001-book-entry.html?embed=1&tab=fe&v=nav3' },
+    { id: 'fr-002', line: 'youbao', label: '新增登录设备', status: '待开始', url: 'fr-002.html?embed=1&tab=fe&v=nav2' }
   ];
   var STATUS_BUCKET = { '待开始': '进行中', '开发中': '进行中', '已上线': '归档', '已暂停': '废纸篓' };
   var STATUS_KEY = 'bm-pm-fr-statuses';
@@ -25,7 +26,7 @@
     else if (raw && raw !== 'overview') {
       var parts = raw.split('/');
       if (LINES.some(function (item) { return item.id === parts[0]; })) line = parts[0];
-      if (line === 'youbao' && parts[1] === 'fr-001') view = 'fr-001';
+      if (DEMOS.some(function (demo) { return demo.line === line && demo.id === parts[1]; })) view = parts[1];
       if (parts[1] === 'components' || raw === 'components') view = 'components';
     }
     return { line: line, view: view };
@@ -71,6 +72,7 @@
     document.querySelectorAll('[data-iteration-sidebar]').forEach(render);
   }
 
+  window.bmDemoFor = function (line, id) { return DEMOS.find(function (demo) { return demo.line === line && demo.id === id; }); };
   window.bmParseHash = parseHash;
   window.bmLineName = lineName;
 
@@ -81,4 +83,5 @@
   }
 
   window.addEventListener('hashchange', init);
+  window.addEventListener('storage', function (event) { if (event.key === STATUS_KEY || event.key === null) init(); });
 })();
