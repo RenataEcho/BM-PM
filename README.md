@@ -21,3 +21,5 @@ python3 -m http.server 19889 --directory demo/iteration
 | 右豹主业务 | FR-001 | 剪辑手供稿书籍填写优化 | 开发中 | [查看 Demo](demo/iteration/fr-001-book-entry.html?tab=fe) |
 
 | 右豹主业务 | FR-002 | 新增登录设备 | 待开始 | [查看 Demo](demo/iteration/fr-002.html) |
+
+| 企业号 | FR-001 | 员工离职操作优化 | 待开始 | [查看 Demo](demo/iteration/fr-enterprise-001-leaving.html?tab=fe) |
