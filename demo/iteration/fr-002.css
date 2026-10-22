@@ -383,3 +383,14 @@ body.embedded #view-fe { height: calc(100vh - 138px); }
 #mockup{width:375px;height:770px;min-width:375px;border:0;border-radius:24px}.board-scroll{display:flex;justify-content:center;align-items:flex-start} .flow-svg-wrap svg{max-width:none} .rule-copy h3{margin-top:18px}.rule-copy p{margin:10px 0}[hidden]{display:none!important}
 
 .scene-button strong{font-size:13px;font-weight:700;line-height:1.6}.scene-button small{display:block;line-height:1.6}.scene-button{border-radius:7px;min-height:62px;display:flex}.scene-button.active{border-color:var(--primary-border);background:var(--primary-light);color:var(--primary)}
+
+/* 规则抽屉：统一章节、字段表与条目层级 */
+.rule-copy{font-size:12px;line-height:1.75;padding:18px 20px 28px;overflow-wrap:anywhere}
+.rule-summary{padding:12px 14px;background:var(--primary-light);border:1px solid var(--primary-border);border-radius:8px;color:var(--text-primary)}
+.rule-summary strong{font-size:14px}.rule-summary p{margin:5px 0 0;color:var(--text-secondary)}
+.rule-section{margin-top:22px}.rule-section h3{font-size:14px;line-height:1.5;color:var(--text-primary);margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.rule-section ul{padding-left:18px;margin:0}.rule-section li{margin:0 0 8px;padding-left:2px}.rule-section p{margin:8px 0}
+.rule-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px;background:var(--surface);border:1px solid var(--border)}
+.rule-table th,.rule-table td{padding:9px 10px;border:1px solid var(--border);text-align:left;vertical-align:top;line-height:1.7}
+.rule-table th{background:#f8fafc;font-weight:600;color:var(--text-primary)}.rule-table th:first-child{width:100px}.rule-table td:first-child{font-weight:500;color:var(--text-primary)}
+.rule-copy blockquote{margin:12px 0 0;padding:10px 12px;border-left:3px solid var(--primary-border);background:#f8fafc;color:var(--text-secondary);border-radius:0 6px 6px 0}.rule-footnote{color:var(--text-muted);font-size:11px}
