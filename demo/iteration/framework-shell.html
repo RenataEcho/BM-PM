@@ -215,7 +215,7 @@
     <iframe id="spec-frame" title="组件规范" hidden src="about:blank"></iframe>
   </main>
   </div>
-  <script src="sidebar-nav.js?v=enterprise001-v1"></script>
+  <script src="sidebar-nav.js?v=enterprise001-status-2"></script>
   <script>
     var EMPTY_TEXT = {
       progress: '还没有进行中的需求。',
@@ -247,6 +247,7 @@
     }
 
     function applyShellView() {
+      applyStatuses();
       var state = window.bmParseHash();
       var lineName = window.bmLineName(state.line);
       document.querySelectorAll('#biz-nav button').forEach(function (btn) {
@@ -277,7 +278,6 @@
         note.hidden = visible > 0;
         note.textContent = lineName + EMPTY_TEXT[note.getAttribute('data-empty')];
       });
-      applyStatuses();
     }
 
     document.getElementById('biz-nav').addEventListener('click', function (event) {
@@ -303,7 +303,7 @@
       statuses[row.getAttribute('data-id')] = select.value;
       writeStatuses(statuses);
       applyShellView();
-      window.dispatchEvent(new Event('hashchange'));
+      window.dispatchEvent(new Event('bm-status-change'));
     });
     window.addEventListener('storage', function (event) { if (event.key === STATUS_KEY || event.key === null) applyShellView(); });
     window.addEventListener('popstate', applyShellView);

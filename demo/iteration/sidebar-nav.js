@@ -84,5 +84,6 @@
   }
 
   window.addEventListener('hashchange', init);
+  window.addEventListener('bm-status-change', init);
   window.addEventListener('storage', function (event) { if (event.key === STATUS_KEY || event.key === null) init(); });
 })();
