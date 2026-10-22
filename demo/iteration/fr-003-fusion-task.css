@@ -277,7 +277,7 @@
     .flow-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: -2px; }
     .swatch { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
     .swatch b { width: 14px; height: 14px; border-radius: 3px; border: 1px solid; flex-shrink: 0; }
-  
+
 /* 基础组件原样复制自 component-spec-demo.html；本FR布局追加于末尾。 */
 
     html.is-embed .sidebar,
