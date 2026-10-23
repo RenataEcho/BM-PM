@@ -171,7 +171,8 @@
             <tr><th>编号</th><th>需求</th><th>状态</th><th>页面</th></tr>
           </thead>
           <tbody data-bucket="progress">
-            <tr data-id="fr-001" data-line="youbao"><td>FR-001</td><td>剪辑手供稿书籍填写优化</td><td><select class="status-select" aria-label="FR-001 状态" data-status-select><option value="待开始">待开始</option><option value="开发中" selected>开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-001">查看 Demo</a></td></tr>
+            <tr data-id="fr-003" data-line="youbao" data-demo="fr-003-fusion-task.html"><td>FR-003</td><td>代发上融合任务</td><td><select class="status-select" aria-label="FR-003 状态" data-status-select><option value="待开始">待开始</option><option value="开发中" selected>开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-003">查看 Demo</a></td></tr>
+            <tr data-id="fr-001" data-line="youbao" data-demo="fr-001-book-entry.html"><td>FR-001</td><td>剪辑手供稿书籍填写优化</td><td><select class="status-select" aria-label="FR-001 状态" data-status-select><option value="待开始">待开始</option><option value="开发中" selected>开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-001">查看 Demo</a></td></tr>
           </tbody>
         </table>
         <p class="page-desc" data-empty="progress">还没有进行中的需求。</p>
@@ -213,7 +214,7 @@
     <iframe id="spec-frame" title="组件规范" hidden src="about:blank"></iframe>
   </main>
   </div>
-  <script src="sidebar-nav.js?v=fr001-nav-4"></script>
+  <script src="sidebar-nav.js?v=fr003-nav-1"></script>
   <script>
     var EMPTY_TEXT = {
       progress: '还没有进行中的需求。',
@@ -245,6 +246,7 @@
     }
 
     function applyShellView() {
+      applyStatuses();
       var state = window.bmParseHash();
       var lineName = window.bmLineName(state.line);
       document.querySelectorAll('#biz-nav button').forEach(function (btn) {
@@ -256,11 +258,12 @@
       document.getElementById('page-title').textContent = lineName;
       document.title = lineName + ' · BM-PM';
       document.getElementById('view-overview').hidden = state.view !== 'overview';
-      document.querySelector('.main').classList.toggle('show-demo', state.view === 'fr-001');
+      var demo = window.bmDemos().find(function (item) { return item.line === state.line && item.id === state.view; });
+      document.querySelector('.main').classList.toggle('show-demo', Boolean(demo));
       var frame = document.getElementById('spec-frame');
       frame.hidden = state.view === 'overview';
-      var source = state.view === 'fr-001' ? 'fr-001-book-entry.html?embed=1&tab=fe&v=nav3' : 'component-spec-demo.html?embed=1';
-      frame.title = state.view === 'fr-001' ? 'FR-001 · 剪辑手供稿书籍填写优化' : '组件规范';
+      var source = demo ? demo.url + '?embed=1&tab=' + (new URLSearchParams(location.search).get('tab') || 'fe') : 'component-spec-demo.html?embed=1';
+      frame.title = demo ? demo.title : '组件规范';
       if (!frame.hidden && frame.getAttribute('src') !== source) frame.src = source;
       document.querySelectorAll('#view-overview tbody').forEach(function (tbody) {
         var visible = 0;
@@ -269,19 +272,21 @@
           row.hidden = !show;
           if (show) visible += 1;
         });
+        var title = tbody.closest('section').querySelector('h2');
+        title.textContent = ({progress:'进行中',archive:'归档',trash:'废纸篓'})[tbody.dataset.bucket] + '（' + visible + '）';
         var note = tbody.closest('.spec-body').querySelector('[data-empty]');
         if (!note) return;
         note.hidden = visible > 0;
         note.textContent = lineName + EMPTY_TEXT[note.getAttribute('data-empty')];
       });
-      applyStatuses();
+      window.bmRefreshSidebar();
     }
 
     document.getElementById('biz-nav').addEventListener('click', function (event) {
       var btn = event.target.closest('button[data-line]');
       if (!btn) return;
       var state = window.bmParseHash();
-      location.hash = btn.getAttribute('data-line') + '/' + (state.view === 'fr-001' ? 'overview' : state.view);
+      location.hash = btn.getAttribute('data-line') + '/' + (state.view === 'components' ? 'components' : 'overview');
     });
 
     document.addEventListener('click', function (event) {
