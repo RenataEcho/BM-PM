@@ -296,3 +296,5 @@ html.fr-003-embedded body > .topnav,html.fr-003-embedded body > .sidebar{display
 html.fr-003-embedded .main{top:0;left:0;right:0;bottom:0}
 html.fr-003-embedded .view,html.fr-003-embedded .view#view-fe{height:calc(100vh - 146px)}
 html.fr-003-embedded .flow-svg-wrap{max-height:calc(100vh - 236px)}
+
+.fill-records{min-width:0;table-layout:auto}.fill-records td,.fill-records th{padding:10px 8px}.fill-records td{overflow-wrap:anywhere}
