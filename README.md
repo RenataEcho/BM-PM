@@ -21,6 +21,8 @@ python3 -m http.server 19889 --directory demo/iteration
 | 右豹主业务 | FR-001 | 剪辑手供稿书籍填写优化 | 开发中 | [查看 Demo](demo/iteration/fr-001-book-entry.html?tab=fe) |
 | 右豹主业务 | FR-003 | 代发上融合任务 | 开发中 | [查看 Demo](demo/iteration/fr-003-fusion-task.html?tab=fe) |
 
+| 右豹主业务 | FR-002 | 新增登录设备 | 待开始 | [查看 Demo](demo/iteration/fr-002.html) |
+| 企业号 | FR-001 | 员工离职操作优化 | 待开始 | [查看 Demo](demo/iteration/fr-enterprise-001-leaving.html?tab=fe) |
 总览按登记行生成需求导航与路由；状态可选待开始、开发中、已上线、已暂停，分别进入进行中、进行中、归档、废纸篓。列表、数量、空状态和左侧分组同步更新。
 
 状态沿用浏览器 localStorage（`bm-pm-fr-statuses`），只保存在当前浏览器配置及同源地址下；刷新保留，清除站点数据后恢复登记的初始值，不写回 README 或服务器，不跨浏览器、设备及不同端口同步。FR-003 初始状态为「开发中」，属于「进行中」。
