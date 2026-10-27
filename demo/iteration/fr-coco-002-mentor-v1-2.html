@@ -218,6 +218,10 @@
       <button type="button" data-tab="admin">管理后台</button>
     </div>
     <section class="page-view active" id="view-fe">
+      <div class="demo-code-tools" style="display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-shrink:0;margin-bottom:12px">
+        <span id="copyDemoStatus" role="status" style="font-size:12px;color:var(--text-secondary)"></span>
+        <button type="button" class="btn btn-ghost" id="copyDemoCode">复制 Demo 代码</button>
+      </div>
       <div class="perspective-tabs" role="tablist" aria-label="页面视角">
         <button type="button" role="tab" class="on" data-perspective="user" aria-selected="true">用户视角</button>
         <button type="button" role="tab" data-perspective="mentor" aria-selected="false">导师视角</button>
@@ -524,6 +528,41 @@
 
     var tab = new URLSearchParams(location.search).get('tab') || 'fe';
     showTab(tab);
+  </script>
+
+  <script>
+    (function () {
+      var button = document.getElementById('copyDemoCode');
+      var status = document.getElementById('copyDemoStatus');
+      button.addEventListener('click', async function () {
+        var source = new URL(document.getElementById('phone').getAttribute('src'), location.href);
+        button.disabled = true;
+        status.textContent = '正在读取 Demo 代码…';
+        try {
+          var response = await fetch(source.href);
+          if (!response.ok) throw new Error('读取失败');
+          var html = await response.text();
+          if (!/<!doctype html/i.test(html)) throw new Error('页面内容不完整');
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(html);
+          } else {
+            var field = document.createElement('textarea');
+            field.value = html;
+            field.style.cssText = 'position:fixed;left:-9999px;top:0';
+            document.body.appendChild(field);
+            field.select();
+            var copied = document.execCommand('copy');
+            field.remove();
+            if (!copied) throw new Error('复制失败');
+          }
+          status.textContent = 'Demo 代码已复制（HTML、CSS、JavaScript）';
+        } catch (error) {
+          status.textContent = '复制失败，请重试或检查浏览器剪贴板权限。';
+        } finally {
+          button.disabled = false;
+        }
+      });
+    })();
   </script>
 </body>
 </html>
