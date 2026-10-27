@@ -18,6 +18,7 @@ python3 -m http.server 19889 --directory demo/iteration
 
 | 业务线 | 编号 | 需求 | 状态 | 页面 |
 |---|---|---|---|---|
+| 右豹主业务 | FR-CoCo-001 | AI申词 | 开发中 | [查看 Demo](demo/iteration/fr-coco-001-ai-shen-ci.html?tab=fe) |
 | 右豹主业务 | FR-001 | 剪辑手供稿书籍填写优化 | 开发中 | [查看 Demo](demo/iteration/fr-001-book-entry.html?tab=fe) |
 | 右豹主业务 | FR-003 | 代发上融合任务 | 开发中 | [查看 Demo](demo/iteration/fr-003-fusion-task.html?tab=fe) |
 

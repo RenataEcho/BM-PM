@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>AI申词 · 右豹</title>
+  <style>
+    :root {
+      --brand: #ff4d22;
+      --brand2: #ff6c46;
+      --ink: #252836;
+      --sub: #9498a8;
+      --line: #eceef3;
+      --bg: #f6f7fb;
+      --green: #16834a;
+      --red: #d92d4a;
+      --soft: #fff1ec;
+      --chip-bg: #fff5f1;
+      --chip-border: #ffe5dc;
+      --chip-text: #f06446;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      width: 100%; max-width: 375px; margin: 0 auto;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 14px;
+      background: var(--bg);
+    }
+    .phone { width: 100%; height: 100dvh; background: var(--bg); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .status {
+      height: 28px; flex-shrink: 0; padding: 6px 16px 0; display: flex; justify-content: space-between; align-items: center;
+      background: #fff; font-size: 12px; font-weight: 650;
+    }
+    .status-icons { display: flex; align-items: center; gap: 5px; }
+    .topbar {
+      height: 54px; flex-shrink: 0; background: #fff; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px; border-bottom: 1px solid #f1f1f5;
+    }
+    .top-title { font-size: 17px; font-weight: 700; letter-spacing: .2px; }
+    .record-link { color: var(--brand); font-weight: 600; font-size: 13px; cursor: pointer; background: none; border: 0; padding: 0; }
+    .main { flex: 1; min-height: 0; overflow: auto; padding: 16px 16px 12px; }
+    .page-records { display: none; }
+    .page-records.show { display: block; }
+    .page-home.hide { display: none; }
+    .section { margin-bottom: 16px; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px; gap: 8px; }
+    .section-title { font-size: 15px; font-weight: 750; }
+    .section-note { font-size: 12px; color: var(--sub); }
+    .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+    .project {
+      height: 72px; border: 1px solid var(--line); background: #fff; border-radius: 13px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+      cursor: pointer; color: #53586d; position: relative; font: inherit;
+    }
+    .project .p-icon {
+      width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center;
+      font-size: 15px; font-weight: 800; color: #fff; background: var(--brand);
+    }
+    .project:nth-child(2) .p-icon { background: var(--brand2); }
+    .project:nth-child(3) .p-icon { background: var(--chip-text); }
+    .project.selected { border: 1.5px solid var(--brand); background: var(--soft); color: var(--brand); font-weight: 750; }
+    .project.selected:after {
+      content: "✓"; position: absolute; right: 7px; top: 5px; width: 16px; height: 16px;
+      background: var(--brand); color: #fff; border-radius: 50%; font-size: 10px; display: grid; place-items: center;
+    }
+    .panel { background: #fff; border: 1px solid #eff0f6; border-radius: 15px; padding: 14px; margin-bottom: 12px; }
+    .field-label { font-weight: 650; font-size: 13px; margin-bottom: 9px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .field-label small { font-weight: 400; color: var(--sub); }
+    input { font: inherit; color: var(--ink); outline: none; }
+    .id-input { width: 100%; border: 1px solid #e6e8f1; border-radius: 10px; padding: 11px 12px; background: #fcfcfe; min-height: 43px; }
+    .id-input:focus, .qty-input:focus { border-color: var(--brand2); box-shadow: 0 0 0 3px var(--soft); }
+    .hint { font-size: 11px; color: #969aae; margin-top: 7px; line-height: 1.5; }
+    .book-card { display: flex; gap: 11px; padding: 12px; border: 1px solid #eceef5; border-radius: 12px; background: #fff; margin-top: 10px; }
+    .cover {
+      width: 62px; height: 82px; flex-shrink: 0; border-radius: 7px;
+      background: linear-gradient(155deg, #ffc7b0, #ff4d22);
+      display: flex; align-items: center; justify-content: center; color: #fff; text-align: center;
+      font-weight: 800; font-size: 13px; line-height: 1.4; box-shadow: 0 3px 9px rgba(255, 77, 34, .18);
+    }
+    .cover.soft { background: linear-gradient(155deg, #ffd8c8, #ff6c46); }
+    .cover.deep { background: linear-gradient(155deg, #ffb39a, #f06446); }
+    .book-body { min-width: 0; flex: 1; }
+    .book-title { font-weight: 750; font-size: 14px; margin: 1px 0 5px; }
+    .book-id-line { display: flex; align-items: center; gap: 7px; font-size: 11px; margin-top: 2px; color: #8b8fa2; }
+    .book-id-line b { font-size: 12px; font-weight: 650; color: #555a70; letter-spacing: .2px; }
+    .book-link { color: var(--brand); font-size: 11px; margin-top: 6px; display: inline-block; text-decoration: none; }
+    .book-remove { border: 0; background: transparent; color: #a0a3b4; padding: 0 0 0 4px; align-self: flex-start; font-size: 18px; cursor: pointer; }
+    .invalid { font-size: 11px; color: var(--red); margin-top: 6px; }
+    .manual-name { display: block; width: 100%; margin-top: 8px; color: var(--ink); font-size: 13px; }
+    .word-panel { padding: 14px; }
+    .word-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; }
+    .word-count { font-size: 11px; color: #8b8fa2; }
+    .word-book { padding: 12px 0; border-top: 1px solid #f0f1f6; }
+    .word-book:first-of-type { border-top: 0; padding-top: 0; }
+    .word-book-title { font-size: 12px; font-weight: 700; margin-bottom: 9px; display: flex; justify-content: space-between; gap: 8px; }
+    .word-list { display: flex; gap: 7px; flex-wrap: wrap; }
+    .word { background: var(--chip-bg); border: 1px solid var(--chip-border); color: var(--chip-text); border-radius: 8px; padding: 7px 10px; font-size: 12px; line-height: 1.2; }
+    .word.pending { color: #9a9daf; background: #f7f8fb; border-style: dashed; border-color: #e7e8f0; }
+    .feedback { font-size: 12px; font-weight: 650; margin: 10px 0 0; padding: 9px 10px; border-radius: 9px; background: var(--soft); color: var(--brand); }
+    .feedback.success { background: #eefaf3; color: var(--green); }
+    .feedback.fail { background: #fff1f3; color: var(--red); }
+    .footer {
+      flex-shrink: 0; background: rgba(255, 255, 255, .97); padding: 10px 16px 13px;
+      border-top: 1px solid #eaebf2; box-shadow: 0 -7px 24px rgba(27, 35, 80, .03);
+    }
+    .btn {
+      border: 0; border-radius: 12px; height: 46px; font: inherit; font-weight: 750; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn:disabled { opacity: .42; cursor: not-allowed; }
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-primary { background: var(--brand); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--brand2); }
+    .btn-secondary { background: #fff; border: 1px solid var(--brand); color: var(--brand); }
+    .btn .mini { font-size: 15px; }
+    .record-back { display: flex; align-items: center; gap: 7px; color: var(--brand); font-weight: 650; cursor: pointer; margin-bottom: 17px; background: none; border: 0; padding: 0; font: inherit; }
+    .record-item { background: #fff; border: 1px solid #eff0f6; border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 3px 12px rgba(32, 35, 58, .02); }
+    .record-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+    .record-project { font-weight: 750; font-size: 14px; }
+    .record-time { font-size: 11px; color: #999daf; white-space: nowrap; padding-top: 2px; }
+    .record-meta { display: flex; align-items: center; gap: 7px; margin-top: 7px; flex-wrap: wrap; }
+    .record-type { display: inline-flex; align-items: center; background: var(--soft); color: var(--brand); border-radius: 6px; padding: 4px 7px; font-size: 10px; font-weight: 650; }
+    .record-status { font-size: 11px; font-weight: 650; border-radius: 6px; padding: 4px 7px; background: #eefaf3; color: var(--green); }
+    .record-status.fail { background: #fff1f3; color: var(--red); }
+    .record-book { border-top: 1px solid #f0f1f6; padding-top: 11px; margin-top: 11px; }
+    .record-book-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 9px; }
+    .record-book-name { font-size: 12px; font-weight: 750; line-height: 1.5; }
+    .record-book-id { font-size: 10px; color: #8b8fa2; margin-top: 3px; }
+    .record-count { font-size: 11px; color: #666b80; white-space: nowrap; }
+    .record-result-label { font-size: 11px; color: #8b8fa2; margin-bottom: 7px; }
+    .record-words { display: flex; flex-wrap: wrap; gap: 6px; }
+    .record-word { background: var(--chip-bg); border: 1px solid var(--chip-border); color: var(--chip-text); border-radius: 7px; padding: 6px 8px; font-size: 11px; line-height: 1.3; }
+    .record-submit-result { font-size: 12px; line-height: 1.5; color: #666b80; background: #f8f9fc; border-radius: 8px; padding: 9px 10px; }
+    .empty { text-align: center; padding: 76px 20px; color: #9296a8; font-size: 13px; }
+    .empty-icon { font-size: 34px; margin-bottom: 12px; color: var(--brand); }
+    .toast {
+      position: absolute; z-index: 10; top: 48px; left: 50%; transform: translate(-50%, -10px); opacity: 0; pointer-events: none;
+      background: #292b3d; color: #fff; padding: 10px 17px; border-radius: 22px; font-size: 12px; transition: .22s; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .demo-tag { display: inline-flex; align-items: center; background: #f0f1f8; color: #85899d; padding: 3px 6px; border-radius: 5px; font-size: 10px; font-weight: 500; }
+    .book-tabs { display: flex; align-items: center; gap: 4px; background: #f1f2f8; border-radius: 9px; padding: 3px; }
+    .book-tab { border: 0; background: transparent; border-radius: 7px; padding: 7px 9px; font: inherit; font-size: 12px; color: var(--sub); cursor: pointer; white-space: nowrap; }
+    .book-tab.active { background: #fff; color: var(--brand); font-weight: 750; box-shadow: 0 1px 4px rgba(37, 38, 74, .08); }
+    .recommend-head { display: flex; align-items: center; justify-content: space-between; margin: 3px 0 9px; font-size: 12px; color: #777c91; }
+    .refresh-recs { border: 0; background: transparent; color: var(--brand); font: inherit; font-size: 12px; font-weight: 700; padding: 5px 0; cursor: pointer; }
+    .rec-grid { display: flex; flex-direction: column; gap: 9px; }
+    .rec-card { display: flex; gap: 10px; align-items: flex-start; background: #fff; border: 1px solid #eceef5; border-radius: 12px; padding: 10px; }
+    .rec-card .cover { width: 48px; height: 64px; font-size: 11px; }
+    .rec-card .book-title { font-size: 12px; margin-top: 1px; }
+    .rec-card .book-id-line { font-size: 10px; }
+    .rec-card .book-link { margin-top: 4px; }
+    .rec-info { min-width: 0; flex: 1; }
+    .rec-add { align-self: center; flex-shrink: 0; border: 1px solid var(--chip-border); background: var(--chip-bg); color: var(--chip-text); border-radius: 8px; padding: 7px 9px; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .rec-add.added { background: #f2f3f7; border-color: #e8e9ef; color: #9397a8; }
+    .tab-pane.hidden, .is-hidden { display: none; }
+    .loading-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; margin: 0 2px; animation: pulse .7s infinite alternate; }
+    @keyframes pulse { to { opacity: .25; transform: translateY(-2px); } }
+    .quantity-panel { padding: 12px 14px; margin-top: 10px; margin-bottom: 10px; }
+    .quantity-panel .qty-input {
+      display: block; width: 100%; height: 43px; min-height: 43px; padding: 11px 12px; text-align: left;
+      border: 1px solid #e6e8f1; border-radius: 10px; background: #fcfcfe; font-size: 14px; font-weight: 400; color: var(--ink);
+      appearance: textfield; -moz-appearance: textfield;
+    }
+    .quantity-panel .qty-input::-webkit-inner-spin-button,
+    .quantity-panel .qty-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.4); z-index:600; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .22s; }
+    .modal-overlay.open { opacity:1; pointer-events:auto; }
+    .modal { width:100%; max-width:400px; background:#fff; border-radius:14px; box-shadow:0 16px 48px rgba(30,40,60,.14); padding:20px; }
+    .modal h2 { font-size:17px; margin:0 0 18px; }
+    .modal select { width:100%; padding:12px; margin:10px 0 20px; border:1px solid var(--line); border-radius:8px; font:inherit; background:#fff; }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="status">
+      <span id="status-time">9:41</span>
+      <span class="status-icons">
+        <svg width="15" height="11" viewBox="0 0 17 12" fill="currentColor" aria-hidden="true"><rect x="0" y="7" width="3" height="5" rx="0.5"/><rect x="4.5" y="5" width="3" height="7" rx="0.5"/><rect x="9" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+        <svg width="14" height="11" viewBox="0 0 15 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 4.2C3.2 2 6 1 7.5 1s4.3 1 6.5 3.2"/><path d="M3.2 6.4c1.4-1.3 2.8-1.9 4.3-1.9s2.9.6 4.3 1.9"/><circle cx="7.5" cy="9.6" r="1" fill="currentColor" stroke="none"/></svg>
+        <svg width="22" height="11" viewBox="0 0 25 12" aria-hidden="true"><rect x="0.5" y="0.5" width="21" height="11" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1" fill="currentColor"/><rect x="22.5" y="3.5" width="1.5" height="5" rx="0.5" fill="currentColor"/></svg>
+      </span>
+    </div>
+    <header class="topbar">
+      <div class="top-title" id="headerTitle">AI申词</div>
+      <button class="record-link" id="openRecords" type="button">申请记录　›</button>
+    </header>
+    <div class="main page-home" id="homePage">
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">选择项目</div>
+          <div class="section-note">请选择一个项目</div>
+        </div>
+        <div class="project-grid" id="projectGrid">
+          <button class="project selected" type="button" data-project="番茄小说"><span class="p-icon">番</span><span>番茄小说</span></button>
+          <button class="project" type="button" data-project="红果短剧"><span class="p-icon">果</span><span>红果短剧</span></button>
+        </div>
+      </section>
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">添加书籍</div>
+          <div class="book-tabs">
+            <button class="book-tab active" type="button" data-tab="manual">输入书籍 ID</button>
+            <button class="book-tab" type="button" data-tab="recommend">官方推荐</button>
+          </div>
+        </div>
+        <div class="panel tab-pane" id="manualPane">
+          <div class="field-label">书籍 ID <small>空格或逗号分隔</small></div>
+          <input id="idInput" class="id-input" placeholder="请输入书籍 ID，如 738201 738202" value="738201" />
+          <div class="hint">输入书籍 ID 后自动匹配书籍信息，支持同时添加多本书。</div>
+        </div>
+        <div class="panel tab-pane hidden" id="recommendPane">
+          <div class="recommend-head">
+            <span>为你推荐 <span class="demo-tag">示例数据</span></span>
+            <button class="refresh-recs" id="refreshRecs" type="button">换一换 ↻</button>
+          </div>
+          <div class="rec-grid" id="recommendList"></div>
+          <div class="hint">每次 5 本，换一换看下一批，看完回到开头。点击「添加」即可加入本次申词。</div>
+        </div>
+        <div class="panel quantity-panel" id="quantityPanel">
+          <div class="field-label">统一申请数量 <small>应用于本次所有书籍 · 1–10 个/本</small></div>
+          <input class="id-input qty-input" id="globalQty" type="number" min="1" max="10" step="1" value="3" inputmode="numeric" aria-label="统一申请数量" />
+          <div class="invalid" id="globalQtyErr" style="display:none">请输入 1–10 之间的数量</div>
+        </div>
+        <div id="bookList"></div>
+        <div id="idErrors"></div>
+      </section>
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">AI 申词结果</div>
+          <div class="section-note">每本书独立生成</div>
+        </div>
+        <div class="panel word-panel">
+          <div class="word-head">
+            <span class="section-title" style="font-size:13px">本次词列表</span>
+            <span class="word-count" id="wordCount">尚未申词</span>
+          </div>
+          <div id="wordResults"></div>
+          <div id="feedbackSlot"></div>
+        </div>
+      </section>
+    </div>
+    <div class="main page-records" id="recordsPage">
+      <button class="record-back" id="backHome" type="button">‹　返回申词</button>
+      <div class="section-head">
+        <div class="section-title">申请记录</div>
+        <span class="section-note" id="recordCount">0 条记录</span>
+      </div>
+      <div id="recordList"></div>
+    </div>
+    <div class="footer" id="footer">
+      <div class="btn-row">
+        <button class="btn btn-primary" id="generateBtn" type="button"><span class="mini" id="generateIcon">✦</span> <span id="generateLabel">AI 申词</span></button>
+        <button class="btn btn-secondary" id="submitBtn" type="button" disabled><span class="mini">➤</span> 立即题词</button>
+      </div>
+    </div>
+    <div class="modal-overlay" id="promotionOverlay">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="promotionTitle">
+        <h2 id="promotionTitle">选择推广类型</h2>
+        <label for="promotionType">推广类型（必选）</label>
+        <select id="promotionType"><option value="">请选择推广类型</option><option>真人出镜</option><option>图文</option><option>解压TTS</option><option>解说混剪</option><option>meme剪辑</option><option>AIGC</option><option>营销号</option><option>沙雕漫</option><option>AI数字人</option><option>滚屏素材</option></select>
+        <div class="btn-row"><button class="btn btn-secondary" id="cancelPromotion" type="button">取消</button><button class="btn btn-primary" id="confirmPromotion" type="button" disabled>确认题词</button></div>
+      </section>
+    </div>
+    <div class="toast" id="toast"></div>
+  </div>
+  <script>
+    var books = {
+      "738201": { id: "738201", name: "南风知我意", link: "https://example.com/book/738201", cover: "南风知\n我意", style: "" },
+      "738202": { id: "738202", name: "雾都来信", link: "https://example.com/book/738202", cover: "雾都\n来信", style: "soft" },
+      "738203": { id: "738203", name: "重生后我不再隐忍", link: "https://example.com/book/738203", cover: "重生后\n我不再隐忍", style: "deep" },
+      "738204": { id: "738204", name: "月光落在旧书页", link: "https://example.com/book/738204", cover: "月光落在\n旧书页", style: "soft" },
+      "738205": { id: "738205", name: "她的第二人生", link: "https://example.com/book/738205", cover: "她的\n第二人生", style: "deep" },
+      "738206": { id: "738206", name: "消失的第七封信", link: "https://example.com/book/738206", cover: "消失的\n第七封信", style: "soft" },
+      "738207": { id: "738207", name: "闪婚之后", link: "https://example.com/book/738207", cover: "闪婚\n之后", style: "" },
+      "738208": { id: "738208", name: "逆光而行", link: "https://example.com/book/738208", cover: "逆光\n而行", style: "deep" },
+      "738209": { id: "738209", name: "长夜有星河", link: "https://example.com/book/738209", cover: "长夜有\n星河", style: "soft" },
+      "738210": { id: "738210", name: "偏偏是你", link: "https://example.com/book/738210", cover: "偏偏\n是你", style: "" },
+      "738211": { id: "738211", name: "山海之间", link: "https://example.com/book/738211", cover: "山海\n之间", style: "deep" },
+      "738212": { id: "738212", name: "如果重来一次", link: "https://example.com/book/738212", cover: "如果重来\n一次", style: "soft" }
+    };
+    var sampleWords = {
+      "738201": ["错过后的再次心动", "南风吹来的告白", "重逢才懂的深情", "藏在回忆里的爱", "命运安排的相遇", "迟来的真心告白"],
+      "738202": ["雾都深处的秘密", "一封未寄出的信", "真相藏在旧照片", "迷雾里的关键证据", "午夜来访的陌生人", "被抹去的那段记忆"],
+      "738203": ["重生后逆风翻盘", "不再隐忍的她", "手撕虚伪白莲花", "归来夺回属于我的", "这一世绝不心软", "隐藏大佬终于出手"],
+      "738204": ["月光下的旧时光", "书页里的秘密", "那年夏天的约定"],
+      "738205": ["她的人生重新开场", "告别过去拥抱自己", "这次为自己而活"],
+      "738206": ["第七封信的秘密", "旧案背后的真相", "深夜来信指向谁"],
+      "738207": ["闪婚后爱意失控", "先婚后爱的心动", "意外成为偏爱"],
+      "738208": ["逆风翻盘的日子", "从低谷走向高光", "这一回绝不认输"],
+      "738209": ["长夜尽头有星河", "秘密藏在旧时光", "迟来的真相与爱"],
+      "738210": ["偏偏对你动了心", "欢喜冤家的日常", "越斗嘴越心动"],
+      "738211": ["山海尽头是归途", "寻亲路上的温暖", "跨越山海的约定"],
+      "738212": ["如果人生能重来", "这次换我做选择", "重启人生的答案"]
+    };
+    var selectedProject = "番茄小说";
+    var globalQty = 3;
+    var generated = {};
+    var records = [];
+    var busy = false;
+    var manualNames = {};
+    var failNext = false;
+    var recPage = 0;
+    var hasGenerated = false;
+    var toastTimer = null;
+    var recommendedIds = ["738202", "738203", "738204", "738205", "738206", "738207", "738208", "738209", "738210", "738211"];
+    function $(id) { return document.getElementById(id); }
+    function idsFromInput() {
+      return Array.from(new Set($("idInput").value.split(/[\s,，、;；]+/).map(function (s) { return s.trim(); }).filter(Boolean)));
+    }
+    function esc(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    }
+    function bookOf(id) {
+      if (books[id]) return books[id];
+      var name = (manualNames[id] || "").replace(/^\s+|\s+$/g, "");
+      if (!name) return null;
+      return { id: id, name: name, link: "", cover: name, style: "soft" };
+    }
+    function allIds() { return idsFromInput().filter(function (id) { return !!bookOf(id); }); }
+    function namesReady() {
+      var ids = idsFromInput();
+      return ids.length > 0 && ids.every(function (id) { return !!bookOf(id); });
+    }
+    function formatTime(date) {
+      var pad = function (n) { return n < 10 ? "0" + n : "" + n; };
+      return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate()) + " " + pad(date.getHours()) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds());
+    }
+    function coverHtml(book, small) {
+      return '<div class="cover ' + (book.style || "") + '">' + book.cover.replace("\n", "<br>") + "</div>";
+    }
+    function clearBatch() {
+      generated = {};
+      hasGenerated = false;
+      $("feedbackSlot").innerHTML = "";
+      $("wordCount").textContent = "尚未申词";
+      $("generateLabel").textContent = "AI 申词";
+      $("generateIcon").textContent = "✦";
+      renderWords();
+      updateButtons();
+    }
+    function renderBooks() {
+      var ids = idsFromInput();
+      Object.keys(manualNames).forEach(function (id) {
+        if (ids.indexOf(id) === -1) delete manualNames[id];
+      });
+      $("bookList").innerHTML = "";
+      $("idErrors").innerHTML = "";
+      ids.forEach(function (id) {
+        if (!books[id]) {
+          $("idErrors").insertAdjacentHTML("beforeend",
+            '<div class="invalid"><div>未找到该本书</div><div class="book-id-line"><span>书籍 ID</span><b>' + esc(id) + '</b></div>' +
+            '<input class="id-input manual-name" data-name-for="' + esc(id) + '" placeholder="请输入书籍名称" value="' + esc(manualNames[id] || "") + '" /></div>');
+          return;
+        }
+        var book = books[id];
+        $("bookList").insertAdjacentHTML("beforeend",
+          '<div class="book-card">' + coverHtml(book) +
+          '<div class="book-body"><div class="book-title">' + book.name + '</div>' +
+          '<div class="book-id-line"><span>书籍 ID</span><b>' + book.id + "</b></div>" +
+          '<a class="book-link" href="' + book.link + '">书籍链接 ↗</a></div>' +
+          '<button class="book-remove" type="button" data-remove="' + id + '" aria-label="移除书籍">×</button></div>');
+      });
+      document.querySelectorAll("[data-name-for]").forEach(function (input) {
+        input.addEventListener("input", function () {
+          manualNames[input.getAttribute("data-name-for")] = input.value;
+          clearBatch();
+        });
+      });
+      document.querySelectorAll("[data-remove]").forEach(function (btn) {
+        btn.onclick = function () {
+          var id = btn.getAttribute("data-remove");
+          $("idInput").value = idsFromInput().filter(function (item) { return item !== id; }).join(" ");
+          renderBooks();
+          clearBatch();
+          renderRecommendations();
+        };
+      });
+      updateButtons();
+    }
+    function renderRecommendations() {
+      var ids = recommendedIds.slice(recPage * 5, recPage * 5 + 5);
+      var chosen = idsFromInput();
+      $("recommendList").innerHTML = ids.map(function (id) {
+        var book = books[id];
+        var added = chosen.indexOf(id) !== -1;
+        return '<div class="rec-card">' + coverHtml(book) +
+          '<div class="rec-info"><div class="book-title">' + book.name + '</div>' +
+          '<div class="book-id-line"><span>书籍 ID</span><b>' + book.id + "</b></div>" +
+          '<a class="book-link" href="' + book.link + '">书籍链接 ↗</a></div>' +
+          '<button class="rec-add' + (added ? " added" : "") + '" type="button" data-rec-add="' + id + '">' + (added ? "已添加 ✓" : "＋ 添加") + "</button></div>";
+      }).join("");
+      document.querySelectorAll("[data-rec-add]").forEach(function (btn) {
+        btn.onclick = function () {
+          var id = btn.getAttribute("data-rec-add");
+          var next = idsFromInput();
+          if (next.indexOf(id) === -1) next.push(id);
+          $("idInput").value = next.join(" ");
+          renderBooks();
+          clearBatch();
+          renderRecommendations();
+        };
+      });
+    }
+    function renderWords() {
+      var ids = allIds();
+      if (!Object.keys(generated).length) {
+        $("wordResults").innerHTML = '<div class="empty" style="padding:25px 8px"><div class="empty-icon">✦</div>添加书籍并设置统一申请数量后，点击「AI 申词」</div>';
+        return;
+      }
+        $("wordResults").innerHTML = ids.filter(function (id) { return generated[id]; }).map(function (id) {
+        return '<div class="word-book"><div class="word-book-title"><span>' + bookOf(id).name + '</span><span class="word-count">' + generated[id].length + ' 个词</span></div><div class="word-list">' +
+          generated[id].map(function (word) { return '<span class="word">' + word + "</span>"; }).join("") +
+          "</div></div>";
+      }).join("");
+      var total = ids.reduce(function (sum, id) { return sum + ((generated[id] && generated[id].length) || 0); }, 0);
+      $("wordCount").textContent = "共 " + total + " 个词";
+    }
+    function qtyOk() {
+      return Number.isInteger(Number(globalQty)) && Number(globalQty) >= 1 && Number(globalQty) <= 10;
+    }
+    function valid() { return !!selectedProject && namesReady() && qtyOk() && !busy; }
+    function hasWords() {
+      var ids = allIds();
+      return ids.length > 0 && ids.every(function (id) { return generated[id] && generated[id].length === Number(globalQty); });
+    }
+    function updateButtons() {
+      var ready = hasWords();
+      $("generateBtn").disabled = ((!valid() && !ready) || busy);
+      $("generateLabel").textContent = hasGenerated ? "重新申请" : "AI 申词";
+      $("generateIcon").textContent = hasGenerated ? "↻" : "✦";
+      $("submitBtn").disabled = !ready || busy;
+      $("globalQtyErr").style.display = ($("globalQty").value === "" || !qtyOk()) ? "block" : "none";
+    }
+    function toast(msg) {
+      var node = $("toast");
+      node.textContent = msg;
+      node.classList.add("show");
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { node.classList.remove("show"); }, 1800);
+    }
+    function setFeedback(type, msg) {
+      $("feedbackSlot").innerHTML = '<div class="feedback ' + type + '">' + msg + "</div>";
+    }
+    function makeWords(id, count, offset) {
+      var arr = sampleWords[id] || sampleWords["738201"];
+      var start = offset || 0;
+      return Array.from({ length: count }, function (_, i) { return arr[(i + start) % arr.length]; });
+    }
+    function wait(ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); }
+    function addRecord(type, success) {
+      var now = new Date();;
+      records.unshift({
+        project: selectedProject,
+        ids: allIds().map(function (id) {
+          return { id: id, name: bookOf(id).name, count: (generated[id] && generated[id].length) || 0, words: (generated[id] || []).slice() };
+        }),
+        type: type,
+        success: success,
+        time: formatTime(now)
+      });
+      renderRecords();
+    }
+    async function generate(isReroll) {
+      if (busy) return;
+      var canReroll = hasGenerated && allIds().length > 0 && qtyOk();
+      if (!(isReroll ? canReroll : valid())) return;
+      busy = true;
+      $("feedbackSlot").innerHTML = "";
+      updateButtons();
+      var ids = allIds();
+      $("wordResults").innerHTML = ids.map(function (id) {
+        return '<div class="word-book"><div class="word-book-title"><span>' + bookOf(id).name + '</span><span class="word-count">正在申词<span class="loading-dot"></span></span></div><div class="word-list"><span class="word pending">正在生成…</span></div></div>';
+      }).join("");
+      $("wordCount").textContent = "生成中…";
+      if (!isReroll) generated = {};
+      for (var i = 0; i < ids.length; i += 1) {
+        await wait(450);
+        generated[ids[i]] = makeWords(ids[i], Number(globalQty), isReroll ? 1 : 0);
+        renderWords();
+      }
+      busy = false;
+      hasGenerated = true;
+      updateButtons();
+      addRecord("AI申词", true);
+      toast(isReroll ? "重新申请完成" : "申词完成");
+    }
+    function closePromotion() {
+      $("promotionOverlay").classList.remove("open");
+      $("submitBtn").focus();
+    }
+    function requestSubmit() {
+      if ($("submitBtn").disabled) return;
+      // 当前支持的项目均为字节系，确认类型后才提交。
+      $("promotionType").value = "";
+      $("confirmPromotion").disabled = true;
+      $("promotionOverlay").classList.add("open");
+      $("promotionType").focus();
+    }
+    function submit(promotionType) {
+      if (!promotionType) return;
+      if ($("submitBtn").disabled) return;
+      var success = !failNext;
+      setFeedback(success ? "success" : "fail", success ? "提交成功" : "提交失败");
+      addRecord("立即题词", success);
+      records[0].promotionType = promotionType;
+      toast(success ? "提交成功" : "提交失败");
+    }
+    function renderRecords() {
+      $("recordCount").textContent = records.length + " 条记录";
+      if (!records.length) {
+        $("recordList").innerHTML = '<div class="empty"><div class="empty-icon">▤</div>还没有申请记录</div>';
+        return;
+      }
+      $("recordList").innerHTML = records.map(function (row) {
+        var booksHtml = row.ids.map(function (book) {
+          var body = row.type === "AI申词"
+            ? '<div class="record-result-label">本次申请词</div><div class="record-words">' + book.words.map(function (word) { return '<span class="record-word">' + word + "</span>"; }).join("") + "</div>"
+            : '<div class="record-submit-result">' + (row.success ? "提交成功" : "提交失败") + "</div>";
+          var count = row.type === "AI申词" ? '<span class="record-count">' + book.count + " 个词</span>" : "";
+          return '<div class="record-book"><div class="record-book-head"><div><div class="record-book-name">' + book.name + '</div><div class="record-book-id">书籍 ID：' + book.id + "</div></div>" + count + "</div>" + body + "</div>";
+        }).join("");
+        var status = row.type === "立即题词"
+          ? '<span class="record-status' + (row.success ? "" : " fail") + '">' + (row.success ? "提交成功" : "提交失败") + "</span>"
+          : '<span class="record-status">申词完成</span>';
+        return '<div class="record-item"><div class="record-top"><div><div class="record-project">' + row.project + '</div><div class="record-meta"><span class="record-type">' + row.type + "</span>" + status + '</div></div><div class="record-time">' + row.time + "</div></div>" + booksHtml + "</div>";
+      }).join("");
+    }
+    function showRecords(show) {
+      if (window.parent !== window) window.parent.postMessage({ type: "ai-shen-ci-page", page: show ? "records" : "home" }, location.origin);
+      $("homePage").classList.toggle("hide", show);
+      $("recordsPage").classList.toggle("show", show);
+      $("footer").style.display = show ? "none" : "block";
+      $("headerTitle").textContent = show ? "申请记录" : "AI申词";
+      $("openRecords").style.display = show ? "none" : "block";
+    }
+    function selectProject(name) {
+      selectedProject = name;
+      document.querySelectorAll("#projectGrid .project").forEach(function (node) {
+        node.classList.toggle("selected", node.getAttribute("data-project") === name);
+      });
+    }
+    function bind() {
+      $("globalQty").addEventListener("input", function () {
+        globalQty = $("globalQty").value === "" ? "" : Number($("globalQty").value);
+        clearBatch();
+      });
+      $("projectGrid").addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-project]");
+        if (!btn) return;
+        selectProject(btn.getAttribute("data-project"));
+        clearBatch();
+      });
+      $("idInput").addEventListener("input", function () {
+        renderBooks();
+        renderRecommendations();
+        clearBatch();
+      });
+      document.querySelectorAll("[data-tab]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll("[data-tab]").forEach(function (node) { node.classList.toggle("active", node === btn); });
+          var recommend = btn.getAttribute("data-tab") === "recommend";
+          $("manualPane").classList.toggle("hidden", recommend);
+          $("recommendPane").classList.toggle("hidden", !recommend);
+          $("bookList").classList.toggle("is-hidden", recommend);
+          $("idErrors").classList.toggle("is-hidden", recommend);
+        });
+      });
+      $("refreshRecs").addEventListener("click", function () {
+        var pages = Math.max(1, Math.ceil(recommendedIds.length / 5));
+        recPage = (recPage + 1) % pages;
+        renderRecommendations();
+      });
+      $("homePage").addEventListener("click", function (event) {
+        if (event.target.closest(".book-link")) event.preventDefault();
+      });
+      $("generateBtn").addEventListener("click", function () { generate(hasGenerated); });
+      $("submitBtn").addEventListener("click", requestSubmit);
+      $("promotionType").addEventListener("change", function () { $("confirmPromotion").disabled = !this.value; });
+      $("cancelPromotion").addEventListener("click", closePromotion);
+      $("confirmPromotion").addEventListener("click", function () {
+        if (!$("promotionType").value) return;
+        // Demo 模拟携带推广类型提交；不调用真实题词接口。
+        closePromotion();
+        submit($("promotionType").value);
+      });
+      $("promotionOverlay").addEventListener("click", function (event) { if (event.target === this) closePromotion(); });
+      document.addEventListener("keydown", function (event) { if (event.key === "Escape" && $("promotionOverlay").classList.contains("open")) closePromotion(); });
+      $("openRecords").addEventListener("click", function () { showRecords(true); });
+      $("backHome").addEventListener("click", function () { showRecords(false); });
+    }
+    function seedRecords() {
+      records = [
+        {
+          project: "番茄小说",
+          ids: [
+            { id: "738201", name: "南风知我意", count: 3, words: ["错过后的再次心动", "南风吹来的告白", "重逢才懂的深情"] },
+            { id: "738202", name: "雾都来信", count: 3, words: ["雾都深处的秘密", "一封未寄出的信", "真相藏在旧照片"] }
+          ],
+          type: "AI申词",
+          success: true,
+          time: "2026-10-23 17:20:00"
+        },
+        {
+          project: "红果短剧",
+          ids: [{ id: "738203", name: "重生后我不再隐忍", count: 2, words: ["重生后逆风翻盘", "不再隐忍的她"] }],
+          type: "立即题词",
+          success: false,
+          time: "2026-10-22 11:05:00"
+        }
+      ];
+    }
+    function preset(screen) {
+      busy = false;
+      failNext = screen === "fail";
+      showRecords(screen === "records");
+      if (screen === "records") {
+        renderRecords();
+        return;
+      }
+      if (screen === "start") {
+        selectProject("番茄小说");
+        $("idInput").value = "738201";
+        globalQty = 3;
+        $("globalQty").value = "3";
+        generated = {};
+        hasGenerated = false;
+        $("feedbackSlot").innerHTML = "";
+      } else {
+        selectProject("番茄小说");
+        $("idInput").value = "738201 738202";
+        globalQty = 3;
+        $("globalQty").value = "3";
+        generated = {
+          "738201": ["错过后的再次心动", "南风吹来的告白", "重逢才懂的深情"],
+          "738202": ["雾都深处的秘密", "一封未寄出的信", "真相藏在旧照片"]
+        };
+        hasGenerated = true;
+        if (screen === "ok") setFeedback("success", "提交成功");
+        else if (screen === "fail") setFeedback("fail", "提交失败");
+        else $("feedbackSlot").innerHTML = "";
+      }
+      renderBooks();
+      renderRecommendations();
+      renderWords();
+      updateButtons();
+    }
+    window.addEventListener("message", function (event) {
+      var data = event.data || {};
+      if (data.type !== "ai-shen-ci" || !data.screen) return;
+      preset(data.screen);
+    });
+    var clock = new Date();
+    $("status-time").textContent = (clock.getHours() < 10 ? "0" : "") + clock.getHours() + ":" + (clock.getMinutes() < 10 ? "0" : "") + clock.getMinutes();
+    seedRecords();
+    bind();
+    renderRecords();
+    var initial = new URLSearchParams(location.search).get("screen") || "start";
+    preset(initial);
+  </script>
+</body>
+</html>

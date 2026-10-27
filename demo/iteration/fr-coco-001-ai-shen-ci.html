@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="gate.js?v=2"></script>
+  <title>FR-CoCo-001 · AI申词 · BM-PM</title>
+  <style>
+    :root {
+      --primary: #2563eb; --primary-hover: #1d4ed8; --primary-light: #eff6ff; --primary-border: #bfdbfe;
+      --accent-rule: #0891b2;
+      --success: #16a34a; --danger: #dc2626;
+      --surface: #fff; --surface-glass: rgba(255,255,255,0.72);
+      --surface-hover: #f8fafc; --border: #e8edf3;
+      --text-primary: #18222f; --text-secondary: #4a5568; --text-muted: #9aa5b4;
+      --sidebar-w: 240px; --topnav-h: 54px; --drawer-w: 480px;
+      --radius-sm: 7px; --radius-lg: 14px;
+      --shadow: 0 8px 32px rgba(30,40,80,0.10);
+    }
+    [hidden] { display: none !important; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 13px;
+      color: var(--text-primary);
+      background: linear-gradient(135deg, #e0e7ff 0%, #f0f4f8 40%, #e0f2fe 100%);
+      display: grid;
+      grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+      grid-template-rows: var(--topnav-h) minmax(0, 1fr);
+      height: 100vh; overflow: hidden;
+    }
+    .topnav {
+      grid-column: 1 / -1; height: var(--topnav-h);
+      display: flex; align-items: stretch;
+      background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 40%, #e0f2fe 100%);
+      border-bottom: 1px solid rgba(148,163,196,0.35);
+    }
+    .topnav-brand {
+      display: flex; align-items: center; gap: 10px;
+      width: var(--sidebar-w); padding: 0 18px;
+      border-right: 1px solid rgba(148,163,196,0.25);
+    }
+    .brand-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+    .brand-text { font-size: 14px; font-weight: 700; }
+    .brand-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .pnav { display: flex; align-items: stretch; flex: 1; }
+    .pnav-item {
+      position: relative; height: 100%; padding: 0 22px; border: none; background: transparent;
+      font-family: inherit; font-size: 15px; font-weight: 600; color: #3b4d6b;
+      display: inline-flex; align-items: center; text-decoration: none;
+    }
+    .pnav-item.active { color: #1e3a8a; font-weight: 700; background: rgba(99,102,241,0.13); }
+    .pnav-item.active::after {
+      content: ''; position: absolute; bottom: 0; left: 14px; right: 14px; height: 3px;
+      border-radius: 3px 3px 0 0; background: #4f46e5;
+    }
+    .sidebar {
+      min-height: 0; display: flex; flex-direction: column;
+      background: #eef2fb; border-right: 1px solid #d3dce8;
+    }
+    .sidebar-scroll { flex: 1; overflow-y: auto; padding: 8px 0 16px; }
+    .nav-item {
+      position: relative; display: flex; align-items: center; height: 40px;
+      padding: 0 12px 0 14px; margin: 1px 8px; width: calc(100% - 16px);
+      border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary); text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(99,102,241,0.06); color: var(--text-primary); }
+    .nav-item.active { color: var(--primary); background: rgba(37,99,235,0.12); font-weight: 600; }
+    .nav-item.active::before {
+      content: ''; position: absolute; left: 0; top: 7px; bottom: 7px; width: 3px;
+      border-radius: 0 2px 2px 0; background: var(--primary);
+    }
+    .sidebar-foot { padding: 10px 14px 14px; border-top: 1px solid rgba(148,163,196,0.22); font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+    .main { min-width: 0; min-height: 0; display: flex; flex-direction: column; padding: 12px 20px 12px; }
+    .breadcrumb { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .page-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+    .page-header h1 { font-size: 19px; font-weight: 700; }
+    .page-desc { font-size: 12px; color: var(--text-muted); line-height: 1.45; max-width: 720px; margin-top: 4px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 34px; padding: 0 14px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent;
+    }
+    .btn-rule { background: var(--primary-light); color: var(--primary); border-color: var(--primary-border); }
+    .btn-rule.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .page-tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+    .page-tabs button {
+      height: 32px; padding: 0 14px; border: none; background: transparent; cursor: pointer;
+      font-size: 13px; color: var(--text-secondary); border-bottom: 2px solid transparent;
+    }
+    .page-tabs button.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
+    .page-view { display: none; min-height: 0; flex: 1; }
+    .page-view.active { display: flex; flex-direction: column; }
+    .demo-layout { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(280px, 540px) minmax(375px, 1fr); gap: 16px; }
+    .context-rules { min-height: 0; overflow: auto; padding: 20px; background: var(--surface-glass); border: 1px solid rgba(255,255,255,.55); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+    .context-rules h2 { font-size: 16px; margin-bottom: 6px; }
+    .context-rules .intro { font-size: 12px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 20px; }
+    .context-rules .rule-section h3 { font-size: 13px; }
+    .context-rules .rule-content { font-size: 12px; }
+    @media (max-width: 1000px) { .demo-layout { grid-template-columns: minmax(220px, 1fr) minmax(375px, 1fr); overflow: auto; } }
+
+    .mockup-board {
+      width: 100%; height: 100%; min-height: 0; overflow: auto;
+      display: flex; align-items: flex-start; justify-content: safe center; padding: 16px;
+      background: var(--surface-glass); border: 1px solid rgba(255,255,255,0.55);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow);
+    }
+    .mobile-preview {
+      width: 375px; height: 100%; min-height: 420px; flex-shrink: 0;
+      overflow: hidden; background: #f6f7fb;
+    }
+    .mobile-preview iframe { display: block; width: 100%; height: 100%; border: 0; background: #f6f7fb; }
+    .flow-page { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .flow-page-intro { padding: 12px 14px 0; font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+    .flow-svg-wrap { overflow: auto; max-height: 72vh; padding: 8px; }
+    .flow-svg-wrap svg { display: block; }
+    .flow-edges line, .flow-edges polyline { fill: none; stroke: #94a3b8; stroke-width: 1.5; }
+    .flow-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 4px 14px 14px; font-size: 11px; color: var(--text-muted); }
+    .flow-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: -2px; }
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.35); z-index: 500;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: var(--drawer-w); z-index: 501;
+      background: rgba(255,255,255,0.98); box-shadow: -8px 0 40px rgba(30,40,60,0.18);
+      transform: translateX(100%); transition: transform 0.28s ease;
+      display: flex; flex-direction: column;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .drawer-header h2 { font-size: 15px; font-weight: 700; }
+    .drawer-close {
+      width: 28px; height: 28px; border: none; background: #f1f5f9; border-radius: 6px;
+      cursor: pointer; font-size: 16px; color: var(--text-secondary);
+    }
+    .drawer-body { flex: 1; overflow-y: auto; }
+    .rule-tab-bar { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); }
+    .rule-tab-bar button {
+      padding: 10px 18px; border: none; background: none; cursor: pointer;
+      font-size: 13px; color: var(--text-secondary); border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    .rule-tab-bar button.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
+    .rule-panel { display: none; padding: 16px 20px 24px; }
+    .rule-panel.active { display: block; }
+    .rule-section { margin-bottom: 20px; }
+    .rule-section h3 { font-size: 14px; font-weight: 700; color: var(--accent-rule); margin-bottom: 8px; }
+    .rule-content { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .rule-content ul { padding-left: 18px; }
+    .rule-content li { margin-bottom: 5px; }
+  </style>
+</head>
+<body>
+  <header class="topnav">
+    <div class="topnav-brand">
+      <div class="brand-icon">迭</div>
+      <div>
+        <div class="brand-text">BM-PM</div>
+        <div class="brand-sub">迭代需求</div>
+      </div>
+    </div>
+    <nav class="pnav" aria-label="业务线">
+      <a class="pnav-item active" href="framework-shell.html#youbao/overview">右豹主业务</a>
+      <a class="pnav-item" href="framework-shell.html#mentor/overview">导师商务</a>
+      <a class="pnav-item" href="framework-shell.html#enterprise/overview">企业号</a>
+    </nav>
+  </header>
+  <aside class="sidebar">
+    <div class="sidebar-scroll" data-iteration-sidebar></div>
+    <div class="sidebar-foot">先写明业务线，再做设计。<br />已上线进归档，已暂停进废纸篓。</div>
+  </aside>
+  <main class="main">
+    <nav class="breadcrumb"><a href="framework-shell.html#youbao/overview">右豹主业务</a> / AI申词</nav>
+    <header class="page-header">
+      <div>
+        <h1>FR-CoCo-001 · AI申词 · v1 当前</h1>
+        <p class="page-desc">小明选项目、定书，让 AI 出词，再题词。示例数据，提交后不保存。</p>
+      </div>
+      <button class="btn btn-rule" id="ruleBtn" type="button" aria-expanded="false">需求规则</button>
+    </header>
+    <div class="page-tabs" role="tablist">
+      <button type="button" class="active" data-tab="fe">前端交互</button>
+      <button type="button" data-tab="flow">业务流程</button>
+    </div>
+    <section class="page-view active" id="view-fe">
+      <div class="demo-layout">
+        <aside class="context-rules" aria-label="当前页面需求规则">
+          <h2 id="contextTitle">申词页 · 需求规则</h2>
+          <p class="intro">对照右侧页面查看字段、操作与边界。进入申请记录后，说明同步切换。</p>
+          <div style="display:flex;gap:8px;margin-bottom:16px"><button type="button" class="btn btn-ghost" id="editRules">编辑规则</button><button type="button" class="btn btn-primary" id="saveRules" hidden>保存到项目</button><button type="button" class="btn btn-ghost" id="cancelRules" hidden>取消</button></div><p id="ruleEditStatus" role="status" style="font-size:12px;line-height:1.6"></p><textarea id="ruleEditor" aria-label="编辑当前页面需求规则" hidden style="width:100%;min-height:420px;resize:vertical;border:1px solid var(--border);border-radius:8px;padding:12px;font:12px/1.8 inherit"></textarea><div id="contextRules"></div>
+        </aside>
+        <div class="mockup-board">
+          <div class="mobile-preview">
+            <iframe id="phone" title="AI申词完整交互页面" src="fr-coco-001-ai-shen-ci-demo.html?embed=1&amp;screen=start&amp;v=4"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="page-view" id="view-flow">
+      <div class="flow-page">
+        <p class="flow-page-intro">失败留在当前页，重新申请回到出词。两条回环都接到对应步骤的顶边，不回到打开页面。</p>
+        <div class="flow-svg-wrap">
+          <svg width="960" height="1260" viewBox="0 0 960 1260" role="img" aria-label="AI申词业务流程">
+            <defs>
+              <marker id="flow-arrow-1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="#94a3b8"></path>
+              </marker>
+            </defs>
+            <g class="flow-edges" fill="none" stroke="#94a3b8" stroke-width="1.5">
+              <line x1="480" y1="60" x2="480" y2="92" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="132" x2="480" y2="164" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="212" x2="480" y2="248" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="328" x2="480" y2="364" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="412" x2="480" y2="444" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="484" x2="480" y2="520" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="600" x2="480" y2="636" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="676" x2="480" y2="708" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="748" x2="480" y2="784" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="864" x2="480" y2="900" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="940" x2="480" y2="972" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="1020" x2="480" y2="1056" marker-end="url(#flow-arrow-1)"></line>
+              <line x1="480" y1="1136" x2="480" y2="1172" marker-end="url(#flow-arrow-1)"></line>
+              <polyline points="385,288 180,288" marker-end="url(#flow-arrow-1)"></polyline>
+              <polyline points="110,308 110,464 370,464" marker-end="url(#flow-arrow-1)"></polyline>
+              <polyline points="385,560 180,560" marker-end="url(#flow-arrow-1)"></polyline>
+              <polyline points="40,540 16,540 16,428 480,428 480,444" marker-end="url(#flow-arrow-1)"></polyline>
+              <polyline points="385,824 180,824" marker-end="url(#flow-arrow-1)"></polyline>
+              <polyline points="40,804 16,804 16,692 480,692 480,708" marker-end="url(#flow-arrow-1)"></polyline>
+              <polyline points="575,1096 730,1096" marker-end="url(#flow-arrow-1)"></polyline>
+              <polyline points="890,1076 930,1076 930,882 480,882 480,900" marker-end="url(#flow-arrow-1)"></polyline>
+              <polyline points="590,40 730,40" stroke-dasharray="4 3" marker-end="url(#flow-arrow-1)"></polyline>
+              <polyline points="820,60 820,76 480,76 480,60" stroke-dasharray="4 3" marker-end="url(#flow-arrow-1)"></polyline>
+            </g>
+            <g class="flow-nodes" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+              <rect x="370" y="20" width="220" height="40" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="480" y="45" text-anchor="middle" font-size="12" fill="#18222f">打开这个 H5</text>
+              <rect x="370" y="92" width="220" height="40" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="480" y="117" text-anchor="middle" font-size="12" fill="#18222f">选择支持的项目</text>
+              <rect x="370" y="164" width="220" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="480" y="184" text-anchor="middle" font-size="12" fill="#18222f">输入多个书籍 ID</text>
+              <text x="480" y="202" text-anchor="middle" font-size="12" fill="#18222f">或选官方推荐</text>
+              <polygon points="480,248 575,288 480,328 385,288" fill="#fffbeb" stroke="#d97706"></polygon>
+              <text x="480" y="284" text-anchor="middle" font-size="11" fill="#92400e">书籍信息</text>
+              <text x="480" y="300" text-anchor="middle" font-size="11" fill="#92400e">带出了吗?</text>
+              <rect x="40" y="268" width="140" height="40" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="110" y="293" text-anchor="middle" font-size="12" fill="#18222f">自己填书名</text>
+              <rect x="370" y="364" width="220" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="480" y="384" text-anchor="middle" font-size="12" fill="#18222f">带出封面、名称</text>
+              <text x="480" y="402" text-anchor="middle" font-size="12" fill="#18222f">书籍 ID 和链接</text>
+              <rect x="370" y="444" width="220" height="40" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="480" y="469" text-anchor="middle" font-size="12" fill="#18222f">每本书的申请数量</text>
+              <polygon points="480,520 575,560 480,600 385,560" fill="#fffbeb" stroke="#d97706"></polygon>
+              <text x="480" y="556" text-anchor="middle" font-size="11" fill="#92400e">数量是</text>
+              <text x="480" y="572" text-anchor="middle" font-size="11" fill="#92400e">1 到 10 个?</text>
+              <rect x="40" y="540" width="140" height="40" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="110" y="565" text-anchor="middle" font-size="12" fill="#18222f">改数量</text>
+              <rect x="370" y="636" width="220" height="40" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="480" y="661" text-anchor="middle" font-size="12" fill="#18222f">点击 AI 申词</text>
+              <rect x="370" y="708" width="220" height="40" rx="8" fill="#fff7ed" stroke="#ea580c"></rect>
+              <text x="480" y="733" text-anchor="middle" font-size="12" fill="#18222f">词按结果实时出现</text>
+              <polygon points="480,784 575,824 480,864 385,824" fill="#fffbeb" stroke="#d97706"></polygon>
+              <text x="480" y="820" text-anchor="middle" font-size="11" fill="#92400e">满意</text>
+              <text x="480" y="836" text-anchor="middle" font-size="11" fill="#92400e">这批词?</text>
+              <rect x="40" y="804" width="140" height="40" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="110" y="829" text-anchor="middle" font-size="12" fill="#18222f">重新申请</text>
+              <rect x="370" y="900" width="220" height="40" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="480" y="925" text-anchor="middle" font-size="12" fill="#18222f">点击立即题词</text>
+              <rect x="370" y="972" width="220" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a"></rect>
+              <text x="480" y="992" text-anchor="middle" font-size="12" fill="#18222f">现有关键词</text>
+              <text x="480" y="1010" text-anchor="middle" font-size="12" fill="#18222f">题词接口</text>
+              <polygon points="480,1056 575,1096 480,1136 385,1096" fill="#fffbeb" stroke="#d97706"></polygon>
+              <text x="480" y="1092" text-anchor="middle" font-size="11" fill="#92400e">提交</text>
+              <text x="480" y="1108" text-anchor="middle" font-size="11" fill="#92400e">成功?</text>
+              <rect x="730" y="1076" width="160" height="40" rx="8" fill="#fef2f2" stroke="#dc2626"></rect>
+              <text x="810" y="1101" text-anchor="middle" font-size="12" fill="#991b1b">保留当前页</text>
+              <rect x="370" y="1172" width="220" height="40" rx="8" fill="#eff6ff" stroke="#2563eb"></rect>
+              <text x="480" y="1197" text-anchor="middle" font-size="12" fill="#18222f">结束</text>
+              <rect x="730" y="20" width="180" height="40" rx="8" fill="#f1f5f9" stroke="#94a3b8"></rect>
+              <text x="820" y="45" text-anchor="middle" font-size="12" fill="#18222f">查看申请记录</text>
+              <text x="300" y="284" font-size="11" fill="#dc2626">否</text>
+              <text x="500" y="348" font-size="11" fill="#16a34a">是</text>
+              <text x="300" y="556" font-size="11" fill="#dc2626">否</text>
+              <text x="500" y="620" font-size="11" fill="#16a34a">是</text>
+              <text x="300" y="820" font-size="11" fill="#dc2626">否</text>
+              <text x="500" y="884" font-size="11" fill="#16a34a">是</text>
+              <text x="620" y="1090" font-size="11" fill="#dc2626">否</text>
+              <text x="500" y="1156" font-size="11" fill="#16a34a">是</text>
+              <text x="640" y="32" font-size="11" fill="#64748b">可查看</text>
+            </g>
+          </svg>
+        </div>
+        <div class="flow-legend">
+          <span><i style="background:#eff6ff;border:1px solid #2563eb"></i>前端 / 操作</span>
+          <span><i style="background:#f0fdf4;border:1px solid #16a34a"></i>后端 / 写入</span>
+          <span><i style="background:#fff7ed;border:1px solid #ea580c"></i>异步 / 任务</span>
+          <span><i style="background:#fffbeb;border:1px solid #d97706"></i>校验 / 分支</span>
+          <span><i style="background:#fef2f2;border:1px solid #dc2626"></i>阻断 / 驳回</span>
+          <span><i style="background:#f1f5f9;border:1px solid #94a3b8"></i>可查看</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="drawer-overlay" id="ruleOverlay"></div>
+  <aside class="drawer rule" id="ruleDrawer" role="dialog" aria-labelledby="ruleTitle">
+    <div class="drawer-header">
+      <h2 id="ruleTitle">FR-CoCo-001 · v1 需求规则</h2>
+      <button class="drawer-close" id="ruleClose" type="button" aria-label="关闭">×</button>
+    </div>
+    <div class="rule-tab-bar">
+      <button type="button" class="active" data-rule="fe">前端需求</button>
+      <button type="button" data-rule="admin">后台需求</button>
+    </div>
+    <div class="drawer-body">
+      <div class="rule-panel active" id="rule-fe">
+        <div id="sharedFrontendRules"></div>
+        <div class="rule-section">
+          <h3>1 业务目标</h3>
+          <div class="rule-content">右豹主业务里需要题词的项目，由 AI 想关键词。小明满意后走现有的关键词题词接口。</div>
+        </div>
+        <div class="rule-section">
+          <h3>5 生成提示词</h3>
+          <div class="rule-content">
+            <ul>
+              <li>系统提示词固定：你是漫剧别名生成助手。只输出合法 JSON，不要 Markdown，不要解释。</li>
+              <li>用户提示词依次是 batchHeader、本批剧数据 JSON（bookId、剧名、简介、前缀、数量等）、batchRules、输出 JSON 结构。</li>
+              <li>batchHeader：你是中文漫剧低风险别名生成器。只完成本提示中的数据生成，不读取文件、不访问网站、不调用任何工具。</li>
+              <li>按 plotCount / fixedCount 生成。每个别名正好 4 到 10 个汉字。前段是剧情别名；有前缀时后段是「两字前缀 + 两字剧情后缀」。</li>
+              <li>剧情别名用「具体物件或场景 + 动作或结果」，并写 plotEvidence。</li>
+              <li>禁平台高相似词，禁简介连续三字，禁剧名连续两字，禁人名、地名、IP、成语。禁用风险词和风险字。固定后缀不能撞 blockedFixedSuffixes。</li>
+              <li>只禁止四字完全重复，相近可保留。男女频缺失时按剧名和简介判断。必须原样返回 recordIndex，只输出 JSON。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rule-section">
+          <h3>6 业务流程</h3>
+          <div class="rule-content">见本页业务流程。</div>
+        </div>
+      </div>
+      <div class="rule-panel" id="rule-admin">
+        <div class="rule-section">
+          <h3>1 业务目标</h3>
+          <div class="rule-content">后台不看。</div>
+        </div>
+        <div class="rule-section">
+          <h3>2 数据表与字段</h3>
+          <div class="rule-content">无。</div>
+        </div>
+        <div class="rule-section">
+          <h3>3 列表与筛选</h3>
+          <div class="rule-content">无。</div>
+        </div>
+        <div class="rule-section">
+          <h3>4 边界规则</h3>
+          <div class="rule-content">无。</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <script src="sidebar-nav.js?v=6"></script>
+  <script>
+    var ruleBtn = document.getElementById('ruleBtn');
+    var currentTab = 'fe';
+    var pageRules = {
+      home: [
+        ['页面与字段', ['选择一个字节系项目；通过书籍 ID 或官方推荐添加书籍。', '书籍卡展示封面、名称、书籍 ID 和链接，不展示简介。', '统一申请数量用于每一本书，必须是 1–10 的整数。']],
+        ['选书与校验', ['多个 ID 用空格或逗号分隔；书籍从 fanqie_book_list 匹配。', '官方推荐每次 5 本，换到最后一批后回到开头。', '未匹配到书籍时提示「未找到该本书」，需自行填写书名；存在未填名称的书籍时不能申词。']],
+        ['申词与题词', ['项目、至少一本可用的书和合法数量齐全后，AI 申词可点。', '生成期间底部两个按钮均不可点；每本书按统一数量生成词，以芯片展示。', '出词后左侧改为「重新申请」，替换当前全部书籍的词并新增一条申请记录。', '立即题词提交当前词，仅反馈成功或失败；失败保留当前页面。', "字节系项目点击「立即题词」先选择推广类型（必选），确认后携带所选类型走题词接口；未选择不可确认，取消不提交。类型：真人出镜、图文、解压TTS、解说混剪、meme剪辑、AIGC、营销号、沙雕漫、AI数字人、滚屏素材。"]],
+        ['状态与边界', ['修改项目、书籍或数量后，清空当前词和提交反馈，需要重新申词。', '底部两个操作固定可见；申请记录入口位于页头。', '本 Demo 使用示例数据，不调用真实接口、不持久化。']]
+      ],
+      records: [
+        ['页面与字段', ['展示条数；无记录时显示空态。', '每条展示项目、类型、状态和申请时间，时间格式 YYYY-MM-DD HH:mm:ss。']],
+        ['记录内容', ['AI申词：按书展示书籍 ID、词数和本批申请词，状态为「申词完成」。', '立即题词：按书展示提交成功或提交失败。每次申词或题词各留一条记录。']],
+        ['操作与边界', ['记录只读，没有进一步操作，页面不展示底部申词和题词按钮。', '返回申词页时，保留离开前的词和提交反馈。', '产品要求记录跨次保留；本 Demo 仅在当前页面会话内模拟，不持久化。']]
+      ]
+    };
+    function escapeRule(text){return text.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+    var editingRules=false, ruleView='home', ruleBase=null;
+    var editStatus=document.getElementById('ruleEditStatus'), ruleEditor=document.getElementById('ruleEditor');
+    function editingState(active){editingRules=active;ruleEditor.hidden=!active;document.getElementById('contextRules').hidden=active;document.getElementById('editRules').hidden=active;document.getElementById('saveRules').hidden=!active;document.getElementById('cancelRules').hidden=!active;document.querySelectorAll('[data-perspective]').forEach(function(btn){btn.disabled=active})}
+    document.getElementById('editRules').onclick=function(){ruleView=currentRulePage;ruleBase=JSON.parse(JSON.stringify(pageRules[ruleView]));ruleEditor.value=ruleBase.map(function(g){return '## '+g[0]+'\n'+g[1].map(function(line){return '- '+line}).join('\n')}).join('\n\n');editingState(true);editStatus.textContent='每个分区以 ## 标题开始，每条规则以 - 开始。保存将写入本项目 frontend-rules.json。';};
+    document.getElementById('cancelRules').onclick=function(){editingState(false);showContextRules(currentRulePage);editStatus.textContent='已取消编辑';};
+    document.getElementById('saveRules').onclick=async function(){
+      var groups=[];
+      try{
+        ruleEditor.value.split('\n').forEach(function(line){line=line.trim();if(!line)return;if(line.startsWith('## ')){groups.push([line.slice(3).trim(),[]])}else if(line.startsWith('- ')&&groups.length){groups[groups.length-1][1].push(line.slice(2).trim())}else{throw Error('请使用 ## 分区标题和 - 规则条目')}});
+        if(!groups.length||groups.some(function(g){return !g[0]||!g[1].length}))throw Error('每个分区需要标题和至少一条规则');
+        this.disabled=true;
+        var response=await fetch('/__local/ai-rules',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({view:ruleView,groups:groups,base:ruleBase})});
+        if(!response.ok){var error=await response.json().catch(function(){return {error:'保存服务不可用，请用 python3 scripts/preview_server.py 启动预览'}});throw Error(error.error)}
+        pageRules[ruleView]=groups;document.getElementById('contextRules').innerHTML=ruleMarkup(groups);renderFullRules();editingState(false);showContextRules(currentRulePage);editStatus.textContent='保存成功，已写入项目 frontend-rules.json';
+      }catch(error){editStatus.textContent=error.message}finally{this.disabled=false}
+    };
+    fetch('/__local/ai-rules').then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(data){if(editingRules)return;pageRules=data;document.getElementById('contextRules').innerHTML=ruleMarkup(data[ruleView]);renderFullRules()}).catch(function(){editStatus.textContent='本地编辑需使用 python3 scripts/preview_server.py 启动预览服务。'});
+    function ruleMarkup(groups) {
+      return groups.map(function (group) {
+        return '<section class="rule-section"><h3>' + escapeRule(group[0]) + '</h3><div class="rule-content"><ul>' + group[1].map(function (line) { return '<li>' + escapeRule(line) + '</li>'; }).join('') + '</ul></div></section>';
+      }).join('');
+    }
+    var currentRulePage = "home";
+    function showContextRules(page) {
+      currentRulePage = page;
+      if (editingRules) { editStatus.textContent = "正在编辑" + (ruleView === "home" ? "申词页" : "申请记录") + "规则；请保存或取消后查看其他页面规则。"; return; }
+      ruleView = page;
+      document.getElementById('contextTitle').textContent = (page === 'records' ? '申请记录' : '申词页') + ' · 需求规则';
+      document.getElementById('contextRules').innerHTML = ruleMarkup(pageRules[page]);
+    }
+    function renderFullRules() { document.getElementById('sharedFrontendRules').innerHTML = '<h2>申词页</h2>' + ruleMarkup(pageRules.home) + '<h2>申请记录</h2>' + ruleMarkup(pageRules.records); }
+    renderFullRules();
+    showContextRules('home');
+    window.addEventListener('message', function (event) {
+      if (event.origin !== location.origin || event.source !== document.getElementById('phone').contentWindow) return;
+      if (event.data && event.data.type === 'ai-shen-ci-page' && (event.data.page === 'home' || event.data.page === 'records')) showContextRules(event.data.page);
+    });
+
+
+    function showTab(name) {
+      currentTab = name;
+      document.querySelectorAll('.page-tabs button').forEach(function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === name);
+      });
+      document.getElementById('view-fe').classList.toggle('active', name === 'fe');
+      document.getElementById('view-flow').classList.toggle('active', name === 'flow');
+      if (location.search.indexOf('tab=' + name) === -1) {
+        history.replaceState(null, '', '?tab=' + name);
+      }
+    }
+
+    function setRule(open) {
+      document.getElementById('ruleOverlay').classList.toggle('open', open);
+      document.getElementById('ruleDrawer').classList.toggle('open', open);
+      ruleBtn.classList.toggle('active', open);
+      ruleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) showRule(currentTab === 'flow' || currentTab === 'fe' ? 'fe' : 'admin');
+    }
+
+    function showRule(which) {
+      document.querySelectorAll('.rule-tab-bar button').forEach(function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-rule') === which);
+      });
+      document.getElementById('rule-fe').classList.toggle('active', which === 'fe');
+      document.getElementById('rule-admin').classList.toggle('active', which === 'admin');
+    }
+
+    document.querySelectorAll('.page-tabs button').forEach(function (btn) {
+      btn.addEventListener('click', function () { showTab(btn.getAttribute('data-tab')); });
+    });
+    ruleBtn.addEventListener('click', function () { setRule(!document.getElementById('ruleDrawer').classList.contains('open')); });
+    document.getElementById('ruleClose').addEventListener('click', function () { setRule(false); });
+    document.getElementById('ruleOverlay').addEventListener('click', function () { setRule(false); });
+    document.querySelectorAll('.rule-tab-bar button').forEach(function (btn) {
+      btn.addEventListener('click', function () { showRule(btn.getAttribute('data-rule')); });
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') setRule(false);
+    });
+
+    function pointSidebarHome() {
+      document.querySelectorAll('[data-iteration-sidebar] a').forEach(function (link) {
+        var href = link.getAttribute('href') || '';
+        if (href.charAt(0) === '#') link.setAttribute('href', 'framework-shell.html' + href);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', pointSidebarHome);
+    window.addEventListener('hashchange', pointSidebarHome);
+
+    var tab = new URLSearchParams(location.search).get('tab');
+    if (tab === 'flow') showTab('flow');
+  </script>
+</body>
+</html>
