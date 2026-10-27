@@ -218,16 +218,12 @@
       <button type="button" data-tab="admin">管理后台</button>
     </div>
     <section class="page-view active" id="view-fe">
-      <div class="demo-code-tools" style="display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-shrink:0;margin-bottom:12px">
-        <span id="copyDemoStatus" role="status" style="font-size:12px;color:var(--text-secondary)"></span>
-        <button type="button" class="btn btn-ghost" id="copyDemoCode">复制 Demo 代码</button>
-      </div>
       <div class="perspective-tabs" role="tablist" aria-label="页面视角">
         <button type="button" role="tab" class="on" data-perspective="user" aria-selected="true">用户视角</button>
         <button type="button" role="tab" data-perspective="mentor" aria-selected="false">导师视角</button>
       </div>
       <div class="demo-layout">
-        <aside class="context-rules" aria-label="当前视角前端需求规则"><h2 id="contextTitle">用户视角 · 前端需求</h2><p class="intro">对照右侧页面查看字段、操作与边界。切换视角后，说明同步切换。</p><div style="display:flex;gap:8px;margin-bottom:16px"><button type="button" class="btn btn-ghost" id="editRules">编辑规则</button><button type="button" class="btn btn-primary" id="saveRules" hidden>保存到项目</button><button type="button" class="btn btn-ghost" id="cancelRules" hidden>取消</button></div><p id="ruleEditStatus" role="status" style="font-size:12px;line-height:1.6"></p><textarea id="ruleEditor" aria-label="编辑当前视角需求规则" hidden style="width:100%;min-height:420px;resize:vertical;border:1px solid var(--border);border-radius:8px;padding:12px;font:12px/1.8 inherit"></textarea><div id="contextRules"></div></aside>
+        <aside class="context-rules" aria-label="当前视角前端需求规则"><h2 id="contextTitle">用户视角 · 前端需求</h2><p class="intro">对照右侧页面查看字段、操作与边界。切换视角后，说明同步切换。</p><div style="display:flex;gap:8px;margin-bottom:16px"><button type="button" class="btn btn-ghost" id="editRules">编辑规则</button><button type="button" class="btn btn-ghost" id="copyDemoCode">复制 Demo 代码</button><button type="button" class="btn btn-primary" id="saveRules" hidden>保存到项目</button><button type="button" class="btn btn-ghost" id="cancelRules" hidden>取消</button></div><p id="copyDemoStatus" role="status" style="font-size:12px;line-height:1.6;color:var(--text-secondary)"></p><p id="ruleEditStatus" role="status" style="font-size:12px;line-height:1.6"></p><textarea id="ruleEditor" aria-label="编辑当前视角需求规则" hidden style="width:100%;min-height:420px;resize:vertical;border:1px solid var(--border);border-radius:8px;padding:12px;font:12px/1.8 inherit"></textarea><div id="contextRules"></div></aside>
         <div class="mockup-board">
           <iframe id="phone" title="社群页完整还原" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;screen=joined&amp;v=10"></iframe>
         </div>
