@@ -267,6 +267,7 @@
       var frame = document.getElementById('spec-frame');
       frame.hidden = state.view === 'overview';
       var source = demo ? demo.url + '?embed=1&tab=' + (new URLSearchParams(location.search).get('tab') || 'fe') : 'component-spec-demo.html?embed=1';
+      if (demo && /^fr-coco-00[12]$/.test(demo.id)) source += '&v=20261027-copy-position-2';
       frame.title = demo ? demo.title : '组件规范';
       if (!frame.hidden && frame.getAttribute('src') !== source) frame.src = source;
       document.querySelectorAll('#view-overview tbody').forEach(function (tbody) {
