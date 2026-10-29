@@ -18,6 +18,7 @@ python3 -m http.server 19889 --directory demo/iteration
 
 | 业务线 | 编号 | 需求 | 状态 | 页面 |
 |---|---|---|---|---|
+| 右豹主业务 | 待编号 | 推广文案 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-pending-promotion) |
 | 导师商务 | FR-CoCo-002 | 导师迭代V1.2 | 开发中 | [查看 Demo](demo/iteration/fr-coco-002-mentor-v1-2.html?tab=fe) |
 | 右豹主业务 | FR-CoCo-001 | AI申词 | 开发中 | [查看 Demo](demo/iteration/fr-coco-001-ai-shen-ci.html?tab=fe) |
 | 右豹主业务 | FR-001 | 剪辑手供稿书籍填写优化 | 开发中 | [查看 Demo](demo/iteration/fr-001-book-entry.html?tab=fe) |
