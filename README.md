@@ -29,3 +29,9 @@ python3 -m http.server 19889 --directory demo/iteration
 | 企业号 | FR-XY-02 | 新增工具配置项 | 待开始 | [查看 Demo](https://cicichak00.github.io/Enterprise-Systems/enterprise-tools/employee.html) |
 
 | 企业号 | FR-XY-03 | 新增团队数据页 | 待开始 | [查看 Demo](https://cicichak00.github.io/Enterprise-Systems/ux/team-statistics.html) |
+
+## 待编号需求草稿
+
+| 业务线 | 需求 | 状态 | 页面 |
+| --- | --- | --- | --- |
+| 右豹主业务 | 推广文案 | 待开始 | [UX 草稿](demo/iteration/fr-pending-promotion.html) |
