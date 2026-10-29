@@ -18,6 +18,7 @@ python3 -m http.server 19889 --directory demo/iteration
 
 | 业务线 | 编号 | 需求 | 状态 | 页面 |
 |---|---|---|---|---|
+| 右豹主业务 | 待编号 | 推广文案 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-pending-promotion) |
 | 导师商务 | FR-CoCo-002 | 导师迭代V1.2 | 开发中 | [查看 Demo](demo/iteration/fr-coco-002-mentor-v1-2.html?tab=fe) |
 | 右豹主业务 | FR-CoCo-001 | AI申词 | 开发中 | [查看 Demo](demo/iteration/fr-coco-001-ai-shen-ci.html?tab=fe) |
 | 右豹主业务 | FR-001 | 剪辑手供稿书籍填写优化 | 开发中 | [查看 Demo](demo/iteration/fr-001-book-entry.html?tab=fe) |
@@ -32,9 +33,3 @@ python3 -m http.server 19889 --directory demo/iteration
 FR-003 总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-003)、[管理后台](http://127.0.0.1:19889/framework-shell.html?tab=admin#youbao/fr-003)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-003)。
 
 AI申词与导师需求的本地规则编辑：运行 `python3 scripts/preview_server.py`（端口 19889）。保存写入对应需求目录的 `frontend-rules.json`，普通静态服务不支持保存。
-
-## 待编号需求草稿
-
-| 业务线 | 需求 | 状态 | 页面 |
-| --- | --- | --- | --- |
-| 右豹主业务 | 推广文案 | 待开始 | [UX 草稿](demo/iteration/fr-pending-promotion.html) |
