@@ -27,3 +27,5 @@ python3 -m http.server 19889 --directory demo/iteration
 | 企业号 | FR-XY-01 | 员工列表优化 | 待开始 | [查看 Demo](https://cicichak00.github.io/Enterprise-Systems/drafts/employee-management/) |
 
 | 企业号 | FR-XY-02 | 新增工具配置项 | 待开始 | [查看 Demo](https://cicichak00.github.io/Enterprise-Systems/enterprise-tools/employee.html) |
+
+| 企业号 | FR-XY-03 | 新增团队数据页 | 待开始 | [查看 Demo](https://cicichak00.github.io/Enterprise-Systems/ux/team-statistics.html) |
