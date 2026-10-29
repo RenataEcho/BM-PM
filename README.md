@@ -25,3 +25,5 @@ python3 -m http.server 19889 --directory demo/iteration
 | 企业号 | FR-001 | 员工离职操作优化 | 待开始 | [查看 Demo](demo/iteration/fr-enterprise-001-leaving.html?tab=fe) |
 
 | 企业号 | FR-XY-01 | 员工列表优化 | 待开始 | [查看 Demo](https://cicichak00.github.io/Enterprise-Systems/drafts/employee-management/) |
+
+| 企业号 | FR-XY-02 | 新增工具配置项 | 待开始 | [查看 Demo](https://cicichak00.github.io/Enterprise-Systems/enterprise-tools/employee.html) |
