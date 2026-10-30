@@ -16,6 +16,14 @@
     { id: 'fr-001', line: 'youbao', label: '剪辑手供稿书籍填写优化', status: '开发中', url: 'fr-001-book-entry.html?embed=1&tab=fe&v=nav3' },
     { id: 'fr-002', line: 'youbao', label: '新增登录设备', status: '待开始', url: 'fr-002.html?embed=1&tab=fe&v=rules3' }
   ];
+  // 登记行是导航与路由的唯一来源，避免新增需求后仍打开旧 Demo。
+  function demos() {
+    return Array.from(document.querySelectorAll('#view-overview tr[data-id][data-line]')).map(function (row) {
+      return { id: row.dataset.id, line: row.dataset.line, label: row.cells[1].textContent,
+        status: row.querySelector('[data-status-select]').value, url: row.dataset.demo,
+        title: row.cells[0].textContent + ' · ' + row.cells[1].textContent };
+    });
+  }
   var STATUS_BUCKET = { '待开始': '进行中', '开发中': '进行中', '已上线': '归档', '已暂停': '废纸篓' };
   var STATUS_KEY = 'bm-pm-fr-statuses';
   function currentStatuses() {
@@ -30,9 +38,11 @@
     else if (raw && raw !== 'overview') {
       var parts = raw.split('/');
       if (LINES.some(function (item) { return item.id === parts[0]; })) line = parts[0];
-      if (DEMOS.some(function (demo) { return demo.line === line && demo.id === parts[1]; })) view = parts[1];
+      if (demos().some(function (demo) { return demo.line === line && demo.id === parts[1]; })) view = parts[1];
       if (parts[1] === 'components' || raw === 'components') view = 'components';
     }
+    var page = location.pathname.split('/').pop();
+    if (page.indexOf('fr-coco-002-') === 0) line = 'mentor';
     return { line: line, view: view };
   }
 
@@ -49,12 +59,12 @@
     ITEMS.forEach(function (item) {
       var current = state.view === item.id;
       html.push(
-        '<a class="nav-item' + (current ? ' active' : '') + '" href="#' + state.line + '/' + item.id + '"' +
+        '<a class="nav-item' + (current ? ' active' : '') + '" href="' + (document.getElementById('view-overview') ? '' : 'framework-shell.html') + '#' + state.line + '/' + item.id + '"' +
         (current ? ' aria-current="page"' : '') + '>' + item.label + '</a>'
       );
     });
     var statuses = currentStatuses();
-    var lineDemos = DEMOS.filter(function (demo) { return demo.line === state.line; });
+    var lineDemos = demos().filter(function (demo) { return demo.line === state.line; });
     var groups = {};
     lineDemos.forEach(function (demo) {
       var status = statuses[demo.id] || demo.status;
@@ -63,7 +73,7 @@
     });
     ['进行中', '归档', '废纸篓'].forEach(function (group) {
       if (!groups[group]) return;
-      html.push('<div class="nav-group-label">' + group + '</div>');
+      html.push('<div class="nav-group-label">' + group + '（' + groups[group].length + '）</div>');
       groups[group].forEach(function (entry) {
         var demo = entry.demo;
         html.push('<a class="nav-item' + (state.view === demo.id ? ' active' : '') + '" href="#' + demo.line + '/' + demo.id + '"' + (state.view === demo.id ? ' aria-current="page"' : '') + '>' + demo.label + '</a>');
@@ -76,7 +86,8 @@
     document.querySelectorAll('[data-iteration-sidebar]').forEach(render);
   }
 
-  window.bmDemoFor = function (line, id) { return DEMOS.find(function (demo) { return demo.line === line && demo.id === id; }); };
+  window.bmDemos = demos;
+  window.bmRefreshSidebar = init;
   window.bmParseHash = parseHash;
   window.bmLineName = lineName;
 
@@ -87,6 +98,4 @@
   }
 
   window.addEventListener('hashchange', init);
-  window.addEventListener('bm-status-change', init);
-  window.addEventListener('storage', function (event) { if (event.key === STATUS_KEY || event.key === null) init(); });
 })();
