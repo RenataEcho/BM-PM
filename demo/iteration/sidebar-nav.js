@@ -33,6 +33,8 @@
       if (demos().some(function (demo) { return demo.line === line && demo.id === parts[1]; })) view = parts[1];
       if (parts[1] === 'components' || raw === 'components') view = 'components';
     }
+    var page = location.pathname.split('/').pop();
+    if (page.indexOf('fr-coco-002-') === 0) line = 'mentor';
     return { line: line, view: view };
   }
 
@@ -49,7 +51,7 @@
     ITEMS.forEach(function (item) {
       var current = state.view === item.id;
       html.push(
-        '<a class="nav-item' + (current ? ' active' : '') + '" href="#' + state.line + '/' + item.id + '"' +
+        '<a class="nav-item' + (current ? ' active' : '') + '" href="' + (document.getElementById('view-overview') ? '' : 'framework-shell.html') + '#' + state.line + '/' + item.id + '"' +
         (current ? ' aria-current="page"' : '') + '>' + item.label + '</a>'
       );
     });

@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>社群页 · 导师迭代V1.2</title>
+  <style>
+    :root {
+      --brand: #ff4d22;
+      --brand-hover: #ff6c46;
+      --ink: #252836;
+      --sub: #9498a8;
+      --line: #eceef3;
+      --bg: #f6f7fb;
+      --card: #fff;
+      --soft: #fff1ec;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      width: 375px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    }
+    button, input { font: inherit; color: inherit; }
+    .phone { width: 375px; height: 812px; display: flex; flex-direction: column; position: relative; overflow: hidden; background: var(--bg); }
+    .scroll { flex: 1; min-height: 0; overflow: auto; background: var(--bg); }
+    .hero {
+      position: relative; padding: 8px 16px 36px; text-align: center; color: #fff; overflow: hidden;
+      background:
+        radial-gradient(90% 70% at 50% 18%, rgba(140, 48, 78, .55), transparent 60%),
+        linear-gradient(180deg, #2b1020 0%, #4a1832 46%, #140910 100%);
+    }
+    .hero::before {
+      content: "品牌社群"; position: absolute; left: 0; right: 0; top: 78px;
+      font-size: 40px; font-weight: 900; letter-spacing: 8px; color: rgba(255,255,255,.08); pointer-events: none;
+    }
+    .status {
+      height: 22px; display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; font-weight: 650; position: relative;
+    }
+    .status-icons { display: flex; align-items: center; gap: 5px; }
+    .back {
+      position: absolute; left: 4px; top: 28px; width: 44px; height: 44px; border: 0; background: transparent;
+      color: #fff; font-size: 28px; line-height: 1; cursor: pointer;
+    }
+    .logo {
+      width: 64px; height: 64px; margin: 18px auto 10px; border-radius: 16px; background: #fff;
+      display: grid; place-items: center; color: var(--brand); font-size: 18px; font-weight: 900; position: relative;
+    }
+    .hero h1 { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.2; color: #fff; position: relative; }
+    .hero .days { margin: 4px 0 0; font-size: 12px; line-height: 1.5; color: rgba(255,255,255,.72); position: relative; }
+    .body-pad { padding: 0 12px 16px; display: flex; flex-direction: column; gap: 16px; }
+    .proj-card {
+      margin-top: -20px; background: linear-gradient(180deg, #ffe4d6, #fff6f1); border-radius: 16px;
+      padding: 12px 12px 10px; box-shadow: 0 8px 18px rgba(80, 30, 20, .06); position: relative;
+    }
+    .proj-card h2, .block h2 { margin: 0 0 8px; font-size: 15px; font-weight: 800; line-height: 1.3; }
+    .proj-card h2 { font-size: 12px; font-weight: 600; color: #9a6a5e; }
+    .tabs { display: flex; }
+    .tabs button {
+      flex: 1; min-height: 44px; border: 0; border-bottom: 2px solid transparent;
+      background: transparent; color: #758096; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .tabs button[aria-selected="true"] { color: var(--brand); border-bottom-color: var(--brand); font-weight: 800; }
+    .block {
+      background: var(--card); border-radius: 16px; padding: 12px;
+      box-shadow: 0 3px 10px rgba(45, 55, 85, .025);
+    }
+    .block[hidden] { display: none; }
+    .body { margin: 0; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--ink); }
+    .body + .body { margin-top: 8px; }
+    .media { display: block; width: 100%; height: 92px; margin-top: 12px; border-radius: 12px; object-fit: cover; background: #111; }
+    .hscroll { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 2px; }
+    .proj {
+      flex: 0 0 64px; width: 64px; border: 0; background: transparent; padding: 0;
+      text-align: center; cursor: pointer; min-height: 44px;
+    }
+    .picon {
+      width: 32px; height: 32px; margin: 0 auto 6px; border-radius: 8px;
+      display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 800;
+    }
+    .pname { display: block; font-size: 11px; font-weight: 600; line-height: 1.3; color: var(--ink); }
+    .group-label { margin: 10px 0 0; font-size: 12px; font-weight: 600; line-height: 1.4; }
+    .mentor {
+      width: 100%; display: flex; gap: 10px; align-items: center; text-align: left;
+      border: 0; border-top: 1px solid var(--line); background: transparent;
+      padding: 10px 0; min-height: 44px; cursor: pointer;
+    }
+    .mentor:first-of-type { border-top: 0; }
+    .m-main { flex: 1; min-width: 0; }
+    .avatar {
+      width: 44px; height: 44px; border-radius: 50%; flex: none;
+      display: grid; place-items: center; background: var(--soft); color: var(--brand);
+      font-size: 15px; font-weight: 800;
+    }
+    .m-name { display: block; font-size: 12px; font-weight: 600; line-height: 1.4; }
+    .m-duty { display: block; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--sub); }
+    .tag {
+      flex: none; margin-left: auto; padding: 2px 8px; border-radius: 999px;
+      background: #fff5f1; border: 1px solid #ffe5dc; color: #f06446;
+      font-size: 11px; font-weight: 600; line-height: 1.4; white-space: nowrap;
+    }
+    .stat { margin-top: 10px; }
+    .stat-label { display: block; font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--sub); }
+    .money, .count { display: block; margin-top: 2px; font-size: 16px; font-weight: 800; line-height: 1.2; min-height: 19px; }
+    .money { color: var(--brand); }
+    .count { color: var(--ink); }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+    .pair + .pair { margin-top: 12px; }
+    .pair .stat { margin-top: 0; }
+    .team { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+    .team p { margin: 4px 0 0; font-size: 12px; line-height: 1.5; }
+    .team .money { display: inline; }
+    .top { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+    .top-row { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+    .top-row .avatar { width: 32px; height: 32px; font-size: 13px; }
+    .top-name { flex: 1; min-width: 0; font-size: 12px; font-weight: 600; line-height: 1.4; }
+    .top-row .money { margin: 0; }
+    .cta-bar { flex: none; padding: 8px 16px 16px; background: var(--bg); }
+    .cta {
+      width: 100%; height: 48px; border: 0; border-radius: 14px; cursor: pointer;
+      background: var(--brand); color: #fff; font-size: 17px; font-weight: 700;
+    }
+    .cta:active { background: var(--brand-hover); }
+    .mask {
+      position: absolute; inset: 0; z-index: 5; background: rgba(0, 0, 0, .32);
+      display: flex; align-items: flex-end;
+    }
+    .mask[hidden] { display: none; }
+    .sheet {
+      width: 100%; max-height: 72%; overflow: auto; background: #fff;
+      border-radius: 20px 20px 0 0; padding: 10px 16px 28px; position: relative;
+    }
+    .handle { width: 36px; height: 4px; border-radius: 999px; background: #e4e6eb; margin: 0 auto 8px; }
+    .sheet .avatar { width: 44px; height: 44px; margin: 8px auto 8px; }
+    .sheet .m-name { text-align: center; font-size: 15px; font-weight: 800; }
+    .sheet .m-id, .sheet .m-duty { display: block; text-align: center; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--sub); }
+    .sheet-label { margin: 14px 0 0; text-align: left; font-size: 12px; font-weight: 600; line-height: 1.4; }
+    .sheet-about { margin: 4px 0 0; text-align: left; font-size: 12px; font-weight: 400; line-height: 1.6; color: var(--ink); }
+    .sheet:focus { outline: none; }
+    .sr {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+  </style>
+</head>
+<body>
+    <div class="phone">
+    <div class="scroll" id="scroll"></div>
+    <div class="cta-bar">
+      <button class="cta" id="feishu" type="button">进入社区飞书</button>
+    </div>
+    <div class="mask" id="mask" hidden>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" tabindex="-1">
+        <div class="handle"></div>
+        <div class="avatar" id="sheetAvatar"></div>
+        <p class="m-name" id="sheetName"></p>
+        <p class="m-id" id="sheetIdentity"></p>
+        <p class="m-duty" id="sheetDuty"></p>
+        <p class="sheet-label">导师介绍</p>
+        <p class="sheet-about" id="sheetAbout"></p>
+      </div>
+    </div>
+  </div>
+  <script>
+    var INTRO = "星火创业社集中看小说和短剧项目。新成员先看社群负责的项目，再按社群导师的安排跟进。";
+    var INTRO_MORE = "每周更新一次项目进度。有问题找创业导师周衡，打卡和问题整理由助理导师跟进。介绍全文都在这一页，向下滚动就能读完。";
+    var INTRO_THIRD = "社群目前集中在番茄小说和红果短剧。成员先看项目要求，再按导师安排提交素材和打卡。缺图、缺标题的内容会退回补齐，补齐后才计入本周进度。";
+    var INTRO_FOURTH = "每周五前，助理导师把本周问题按项目归类，交给创业导师。答疑时讲重复出现的问题，不在群里临时改规则。新成员加入后的前三天有人对接，说明项目在哪看、打卡发给谁、问题汇总到哪。";
+    var MEDIA = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="640" height="200" viewBox="0 0 640 200"><rect width="640" height="200" fill="#111"/><text x="320" y="108" text-anchor="middle" font-size="16" font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#ffffff">社群介绍图片</text></svg>');
+    var MENTORS = [
+      { name: "周衡", identity: "创业导师", duty: "带成员看项目、答疑", about: "负责星火创业社的项目方向。新成员进来，先由他讲番茄小说和红果短剧怎么跟，每周固定答疑一次。项目规则有变化时，由他在社群里讲清楚，再交给助理导师跟进每天的进度。" },
+      { name: "林夏", identity: "创业导师", duty: "看本周产出、定跟进顺序", about: "看社群本周的产出和成员进度，决定先跟哪些项目。成员对收益或排行有疑问，先找她对一下数字从哪来，再决定本周安排要不要调整。" },
+      { name: "陈麦", identity: "助理导师", duty: "跟进每日打卡", about: "每天收成员打卡，缺卡的单独提醒。打卡内容对不上项目要求时先记下来，第二天交给创业导师看，不在群里直接改规则。" },
+      { name: "苏晚", identity: "助理导师", duty: "整理本周问题", about: "把成员本周提出的问题按项目归类，周五前交给周衡。重复出现的问题写成一条说明，下次答疑时一起讲。" },
+      { name: "何舟", identity: "助理导师", duty: "核对项目素材", about: "核对番茄小说和红果短剧的素材是否按项目要求提交。缺图、缺标题的退回成员补，补齐后再记到本周进度里。" },
+      { name: "江宁", identity: "助理导师", duty: "接待新成员", about: "新成员加入后的前三天由她对接，说明去哪看负责项目、打卡发给谁、问题汇总到哪。三天之后转到对应项目的助理导师。" }
+    ];
+    var ICON_COLOR = {
+      "番茄小说": "#ff4d22",
+      "红果短剧": "#ff3157",
+      "悟空浏览器": "#2f6bff",
+      "番茄畅听": "#ff8a1e",
+      "红果漫剧": "#7b61ff",
+      "短故事": "#1a1a1a"
+    };
+    var TWO = [
+      { name: "番茄小说" },
+      { name: "红果短剧" }
+    ];
+    var MANY = TWO.concat([
+      { name: "悟空浏览器" },
+      { name: "番茄畅听" },
+      { name: "红果漫剧" },
+      { name: "短故事" }
+    ]);
+    var STATUS = '<div class="status"><span id="status-time">9:41</span><span class="status-icons">' +
+      '<svg width="15" height="11" viewBox="0 0 17 12" fill="currentColor" aria-hidden="true"><rect x="0" y="7" width="3" height="5" rx="0.5"/><rect x="4.5" y="5" width="3" height="7" rx="0.5"/><rect x="9" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>' +
+      '<svg width="14" height="11" viewBox="0 0 15 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 4.2C3.2 2 6 1 7.5 1s4.3 1 6.5 3.2"/><path d="M3.2 6.4c1.4-1.3 2.8-1.9 4.3-1.9s2.9.6 4.3 1.9"/><circle cx="7.5" cy="9.6" r="1" fill="currentColor" stroke="none"/></svg>' +
+      '<svg width="22" height="11" viewBox="0 0 25 12" aria-hidden="true"><rect x="0.5" y="0.5" width="21" height="11" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1" fill="currentColor"/><rect x="22.5" y="3.5" width="1.5" height="5" rx="0.5" fill="currentColor"/></svg>' +
+      "</span></div>";
+    var TOP10 = [
+      { name: "周*衡", income: "1860" },
+      { name: "林*夏", income: "1420" },
+      { name: "陈*麦", income: "1280" },
+      { name: "苏*晚", income: "960" },
+      { name: "何*舟", income: "840" },
+      { name: "江*宁", income: "720" },
+      { name: "小*鱼", income: "640" },
+      { name: "南*风", income: "510" },
+      { name: "阿*宁", income: "360" },
+      { name: "晚*星", income: "280" }
+    ];
+    var FULL_STATS = { output: "12860", active: "36", total: "120", rank: "8", income: "860", member: "周衡", memberProject: "番茄小说", memberIncome: "320", top: TOP10 };
+    var MIXED_STATS = { output: "0", active: null, total: null, rank: "5", income: null, member: "陈麦", memberProject: "红果短剧", memberIncome: "0" };
+    var lastFocus = null;
+
+    function esc(text) {
+      return String(text).replace(/[&<>"']/g, function (ch) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+      });
+    }
+    function plain(value) {
+      if (value === null || value === undefined || value === "") return '<span class="sr">空</span>';
+      return "<span>" + esc(value) + "</span>";
+    }
+    function figure(value, kind) {
+      if (value === null || value === undefined || value === "") return '<span class="' + kind + '"><span class="sr">空</span></span>';
+      return '<span class="' + kind + '">' + esc(value) + "</span>";
+    }
+    function stateFor(screen) {
+      var state = { projects: TWO, intro: true, media: true, mentors: MENTORS, stats: FULL_STATS, sheetName: "" };
+      if (screen === "scroll") state.projects = MANY;
+      if (screen === "sheet") state.sheetName = "周衡";
+      if (screen === "intro-text") state.media = false;
+      if (screen === "no-intro") state.intro = false;
+      if (screen === "no-stats") state.stats = null;
+      if (screen === "stats-mixed") state.stats = MIXED_STATS;
+      return state;
+    }
+    function tabBtn(label, id, active, tabs) {
+      if (tabs.indexOf(id) < 0) return "";
+      return '<button type="button" role="tab" data-tab="' + id + '" aria-selected="' + (active === id ? "true" : "false") + '">' + label + "</button>";
+    }
+    function mentorRows(list) {
+      return list.map(function (item) {
+        return '<button class="mentor" type="button" data-name="' + esc(item.name) + '">' +
+          '<span class="avatar" aria-hidden="true">' + esc(item.name.slice(0, 1)) + "</span>" +
+          '<span class="m-main"><span class="m-name">' + esc(item.name) + "</span>" +
+          '<span class="m-duty">' + esc(item.duty) + "</span></span>" +
+          '<span class="tag">' + esc(item.identity) + "</span></button>";
+      }).join("");
+    }
+    function topRows(list) {
+      return list.map(function (item) {
+        return '<div class="top-row"><span class="avatar" aria-hidden="true">' + esc(item.name.slice(0, 1)) + "</span>" +
+          '<span class="top-name">' + esc(item.name) + "</span>" + figure(item.income, "money") + "</div>";
+      }).join("");
+    }
+    function render(screen) {
+      var state = stateFor(screen);
+      var html = '<header class="hero">' + STATUS +
+        '<button class="back" type="button" aria-label="返回"><svg width="10" height="18" viewBox="0 0 10 18" fill="none" aria-hidden="true"><path d="M8.5 1.5 L1.5 9 L8.5 16.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+        '<div class="logo" role="img" aria-label="社群头像">星</div>' +
+        '<h1>星火创业社</h1><p class="days">已加入128天</p></header><div class="body-pad">';
+      if (state.projects.length) {
+        html += '<section class="proj-card"><h2>社群负责项目</h2><div class="hscroll" tabindex="0">';
+        state.projects.forEach(function (item) {
+          var color = ICON_COLOR[item.name] || "#ff4d22";
+          html += '<button class="proj" type="button"><span class="picon" style="background:' + color +
+            '" aria-hidden="true">' + esc(item.name.slice(0, 1)) + '</span><span class="pname">' + esc(item.name) + "</span></button>";
+        });
+        html += "</div></section>";
+      }
+      var tabs = [];
+      if (state.intro) tabs.push("intro");
+      if (state.mentors.length) tabs.push("mentor");
+      if (state.stats) tabs.push("stats");
+      var activeTab = state.sheetName ? "mentor" : tabs[0];
+      if (tabs.length) {
+        html += '<div class="switcher"><div class="tabs" role="tablist">';
+        html += tabBtn("社群介绍", "intro", activeTab, tabs);
+        html += tabBtn("社群导师", "mentor", activeTab, tabs);
+        html += tabBtn("社区战绩", "stats", activeTab, tabs);
+        html += "</div>";
+        if (state.intro) {
+          html += '<section class="block panel" data-panel="intro" role="tabpanel"' + (activeTab === "intro" ? "" : " hidden") + ">";
+          html += '<p class="body">' + esc(INTRO) + "</p><p class=\"body\">" + esc(INTRO_MORE) + "</p>";
+          html += '<p class="body">' + esc(INTRO_THIRD) + "</p><p class=\"body\">" + esc(INTRO_FOURTH) + "</p>";
+          if (state.media) html += '<img class="media" alt="社群介绍图片" src="' + MEDIA + '">';
+          html += "</section>";
+        }
+        if (state.mentors.length) {
+          var leads = state.mentors.filter(function (item) { return item.identity === "创业导师"; });
+          var assistants = state.mentors.filter(function (item) { return item.identity === "助理导师"; });
+          var rest = state.mentors.filter(function (item) { return item.identity !== "创业导师" && item.identity !== "助理导师"; });
+          html += '<section class="block panel" data-panel="mentor" role="tabpanel"' + (activeTab === "mentor" ? "" : " hidden") + ">" + mentorRows(leads);
+          if (assistants.length) html += '<p class="group-label">助理导师' + assistants.length + "人</p>" + mentorRows(assistants);
+          html += mentorRows(rest) + "</section>";
+        }
+        if (state.stats) {
+          var stats = state.stats;
+          var active = stats.active === null || stats.total === null ? "" : stats.active + " / " + stats.total;
+          html += '<section class="block panel" data-panel="stats" role="tabpanel"' + (activeTab === "stats" ? "" : " hidden") + ">";
+          html += '<div class="pair"><div class="stat"><span class="stat-label">社区本月总产出</span>' + figure(stats.output, "money") +
+            '</div><div class="stat"><span class="stat-label">活跃成员</span>' + figure(active, "count") + "</div></div>";
+          html += '<div class="pair"><div class="stat"><span class="stat-label">你的社区排行</span>' + figure(stats.rank, "count") +
+            '</div><div class="stat"><span class="stat-label">本月收益</span>' + figure(stats.income, "money") + "</div></div>";
+          html += '<div class="team"><span class="stat-label">团队成员收益</span><p>' +
+            plain(stats.member) + " " + plain(stats.memberProject) + " " + figure(stats.memberIncome, "money") + "</p></div>";
+          html += '<div class="top"><span class="stat-label">成员TOP-10</span>' + topRows(stats.top || TOP10) + "</div></section>";
+        }
+        html += "</div>";
+      }
+      html += "</div>";
+      document.getElementById("scroll").innerHTML = html;
+      document.getElementById("scroll").scrollTop = 0;
+      var clock = new Date();
+      document.getElementById("status-time").textContent = (clock.getHours() < 10 ? "0" : "") + clock.getHours() + ":" + (clock.getMinutes() < 10 ? "0" : "") + clock.getMinutes();
+      bindPage();
+      if (state.sheetName) openSheet(state.sheetName, false);
+      else closeSheet(false);
+    }
+    function findMentor(name) {
+      for (var i = 0; i < MENTORS.length; i += 1) if (MENTORS[i].name === name) return MENTORS[i];
+      return null;
+    }
+    function openSheet(name, focusClose) {
+      var mentor = findMentor(name);
+      if (!mentor) return;
+      document.getElementById("sheetAvatar").textContent = mentor.name.slice(0, 1);
+      document.getElementById("sheetName").textContent = mentor.name;
+      document.getElementById("sheetIdentity").textContent = mentor.identity;
+      document.getElementById("sheetDuty").textContent = mentor.duty;
+      document.getElementById("sheetAbout").textContent = mentor.about;
+      document.getElementById("mask").hidden = false;
+      if (focusClose) document.getElementById("sheet").focus({ preventScroll: true });
+    }
+    function closeSheet(restore) {
+      var mask = document.getElementById("mask");
+      if (mask.hidden) return;
+      mask.hidden = true;
+      if (restore && lastFocus) lastFocus.focus({ preventScroll: true });
+    }
+    function bindPage() {
+      document.querySelectorAll(".proj, .back").forEach(function (btn) {
+        btn.addEventListener("click", function (event) { event.preventDefault(); });
+      });
+      document.querySelectorAll(".tabs button").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var id = btn.getAttribute("data-tab");
+          document.querySelectorAll(".tabs button").forEach(function (item) {
+            item.setAttribute("aria-selected", item === btn ? "true" : "false");
+          });
+          document.querySelectorAll(".panel").forEach(function (panel) {
+            panel.hidden = panel.getAttribute("data-panel") !== id;
+          });
+        });
+      });
+      document.querySelectorAll(".mentor").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          lastFocus = btn;
+          openSheet(btn.getAttribute("data-name"), true);
+        });
+      });
+    }
+    document.getElementById("mask").addEventListener("click", function (event) {
+      if (event.target.id === "mask") closeSheet(true);
+    });
+    document.getElementById("feishu").addEventListener("click", function (event) { event.preventDefault(); });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeSheet(true);
+    });
+    window.addEventListener("message", function (event) {
+      var data = event.data || {};
+      if (data.type !== "coco-002" || !data.screen) return;
+      render(data.screen);
+    });
+    render(new URLSearchParams(location.search).get("screen") || "joined");
+  </script>
+</body>
+</html>

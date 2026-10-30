@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="gate.js?v=2"></script>
+  <script>
+    if (new URLSearchParams(location.search).get('embed') === '1') {
+      document.documentElement.classList.add('embedded');
+    }
+  </script>
+  <title>FR-CoCo-002 · 导师迭代V1.2 · BM-PM</title>
+  <style>
+    [hidden] { display: none !important; }
+    :root {
+      --primary: #2563eb; --primary-hover: #1d4ed8; --primary-light: #eff6ff; --primary-border: #bfdbfe;
+      --accent-rule: #0891b2;
+      --surface: #fff; --surface-glass: rgba(255,255,255,0.72);
+      --border: #e8edf3;
+      --text-primary: #18222f; --text-secondary: #4a5568; --text-muted: #9aa5b4;
+      --sidebar-w: 240px; --topnav-h: 54px; --drawer-w: 480px;
+      --radius-sm: 7px; --radius-lg: 14px;
+      --shadow: 0 8px 32px rgba(30,40,80,0.10);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 13px;
+      color: var(--text-primary);
+      background: linear-gradient(135deg, #e0e7ff 0%, #f0f4f8 40%, #e0f2fe 100%);
+      display: grid;
+      grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+      grid-template-rows: var(--topnav-h) minmax(0, 1fr);
+      height: 100vh; overflow: hidden;
+    }
+    .topnav {
+      grid-column: 1 / -1; height: var(--topnav-h);
+      display: flex; align-items: stretch;
+      background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 40%, #e0f2fe 100%);
+      border-bottom: 1px solid rgba(148,163,196,0.35);
+    }
+    .topnav-brand {
+      display: flex; align-items: center; gap: 10px;
+      width: var(--sidebar-w); padding: 0 18px;
+      border-right: 1px solid rgba(148,163,196,0.25);
+    }
+    .brand-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+    .brand-text { font-size: 14px; font-weight: 700; }
+    .brand-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .pnav { display: flex; align-items: stretch; flex: 1; }
+    .pnav-item {
+      position: relative; height: 100%; padding: 0 22px; border: none; background: transparent;
+      font-family: inherit; font-size: 15px; font-weight: 600; color: #3b4d6b;
+      display: inline-flex; align-items: center; text-decoration: none;
+    }
+    .pnav-item.active { color: #1e3a8a; font-weight: 700; background: rgba(99,102,241,0.13); }
+    .pnav-item.active::after {
+      content: ''; position: absolute; bottom: 0; left: 14px; right: 14px; height: 3px;
+      border-radius: 3px 3px 0 0; background: #4f46e5;
+    }
+    .sidebar {
+      min-height: 0; display: flex; flex-direction: column;
+      background: #eef2fb; border-right: 1px solid #d3dce8;
+    }
+    .sidebar-scroll { flex: 1; overflow-y: auto; padding: 8px 0 16px; }
+    .nav-item {
+      position: relative; display: flex; align-items: center; height: 40px;
+      padding: 0 12px 0 14px; margin: 1px 8px; width: calc(100% - 16px);
+      border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--text-secondary); text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(99,102,241,0.06); color: var(--text-primary); }
+    .nav-item.active { color: var(--primary); background: rgba(37,99,235,0.12); font-weight: 600; }
+    .nav-item.active::before {
+      content: ''; position: absolute; left: 0; top: 7px; bottom: 7px; width: 3px;
+      border-radius: 0 2px 2px 0; background: var(--primary);
+    }
+    .sidebar-foot { padding: 10px 14px 14px; border-top: 1px solid rgba(148,163,196,0.22); font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+    .main { min-width: 0; min-height: 0; display: flex; flex-direction: column; padding: 12px 20px 16px; }
+    .breadcrumb { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .page-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .page-header h1 { font-size: 19px; font-weight: 700; }
+    .page-desc { font-size: 12px; color: var(--text-muted); line-height: 1.45; max-width: 720px; margin-top: 4px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 34px; padding: 0 14px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent;
+    }
+    .btn-rule { background: var(--primary-light); color: var(--primary); border-color: var(--primary-border); }
+    .btn-rule.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .page-tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+    .page-tabs button {
+      height: 32px; padding: 0 14px; border: none; background: transparent; cursor: pointer;
+      font-family: inherit; font-size: 13px; color: var(--text-secondary); border-bottom: 2px solid transparent;
+    }
+    .page-tabs button.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
+    .page-view { display: none; min-height: 0; flex: 1; }
+    .page-view.active { display: flex; flex-direction: column; }
+    #view-fe.active { height: calc(100vh - 188px); min-height: 560px; }
+    .demo-layout { flex:1;min-height:0;display:grid;grid-template-columns:minmax(280px,540px) minmax(375px,1fr);gap:16px; }
+    .context-rules {min-height:0;overflow:auto;padding:20px;background:var(--surface-glass);border:1px solid rgba(255,255,255,.55);border-radius:var(--radius-lg);box-shadow:var(--shadow)}
+    .context-rules h2 {font-size:16px;margin-bottom:6px}
+    .context-rules .intro {font-size:12px;line-height:1.6;color:var(--text-secondary);margin-bottom:20px}
+    .context-rules .rule-section h3 {font-size:13px}
+    .context-rules .rule-content {font-size:12px}
+    .perspective-tabs{display:flex;gap:24px;flex-shrink:0;padding:0 16px;margin-bottom:12px;border-bottom:1px solid var(--border)}
+    .perspective-tabs button{border:0;border-bottom:2px solid transparent;background:none;padding:10px 0;color:var(--text-secondary);font:inherit;font-size:13px;cursor:pointer}.perspective-tabs button.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+    @media(max-width:1000px){.demo-layout{grid-template-columns:minmax(220px,1fr) minmax(375px,1fr);overflow:auto}}
+    .scene-panel, .mockup-board {
+      background: var(--surface-glass); border: 1px solid rgba(255,255,255,0.55);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow); min-height: 0;
+    }
+    .scene-panel { padding: 12px; overflow: auto; }
+    .scene-panel h2 { font-size: 13px; margin-bottom: 8px; }
+    .scene {
+      width: 100%; text-align: left; border: 1px solid var(--border); background: #fff;
+      border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; cursor: pointer; font: inherit; color: inherit;
+    }
+    .scene strong { display: block; font-size: 12px; }
+    .scene span { display: block; margin-top: 2px; font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+    .scene.on { border-color: var(--primary-border); background: var(--primary-light); }
+    .mockup-board { width: 100%; height: 100%; min-height: 0; overflow: hidden; background: #f6f7fb; border-radius: var(--radius-lg); }
+    .mockup-board iframe { width: 100%; height: 100%; min-height: 0; border: 0; background: #f6f7fb; display: block; }
+    .doc { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 12px; }
+    .empty-note {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      background: var(--surface-glass); border: 1px solid rgba(255,255,255,0.55);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow);
+      color: var(--text-muted); font-size: 13px;
+    }
+    .mod {
+      background: var(--surface-glass); border: 1px solid rgba(255,255,255,0.55);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 16px 18px 8px;
+    }
+    .mod h2 { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .kind { font-size: 12px; font-weight: 700; color: var(--accent-rule); margin: 10px 0 6px; }
+    .kind:first-of-type { margin-top: 0; }
+    .item { display: grid; grid-template-columns: 148px minmax(0, 1fr); gap: 8px 12px; margin-bottom: 8px; font-size: 13px; line-height: 1.55; }
+    .item b { font-weight: 600; color: var(--text-primary); }
+    .item span { color: var(--text-secondary); }
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.35); z-index: 500;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: var(--drawer-w); z-index: 501;
+      background: rgba(255,255,255,0.98); box-shadow: -8px 0 40px rgba(30,40,60,0.18);
+      transform: translateX(100%); transition: transform 0.28s ease;
+      display: flex; flex-direction: column;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .drawer-header h2 { font-size: 15px; font-weight: 700; }
+    .drawer-close {
+      width: 28px; height: 28px; border: none; background: #f1f5f9; border-radius: 6px;
+      cursor: pointer; font-size: 16px; color: var(--text-secondary);
+    }
+    .drawer-body { flex: 1; overflow-y: auto; }
+    .rule-tab-bar { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); }
+    .rule-tab-bar button {
+      padding: 10px 18px; border: none; background: none; cursor: pointer;
+      font-size: 13px; color: var(--text-secondary); border-bottom: 2px solid transparent; margin-bottom: -1px;
+    }
+    .rule-tab-bar button.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
+    .rule-panel { display: none; padding: 16px 20px 24px; }
+    .rule-panel.active { display: block; }
+    .rule-section { margin-bottom: 20px; }
+    .rule-section h3 { font-size: 14px; font-weight: 700; color: var(--accent-rule); margin-bottom: 8px; }
+    .rule-content { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .rule-content ul { padding-left: 18px; }
+    .rule-content li { margin-bottom: 5px; }
+    .rule-content p + p { margin-top: 6px; }
+    .rule-content h4 { font-size: 13px; font-weight: 700; color: var(--text-primary); margin: 10px 0 4px; }
+    html.embedded body { display: block; }
+    html.embedded body > .topnav,
+    html.embedded body > .sidebar { display: none; }
+    html.embedded body > .main { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <header class="topnav">
+    <div class="topnav-brand">
+      <div class="brand-icon">迭</div>
+      <div>
+        <div class="brand-text">BM-PM</div>
+        <div class="brand-sub">迭代需求</div>
+      </div>
+    </div>
+    <nav class="pnav" aria-label="业务线">
+      <a class="pnav-item" href="framework-shell.html#youbao/overview">右豹主业务</a>
+      <a class="pnav-item active" href="framework-shell.html#mentor/overview">导师商务</a>
+      <a class="pnav-item" href="framework-shell.html#enterprise/overview">企业号</a>
+    </nav>
+  </header>
+  <aside class="sidebar">
+    <div class="sidebar-scroll" data-iteration-sidebar></div>
+    <div class="sidebar-foot">先写明业务线，再做设计。<br />已上线进归档，已暂停进废纸篓。</div>
+  </aside>
+  <main class="main">
+    <nav class="breadcrumb"><a href="framework-shell.html#mentor/overview">导师商务</a> / 导师迭代V1.2</nav>
+    <header class="page-header">
+      <div>
+        <h1>FR-CoCo-002 · 导师迭代V1.2 · v1 当前</h1>
+        <p class="page-desc">前端交互：切换用户视角的社群页与导师视角的个人信息配置。管理后台只列规则。</p>
+      </div>
+      <button class="btn btn-rule" id="ruleBtn" type="button" aria-expanded="false">需求规则</button>
+    </header>
+    <div class="page-tabs" role="tablist">
+      <button type="button" class="active" data-tab="fe">前端交互</button>
+      <button type="button" data-tab="admin">管理后台</button>
+    </div>
+    <section class="page-view active" id="view-fe">
+      <div class="perspective-tabs" role="tablist" aria-label="页面视角">
+        <button type="button" role="tab" class="on" data-perspective="user" aria-selected="true">用户视角</button>
+        <button type="button" role="tab" data-perspective="mentor" aria-selected="false">导师视角</button>
+      </div>
+      <div class="demo-layout">
+        <aside class="context-rules" aria-label="当前视角前端需求规则"><h2 id="contextTitle">用户视角 · 前端需求</h2><p class="intro">对照右侧页面查看字段、操作与边界。切换视角后，说明同步切换。</p><div style="display:flex;gap:8px;margin-bottom:16px"><button type="button" class="btn btn-ghost" id="editRules">编辑规则</button><button type="button" class="btn btn-ghost" id="copyDemoCode">复制 Demo 代码</button><button type="button" class="btn btn-primary" id="saveRules" hidden>保存到项目</button><button type="button" class="btn btn-ghost" id="cancelRules" hidden>取消</button></div><p id="copyDemoStatus" role="status" style="font-size:12px;line-height:1.6;color:var(--text-secondary)"></p><p id="ruleEditStatus" role="status" style="font-size:12px;line-height:1.6"></p><textarea id="ruleEditor" aria-label="编辑当前视角需求规则" hidden style="width:100%;min-height:420px;resize:vertical;border:1px solid var(--border);border-radius:8px;padding:12px;font:12px/1.8 inherit"></textarea><div id="contextRules"></div></aside>
+        <div class="mockup-board">
+          <iframe id="phone" title="社群页完整还原" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;screen=joined&amp;v=10"></iframe>
+        </div>
+      </div>
+    </section>
+    <section class="page-view" id="view-admin">
+    <div class="doc">
+      <section class="mod" aria-labelledby="mod-community">
+        <h2 id="mod-community">社群管理</h2>
+        <p class="kind">新增按钮</p>
+        <div class="item"><b>同步飞书信息</b><span>按飞书机器人归属的群，用社群名称和现有社群一对一同步。</span></div>
+        <p class="kind">新增字段</p>
+        <div class="item"><b>飞书社群人员</b><span>显示该社群在飞书的成员信息。</span></div>
+      </section>
+      <section class="mod" aria-labelledby="mod-people">
+        <h2 id="mod-people">人员管理</h2>
+        <p class="kind">新增操作</p>
+        <div class="item"><b>批量入群</b><span>把还未拉进飞书群的人员拉进飞书群。</span></div>
+        <div class="item"><b>重新入群</b><span>入群失败后可再拉一次。</span></div>
+        <p class="kind">新增字段</p>
+        <div class="item"><b>入群状态</b><span>已入群、未入群、入群失败。入群失败显示失败原因。</span></div>
+      </section>
+      <section class="mod" aria-labelledby="mod-mentor">
+        <h2 id="mod-mentor">导师管理</h2>
+        <p class="kind">新增操作</p>
+        <div class="item"><b>同步飞书信息</b><span>同步该导师在飞书的社群信息。</span></div>
+        <p class="kind">新增字段</p>
+        <div class="item"><b>飞书信息</b><span>飞书昵称、飞书手机号、飞书ID。</span></div>
+        <div class="item"><b>是否已同步飞书信息</b><span>社群弹窗。是、否。</span></div>
+        <div class="item"><b>飞书社群人数</b><span>社群弹窗。机器人同步的飞书社群成员数量。</span></div>
+        <div class="item"><b>该导师群内身份</b><span>社群弹窗。机器人拉回的群内身份，如群主、管理员。</span></div>
+      </section>
+    </div>
+    </section>
+  </main>
+
+  <div class="drawer-overlay" id="ruleOverlay"></div>
+  <aside class="drawer rule" id="ruleDrawer" role="dialog" aria-labelledby="ruleTitle">
+    <div class="drawer-header">
+      <h2 id="ruleTitle">FR-CoCo-002 · v1 需求规则</h2>
+      <button class="drawer-close" id="ruleClose" type="button" aria-label="关闭">×</button>
+    </div>
+    <div class="rule-tab-bar">
+      <button type="button" data-rule="fe">前端需求</button>
+      <button type="button" class="active" data-rule="admin">后台需求</button>
+    </div>
+    <div class="drawer-body">
+      <div class="rule-panel" id="rule-fe"><h3>导师视角 · 个人介绍</h3><p>个人信息页移除团队角色，新增个人介绍入口。配置页展示头像、导师名称、只读置灰的后台身份、个人介绍文本框；介绍与社群导师浮层使用同一份内容。保存方式及字段编辑能力待确认。</p>
+        <div class="rule-section">
+          <h3>1 业务目标</h3>
+          <div class="rule-content">用户视角：已经加入社群的成员进入社群详情页后，可以查看社群身份、社群公告、负责项目、导师团、社群介绍、社区战绩和收益荣誉榜，并通过底部按钮进入社区飞书。页面只读，所有数据为 Demo 展示数据。</div>
+        </div>
+        <div class="rule-section">
+          <h3>2 页面结构</h3>
+          <div class="rule-content">
+            <ul>
+              <li>页面采用移动端社群详情布局：深色社群头图、成员概览、公告入口、负责项目、导师团、社群介绍、社群战绩、收益荣誉榜、社群案例和底部固定操作。</li>
+              <li>头图显示社群头像、社群名称、已加入天数、社群状态标签和项目交流标签。</li>
+              <li>负责项目横向排列，项目卡片必须同时有项目图标和项目名称；超出屏幕宽度时可横向滑动。</li>
+              <li>导师团先展示创业导师，再展示导师团成员人数和导师团成员列表；每行显示头像、名字、职责和身份标签。</li>
+              <li>社群介绍支持正文收起/展开；展开后显示完整正文，配图或视频接在正文之后。</li>
+              <li>社群战绩显示社区本月总产出、活跃成员、本月新增成员、你的社区排行、本月收益和团队成员收益；收益荣誉榜显示本月 TOP 5。</li>
+              <li>底部固定按钮为「进入社群飞书」，页面滚动时保持可见。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rule-section">
+          <h3>3 交互规则</h3>
+          <div class="rule-content">
+            <ul>
+              <li>点击社群公告或最新公告卡片，打开公告浮层；点击遮罩空白处关闭。</li>
+              <li>点击项目卡片，打开该项目的 Demo 详情浮层；不连接真实项目详情页。</li>
+              <li>点击创业导师或导师团成员卡片，打开导师浮层，显示头像、名字、身份、职责和导师介绍；浮层不显示手机号、飞书信息、收益，也不提供编辑操作。</li>
+              <li>导师浮层没有关闭按钮，点击遮罩空白处关闭，点击浮层内容不关闭，关闭后保留原滚动位置。</li>
+              <li>点击「查看完整介绍」在当前页面展开全文，再次点击可收起；不跳转其他页面。</li>
+              <li>点击「数据说明」显示战绩为 Demo 模拟数据；战绩、收益榜和案例均为只读。</li>
+              <li>点击社群案例卡片打开案例详情浮层；点击「进入社群飞书」打开静态跳转提示，不访问真实飞书。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rule-section">
+          <h3>4 数据和边界</h3>
+          <div class="rule-content">
+            <ul>
+              <li>页面仅面向已加入社群的成员，不提供加入社群、编辑资料、删除项目或修改导师信息的入口。</li>
+              <li>成员 TOP 榜按收益从高到低展示；未返回的值留空，返回 0 时显示 0，昵称按返回结果展示。</li>
+              <li>不接真实接口、登录、权限、持久化或真实飞书跳转；点击行为只改变 Demo 页面状态或显示提示。</li>
+              <li>社群公告、收益荣誉榜和社群案例是本次参考页面还原中的展示模块，后续如与正式 PRD 口径冲突，以确认后的 PRD 为准。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rule-section">
+          <h3>5 业务流程</h3>
+          <div class="rule-content">进入社群详情页 → 查看公告、项目、导师和战绩 → 点击项目或导师查看详情 → 点击「进入社群飞书」查看静态跳转提示。</div>
+        </div>
+      </div>
+      <div class="rule-panel active" id="rule-admin">
+        <div class="rule-section">
+          <h3>社群管理</h3>
+          <div class="rule-content">
+            <p>新增按钮：同步飞书信息。按飞书机器人归属的群，用社群名称和现有社群一对一同步。</p>
+            <p>新增字段：飞书社群人员。显示该社群在飞书的成员信息。</p>
+          </div>
+        </div>
+        <div class="rule-section">
+          <h3>人员管理</h3>
+          <div class="rule-content">
+            <p>新增操作：批量入群。把还未拉进飞书群的人员拉进飞书群。</p>
+            <p>新增操作：重新入群。入群失败后可再拉一次。</p>
+            <p>新增字段：入群状态。已入群、未入群、入群失败。入群失败显示失败原因。</p>
+          </div>
+        </div>
+        <div class="rule-section">
+          <h3>导师管理</h3>
+          <div class="rule-content">
+            <p>新增操作：同步飞书信息。同步该导师在飞书的社群信息。</p>
+            <p>新增字段：飞书信息。飞书昵称、飞书手机号、飞书ID。</p>
+            <p>社群弹窗新增字段：是否已同步飞书信息（是、否）；飞书社群人数（机器人同步的成员数量）；该导师群内身份（如群主、管理员）。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <script src="sidebar-nav.js?v=9"></script>
+  <script>
+    var phone = document.getElementById('phone');
+    var ruleBtn = document.getElementById('ruleBtn');
+    var currentTab = 'fe';
+
+    function showTab(name) {
+      if (name !== 'fe' && name !== 'admin') name = 'admin';
+      currentTab = name;
+      document.querySelectorAll('.page-tabs button').forEach(function (btn) {
+        var on = btn.getAttribute('data-tab') === name;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      document.getElementById('view-fe').classList.toggle('active', name === 'fe');
+      document.getElementById('view-admin').classList.toggle('active', name === 'admin');
+      var params = new URLSearchParams(location.search);
+      if (params.get('tab') !== name) {
+        params.set('tab', name);
+        history.replaceState(null, '', '?' + params.toString());
+      }
+    }
+
+    function sendScreen(screen) {
+      if (phone.contentWindow) phone.contentWindow.postMessage({ type: 'coco-002', screen: screen }, '*');
+    }
+
+    function showRule(which) {
+      document.querySelectorAll('.rule-tab-bar button').forEach(function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-rule') === which);
+      });
+      document.getElementById('rule-fe').classList.toggle('active', which === 'fe');
+      document.getElementById('rule-admin').classList.toggle('active', which === 'admin');
+    }
+
+    function setRule(open, which) {
+      document.getElementById('ruleOverlay').classList.toggle('open', open);
+      document.getElementById('ruleDrawer').classList.toggle('open', open);
+      ruleBtn.classList.toggle('active', open);
+      ruleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) showRule(which || (currentTab === 'admin' ? 'admin' : 'fe'));
+    }
+
+    document.querySelectorAll('.page-tabs button').forEach(function (btn) {
+      btn.addEventListener('click', function () { showTab(btn.getAttribute('data-tab')); });
+    });
+    document.querySelectorAll('.scene[data-screen]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.scene').forEach(function (item) {
+          item.classList.remove('on');
+          item.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('on');
+        btn.setAttribute('aria-pressed', 'true');
+        sendScreen(btn.getAttribute('data-screen'));
+      });
+    });
+    var perspectiveRules = {
+  "user": [
+    [
+      "页面与字段",
+      [
+        "页面面向已加入该社群的成员，展示社群头像、社群名称和已加入天数。",
+        "负责项目展示项目图标和名称，一行放不下时可横向浏览。"
+      ]
+    ],
+    [
+      "项目与导师操作",
+      [
+        "开发规则：点击项目打开对应项目详情页；本 Demo 不实现真实详情跳转。",
+        "点击导师打开浮层，显示头像、名字、后台配置的身份、标签及导师介绍。",
+        "导师介绍与导师端配置的个人介绍、管理后台配置的使用同一份内容。",
+        "导师标签:第一个显示导师团负责人,即“导师长”;导师团成员显示其余导师成员,注意要显示身份tag,demo里没有显示"
+      ]
+    ],
+    [
+      "介绍与战绩",
+      [
+        "社群介绍显示正文，配置图片或视频时一并展示。",
+        "战绩展示社区本月总产出、活跃成员、你的社区排行、本月收益及团队成员收益。",
+        "成员排名展示头像、脱敏昵称和收益。统计口径按现有逻辑，按返回数值显示。"
+      ]
+    ],
+    [
+      "操作与边界",
+      [
+        "底部「进入社区飞书」入口保持可见；按现有的逻辑即可。",
+        "成员在社群页不能编辑社群或导师信息。",
+        "本 Demo 使用示例数据，不调用真实接口、不持久化。"
+      ]
+    ]
+  ],
+  "mentor": [
+    [
+      "页面与字段",
+      [
+        "个人信息页面移除「团队角色」配置，增加「个人介绍」配置入口。",
+        "个人介绍配置页展示头像、导师名称、当前身份和个人介绍。",
+        "当前身份默认显示后台配置的身份名称，置灰且不支持修改。"
+      ]
+    ],
+    [
+      "编辑与保存",
+      [
+        "进入个人信息页后，个人介绍、头像、名称默认可编辑。",
+        "点击保存后仅提示「保存成功」，停留当前页面，信息保持展开。",
+        "个人介绍与用户视角导师浮层中的导师介绍使用同一份内容。"
+      ]
+    ],
+    [
+      "其他导师端调整",
+      [
+        "服务记录页面的成员列表增加「右豹ID」「飞书手机号」显示。",
+        "导师管理的群移除「新建群」「群规模」按钮。"
+      ]
+    ]
+  ]
+};
+    function escapeRule(text){return text.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+    var editingRules=false, ruleView='user', ruleBase=null;
+    var editStatus=document.getElementById('ruleEditStatus'), ruleEditor=document.getElementById('ruleEditor');
+    function editingState(active){editingRules=active;ruleEditor.hidden=!active;document.getElementById('contextRules').hidden=active;document.getElementById('editRules').hidden=active;document.getElementById('saveRules').hidden=!active;document.getElementById('cancelRules').hidden=!active;document.querySelectorAll('[data-perspective]').forEach(function(btn){btn.disabled=active})}
+    document.getElementById('editRules').onclick=function(){ruleBase=JSON.parse(JSON.stringify(perspectiveRules[ruleView]));ruleEditor.value=ruleBase.map(function(g){return '## '+g[0]+'\n'+g[1].map(function(line){return '- '+line}).join('\n')}).join('\n\n');editingState(true);editStatus.textContent='每个分区以 ## 标题开始，每条规则以 - 开始。保存将写入本项目 frontend-rules.json。';};
+    document.getElementById('cancelRules').onclick=function(){editingState(false);editStatus.textContent='已取消编辑';};
+    document.getElementById('saveRules').onclick=async function(){
+      var groups=[];
+      try{
+        ruleEditor.value.split('\n').forEach(function(line){line=line.trim();if(!line)return;if(line.startsWith('## ')){groups.push([line.slice(3).trim(),[]])}else if(line.startsWith('- ')&&groups.length){groups[groups.length-1][1].push(line.slice(2).trim())}else{throw Error('请使用 ## 分区标题和 - 规则条目')}});
+        if(!groups.length||groups.some(function(g){return !g[0]||!g[1].length}))throw Error('每个分区需要标题和至少一条规则');
+        this.disabled=true;
+        var response=await fetch('/__local/mentor-rules',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({view:ruleView,groups:groups,base:ruleBase})});
+        if(!response.ok){var error=await response.json().catch(function(){return {error:'保存服务不可用，请用 python3 scripts/preview_server.py 启动预览'}});throw Error(error.error)}
+        perspectiveRules[ruleView]=groups;document.getElementById('contextRules').innerHTML=ruleMarkup(groups);editingState(false);editStatus.textContent='保存成功，已写入项目 frontend-rules.json';
+      }catch(error){editStatus.textContent=error.message}finally{this.disabled=false}
+    };
+    fetch('/__local/mentor-rules').then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(data){if(editingRules)return;perspectiveRules=data;document.getElementById('contextRules').innerHTML=ruleMarkup(data[ruleView])}).catch(function(){editStatus.textContent='本地编辑需使用 python3 scripts/preview_server.py 启动预览服务。'});
+    function ruleMarkup(groups) {
+      return groups.map(function(group){return '<section class="rule-section"><h3>'+escapeRule(group[0])+'</h3><div class="rule-content"><ul>'+group[1].map(function(line){return '<li>'+escapeRule(line)+'</li>'}).join('')+'</ul></div></section>'}).join('');
+    }
+    function setPerspective(view) {
+      ruleView=view;
+      document.querySelectorAll('[data-perspective]').forEach(function(btn){
+        var active = btn.getAttribute('data-perspective') === view;
+        btn.classList.toggle('on', active); btn.setAttribute('aria-selected', String(active));
+      });
+      phone.src = view === 'mentor' ? 'fr-coco-002-mentor-intro-fe.html?embed=1&screen=editor' : 'fr-coco-002-mentor-v1-2-fe.html?embed=1&screen=joined&v=10';
+      document.getElementById('contextTitle').textContent = (view === 'mentor' ? '导师视角 · 个人介绍' : '用户视角 · 社群页') + ' · 需求规则';
+      document.getElementById('contextRules').innerHTML = ruleMarkup(perspectiveRules[view]);
+      phone.title = view === 'mentor' ? '导师个人信息及介绍配置' : '用户社群详情页';
+      var params = new URLSearchParams(location.search); params.set('view',view);
+      history.replaceState(null,'','?'+params.toString()+location.hash);
+    }
+    document.querySelectorAll('[data-perspective]').forEach(function(btn){btn.addEventListener('click',function(){setPerspective(btn.getAttribute('data-perspective'))})});
+    setPerspective(new URLSearchParams(location.search).get('view') === 'mentor' ? 'mentor' : 'user');
+    ruleBtn.addEventListener('click', function () {
+      setRule(!document.getElementById('ruleDrawer').classList.contains('open'));
+    });
+    document.getElementById('ruleClose').addEventListener('click', function () { setRule(false); });
+    document.getElementById('ruleOverlay').addEventListener('click', function () { setRule(false); });
+    document.querySelectorAll('.rule-tab-bar button').forEach(function (btn) {
+      btn.addEventListener('click', function () { showRule(btn.getAttribute('data-rule')); });
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') setRule(false);
+    });
+
+    function pointSidebarHome() {
+      document.querySelectorAll('[data-iteration-sidebar] a').forEach(function (link) {
+        var href = link.getAttribute('href') || '';
+        if (href.charAt(0) === '#') link.setAttribute('href', 'framework-shell.html' + href);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', pointSidebarHome);
+    window.addEventListener('hashchange', pointSidebarHome);
+
+    var tab = new URLSearchParams(location.search).get('tab') || 'fe';
+    showTab(tab);
+  </script>
+
+  <script>
+    (function () {
+      var button = document.getElementById('copyDemoCode');
+      var status = document.getElementById('copyDemoStatus');
+      button.addEventListener('click', async function () {
+        var source = new URL(document.getElementById('phone').getAttribute('src'), location.href);
+        button.disabled = true;
+        status.textContent = '正在读取 Demo 代码…';
+        try {
+          var response = await fetch(source.href);
+          if (!response.ok) throw new Error('读取失败');
+          var html = await response.text();
+          if (!/<!doctype html/i.test(html)) throw new Error('页面内容不完整');
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(html);
+          } else {
+            var field = document.createElement('textarea');
+            field.value = html;
+            field.style.cssText = 'position:fixed;left:-9999px;top:0';
+            document.body.appendChild(field);
+            field.select();
+            var copied = document.execCommand('copy');
+            field.remove();
+            if (!copied) throw new Error('复制失败');
+          }
+          status.textContent = 'Demo 代码已复制（HTML、CSS、JavaScript）';
+        } catch (error) {
+          status.textContent = '复制失败，请重试或检查浏览器剪贴板权限。';
+        } finally {
+          button.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
