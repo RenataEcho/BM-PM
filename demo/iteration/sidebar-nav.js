@@ -8,14 +8,6 @@
     { id: 'overview', label: '概览' },
     { id: 'components', label: '组件规范' }
   ];
-  var DEMOS = [
-    { id: 'fr-xy-03', line: 'enterprise', label: '新增团队数据页', status: '待开始', url: 'https://cicichak00.github.io/Enterprise-Systems/ux/team-statistics.html' },
-    { id: 'fr-xy-02', line: 'enterprise', label: '新增工具配置项', status: '待开始', url: 'https://cicichak00.github.io/Enterprise-Systems/enterprise-tools/employee.html' },
-    { id: 'fr-xy-01', line: 'enterprise', label: '员工列表优化', status: '待开始', url: 'https://cicichak00.github.io/Enterprise-Systems/drafts/employee-management/' },
-    { id: 'enterprise-fr-001', line: 'enterprise', label: '员工离职操作优化', status: '待开始', url: 'fr-enterprise-001-leaving.html?embed=1&tab=fe&v=1' },
-    { id: 'fr-001', line: 'youbao', label: '剪辑手供稿书籍填写优化', status: '开发中', url: 'fr-001-book-entry.html?embed=1&tab=fe&v=nav3' },
-    { id: 'fr-002', line: 'youbao', label: '新增登录设备', status: '待开始', url: 'fr-002.html?embed=1&tab=fe&v=rules3' }
-  ];
   // 登记行是导航与路由的唯一来源，避免新增需求后仍打开旧 Demo。
   function demos() {
     return Array.from(document.querySelectorAll('#view-overview tr[data-id][data-line]')).map(function (row) {
