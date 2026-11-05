@@ -1,10 +1,74 @@
 (()=>{'use strict';const $=s=>document.querySelector(s),M=window.ClaimDemo,esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let ruleReturn; let tab='fe',module='types',screen='square',drawerReturn,modalReturn,modalAction,drawerAction;
 const scenes=[['square','作品广场','广场找稿 → 稿件详情 → 立即领取。'],['detail','稿件详情 · 有要求','规则加载失败不能当成无要求直领。'],['select','选择账号 · 混合列表','切换此预设会重置账号样例；四平台共同参与，按当前要求判断。'],['empty','空账号列表','切换此预设会清空当前账号样例（历史保留）；添加返回不重置。'],['none','全部不满足','切换此预设会重置为未达门槛账号样例（历史保留）；按当前要求判断。'],['direct','无要求 · 直接领取','不使用统一要求时免账号直领。'],['add','添加媒体账号','识别、保存两步；完整但未达门槛仍可添加。'],['upload','剪辑手 · PC上传','第二步每张书籍卡片独立开关，默认否。']];
-function fitPhone(){if($('#phone-stage').hidden)return;const board=$('.board-scroll'),scale=Math.max(.2,Math.min(1,(board.clientHeight-52)/812,(board.clientWidth-52)/375));const stage=$('#phone-stage'),frame=$('#mobile');stage.style.width=(375*scale+16)+'px';stage.style.height=(812*scale+16)+'px';frame.style.width='375px';frame.style.height='812px';frame.style.transform=`scale(${scale})`;frame.style.transformOrigin='top left';}
+function fitPhone(){if($('#phone-stage').hidden)return;const board=$('.board-scroll'),scale=Math.max(.2,Math.min(1,(board.clientHeight-52)/812,(board.clientWidth-52)/375));const stage=$('#phone-stage'),frame=$('#mobile');stage.style.width=(375*scale+16)+'px';stage.style.height=(812*scale+16)+'px';frame.style.width='375px';frame.style.height='812px';/* 保留现有 zoom 缩放；iframe 的批注边界另由同页批注视图处理。 */frame.style.zoom=scale;frame.style.transform='none';frame.style.transformOrigin='top left';$('#phone-annotation').style.zoom=scale;}
 new ResizeObserver(fitPhone).observe($('.board-scroll'));
+// 批注器可直接命中同页元素；交互仍由原 iframe 承载。
+function closeAnnotation(){
+  $('#phone-annotation').hidden=true;
+  $('#phone-annotation').replaceChildren();
+  $('#mobile').hidden=false;
+  $('#annotation-toggle').setAttribute('aria-pressed','false');
+  $('#annotation-toggle').textContent='批注视图';
+}
+function annotationCss(rules){
+  return [...rules].map(rule=>{
+    if(rule.selectorText){
+      const selector=rule.selectorText.replace(/(^|[\s,>+~])(?:body|html|:root)(?=$|[\s,>+~.#:[\]])/g,'$1.annotation-screen').replace(/#([\w-]+)/g,'#annotation-$1').split(',').map(part=>'#phone-annotation '+(part.trim().startsWith('.annotation-screen')?'':'.annotation-screen ')+part.trim()).join(',');
+      return selector+'{'+rule.style.cssText+'}';
+    }
+    if(rule.cssRules)return rule.cssText.slice(0,rule.cssText.indexOf('{')+1)+annotationCss(rule.cssRules)+'}';
+    return rule.cssText;
+  }).join('\n');
+}
+$('#annotation-toggle').onclick=()=>{
+  const host=$('#phone-annotation');
+  if(!host.hidden){closeAnnotation();fitPhone();return;}
+  try{
+    const source=$('#mobile').contentDocument;
+    if(!source?.body||!source.querySelector('#content')?.textContent.trim()||source.querySelector('.skeleton')||[...source.querySelectorAll('button')].some(button=>button.textContent==='处理中…')){
+      toast('画面正在加载或处理中，请完成后再切换批注视图');return;
+    }
+    const copy=document.createElement('div');
+    copy.className='annotation-screen';
+    copy.style.cssText='width:375px;height:812px;position:relative;contain:layout paint style;isolation:isolate';
+    const pairs=[...source.body.querySelectorAll('*')].map(original=>({original}));
+    copy.append(...[...source.body.childNodes].map(node=>node.cloneNode(true)));
+    const clones=[...copy.querySelectorAll('*')];
+    pairs.forEach((pair,i)=>{
+      const node=clones[i],original=pair.original;
+      pair.copy=node;pair.top=original.scrollTop;pair.left=original.scrollLeft;
+      node.removeAttribute('inert');
+      for(const attribute of [...node.attributes]){
+        if(attribute.name.startsWith('on')||attribute.name.startsWith('data-'))node.removeAttribute(attribute.name);
+      }
+      if(node.id)node.id='annotation-'+node.id;
+      for(const attr of ['for','aria-labelledby','aria-describedby','aria-controls']){
+        if(node.hasAttribute(attr))node.setAttribute(attr,node.getAttribute(attr).split(/\s+/).map(id=>'annotation-'+id).join(' '));
+      }
+      if(node.matches('input')){node.value=original.value;node.checked=original.checked;node.readOnly=true;}
+      if(node.matches('textarea')){node.value=original.value;node.readOnly=true;}
+      if(node.matches('select')){node.selectedIndex=original.selectedIndex;node.disabled=true;node.style.opacity=getComputedStyle(original).opacity;}
+      if(node.matches('a,button,input,select,textarea,[tabindex]'))node.tabIndex=-1;
+    });
+    copy.querySelectorAll('script,iframe').forEach(node=>node.remove());
+    const style=document.createElement('style');
+    style.textContent='#phone-annotation .annotation-screen,#phone-annotation .annotation-screen *{all:revert}'+[...source.styleSheets].map(sheet=>annotationCss(sheet.cssRules)).join('\n');
+    host.replaceChildren(style,copy);
+    host.hidden=false;
+    $('#mobile').hidden=true;
+    fitPhone();
+    pairs.forEach(pair=>{pair.copy.scrollTop=pair.top;pair.copy.scrollLeft=pair.left;});
+    $('#annotation-toggle').setAttribute('aria-pressed','true');
+    $('#annotation-toggle').textContent='返回交互视图';
+    toast('当前画面已冻结，可开启 Codex 标注；返回交互视图继续操作');
+  }catch(error){closeAnnotation();toast('批注视图生成失败，请刷新页面后重试');console.error('批注视图生成失败',error);}
+};
+// 保留事件传播给预览批注器，但阻止副本中的控件触发默认动作。
+$('#phone-annotation').addEventListener('click',event=>event.preventDefault());
+
 function toast(t){$('#toast').textContent=t;$('#toast').classList.add('show');setTimeout(()=>$('#toast').classList.remove('show'),2400);}window.claimToast=toast;
-function switchTab(t){tab=['fe','admin','flow'].includes(t)?t:'fe';document.querySelectorAll('.view').forEach(el=>el.hidden=el.id!=='view-'+tab);document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));const u=new URL(location.href);u.searchParams.set('tab',tab);history.replaceState(null,'',u);if(tab==='admin')renderAdmin();}
-function scene(s){screen=s;document.querySelectorAll('[data-screen]').forEach(b=>b.classList.toggle('active',b.dataset.screen===s));const row=scenes.find(x=>x[0]===s)||scenes[0];$('#scene-title').textContent=row[1];$('#scene-desc').textContent=row[2];$('#phone-stage').hidden=s==='upload';$('#upload-stage').hidden=s!=='upload';if(s==='upload'){renderUpload();$('#mobile').contentWindow.postMessage({type:'fr-wen-004-cancel'},location.origin);}else {$('#mobile').contentWindow.postMessage({type:'fr-wen-004-screen',screen:s},location.origin);requestAnimationFrame(fitPhone);}}
+function switchTab(t){closeAnnotation();tab=['fe','admin','flow'].includes(t)?t:'fe';document.querySelectorAll('.view').forEach(el=>el.hidden=el.id!=='view-'+tab);document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));const u=new URL(location.href);u.searchParams.set('tab',tab);history.replaceState(null,'',u);if(tab==='admin')renderAdmin();}
+function scene(s){closeAnnotation();$('#annotation-toggle').hidden=s==='upload';screen=s;document.querySelectorAll('[data-screen]').forEach(b=>b.classList.toggle('active',b.dataset.screen===s));const row=scenes.find(x=>x[0]===s)||scenes[0];$('#scene-title').textContent=row[1];$('#scene-desc').textContent=row[2];$('#phone-stage').hidden=s==='upload';$('#upload-stage').hidden=s!=='upload';if(s==='upload'){renderUpload();$('#mobile').contentWindow.postMessage({type:'fr-wen-004-cancel'},location.origin);}else {$('#mobile').contentWindow.postMessage({type:'fr-wen-004-screen',screen:s},location.origin);requestAnimationFrame(fitPhone);}}
 $('#scenes').innerHTML=scenes.map(x=>`<button class="scene btn btn-ghost" data-screen="${x[0]}">${x[1]}</button>`).join('');
 function showDrawer(title,html,rule=false){drawerReturn=document.activeElement;$('#drawer-title').textContent=title;$('#drawer-body').innerHTML=html;$('#drawer').classList.toggle('rule',rule);$('#drawer').hidden=false;$('#drawer-overlay').hidden=false;$('#drawer').classList.add('open');$('#drawer-overlay').classList.add('open');$('#workspace').inert=true;$('#rules-open').setAttribute('aria-expanded',rule?'true':'false');$('#drawer-close');$('#drawer .drawer-close').focus();}
 function closeDrawer(){if($('#drawer').hidden)return;$('#drawer').hidden=true;$('#drawer-overlay').hidden=true;$('#workspace').inert=false;$('#rules-open').setAttribute('aria-expanded','false');drawerReturn?.focus();}
