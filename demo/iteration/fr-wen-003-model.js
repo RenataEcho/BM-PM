@@ -1,14 +1,13 @@
 /* FR-wen-003：纯内存示例模型，不请求接口、不持久化。 */
 (function (root) {
   'use strict';
-  const variables = ['留言对象昵称', '团长昵称', '团长联系电话', '团长联系方式'];
+  const variables = ['留言对象昵称', '团长昵称', '团长联系电话'];
   const clone = value => JSON.parse(JSON.stringify(value));
   const bj = value => new Intl.DateTimeFormat('sv-SE', {timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(value));
-  const qr = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" fill="white"/><g fill="#252836"><path d="M12 12h42v42H12zm94 0h42v42h-42zM12 106h42v42H12z"/><path d="M64 12h14v14H64zm14 14h14v28H78zM64 64h14v14H64zm28 0h14v28H92zm28 0h28v14h-28zM64 92h14v42H64zm28 14h14v42H92zm28-14h14v14h-14zm0 28h28v14h-28zm14 14h14v14h-14zM12 64h14v14H12zm14 14h28v14H26z"/></g><g fill="white"><path d="M20 20h26v26H20zm94 0h26v26h-26zM20 114h26v26H20z"/></g><g fill="#252836"><path d="M26 26h14v14H26zm94 0h14v14h-14zM26 120h14v14H26z"/></g></svg>');
   class MessageDemo {
     constructor() { this.reset(); }
     reset() {
-      this.leader = {id:'1008601',name:'团长小周',phone:'138 0013 8000',wechat:'youbao_zhou',qr};
+      this.leader = {id:'1008601',name:'团长小周',phone:'138 0013 8000'};
       this.members = [
         {id:'3895034',name:'雪糕冷呀',relation:'间属成员',level:'V1',avatar:'🍦',joined:'2026.10.09 18:06:36'},
         {id:'3785217',name:'一脚踹飞28个良子',relation:'直属成员',level:'V2',avatar:'🦁',joined:'2026.07.31 20:13:40'},
@@ -17,8 +16,8 @@
       ];
       this.whitelist = [{id:this.leader.id,name:this.leader.name,enabled:true,opened:'2026-10-30 09:00:00',operator:'coco',updated:'2026-10-30 09:00:00',note:'运营开白'}];
       this.templates = [
-        {id:'T001',name:'团队协作提醒',body:'{留言对象昵称}，你好！我是{团长昵称}。\n近期有新的推广任务，欢迎联系我了解。\n联系电话：{团长联系电话}\n{团长联系方式}',enabled:true,creator:'coco',created:'2026-10-30 09:10:00',updater:'coco',updated:'2026-10-30 09:10:00'},
-        {id:'T002',name:'新成员欢迎',body:'欢迎你，{留言对象昵称}！\n我是{团长昵称}，很高兴与你一起成长。\n有任何问题都可以联系我。\n{团长联系方式}',enabled:true,creator:'coco',created:'2026-10-30 09:12:00',updater:'coco',updated:'2026-10-30 09:12:00'},
+        {id:'T001',name:'团队协作提醒',body:'{留言对象昵称}，你好！我是{团长昵称}。\n近期有新的推广任务，欢迎联系我了解。\n联系电话：{团长联系电话}',enabled:true,creator:'coco',created:'2026-10-30 09:10:00',updater:'coco',updated:'2026-10-30 09:10:00'},
+        {id:'T002',name:'新成员欢迎',body:'欢迎你，{留言对象昵称}！\n我是{团长昵称}，很高兴与你一起成长。\n有任何问题都可以联系我。',enabled:true,creator:'coco',created:'2026-10-30 09:12:00',updater:'coco',updated:'2026-10-30 09:12:00'},
         {id:'T003',name:'活动提醒',body:'{留言对象昵称}，记得查看最新活动规则。\n你的团长：{团长昵称}',enabled:false,creator:'coco',created:'2026-10-30 09:15:00',updater:'coco',updated:'2026-10-30 09:15:00'}
       ];
       this.rules = [
@@ -40,12 +39,11 @@
     apply(data) { ['leader','members','whitelist','templates','rules','records','notifications','updated','scenario','recipientId'].forEach(k=>{if(k in data)this[k]=clone(data[k]);}); }
     content(templateId,targetId) {
       const t=this.templates.find(x=>x.id===templateId), m=this.members.find(x=>x.id===targetId);
-      if(!t || !m)return {text:'',image:'',fingerprint:''};
-      const missing=this.scenario==='missing', contact=!missing&&this.leader.wechat;
-      const map={'留言对象昵称':m.name||'','团长昵称':this.leader.name||'','团长联系电话':missing?'':this.leader.phone||'','团长联系方式':contact?'微信号：'+this.leader.wechat:''};
+      if(!t || !m)return {text:'',fingerprint:''};
+      const missing=this.scenario==='missing';
+      const map={'留言对象昵称':m.name||'','团长昵称':this.leader.name||'','团长联系电话':missing?'':this.leader.phone||''};
       const text=t.body.replace(/\{([^{}]+)\}/g,(_,v)=>map[v]||'');
-      const image=t.body.includes('{团长联系方式}')&&contact?this.leader.qr:'';
-      return {text,image,fingerprint:JSON.stringify([text,image])};
+      return {text,fingerprint:JSON.stringify([text])};
     }
     canMessage(member) { return !!this.whitelist.find(x=>x.id===this.leader.id&&x.enabled)&&member.relation.startsWith('直属')&&this.scenario!=='unlisted'; }
     preview(templateId,targetId) { return this.content(templateId,targetId); }
@@ -70,7 +68,7 @@
       if(!member||!member.relation.startsWith('直属')||this.scenario==='relation-changed')return block('该用户已不是你的直属下级，无法发送留言');
       if(!template||!template.enabled||this.scenario==='template-changed')return block('该话术已不可用，请重新选择');
       const content=this.content(templateId,targetId);
-      if(this.scenario==='content-changed'){content.text+='\n请查看最新任务说明。';content.fingerprint=JSON.stringify([content.text,content.image]);}
+      if(this.scenario==='content-changed'){content.text+='\n请查看最新任务说明。';content.fingerprint=JSON.stringify([content.text]);}
       if(fingerprint!==content.fingerprint)return {status:'changed',message:'留言内容已更新，请重新确认',content};
       if(this.scenario==='offline')return block('当前网络不可用，请恢复网络后重试');
       const limit=this.limitError(targetId,content);if(limit)return block(limit);
@@ -92,7 +90,7 @@
     complete(request,content) {
       if(this.operations[request.id])return clone(this.operations[request.id]);
       const row=this.record(request,content,'成功','');
-      this.notifications.unshift({id:'N-'+request.id,target:request.targetId,title:'团长留言',text:content.text,image:content.image,time:row.time,read:false});
+      this.notifications.unshift({id:'N-'+request.id,target:request.targetId,title:'团长留言',text:content.text,time:row.time,read:false});
       delete this.pending[request.id]; this.recipientId=request.targetId;
       return this.operations[request.id]={status:'success',message:'留言已发送'};
     }

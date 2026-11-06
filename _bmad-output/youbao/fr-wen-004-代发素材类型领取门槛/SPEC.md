@@ -1,6 +1,6 @@
 ---
 id: SPEC-FR-wen-004
-title: '一键代发_报名领取稿件。'
+title: '代发素材类型领取门槛'
 iteration_id: FR-wen-004
 business_line: 右豹主业务
 version: v3
@@ -16,7 +16,7 @@ sources:
   - 需求单.md
 ---
 
-# FR-wen-004 · 一键代发_报名领取稿件。 · v3 当前
+# FR-wen-004 · 代发素材类型领取门槛 · v3 当前
 
 业务线：右豹主业务（youbao）。本合同与 companions 共同定义实现及验收范围，依据 PRD v7、UX v2 和 2026-11-05 产品十项确认派生。需求名沿用需求单原话；能力 ID 保持 CAP-1 至 CAP-8。
 

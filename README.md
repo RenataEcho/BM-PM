@@ -18,7 +18,7 @@ python3 -m http.server 19889 --directory demo/iteration
 
 | 业务线 | 编号 | 需求 | 状态 | 页面 |
 |---|---|---|---|---|
-| 右豹主业务 | FR-wen-004 | 一键代发_报名领取稿件。 | 开发中 | [查看 Demo](demo/iteration/fr-wen-004-claim.html?tab=fe) |
+| 右豹主业务 | FR-wen-004 | 代发素材类型领取门槛 | 开发中 | [查看 Demo](demo/iteration/fr-wen-004-claim.html?tab=fe) |
 | 右豹主业务 | FR-XIAOYU-002 | 推广文案 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-002) |
 | 右豹主业务 | FR-CoCo-003 | 团队数据优化 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-003) |
 | 导师商务 | FR-CoCo-002 | 导师迭代V1.2 | 开发中 | [查看 Demo](demo/iteration/fr-coco-002-mentor-v1-2.html?tab=fe) |

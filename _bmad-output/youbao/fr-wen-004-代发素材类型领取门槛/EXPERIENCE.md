@@ -1,5 +1,5 @@
 ---
-name: '一键代发_报名领取稿件。'
+name: '代发素材类型领取门槛'
 description: 'FR-wen-004：媒体账号添加、选择领取与后台追溯的行为合同。'
 iteration_id: FR-wen-004
 business_line: 右豹主业务
@@ -21,7 +21,7 @@ sources:
   - ../../../demo/iteration/fr-003-fusion-task.js
 ---
 
-# FR-wen-004 · 一键代发_报名领取稿件。 · v2 当前
+# FR-wen-004 · 代发素材类型领取门槛 · v2 当前
 
 业务线：右豹主业务（youbao）。对应 PRD v7、SPEC v3，按 2026-11-05 产品十项确认更新。D-2 取消独立入口，D-4、E-1、E-2 采用原暂定规则并转为已确认；S-1 明确每本书卡片打包一个稿件，无相关待决项。视觉见 DESIGN.md。
 

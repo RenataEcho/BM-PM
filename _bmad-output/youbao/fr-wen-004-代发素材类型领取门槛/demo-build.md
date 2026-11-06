@@ -8,7 +8,7 @@ source: demo-refresh-build.md
 
 # FR-wen-004 Demo 交付
 
-业务线：右豹主业务。需求名：一键代发_报名领取稿件。。页面版本为 v1，与 SPEC v3、PRD v7、UX v2 的文档版本分别管理。
+业务线：右豹主业务。需求名：代发素材类型领取门槛。页面版本为 v1，与 SPEC v3、PRD v7、UX v2 的文档版本分别管理。
 
 ## 入口与范围
 

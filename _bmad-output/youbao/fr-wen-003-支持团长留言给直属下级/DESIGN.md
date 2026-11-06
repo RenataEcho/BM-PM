@@ -148,7 +148,7 @@ components:
 
 ## 品牌与风格（Brand & Style）
 
-业务线为「右豹主业务」。本文件与同目录 [EXPERIENCE.md](EXPERIENCE.md) 共同约束本增量：本文件管视觉，后者管行为；二者优先于 PRD 与后续 Demo，冲突时修正 Demo。输入采用 [prd.md](prd.md) v2 的已确认决策；需求单保留的 10 秒及旧联系方式缺失口径不作为当前设计规则。
+业务线为「右豹主业务」。本文件与同目录 [EXPERIENCE.md](EXPERIENCE.md) 共同约束本增量：本文件管视觉，后者管行为；二者优先于 PRD 与后续 Demo，冲突时修正 Demo。输入采用 [prd.md](prd.md) v2 的已确认决策；需求单保留的 10 秒口径不作为当前设计规则。
 
 继承三套已有系统，只描述本次页面组合：C 端使用[移动端设计规范](../../../docs/design/移动端设计规范.md)的暖橙、浅灰底和白卡片；后台使用[管理后台规范](../../../docs/design/admin-ui-spec.md)的蓝色与玻璃面板；评审台使用[迭代外壳](../../../docs/design/iteration-shell/DESIGN.md)。上方 token 是这些规范的使用别名，不是新配色。C 端保持「对象明确、话术固定、发送前看清」；后台突出配置与追溯，不增加营销装饰。
 
@@ -175,9 +175,9 @@ components:
 
 逻辑宽 390px、左右 `{spacing.mobile-gutter}`、模块间 `{spacing.module-gap}`；后续 iframe 稿按规范 375×812 缩放，不能压扁手机内容。成员列表保留原布局，仅在符合资格的单个成员行末增加「留言」。行内保留昵称及用户 ID，点击留言不触发整行原跳转。
 
-「选择话术」与「留言预览」采用同一个 `{components.message-sheet}` 切换步骤，最高约屏高 72%，上部标题和关闭、底部动作固定，中部独立滚动。顺序为对象昵称与右豹 ID → 模板选项或完整实际内容 → 动作；长内容和二维码不能被底部按钮遮住。选择阶段底部「下一步」，预览阶段「返回选择／确认发送」。不叠第二个发送确认弹窗。
+「选择话术」与「留言预览」采用同一个 `{components.message-sheet}` 切换步骤，最高约屏高 72%，上部标题和关闭、底部动作固定，中部独立滚动。顺序为对象昵称与右豹 ID → 模板选项或完整实际内容 → 动作；长内容不能被底部按钮遮住。选择阶段底部「下一步」，预览阶段「返回选择／确认发送」。不叠第二个发送确认弹窗。
 
-系统通知列表复用现有行结构；标题固定「团长留言」。图文详情使用现有全屏子页，隐藏全局底栏并按原行为返回。二维码在实际内容对应位置完整等比显示，不裁切、不拉伸、不添加占位图。二维码具体资源规格与现有消息能力在实施前核实，不新增上传能力或联系方式设置页。
+系统通知列表复用现有行结构；标题固定「团长留言」。图文详情使用现有全屏子页，隐藏全局底栏并按原行为返回。
 
 ### 后台表面
 
@@ -197,7 +197,7 @@ components:
 
 ## 形状（Shapes）
 
-手机控件 `{rounded.mobile-control}`、卡片 `{rounded.mobile-card}`、Sheet 顶角 `{rounded.sheet}`。后台按钮和输入 `{rounded.admin-control}`，Modal 与卡片 `{rounded.admin-card}`。二维码保留原图边界，不以圆角遮挡有效图案。状态 Tag 使用 live spec 胶囊，限制 `width: fit-content; white-space: nowrap`。
+手机控件 `{rounded.mobile-control}`、卡片 `{rounded.mobile-card}`、Sheet 顶角 `{rounded.sheet}`。后台按钮和输入 `{rounded.admin-control}`，Modal 与卡片 `{rounded.admin-card}`。状态 Tag 使用 live spec 胶囊，限制 `width: fit-content; white-space: nowrap`。
 
 ## 组件（Components）
 
@@ -208,9 +208,9 @@ components:
 | member-row | 成员原头像、昵称、ID、关系信息 + 行末暖橙「留言」，沿用 `{components.member-row}`，未具资格不留禁用按钮占位 |
 | message-sheet | 顶部 drag bar、标题、关闭，中部滚动区，底部动作；`{components.message-sheet}`，白色底，不用后台 Modal |
 | template-option | 模板名称 + 内容摘要 + 单选标识；选中用 `{components.template-option}` 并显示勾选；不把模板变量占位符当实际内容展示 |
-| actual-content | `{components.actual-content}`，完整文字及存在的二维码；手机预览、图文详情、后台快照统一保留内容顺序；空变量为空，不补占位文案 |
+| actual-content | `{components.actual-content}`，完整文字；手机预览、图文详情、后台快照统一保留内容顺序；空变量为空，不补占位文案 |
 | mobile-action | 沿用 `{components.mobile-action}` 的主动作和移动端次要动作；loading 有文字「发送中…」，禁用有可见原因 |
-| notification-item | `{components.notification-item}`，标题「团长留言」、实际内容摘要、现有时间及未读标识；二维码列表呈现继承现有消息能力，详情完整显示 |
+| notification-item | `{components.notification-item}`，标题「团长留言」、实际内容摘要、现有时间及未读标识；详情完整显示留言文字 |
 | admin-panel | `{components.admin-panel}`；模块 Tab、筛选卡、表格卡、规则分组沿用后台层级；无新增数据大盘 |
 | admin-button | `.btn .btn-primary`／`.btn .btn-ghost`／`.link`；`{components.admin-button}`；删除入口 `.link-danger`，确认 `.btn-danger` |
 | admin-form | `{components.admin-form}`；开白表单 ID、状态、备注；模板表单名称、正文、变量插入与启用状态；规则开关和正整数输入；错误紧邻字段 |
@@ -239,3 +239,8 @@ components:
 新增开白支持多个团长右豹 ID，以英文逗号或中文逗号分隔，输入框下提示「多个ID开白可用逗号分隔开」。核对各 ID 的团长昵称后保存，每个 ID 生成独立记录，共用本次选择的开白状态和备注；编辑已有记录时 ID 仍只读。
 
 [ASSUMPTION] 批量保存先校验全部 ID；空项、重复 ID、无效 ID 或已有开白记录时提示对应错误，保留输入且整批不写入，修正后再保存，避免部分成功。
+
+
+### 需求调整（2026-11-06）
+
+话术模板仅保留「留言对象昵称」「团长昵称」「团长联系电话」三个变量。实际内容为变量替换后的文字，预览、通知详情和后台记录使用同一文字快照，相同内容按完整文字（含空格和换行）判断。
