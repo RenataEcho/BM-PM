@@ -8,3 +8,9 @@
 .modal-overlay.sheet-overlay{padding:0;align-items:flex-end;z-index:500}
 
 .sheet-overlay .sheet-footer .row{flex-direction:row}.sheet-overlay .sheet-footer .btn{min-width:0}.sheet-body .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.sheet-body .metrics>div{display:block}.sheet-body .card.selected{box-shadow:inset 3px 0 #ff4d22;padding-left:8px}.sheet-body .muted{font-size:11px}.sheet-body .reason{font-size:11px}.sheet-body .requirement{font-size:12px}.sheet-body .link-danger{float:right}.sheet-body .card .top{clear:both}.sheet-body .card{overflow:auto}.detail-book p>span{color:#646b7b}
+
+/* 批注 2 / 6：单行快捷提词和紧凑账号卡片。 */
+.detail-actions>#quick-question{width:108px;min-width:108px;white-space:nowrap;padding:10px 12px}
+.sheet-body .account-compact{padding:8px 0}.account-compact .account-radio{min-height:44px}.account-compact .account-id{margin:0 0 2px 28px;font-size:11px;color:var(--secondary)}
+.account-compact .metrics{margin-left:28px;padding:2px 0;gap:6px}.account-compact .metrics>div{display:flex;align-items:baseline;gap:4px}.account-compact .metrics b{font-size:12px}
+.account-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-left:28px}.account-bottom .reason{padding:0;background:none;border:0;color:#c91e42;margin:0}.account-bottom .link-danger{float:none;min-height:44px;padding:4px 0}.sheet-body .card.account-compact.selected{padding:8px 0 8px 8px}

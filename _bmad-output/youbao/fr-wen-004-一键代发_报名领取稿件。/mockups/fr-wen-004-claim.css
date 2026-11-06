@@ -296,3 +296,8 @@
 /* 同页批注画面与 iframe 互斥，样式由专属选择器隔离。 */
 .preview-tools{display:flex;align-items:center;gap:10px;flex-shrink:0}
 #phone-annotation{width:375px;height:812px;overflow:hidden;border-radius:23px;background:#f6f7fb}
+
+#view-pc{height:calc(100dvh - 220px);min-height:560px}#view-pc iframe{width:100%;height:100%;border:1px solid var(--border);border-radius:12px;background:#fff}.claims-table{min-width:1560px}.claim-filters{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}.claim-filters label{font-size:12px}.claim-filters input,.claim-filters select{display:block;border:1px solid var(--border);border-radius:5px;padding:7px;max-width:150px}.cell-sub{display:block;font-size:11px;color:var(--text-secondary);margin-top:4px}.modal:has(.fill-details){width:min(1100px,95vw);max-width:1100px}.fill-details{min-width:860px}.admin-scenarios{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Keep pointer coordinates consistent in scaled embedded previews. */
+.phone-stage{position:relative;overflow:hidden}.phone-stage>#mobile,.phone-stage>#phone-annotation{position:absolute;top:8px;left:8px;max-width:none}
