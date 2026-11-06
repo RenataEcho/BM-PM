@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FR-CoCo-003 · 团队数据优化 · V4.2</title>
+  <link rel="stylesheet" href="fr-003-fusion-task.css">
+  <style>
+    [hidden]{display:none!important}
+    .page-header{align-items:flex-start}.page-header>div{min-width:0}.page-desc{max-width:760px}
+    .view#view-fe{display:grid;grid-template-columns:minmax(280px,540px) minmax(375px,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"scenes scenes" "rules demo";gap:12px 16px;height:calc(100vh - 200px);min-height:560px}
+    .scene-panel{grid-area:scenes;min-height:0!important;overflow:visible!important;border:0!important;border-bottom:1px solid var(--border)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+    .scene-panel h2,.scene-help{display:none}.scene-list{display:flex;align-items:flex-end;gap:24px;overflow-x:auto;padding:0 16px}
+    .scene-btn{width:auto!important;min-height:42px!important;padding:10px 0!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:transparent!important;color:var(--text-secondary)!important;white-space:nowrap}
+    .scene-btn strong{font-size:13px}.scene-btn span{display:none}.scene-btn.active{border-bottom-color:var(--primary)!important;color:var(--primary)!important}
+    .scene-btn:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+    .mockup-board{grid-area:demo;min-height:0}.board-caption{align-items:flex-start}.board-caption span{font-size:11px;color:var(--text-muted)}
+    .board-scroll{padding:14px!important;align-items:flex-start;overflow:auto}.device.phone{width:393px;height:auto;min-height:0;padding:8px;border-radius:30px;flex:none}
+    .device.phone iframe{display:block;width:375px;height:720px;border:0;border-radius:23px;transform:none;background:#f7f8fa}
+    .context-rules{grid-area:rules;min-width:0;overflow:auto;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.78);box-shadow:0 8px 32px rgba(30,40,80,.06)}
+    .context-rules-head{position:sticky;top:0;z-index:1;padding:14px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--border)}
+    .context-rules-head span{display:block;color:var(--primary);font-size:11px;font-weight:700}.context-rules-head h2{margin:4px 0 10px;font-size:16px}
+    .context-rule-actions{display:flex;flex-wrap:wrap;gap:7px}.context-rule-actions .btn{height:32px;padding:0 11px;font-size:12px}
+    .rule-edit-status{margin:8px 0 0;color:var(--text-secondary);font-size:11px;line-height:1.55}
+    .rule-editor{width:100%;min-height:430px;resize:vertical;border:1px solid var(--border-control,var(--border));border-radius:8px;padding:11px;background:#fff;color:var(--text-primary);font:12px/1.75 inherit}
+    .context-rules-body{padding:4px 14px 16px}.context-rule-block{padding:12px 0;border-bottom:1px solid var(--border)}.context-rule-block:last-child{border-bottom:0}
+    .context-rule-block h3{margin:0 0 7px;font-size:12px;color:var(--text-primary)}.context-rule-block p{margin:0;color:var(--text-secondary);font-size:12px;line-height:1.65}
+    .context-rule-block ul{margin:0;padding-left:18px;color:var(--text-secondary);font-size:12px;line-height:1.6}.context-rule-block li+li{margin-top:5px}
+    .context-gates{display:flex;flex-wrap:wrap;gap:5px}.context-gates span{padding:3px 6px;border:1px solid #fde68a;border-radius:6px;background:#fffbeb;color:#92400e;font-size:10px;font-weight:700}
+    .rules-compact,.review-mobile-bar,.review-panel-mask{display:none!important}
+    .view#view-flow{height:calc(100vh - 200px);min-height:560px}.flow-page{padding:0;max-height:72vh}.flow-svg-wrap{max-height:calc(72vh - 96px);overflow:auto}
+    .flow-edges polyline{stroke:#94a3b8;stroke-width:1.5;fill:none}.flow-edges .retry{stroke-dasharray:4 3}
+    .rule-panel{display:block}.rule-content p{margin:0 0 8px}.rule-content strong{color:var(--text-primary)}.gate-list{padding-left:18px}.gate-list li{margin:7px 0}
+    .drawer-overlay.open{opacity:1;pointer-events:auto}.drawer.open{transform:translateX(0)}
+    .embedded .topnav,.embedded .sidebar{display:none}.embedded .main{top:0;left:0}.embedded .view#view-fe,.embedded .view#view-flow{height:calc(100vh - 146px)}
+    @media(max-width:1000px){.view#view-fe{grid-template-columns:minmax(220px,1fr) minmax(375px,1fr);overflow:auto}}
+    @media(max-width:760px){.view#view-fe{grid-template-columns:1fr;grid-template-rows:auto auto minmax(720px,1fr);grid-template-areas:"scenes" "rules" "demo";height:auto;overflow:visible}.scene-list{gap:18px;padding:0 4px}.context-rules{max-height:420px}.mockup-board{min-height:720px}}
+    @media(max-height:820px){.device.phone iframe{height:700px}}
+  </style>
+</head>
+<body>
+  <header class="topnav" id="topnav"><a href="framework-shell.html#youbao/overview" class="brand-text">BM-PM · 迭代需求</a><span class="business-line">右豹主业务</span><span class="topnote">产品交互演示</span></header>
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><b>右豹主业务</b><p class="brand-sub">需求与设计</p></div><nav class="sidebar-scroll" aria-label="项目导航"><a class="nav-item" href="framework-shell.html#youbao/overview">概览</a><a class="nav-item" href="framework-shell.html#youbao/components">组件规范</a></nav><div class="sidebar-foot">FR-CoCo-003<br>团队数据优化 · V4.2</div></aside>
+
+  <main class="main" id="pageMain">
+    <nav class="breadcrumb"><a href="framework-shell.html#youbao/overview">右豹主业务</a> / 团队数据优化</nav>
+    <header class="page-header">
+      <div><h1>FR-CoCo-003 · 团队数据优化 · V4.2</h1><p class="page-desc">对比项目奖励与出单表现，查看全项目成员聚合排行，并从单项目双榜交接到既有成员奖励详情。</p></div>
+      <button class="btn btn-rule" id="rulesOpen" type="button" aria-expanded="false" aria-controls="rulesDrawer">需求规则</button>
+    </header>
+    <nav class="page-tabs" role="tablist" aria-label="需求视图">
+      <button class="btn btn-ghost active" id="tab-fe" type="button" role="tab" aria-selected="true" aria-controls="view-fe" data-tab="fe">前端交互</button>
+      <button class="btn btn-ghost" id="tab-flow" type="button" role="tab" aria-selected="false" aria-controls="view-flow" data-tab="flow">业务流程</button>
+    </nav>
+
+    <section id="view-fe" class="view" role="tabpanel" aria-labelledby="tab-fe">
+      <div class="review-mobile-bar" id="reviewMobileBar" hidden>
+        <button type="button" data-review-panel="scenes" aria-expanded="false">场景列表</button>
+        <button type="button" data-review-panel="rules" aria-expanded="false">当前需求</button>
+      </div>
+      <button class="review-panel-mask" id="reviewPanelMask" type="button" aria-label="关闭侧栏" hidden></button>
+      <aside class="scene-panel" aria-label="V4.2 场景">
+        <h2>场景演示</h2>
+        <div class="scene-list" id="scenes" role="tablist" aria-label="需求场景">
+          <button class="scene-btn active" type="button" role="tab" aria-selected="true" data-screen="project-board" data-summary-variant="b"><strong>项目排行榜</strong><span>奖励 / 流水构成与三种出单排序</span></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="global-members"><strong>全项目成员榜</strong><span>搜索、关系、周期与三种排序</span></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="detail-reward"><strong>单项目奖励榜</strong><span>固定按团队奖励降序</span></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="detail-orders"><strong>单项目出单榜</strong><span>固定按出单流水降序</span></button>
+        </div>
+        <p class="scene-help">示例数据假定已授权、非负、无并列，且不含多项目关联订单；不代表生产口径。</p>
+      </aside>
+      <div class="mockup-board">
+        <div class="board-caption"><div><b>团队数据优化 · V4.2</b><p>375px 逻辑宽度，手机内容在 iframe 内纵向滚动。</p></div><span>右豹主业务</span></div>
+        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-003 团队数据 V4.2 手机演示" src="fr-coco-03-project-mobile.html?embed=1&amp;screen=project-board&amp;variant=b"></iframe></div></div>
+        <details class="rules-compact">
+          <summary>查看当前场景需求摘要</summary>
+          <div class="context-rules-body" data-context-rule-body></div>
+        </details>
+      </div>
+      <aside class="context-rules" aria-label="当前场景需求摘要" aria-live="polite">
+        <div class="context-rules-head">
+          <span>当前场景需求</span>
+          <h2 data-context-rule-title>项目排行榜 · 需求规则</h2>
+          <div class="context-rule-actions">
+            <button class="btn btn-ghost" id="editRules" type="button">编辑规则</button>
+            <button class="btn btn-rule" id="contextOpenRules" type="button">查看完整规则</button>
+            <button class="btn btn-primary" id="saveRules" type="button" hidden>保存到项目</button>
+            <button class="btn btn-ghost" id="cancelRules" type="button" hidden>取消</button>
+          </div>
+          <p class="rule-edit-status" id="ruleEditStatus" role="status"></p>
+        </div>
+        <textarea class="rule-editor" id="ruleEditor" aria-label="编辑当前场景需求规则" hidden></textarea>
+        <div class="context-rules-body" data-context-rule-body></div>
+      </aside>
+    </section>
+
+    <section id="view-flow" class="view" role="tabpanel" aria-labelledby="tab-flow" hidden>
+      <div class="flow-page">
+        <p class="flow-page-intro">同一流程覆盖项目比较、全项目成员聚合抽屉、单项目双榜交接、权限与后端范围校验，以及加载失败后的重试回环。</p>
+        <div class="flow-svg-wrap">
+          <svg width="1120" height="890" viewBox="0 0 1120 890" role="img" aria-labelledby="flowTitle flowDesc" xmlns="http://www.w3.org/2000/svg">
+            <title id="flowTitle">团队数据优化 V4.2 业务流程</title>
+            <desc id="flowDesc">用户从团队数据入口发起查询，经后端权限范围校验与读取成功判断后，分别进入项目比较、全项目成员聚合抽屉、单项目双排行榜和既有成员奖励详情；失败可重试。</desc>
+            <defs><marker id="flow-arrow-coco003" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8"/></marker></defs>
+            <g class="flow-edges" marker-end="url(#flow-arrow-coco003)">
+              <polyline points="560,68 560,100"/>
+              <polyline points="560,150 560,165"/>
+              <polyline points="470,210 340,210"/>
+              <polyline points="560,255 560,300"/>
+              <polyline points="560,350 560,390"/>
+              <polyline points="650,430 820,430"/>
+              <polyline points="930,452 930,500"/>
+              <polyline class="retry" points="1040,524 1090,524 1090,325 690,325"/>
+              <polyline points="560,470 560,510"/>
+              <polyline points="560,560 560,590 220,590 220,610"/>
+              <polyline points="560,560 560,610"/>
+              <polyline points="560,590 900,590 900,610"/>
+              <polyline points="220,670 220,715"/>
+              <polyline points="560,670 560,715"/>
+              <polyline points="900,670 900,715"/>
+              <polyline points="900,775 900,805"/>
+            </g>
+            <g class="flow-nodes" font-family="Inter, PingFang SC, sans-serif" text-anchor="middle" fill="#18222f">
+              <rect x="430" y="20" width="260" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="560" y="49" font-size="12">前端：点击「项目数据」入口</text>
+              <rect x="430" y="100" width="260" height="50" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="560" y="121" font-size="12"><tspan x="560">后端：按账号、团队、项目</tspan><tspan x="560" dy="17">再次校验可见范围</tspan></text>
+              <polygon points="560,165 650,210 560,255 470,210" fill="#fffbeb" stroke="#d97706"/><text x="560" y="207" font-size="11"><tspan x="560">权限范围</tspan><tspan x="560" dy="15">校验通过？</tspan></text>
+              <text x="397" y="200" font-size="11" fill="#dc2626">否</text><rect x="100" y="188" width="240" height="44" rx="8" fill="#fef2f2" stroke="#dc2626"/><text x="220" y="207" font-size="11"><tspan x="220">不返回敏感经营数据</tspan><tspan x="220" dy="15" fill="#64748b">未授权呈现仍由 P11 决定</tspan></text>
+              <text x="575" y="278" font-size="11" fill="#16a34a">是</text><rect x="430" y="300" width="260" height="50" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="560" y="321" font-size="12"><tspan x="560">后端：查询项目与成员数据</tspan><tspan x="560" dy="17">应用周期、去重与范围规则</tspan></text>
+              <polygon points="560,390 650,430 560,470 470,430" fill="#fffbeb" stroke="#d97706"/><text x="560" y="434" font-size="11">读取成功？</text>
+              <text x="705" y="420" font-size="11" fill="#dc2626">否</text><rect x="820" y="408" width="220" height="44" rx="8" fill="#fef2f2" stroke="#dc2626"/><text x="930" y="434" font-size="12">前端：显示加载失败</text>
+              <rect x="820" y="500" width="220" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="930" y="529" font-size="12">用户点击重试</text>
+              <text x="575" y="492" font-size="11" fill="#16a34a">是</text><rect x="430" y="510" width="260" height="50" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="560" y="531" font-size="12"><tspan x="560">项目数据首页</tspan><tspan x="560" dy="17">概览 · 奖励/流水构成 · 双榜入口</tspan></text>
+              <text x="220" y="582" font-size="11" fill="#2563eb">项目比较</text><text x="560" y="582" font-size="11" fill="#2563eb">全项目成员</text><text x="900" y="582" font-size="11" fill="#2563eb">进入单项目</text>
+              <rect x="80" y="610" width="280" height="60" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="220" y="635" font-size="12"><tspan x="220">切换构成指标、周期与出单排序</tspan><tspan x="220" dy="17" fill="#64748b">项目榜排序不改变构成图</tspan></text>
+              <rect x="80" y="715" width="280" height="50" rx="8" fill="#f1f5f9" stroke="#94a3b8"/><text x="220" y="736" font-size="11"><tspan x="220">比较团队奖励与出单流水</tspan><tspan x="220" dy="16">继续选择具体项目</tspan></text>
+              <rect x="420" y="610" width="280" height="60" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="560" y="635" font-size="12"><tspan x="560">搜索 / 关系 / 周期 / 排序</tspan><tspan x="560" dy="17" fill="#64748b">成员与订单按明确规则去重</tspan></text>
+              <rect x="420" y="715" width="280" height="50" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="560" y="736" font-size="11"><tspan x="560">点击成员打开聚合抽屉</tspan><tspan x="560" dy="16">同周期总计与分项目明细</tspan></text>
+              <rect x="760" y="610" width="280" height="60" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="900" y="635" font-size="12"><tspan x="900">点击项目进入项目详情</tspan><tspan x="900" dy="17" fill="#64748b">保留项目名称与当前项目身份</tspan></text>
+              <rect x="760" y="715" width="280" height="60" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="900" y="740" font-size="12"><tspan x="900">成员奖励榜 / 成员出单榜</tspan><tspan x="900" dy="17" fill="#64748b">共用搜索、关系与时间条件</tspan></text>
+              <rect x="760" y="805" width="280" height="56" rx="8" fill="#f1f5f9" stroke="#94a3b8"/><text x="900" y="828" font-size="11"><tspan x="900">交接既有成员产生奖励详情页</tspan><tspan x="900" dy="16">传递成员 ID + 项目 ID</tspan></text>
+            </g>
+          </svg>
+        </div>
+        <div class="flow-legend"><span><i style="background:#eff6ff;border:1px solid #2563eb"></i>前端 / 操作</span><span><i style="background:#f0fdf4;border:1px solid #16a34a"></i>后端 / 查询</span><span><i style="background:#fffbeb;border:1px solid #d97706"></i>校验 / 分支</span><span><i style="background:#fef2f2;border:1px solid #dc2626"></i>阻断 / 失败</span><span><i style="background:#f1f5f9;border:1px solid #94a3b8"></i>既有载体 / 结果</span></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="drawer-overlay" id="ruleMask" hidden></div>
+  <aside class="drawer rule" id="rulesDrawer" hidden role="dialog" aria-modal="true" aria-labelledby="ruleTitle">
+    <div class="drawer-header"><h2 id="ruleTitle">FR-CoCo-003 · V4.2 需求规则</h2><button class="drawer-close" id="rulesClose" type="button" aria-label="关闭需求规则">×</button></div>
+    <div class="rule-tab-bar" role="tablist" aria-label="规则类型"><button class="active" type="button" role="tab" aria-selected="true">前端需求</button></div>
+    <div class="drawer-body" style="padding:0"><section class="rule-panel" aria-label="前端需求规则">
+      <div id="fullSceneRules"></div>
+      <div class="rule-section"><h3>4 边界规则与开发门禁</h3><div class="rule-content"><p><strong>明确规则：</strong>成员关系与奖励归属独立；跨项目订单按唯一 ID 去重；敏感经营数据需前端控制且后端按账号、团队、项目范围再次校验；搜索/筛选无结果显示空态，接口失败显示重试，失败不得伪装成 0。</p><p><strong>本 Demo 假设：</strong>数据已授权、非负、无并列且不含多项目关联订单，不关闭以下正式开发门禁：</p><ul class="gate-list"><li><strong>P01</strong> 奖励累计起点、迁移/失效处理、源时间、时区与日界线。</li><li><strong>P03</strong> 各类零数据、停用、净额为零或全冲正项目在概览、构成图、项目榜中的纳入规则。</li><li><strong>P05</strong> 跨日退款、冲正、补发的归属日期。</li><li><strong>P06</strong> 负净额、非正总额与正负抵消为零的展示和排序。</li><li><strong>P07</strong> 有效订单状态及退款、部分退款、撤销、补单、结算失败口径。</li><li><strong>P08</strong> 订单累计起点、迁移/失效、源时间及近 7/30 日窗口边界。</li><li><strong>P09</strong> 第 100 名并列截断及同值稳定二次排序。</li><li><strong>P10</strong> 跨项目或历史时点成员关系冲突口径。</li><li><strong>P11</strong> 授权角色与未授权时的具体呈现。</li><li><strong>P12</strong> 是否继承旧奖励台账/调整/追溯模型；决策前不把旧调整合同视为已定。</li><li><strong>P13</strong> 多项目订单归属、分项目明细及其与去重总计的关系。</li></ul><p>本版不承诺冻结统计时点、返回状态恢复、分页、骨架屏或旧奖励调整合同。</p></div></div>
+      <div class="rule-section"><h3>5 业务流程</h3><div class="rule-content"><p>见页内「业务流程」Tab。</p></div></div>
+    </section></div>
+  </aside>
+
+  <script>
+    if(new URLSearchParams(location.search).get('embed')==='1')document.documentElement.classList.add('embedded','fr-003-embedded');
+    const phone=document.getElementById('phone');
+    const sceneButtons=[...document.querySelectorAll('[data-screen]')];
+    const sceneTitles={'project-board':'项目排行榜','global-members':'全项目成员榜','detail-reward':'单项目成员奖励榜','detail-orders':'单项目成员出单榜'};
+    let pageRules={
+      'project-board':[
+        ['业务目标',['同时比较各项目的团队奖励与出单流水；项目榜只按出单流水排序，且列表排序不影响构成图。']],
+        ['字段规则',['顶部概览用一个组件展示累计、今日团队奖励与对应出单流水，不展示昨日统计；今日值使用灰色辅助文字，奖励值不单独高亮。','构成图支持项目奖励与项目流水，均展示 Top 5 与「更多项目」。','页头问号图标打开页面统计规则说明，说明内容由后台 data.tips 字段配置。','项目卡展示项目名称、Icon 与六项金额字段。']],
+        ['交互规则',['项目榜提供且仅提供累计、今日、昨日三种出单流水降序，不提供奖励排序。','构成图支持奖励 / 流水指标下拉，并支持累计、今日、昨日周期切换。','点击具体项目进入当前项目详情。','Icon 缺失或加载失败时显示兜底图。']],
+        ['边界与待确认',['「更多项目」只用于图表聚合，不作为列表项。','接口失败不得显示为 0。','正式口径受 P01、P03、P05、P06、P07、P08、P12 约束。']]
+      ],
+      'global-members':[
+        ['业务目标',['在当前账号有权项目范围内定位跨项目去重后的关键成员。']],
+        ['字段规则',['展示昵称、用户 ID、成员关系。','展示有效出单量、出单流水、团队奖励。','最多展示前 100 名。']],
+        ['交互规则',['支持用户 ID 或昵称搜索和五类成员关系。','支持累计、今日、昨日、近 7 日、近 30 日。','支持三项经营指标分别降序。','点击成员打开同周期全项目汇总抽屉。']],
+        ['边界与待确认',['成员按身份去重，订单按唯一订单 ID 去重。','成员关系不得替换为奖励归属。','正式口径受 P07、P08、P09、P10、P11、P13 约束。']]
+      ],
+      'detail-reward':[
+        ['业务目标',['在当前项目内按团队奖励降序定位贡献成员。']],
+        ['字段规则',['展示昵称、用户 ID、成员关系。','展示有效出单量、出单流水、团队奖励。','明确展示当前项目身份。']],
+        ['交互规则',['与出单榜共用搜索、五类关系和五种时间。','固定按团队奖励降序，不提供排序下拉。','点击成员交接既有详情页，传成员 ID 与项目 ID。']],
+        ['边界与待确认',['项目详情不恢复旧版顶部 KPI。','不新建单项目成员抽屉。','正式口径受 P01、P05、P06、P09、P11、P12 约束。']]
+      ],
+      'detail-orders':[
+        ['业务目标',['在当前项目内按出单流水降序查看成员订单表现。']],
+        ['字段规则',['展示昵称、用户 ID、成员关系。','以出单流水为主指标。','同时展示有效出单量与团队奖励。']],
+        ['交互规则',['与奖励榜共用搜索、五类关系和五种时间。','固定按出单流水降序，不提供排序下拉。','点击成员交接既有详情页，传成员 ID 与项目 ID。']],
+        ['边界与待确认',['出单流水是有效订单交易金额，不是成员个人收益。','敏感指标必须由后端再次鉴权。','正式口径受 P06、P07、P08、P09、P11 约束。']]
+      ]
+    };
+    function escapeRule(text){return text.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
+    function ruleMarkup(groups){return groups.map(group=>`<section class="context-rule-block"><h3>${escapeRule(group[0])}</h3><ul>${group[1].map(line=>`<li>${escapeRule(line)}</li>`).join('')}</ul></section>`).join('')}
+    function renderFullRules(){document.getElementById('fullSceneRules').innerHTML=Object.keys(sceneTitles).map(scene=>`<section class="rule-section"><h2 style="font-size:15px;margin:0 0 8px">${escapeRule(sceneTitles[scene])}</h2>${ruleMarkup(pageRules[scene])}</section>`).join('')}
+    let currentRuleScene='project-board';
+    function renderContextRules(screen){
+      currentRuleScene=pageRules[screen]?screen:'project-board';
+      document.querySelectorAll('[data-context-rule-title]').forEach(node=>node.textContent=sceneTitles[currentRuleScene]+' · 需求规则');
+      document.querySelectorAll('[data-context-rule-body]').forEach(node=>node.innerHTML=ruleMarkup(pageRules[currentRuleScene]));
+    }
+    function selectScene(button){sceneButtons.forEach(item=>{const selected=item===button;item.classList.toggle('active',selected);item.setAttribute('aria-selected',String(selected))});renderContextRules(button.dataset.screen);phone.contentWindow.postMessage({type:'project-screen',screen:button.dataset.screen,summaryVariant:button.dataset.summaryVariant},location.origin)}
+    sceneButtons.forEach(button=>button.addEventListener('click',()=>selectScene(button)));
+    renderContextRules('project-board');
+    renderFullRules();
+    let editingRules=false,ruleBase=null;
+    const ruleEditor=document.getElementById('ruleEditor'),editStatus=document.getElementById('ruleEditStatus'),editRulesButton=document.getElementById('editRules'),saveRulesButton=document.getElementById('saveRules'),cancelRulesButton=document.getElementById('cancelRules'),contextOpenRulesButton=document.getElementById('contextOpenRules');
+    function editingState(active){editingRules=active;ruleEditor.hidden=!active;document.querySelectorAll('[data-context-rule-body]').forEach(node=>node.hidden=active);editRulesButton.hidden=active;contextOpenRulesButton.hidden=active;saveRulesButton.hidden=!active;cancelRulesButton.hidden=!active;sceneButtons.forEach(button=>button.disabled=active)}
+    editRulesButton.addEventListener('click',()=>{ruleBase=JSON.parse(JSON.stringify(pageRules[currentRuleScene]));ruleEditor.value=ruleBase.map(group=>`## ${group[0]}\n${group[1].map(line=>`- ${line}`).join('\n')}`).join('\n\n');editingState(true);editStatus.textContent='每个分区以 ## 标题开始，每条规则以 - 开始。保存将写入本需求 frontend-rules.json。';ruleEditor.focus()});
+    cancelRulesButton.addEventListener('click',()=>{editingState(false);renderContextRules(currentRuleScene);editStatus.textContent='已取消编辑'});
+    saveRulesButton.addEventListener('click',async function(){
+      const groups=[];
+      try{
+        ruleEditor.value.split('\n').forEach(raw=>{const line=raw.trim();if(!line)return;if(line.startsWith('## ')){groups.push([line.slice(3).trim(),[]])}else if(line.startsWith('- ')&&groups.length){groups.at(-1)[1].push(line.slice(2).trim())}else{throw Error('请使用 ## 分区标题和 - 规则条目')}});
+        if(!groups.length||groups.some(group=>!group[0]||!group[1].length))throw Error('每个分区需要标题和至少一条规则');
+        this.disabled=true;
+        const response=await fetch('/__local/coco003-rules',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({view:currentRuleScene,groups,base:ruleBase})});
+        if(!response.ok){const error=await response.json().catch(()=>({error:'保存服务不可用，请用 python3 scripts/preview_server.py 启动预览'}));throw Error(error.error)}
+        pageRules[currentRuleScene]=groups;renderFullRules();editingState(false);renderContextRules(currentRuleScene);editStatus.textContent='保存成功，已写入本需求 frontend-rules.json';
+      }catch(error){editStatus.textContent=error.message}finally{this.disabled=false}
+    });
+    fetch('/__local/coco003-rules').then(response=>{if(!response.ok)throw Error();return response.json()}).then(data=>{if(editingRules)return;pageRules=data;renderContextRules(currentRuleScene);renderFullRules();editStatus.textContent='规则已从项目文件加载'}).catch(()=>{editStatus.textContent='当前为只读预览；保存请使用 python3 scripts/preview_server.py 启动本地服务。'});
+    const compactRules=document.querySelector('.rules-compact'),sideRules=document.querySelector('.context-rules'),scenePanel=document.querySelector('.scene-panel');
+    const compactQuery=window.matchMedia('(min-width:761px) and (max-width:1180px)'),narrowQuery=window.matchMedia('(max-width:760px)');
+    const mobileBar=document.getElementById('reviewMobileBar'),reviewMask=document.getElementById('reviewPanelMask'),reviewPanelButtons=[...document.querySelectorAll('[data-review-panel]')];
+    function closeReviewPanels(){scenePanel.classList.remove('review-panel-open');sideRules.classList.remove('review-panel-open');reviewMask.hidden=true;reviewPanelButtons.forEach(button=>button.setAttribute('aria-expanded','false'))}
+    function syncContextRuleLayout(){compactRules.hidden=true;sideRules.hidden=false;mobileBar.hidden=true;reviewMask.hidden=true;closeReviewPanels()}
+    reviewPanelButtons.forEach(button=>button.addEventListener('click',()=>{const panel=button.dataset.reviewPanel==='scenes'?scenePanel:sideRules;const opening=!panel.classList.contains('review-panel-open');closeReviewPanels();if(opening){panel.classList.add('review-panel-open');reviewMask.hidden=false;button.setAttribute('aria-expanded','true')}}));
+    reviewMask.addEventListener('click',closeReviewPanels);
+    compactQuery.addEventListener('change',syncContextRuleLayout);narrowQuery.addEventListener('change',syncContextRuleLayout);syncContextRuleLayout();
+
+    const tabButtons=[...document.querySelectorAll('[data-tab]')];
+    function showTab(name,updateUrl=true){if(name!=='flow')name='fe';tabButtons.forEach(button=>{const selected=button.dataset.tab===name;button.classList.toggle('active',selected);button.setAttribute('aria-selected',String(selected));document.getElementById('view-'+button.dataset.tab).hidden=!selected});if(updateUrl){const url=new URL(location.href);url.searchParams.set('tab',name);history.replaceState(null,'',url)}}
+    tabButtons.forEach(button=>button.addEventListener('click',()=>showTab(button.dataset.tab)));
+    showTab(new URLSearchParams(location.search).get('tab'),false);
+
+    const mask=document.getElementById('ruleMask'),drawer=document.getElementById('rulesDrawer'),openButton=document.getElementById('rulesOpen'),closeButton=document.getElementById('rulesClose');
+    let lastFocus=null;
+    function setBackgroundInert(value){[document.getElementById('topnav'),document.getElementById('sidebar'),document.getElementById('pageMain')].forEach(node=>{if(node)node.inert=value})}
+    function openRules(){lastFocus=document.activeElement;mask.hidden=false;drawer.hidden=false;requestAnimationFrame(()=>{mask.classList.add('open');drawer.classList.add('open')});openButton.classList.add('active');openButton.setAttribute('aria-expanded','true');setBackgroundInert(true);closeButton.focus()}
+    function closeRules(){mask.classList.remove('open');drawer.classList.remove('open');mask.hidden=true;drawer.hidden=true;openButton.classList.remove('active');openButton.setAttribute('aria-expanded','false');setBackgroundInert(false);if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+    openButton.addEventListener('click',()=>drawer.hidden?openRules():closeRules());closeButton.addEventListener('click',closeRules);mask.addEventListener('click',closeRules);
+    document.getElementById('contextOpenRules').addEventListener('click',openRules);
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&(scenePanel.classList.contains('review-panel-open')||sideRules.classList.contains('review-panel-open'))){event.preventDefault();closeReviewPanels();return}if(drawer.hidden)return;if(event.key==='Escape'){event.preventDefault();closeRules();return}if(event.key==='Tab'){const focusable=[...drawer.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])')];if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}}});
+  </script>
+</body>
+</html>
