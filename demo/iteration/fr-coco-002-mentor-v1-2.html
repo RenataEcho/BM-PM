@@ -110,19 +110,10 @@
     .perspective-tabs{display:flex;gap:24px;flex-shrink:0;padding:0 16px;margin-bottom:12px;border-bottom:1px solid var(--border)}
     .perspective-tabs button{border:0;border-bottom:2px solid transparent;background:none;padding:10px 0;color:var(--text-secondary);font:inherit;font-size:13px;cursor:pointer}.perspective-tabs button.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
     @media(max-width:1000px){.demo-layout{grid-template-columns:minmax(220px,1fr) minmax(375px,1fr);overflow:auto}}
-    .scene-panel, .mockup-board {
+    .mockup-board {
       background: var(--surface-glass); border: 1px solid rgba(255,255,255,0.55);
       border-radius: var(--radius-lg); box-shadow: var(--shadow); min-height: 0;
     }
-    .scene-panel { padding: 12px; overflow: auto; }
-    .scene-panel h2 { font-size: 13px; margin-bottom: 8px; }
-    .scene {
-      width: 100%; text-align: left; border: 1px solid var(--border); background: #fff;
-      border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; cursor: pointer; font: inherit; color: inherit;
-    }
-    .scene strong { display: block; font-size: 12px; }
-    .scene span { display: block; margin-top: 2px; font-size: 11px; color: var(--text-muted); line-height: 1.4; }
-    .scene.on { border-color: var(--primary-border); background: var(--primary-light); }
     .mockup-board { width: 100%; height: 100%; min-height: 0; overflow: hidden; background: #f6f7fb; border-radius: var(--radius-lg); }
     .mockup-board iframe { width: 100%; height: 100%; min-height: 0; border: 0; background: #f6f7fb; display: block; }
     .doc { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 12px; }
@@ -233,7 +224,7 @@
           <div id="contextRules"></div>
         </aside>
         <div class="mockup-board">
-          <iframe id="phone" title="社群页完整还原" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;screen=joined&amp;v=11"></iframe>
+          <iframe id="phone" title="社群页完整还原" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=12"></iframe>
         </div>
       </div>
     </section>
@@ -318,9 +309,7 @@
       intro: '作为社群创业导师，主要负责项目方向判断、关键规则解读与阶段性运营策略指导。对于刚加入的成员，会帮助大家先理解项目机制、参与条件和内容要求，再结合个人时间、资源与执行能力选择合适的切入方式。对于执行过程中遇到的转化、内容质量或节奏问题，会引导成员先梳理现状与数据，再一起拆解原因、制定下一步行动。社群也会定期整理常见问题和实操经验，帮助大家少走弯路。所有项目参与及收益结果均以平台实际规则和结算数据为准。'
     };
     var profile = Object.assign({}, defaultProfile);
-    var resultMode = 'both';
     var messageOrigin = location.origin;
-    var resultModes = ['both', 'stats', 'honor', 'off'];
 
     function validProfile(value) {
       return value && typeof value === 'object' &&
@@ -334,8 +323,7 @@
       if (!phone.contentWindow) return;
       phone.contentWindow.postMessage({
         type: 'coco-002-state',
-        profile: profile,
-        resultMode: resultMode
+        profile: profile
       }, messageOrigin);
     }
     phone.addEventListener('load', pushFrontendState);
@@ -366,12 +354,6 @@
       }
     }
 
-    function sendScreen(screen) {
-      if (phone.contentWindow && typeof screen === 'string') {
-        phone.contentWindow.postMessage({ type: 'coco-002', screen: screen }, messageOrigin);
-      }
-    }
-
     function showRule(which) {
       document.querySelectorAll('.rule-tab-bar button').forEach(function (btn) {
         btn.classList.toggle('active', btn.getAttribute('data-rule') === which);
@@ -391,35 +373,11 @@
     document.querySelectorAll('.page-tabs button').forEach(function (btn) {
       btn.addEventListener('click', function () { showTab(btn.getAttribute('data-tab')); });
     });
-    document.querySelectorAll('.scene[data-screen]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        document.querySelectorAll('.scene').forEach(function (item) {
-          item.classList.remove('on');
-          item.setAttribute('aria-pressed', 'false');
-        });
-        btn.classList.add('on');
-        btn.setAttribute('aria-pressed', 'true');
-        sendScreen(btn.getAttribute('data-screen'));
-      });
-    });
-    document.querySelectorAll('.scene[data-result-mode]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var nextMode = btn.getAttribute('data-result-mode');
-        if (resultModes.indexOf(nextMode) < 0) return;
-        resultMode = nextMode;
-        document.querySelectorAll('.scene[data-result-mode]').forEach(function (item) {
-          var active = item === btn;
-          item.classList.toggle('on', active);
-          item.setAttribute('aria-pressed', active ? 'true' : 'false');
-        });
-        pushFrontendState();
-      });
-    });
     var perspectiveRules = {
       "user": [
         ["页面与入口", [
           "页面面向已加入社群的成员，展示深色头图、社群头像、社群名称、已加入天数和社群负责项目。",
-          "内容使用「社群介绍」「社群导师」「社区战绩」三个 Tab；介绍无内容时隐藏介绍 Tab，两个战绩模块都关闭时隐藏社区战绩 Tab。",
+          "内容按长页顺序展示「社群介绍」「社群导师」「社区战绩」三个纵向分区，不使用内容 Tab；介绍无内容时隐藏介绍分区，两个战绩模块都关闭时隐藏整个社区战绩分区。",
           "负责项目始终展示图标和名称，一行放不下时可横向浏览；Demo 不实现项目详情跳转。"
         ]],
         ["导师展示", [
@@ -435,7 +393,7 @@
         ["操作与边界", [
           "底部按钮固定为「进入社区飞书」；Demo 不打开真实飞书。",
           "用户不能在社群页编辑社群或导师信息；不展示公告、社群案例、月收益排行榜或加入社群。",
-          "Demo 不调用真实接口、不登录、不持久化；刷新外壳恢复示例资料与两项都开启场景。"
+          "Demo 不调用真实接口、不登录、不持久化；刷新外壳恢复示例资料与两个战绩模块都展示的默认状态。"
         ]]
       ],
       "mentor": [
@@ -478,7 +436,7 @@
       return groups.map(function(group){return '<section class="rule-section"><h3>'+escapeRule(group[0])+'</h3><div class="rule-content"><ul>'+group[1].map(function(line){return '<li>'+escapeRule(line)+'</li>'}).join('')+'</ul></div></section>'}).join('');
     }
     document.getElementById('rule-fe').innerHTML =
-      '<section class="rule-section"><h3>用户视角 · 社群页</h3><div class="rule-content"><p>已加入成员通过三 Tab 查看社群介绍、按层级排序的社群导师，以及由后端独立控制的社群战绩与收益荣誉榜。</p></div></section>' +
+      '<section class="rule-section"><h3>用户视角 · 社群页</h3><div class="rule-content"><p>已加入成员沿长页依次查看社群介绍、按层级排序的社群导师，以及由后端独立控制的社群战绩与收益荣誉榜；页面不使用内容 Tab。</p></div></section>' +
       ruleMarkup(perspectiveRules.user) +
       '<section class="rule-section"><h3>导师视角 · 个人介绍</h3><div class="rule-content"><p>导师统一编辑并保存头像、昵称和个人介绍；保存后的资料同步到用户视角。</p></div></section>' +
       ruleMarkup(perspectiveRules.mentor) +
@@ -489,7 +447,7 @@
         var active = btn.getAttribute('data-perspective') === view;
         btn.classList.toggle('on', active); btn.setAttribute('aria-selected', String(active));
       });
-      phone.src = view === 'mentor' ? 'fr-coco-002-mentor-intro-fe.html?embed=1' : 'fr-coco-002-mentor-v1-2-fe.html?embed=1&screen=joined&v=11';
+      phone.src = view === 'mentor' ? 'fr-coco-002-mentor-intro-fe.html?embed=1' : 'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=12';
       document.getElementById('contextTitle').textContent = (view === 'mentor' ? '导师视角 · 个人介绍' : '用户视角 · 社群页') + ' · 需求规则';
       document.getElementById('contextRules').innerHTML = ruleMarkup(perspectiveRules[view]);
       phone.title = view === 'mentor' ? '导师个人信息及介绍配置' : '用户社群详情页';
