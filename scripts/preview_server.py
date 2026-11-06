@@ -8,7 +8,17 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 RULES = ROOT / '_bmad-output/mentor/fr-coco-002-导师迭代V1.2/frontend-rules.json'
 ENDPOINT = '/__local/mentor-rules'
-ROUTES = {ENDPOINT: (RULES, ('user', 'mentor')), '/__local/ai-rules': (ROOT / '_bmad-output/youbao/fr-coco-001-AI申词/frontend-rules.json', ('home', 'records'))}
+ROUTES = {
+    ENDPOINT: (RULES, ('user', 'mentor')),
+    '/__local/ai-rules': (
+        ROOT / '_bmad-output/youbao/fr-coco-001-AI申词/frontend-rules.json',
+        ('home', 'records'),
+    ),
+    '/__local/coco003-rules': (
+        ROOT / '_bmad-output/youbao/fr-coco-003-团队数据优化/frontend-rules.json',
+        ('project-board', 'global-members', 'detail-reward', 'detail-orders'),
+    ),
+}
 
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):

@@ -110,19 +110,10 @@
     .perspective-tabs{display:flex;gap:24px;flex-shrink:0;padding:0 16px;margin-bottom:12px;border-bottom:1px solid var(--border)}
     .perspective-tabs button{border:0;border-bottom:2px solid transparent;background:none;padding:10px 0;color:var(--text-secondary);font:inherit;font-size:13px;cursor:pointer}.perspective-tabs button.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
     @media(max-width:1000px){.demo-layout{grid-template-columns:minmax(220px,1fr) minmax(375px,1fr);overflow:auto}}
-    .scene-panel, .mockup-board {
+    .mockup-board {
       background: var(--surface-glass); border: 1px solid rgba(255,255,255,0.55);
       border-radius: var(--radius-lg); box-shadow: var(--shadow); min-height: 0;
     }
-    .scene-panel { padding: 12px; overflow: auto; }
-    .scene-panel h2 { font-size: 13px; margin-bottom: 8px; }
-    .scene {
-      width: 100%; text-align: left; border: 1px solid var(--border); background: #fff;
-      border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; cursor: pointer; font: inherit; color: inherit;
-    }
-    .scene strong { display: block; font-size: 12px; }
-    .scene span { display: block; margin-top: 2px; font-size: 11px; color: var(--text-muted); line-height: 1.4; }
-    .scene.on { border-color: var(--primary-border); background: var(--primary-light); }
     .mockup-board { width: 100%; height: 100%; min-height: 0; overflow: hidden; background: #f6f7fb; border-radius: var(--radius-lg); }
     .mockup-board iframe { width: 100%; height: 100%; min-height: 0; border: 0; background: #f6f7fb; display: block; }
     .doc { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 12px; }
@@ -223,9 +214,17 @@
         <button type="button" role="tab" data-perspective="mentor" aria-selected="false">导师视角</button>
       </div>
       <div class="demo-layout">
-        <aside class="context-rules" aria-label="当前视角前端需求规则"><h2 id="contextTitle">用户视角 · 前端需求</h2><p class="intro">对照右侧页面查看字段、操作与边界。切换视角后，说明同步切换。</p><div style="display:flex;gap:8px;margin-bottom:16px"><button type="button" class="btn btn-ghost" id="editRules">编辑规则</button><button type="button" class="btn btn-ghost" id="copyDemoCode">复制 Demo 代码</button><button type="button" class="btn btn-primary" id="saveRules" hidden>保存到项目</button><button type="button" class="btn btn-ghost" id="cancelRules" hidden>取消</button></div><p id="copyDemoStatus" role="status" style="font-size:12px;line-height:1.6;color:var(--text-secondary)"></p><p id="ruleEditStatus" role="status" style="font-size:12px;line-height:1.6"></p><textarea id="ruleEditor" aria-label="编辑当前视角需求规则" hidden style="width:100%;min-height:420px;resize:vertical;border:1px solid var(--border);border-radius:8px;padding:12px;font:12px/1.8 inherit"></textarea><div id="contextRules"></div></aside>
+        <aside class="context-rules" aria-label="当前视角前端需求规则">
+          <h2 id="contextTitle">用户视角 · 前端需求</h2>
+          <p class="intro">对照右侧页面查看字段、操作与边界。切换视角后，说明同步切换。</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"><button type="button" class="btn btn-ghost" id="editRules">编辑规则</button><button type="button" class="btn btn-ghost" id="copyDemoCode">复制 Demo 代码</button><button type="button" class="btn btn-primary" id="saveRules" hidden>保存到项目</button><button type="button" class="btn btn-ghost" id="cancelRules" hidden>取消</button></div>
+          <p id="copyDemoStatus" role="status" style="font-size:12px;line-height:1.6;color:var(--text-secondary)"></p>
+          <p id="ruleEditStatus" role="status" style="font-size:12px;line-height:1.6"></p>
+          <textarea id="ruleEditor" aria-label="编辑当前视角需求规则" hidden style="width:100%;min-height:420px;resize:vertical;border:1px solid var(--border);border-radius:8px;padding:12px;font:12px/1.8 inherit"></textarea>
+          <div id="contextRules"></div>
+        </aside>
         <div class="mockup-board">
-          <iframe id="phone" title="社群页完整还原" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;screen=joined&amp;v=10"></iframe>
+          <iframe id="phone" title="社群页完整还原" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=12"></iframe>
         </div>
       </div>
     </section>
@@ -271,55 +270,7 @@
       <button type="button" class="active" data-rule="admin">后台需求</button>
     </div>
     <div class="drawer-body">
-      <div class="rule-panel" id="rule-fe"><h3>导师视角 · 个人介绍</h3><p>个人信息页移除团队角色，新增个人介绍入口。配置页展示头像、导师名称、只读置灰的后台身份、个人介绍文本框；介绍与社群导师浮层使用同一份内容。保存方式及字段编辑能力待确认。</p>
-        <div class="rule-section">
-          <h3>1 业务目标</h3>
-          <div class="rule-content">用户视角：已经加入社群的成员进入社群详情页后，可以查看社群身份、社群公告、负责项目、导师团、社群介绍、社区战绩和收益荣誉榜，并通过底部按钮进入社区飞书。页面只读，所有数据为 Demo 展示数据。</div>
-        </div>
-        <div class="rule-section">
-          <h3>2 页面结构</h3>
-          <div class="rule-content">
-            <ul>
-              <li>页面采用移动端社群详情布局：深色社群头图、成员概览、公告入口、负责项目、导师团、社群介绍、社群战绩、收益荣誉榜、社群案例和底部固定操作。</li>
-              <li>头图显示社群头像、社群名称、已加入天数、社群状态标签和项目交流标签。</li>
-              <li>负责项目横向排列，项目卡片必须同时有项目图标和项目名称；超出屏幕宽度时可横向滑动。</li>
-              <li>导师团先展示创业导师，再展示导师团成员人数和导师团成员列表；每行显示头像、名字、职责和身份标签。</li>
-              <li>社群介绍支持正文收起/展开；展开后显示完整正文，配图或视频接在正文之后。</li>
-              <li>社群战绩显示社区本月总产出、活跃成员、本月新增成员、你的社区排行、本月收益和团队成员收益；收益荣誉榜显示本月 TOP 5。</li>
-              <li>底部固定按钮为「进入社群飞书」，页面滚动时保持可见。</li>
-            </ul>
-          </div>
-        </div>
-        <div class="rule-section">
-          <h3>3 交互规则</h3>
-          <div class="rule-content">
-            <ul>
-              <li>点击社群公告或最新公告卡片，打开公告浮层；点击遮罩空白处关闭。</li>
-              <li>点击项目卡片，打开该项目的 Demo 详情浮层；不连接真实项目详情页。</li>
-              <li>点击创业导师或导师团成员卡片，打开导师浮层，显示头像、名字、身份、职责和导师介绍；浮层不显示手机号、飞书信息、收益，也不提供编辑操作。</li>
-              <li>导师浮层没有关闭按钮，点击遮罩空白处关闭，点击浮层内容不关闭，关闭后保留原滚动位置。</li>
-              <li>点击「查看完整介绍」在当前页面展开全文，再次点击可收起；不跳转其他页面。</li>
-              <li>点击「数据说明」显示战绩为 Demo 模拟数据；战绩、收益榜和案例均为只读。</li>
-              <li>点击社群案例卡片打开案例详情浮层；点击「进入社群飞书」打开静态跳转提示，不访问真实飞书。</li>
-            </ul>
-          </div>
-        </div>
-        <div class="rule-section">
-          <h3>4 数据和边界</h3>
-          <div class="rule-content">
-            <ul>
-              <li>页面仅面向已加入社群的成员，不提供加入社群、编辑资料、删除项目或修改导师信息的入口。</li>
-              <li>成员 TOP 榜按收益从高到低展示；未返回的值留空，返回 0 时显示 0，昵称按返回结果展示。</li>
-              <li>不接真实接口、登录、权限、持久化或真实飞书跳转；点击行为只改变 Demo 页面状态或显示提示。</li>
-              <li>社群公告、收益荣誉榜和社群案例是本次参考页面还原中的展示模块，后续如与正式 PRD 口径冲突，以确认后的 PRD 为准。</li>
-            </ul>
-          </div>
-        </div>
-        <div class="rule-section">
-          <h3>5 业务流程</h3>
-          <div class="rule-content">进入社群详情页 → 查看公告、项目、导师和战绩 → 点击项目或导师查看详情 → 点击「进入社群飞书」查看静态跳转提示。</div>
-        </div>
-      </div>
+      <div class="rule-panel" id="rule-fe"></div>
       <div class="rule-panel active" id="rule-admin">
         <div class="rule-section">
           <h3>社群管理</h3>
@@ -352,6 +303,39 @@
     var phone = document.getElementById('phone');
     var ruleBtn = document.getElementById('ruleBtn');
     var currentTab = 'fe';
+    var defaultProfile = {
+      name: '别暴躁',
+      avatarDataUrl: '',
+      intro: '作为社群创业导师，主要负责项目方向判断、关键规则解读与阶段性运营策略指导。对于刚加入的成员，会帮助大家先理解项目机制、参与条件和内容要求，再结合个人时间、资源与执行能力选择合适的切入方式。对于执行过程中遇到的转化、内容质量或节奏问题，会引导成员先梳理现状与数据，再一起拆解原因、制定下一步行动。社群也会定期整理常见问题和实操经验，帮助大家少走弯路。所有项目参与及收益结果均以平台实际规则和结算数据为准。'
+    };
+    var profile = Object.assign({}, defaultProfile);
+    var messageOrigin = location.origin;
+
+    function validProfile(value) {
+      return value && typeof value === 'object' &&
+        typeof value.name === 'string' &&
+        typeof value.intro === 'string' &&
+        typeof value.avatarDataUrl === 'string' &&
+        (!value.avatarDataUrl || value.avatarDataUrl.indexOf('data:image/') === 0);
+    }
+
+    function pushFrontendState() {
+      if (!phone.contentWindow) return;
+      phone.contentWindow.postMessage({
+        type: 'coco-002-state',
+        profile: profile
+      }, messageOrigin);
+    }
+    phone.addEventListener('load', pushFrontendState);
+    window.addEventListener('message', function (event) {
+      var data = event.data || {};
+      if (event.origin !== messageOrigin || event.source !== phone.contentWindow || !data || typeof data !== 'object') return;
+      if (data.type === 'coco-002-ready') pushFrontendState();
+      if (data.type === 'coco-002-profile-save' && validProfile(data.profile)) {
+        profile = Object.assign({}, defaultProfile, data.profile);
+        pushFrontendState();
+      }
+    });
 
     function showTab(name) {
       if (name !== 'fe' && name !== 'admin') name = 'admin';
@@ -368,10 +352,6 @@
         params.set('tab', name);
         history.replaceState(null, '', '?' + params.toString());
       }
-    }
-
-    function sendScreen(screen) {
-      if (phone.contentWindow) phone.contentWindow.postMessage({ type: 'coco-002', screen: screen }, '*');
     }
 
     function showRule(which) {
@@ -393,78 +373,47 @@
     document.querySelectorAll('.page-tabs button').forEach(function (btn) {
       btn.addEventListener('click', function () { showTab(btn.getAttribute('data-tab')); });
     });
-    document.querySelectorAll('.scene[data-screen]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        document.querySelectorAll('.scene').forEach(function (item) {
-          item.classList.remove('on');
-          item.setAttribute('aria-pressed', 'false');
-        });
-        btn.classList.add('on');
-        btn.setAttribute('aria-pressed', 'true');
-        sendScreen(btn.getAttribute('data-screen'));
-      });
-    });
     var perspectiveRules = {
-  "user": [
-    [
-      "页面与字段",
-      [
-        "页面面向已加入该社群的成员，展示社群头像、社群名称和已加入天数。",
-        "负责项目展示项目图标和名称，一行放不下时可横向浏览。"
+      "user": [
+        ["页面与入口", [
+          "页面面向已加入社群的成员，展示深色头图、社群头像、社群名称、已加入天数和社群负责项目。",
+          "内容按长页顺序展示「社群介绍」「社群导师」「社区战绩」三个纵向分区，不使用内容 Tab；介绍无内容时隐藏介绍分区，两个战绩模块都关闭时隐藏整个社区战绩分区。",
+          "负责项目始终展示图标和名称，一行放不下时可横向浏览；Demo 不实现项目详情跳转。"
+        ]],
+        ["导师展示", [
+          "导师团负责人（导师长）固定第一；其余导师按后端身份层级从高到低，同层级保持后端返回顺序。",
+          "前端不把创业导师、助理导师等身份名称写死为排序规则；每行显示后台配置的身份 Tag。",
+          "导师卡片和浮层使用导师保存后的头像、昵称；浮层的导师介绍与个人介绍使用同一份内容。"
+        ]],
+        ["战绩显隐", [
+          "社群战绩与收益荣誉榜由后端分别控制，关闭其中一个不影响另一个。",
+          "社群战绩展示社区本月总产出、活跃成员、你的社区排行、本月收益及团队成员收益。",
+          "收益荣誉榜显示头像、脱敏昵称和收益；数值按返回原文展示，未返回留空，返回 0 显示 0。"
+        ]],
+        ["操作与边界", [
+          "底部按钮固定为「进入社区飞书」；Demo 不打开真实飞书。",
+          "用户不能在社群页编辑社群或导师信息；不展示公告、社群案例、月收益排行榜或加入社群。",
+          "Demo 不调用真实接口、不登录、不持久化；刷新外壳恢复示例资料与两个战绩模块都展示的默认状态。"
+        ]]
+      ],
+      "mentor": [
+        ["页面与字段", [
+          "个人介绍配置页包含头像、昵称、当前身份和个人介绍；当前身份由后台配置，置灰只读。",
+          "头像、昵称和个人介绍进入页面即可编辑，不需要先点击编辑图标。",
+          "头像文件规则、昵称和个人介绍的必填与字数限制待确认，Demo 不自行增加校验。"
+        ]],
+        ["编辑与保存", [
+          "选择新头像后在当前页预览；未选择新头像时保留原头像。",
+          "点击保存统一保存头像、昵称和个人介绍，保存中按钮不可重复点击。",
+          "保存成功仅提示「保存成功」，停留当前页；切回用户视角后列表与浮层同步最新资料。",
+          "资料只保存在外壳当前页面生命周期内，刷新后恢复示例数据。"
+        ]],
+        ["其他导师端调整", [
+          "服务记录页面成员列表增加「右豹ID」「飞书手机号」。",
+          "导师管理的群移除「新建群」「群规模」按钮。"
+        ]]
       ]
-    ],
-    [
-      "项目与导师操作",
-      [
-        "开发规则：点击项目打开对应项目详情页；本 Demo 不实现真实详情跳转。",
-        "点击导师打开浮层，显示头像、名字、后台配置的身份、标签及导师介绍。",
-        "导师介绍与导师端配置的个人介绍、管理后台配置的使用同一份内容。",
-        "导师标签:第一个显示导师团负责人,即“导师长”;导师团成员显示其余导师成员,注意要显示身份tag,demo里没有显示"
-      ]
-    ],
-    [
-      "介绍与战绩",
-      [
-        "社群介绍显示正文，配置图片或视频时一并展示。",
-        "战绩展示社区本月总产出、活跃成员、你的社区排行、本月收益及团队成员收益。",
-        "成员排名展示头像、脱敏昵称和收益。统计口径按现有逻辑，按返回数值显示。"
-      ]
-    ],
-    [
-      "操作与边界",
-      [
-        "底部「进入社区飞书」入口保持可见；按现有的逻辑即可。",
-        "成员在社群页不能编辑社群或导师信息。",
-        "本 Demo 使用示例数据，不调用真实接口、不持久化。"
-      ]
-    ]
-  ],
-  "mentor": [
-    [
-      "页面与字段",
-      [
-        "个人信息页面移除「团队角色」配置，增加「个人介绍」配置入口。",
-        "个人介绍配置页展示头像、导师名称、当前身份和个人介绍。",
-        "当前身份默认显示后台配置的身份名称，置灰且不支持修改。"
-      ]
-    ],
-    [
-      "编辑与保存",
-      [
-        "进入个人信息页后，个人介绍、头像、名称默认可编辑。",
-        "点击保存后仅提示「保存成功」，停留当前页面，信息保持展开。",
-        "个人介绍与用户视角导师浮层中的导师介绍使用同一份内容。"
-      ]
-    ],
-    [
-      "其他导师端调整",
-      [
-        "服务记录页面的成员列表增加「右豹ID」「飞书手机号」显示。",
-        "导师管理的群移除「新建群」「群规模」按钮。"
-      ]
-    ]
-  ]
-};
+    };
     function escapeRule(text){return text.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
     var editingRules=false, ruleView='user', ruleBase=null;
     var editStatus=document.getElementById('ruleEditStatus'), ruleEditor=document.getElementById('ruleEditor');
@@ -486,13 +435,19 @@
     function ruleMarkup(groups) {
       return groups.map(function(group){return '<section class="rule-section"><h3>'+escapeRule(group[0])+'</h3><div class="rule-content"><ul>'+group[1].map(function(line){return '<li>'+escapeRule(line)+'</li>'}).join('')+'</ul></div></section>'}).join('');
     }
+    document.getElementById('rule-fe').innerHTML =
+      '<section class="rule-section"><h3>用户视角 · 社群页</h3><div class="rule-content"><p>已加入成员沿长页依次查看社群介绍、按层级排序的社群导师，以及由后端独立控制的社群战绩与收益荣誉榜；页面不使用内容 Tab。</p></div></section>' +
+      ruleMarkup(perspectiveRules.user) +
+      '<section class="rule-section"><h3>导师视角 · 个人介绍</h3><div class="rule-content"><p>导师统一编辑并保存头像、昵称和个人介绍；保存后的资料同步到用户视角。</p></div></section>' +
+      ruleMarkup(perspectiveRules.mentor) +
+      '<section class="rule-section"><h3>业务流程</h3><div class="rule-content">本次尚未写入业务流程图。</div></section>';
     function setPerspective(view) {
       ruleView=view;
       document.querySelectorAll('[data-perspective]').forEach(function(btn){
         var active = btn.getAttribute('data-perspective') === view;
         btn.classList.toggle('on', active); btn.setAttribute('aria-selected', String(active));
       });
-      phone.src = view === 'mentor' ? 'fr-coco-002-mentor-intro-fe.html?embed=1&screen=editor' : 'fr-coco-002-mentor-v1-2-fe.html?embed=1&screen=joined&v=10';
+      phone.src = view === 'mentor' ? 'fr-coco-002-mentor-intro-fe.html?embed=1' : 'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=12';
       document.getElementById('contextTitle').textContent = (view === 'mentor' ? '导师视角 · 个人介绍' : '用户视角 · 社群页') + ' · 需求规则';
       document.getElementById('contextRules').innerHTML = ruleMarkup(perspectiveRules[view]);
       phone.title = view === 'mentor' ? '导师个人信息及介绍配置' : '用户社群详情页';
