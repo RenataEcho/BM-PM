@@ -301,3 +301,18 @@
 
 /* Keep pointer coordinates consistent in scaled embedded previews. */
 .phone-stage{position:relative;overflow:hidden}.phone-stage>#mobile,.phone-stage>#phone-annotation{position:absolute;top:8px;left:8px;max-width:none}
+
+/* 嵌入总览时由外壳提供项目导航，直接打开仍保留完整导航。 */
+html.fr-wen-004-embedded body > .topnav,
+html.fr-wen-004-embedded body > .sidebar{display:none}
+html.fr-wen-004-embedded body > .main{margin-left:0;padding-top:16px}
+@media(min-width:901px){
+  html.fr-wen-004-embedded body > .main{display:flex;flex-direction:column}
+  html.fr-wen-004-embedded .main > .breadcrumb,
+  html.fr-wen-004-embedded .main > .page-header,
+  html.fr-wen-004-embedded .main > .page-tabs{flex-shrink:0}
+  html.fr-wen-004-embedded .view#view-fe,
+  html.fr-wen-004-embedded .view#view-admin,
+  html.fr-wen-004-embedded .view#view-flow,
+  html.fr-wen-004-embedded #view-pc{flex:1 1 0;min-height:0;height:auto}
+}
