@@ -5,9 +5,9 @@ status: done
 route: dispatch
 baseline_commit: a5ae97bc4a297ca61f69db6295cf066adfeadc21
 context:
-  - _bmad-output/youbao/fr-wen-004-一键代发_报名领取稿件。/SPEC.md
-  - _bmad-output/youbao/fr-wen-004-一键代发_报名领取稿件。/DESIGN.md
-  - _bmad-output/youbao/fr-wen-004-一键代发_报名领取稿件。/EXPERIENCE.md
+  - _bmad-output/youbao/fr-wen-004-代发素材类型领取门槛/SPEC.md
+  - _bmad-output/youbao/fr-wen-004-代发素材类型领取门槛/DESIGN.md
+  - _bmad-output/youbao/fr-wen-004-代发素材类型领取门槛/EXPERIENCE.md
   - docs/ITERATION-FR-GUIDE.md
 ---
 
@@ -18,7 +18,7 @@ context:
 
 ## Boundaries & Constraints
 
-页头必须是「FR-wen-004 · 一键代发_报名领取稿件。 · v1 当前」，不能使用SPEC文档v3。三个页签：前端交互、管理后台、业务流程。按钮/弹窗/抽屉/Tag复用component-spec-demo.html class，保持现有三端配色。侧栏仍仅概览/组件规范，顶部右豹主业务。手机嵌入iframe，浮层覆盖不挤窄背景，一屏能同时看到场景列表和完整手机。需求规则独立抽屉，前端/后台两个内Tab，按当前页签定位；流程仅写「见本页业务流程」。无独立媒体账号管理页、我的入口、创作者回填优化或素材类型详情操作。
+页头必须是「FR-wen-004 · 代发素材类型领取门槛 · v1 当前」，不能使用SPEC文档v3。三个页签：前端交互、管理后台、业务流程。按钮/弹窗/抽屉/Tag复用component-spec-demo.html class，保持现有三端配色。侧栏仍仅概览/组件规范，顶部右豹主业务。手机嵌入iframe，浮层覆盖不挤窄背景，一屏能同时看到场景列表和完整手机。需求规则独立抽屉，前端/后台两个内Tab，按当前页签定位；流程仅写「见本页业务流程」。无独立媒体账号管理页、我的入口、创作者回填优化或素材类型详情操作。
 
 参考图1：稿件详情白卡、黑底竖向试看、书籍信息/剩余素材/领取步骤/注意事项保留，仅增加领取要求；不要将整张截图当产品页面，必须HTML可操作。图2：底部Sheet参考，按本FR展示四平台、三指标及静态数据口径，不能有审核状态、抖音专属或有效粉丝规则。图3-5：原三步上传，第一步原项目/运营模式/稿件类型/素材类型/平台/剪辑手沿用，改动仅第二步每书卡片领取配置。图6-7：原素材类型列表类型/用途/状态/编辑/删除，居中新增编辑弹窗保留名称用途+三指标规则。详情类仅领取记录详情采用右侧抽屉，回填数量仍原居中弹窗。
 

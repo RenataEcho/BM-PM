@@ -1,5 +1,5 @@
 ---
-title: '一键代发_报名领取稿件。'
+title: '代发素材类型领取门槛'
 iteration_id: FR-wen-004
 business_line: 右豹主业务
 version: v7
@@ -9,7 +9,7 @@ updated: 2026-11-05
 source: 需求单.md
 ---
 
-# FR-wen-004 · 一键代发_报名领取稿件。 · v7 当前
+# FR-wen-004 · 代发素材类型领取门槛 · v7 当前
 
 业务线：右豹主业务（youbao）
 
