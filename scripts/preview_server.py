@@ -6,7 +6,7 @@ import os
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-RULES = ROOT / '_bmad-output/mentor/fr-coco-002-导师迭代V1.2/frontend-rules.json'
+RULES = ROOT / '_bmad-output/mentor/fr-coco-002-加入导师团优化/frontend-rules.json'
 ENDPOINT = '/__local/mentor-rules'
 ROUTES = {
     ENDPOINT: (RULES, ('user', 'mentor')),

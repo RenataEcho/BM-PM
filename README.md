@@ -21,7 +21,7 @@ python3 -m http.server 19889 --directory demo/iteration
 | 右豹主业务 | FR-wen-004 | 代发素材类型领取门槛 | 开发中 | [查看 Demo](demo/iteration/fr-wen-004-claim.html?tab=fe) |
 | 右豹主业务 | FR-XIAOYU-002 | 推广文案 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-002) |
 | 右豹主业务 | FR-CoCo-003 | 团队数据优化 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-003) |
-| 导师商务 | FR-CoCo-002 | 导师迭代V1.2 | 开发中 | [查看 Demo](demo/iteration/fr-coco-002-mentor-v1-2.html?tab=fe) |
+| 导师商务 | FR-CoCo-002 | 加入导师团优化 | 开发中 | [查看 Demo](demo/iteration/fr-coco-002-mentor-v1-2.html?tab=fe) |
 | 右豹主业务 | FR-CoCo-001 | AI申词 | 开发中 | [查看 Demo](demo/iteration/fr-coco-001-ai-shen-ci.html?tab=fe) |
 | 右豹主业务 | FR-001 | 剪辑手供稿书籍填写优化 | 开发中 | [查看 Demo](demo/iteration/fr-001-book-entry.html?tab=fe) |
 | 右豹主业务 | FR-003 | 代发上融合任务 | 开发中 | [查看 Demo](demo/iteration/fr-003-fusion-task.html?tab=fe) |

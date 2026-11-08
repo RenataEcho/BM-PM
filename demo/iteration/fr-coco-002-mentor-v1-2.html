@@ -9,7 +9,7 @@
       document.documentElement.classList.add('embedded');
     }
   </script>
-  <title>FR-CoCo-002 · 导师迭代V1.2 · BM-PM</title>
+  <title>FR-CoCo-002 · 加入导师团优化 · BM-PM</title>
   <style>
     [hidden] { display: none !important; }
     :root {
@@ -196,11 +196,11 @@
     <div class="sidebar-foot">先写明业务线，再做设计。<br />已上线进归档，已暂停进废纸篓。</div>
   </aside>
   <main class="main">
-    <nav class="breadcrumb"><a href="framework-shell.html#mentor/overview">导师商务</a> / 导师迭代V1.2</nav>
+    <nav class="breadcrumb"><a href="framework-shell.html#mentor/overview">导师商务</a> / 加入导师团优化</nav>
     <header class="page-header">
       <div>
-        <h1>FR-CoCo-002 · 导师迭代V1.2 · v1 当前</h1>
-        <p class="page-desc">前端交互：切换用户视角的社群页与导师视角的个人信息配置。管理后台只列规则。</p>
+        <h1>FR-CoCo-002 · 加入导师团优化 · v2 当前</h1>
+        <p class="page-desc">前端交互：从「我的社群」列表进入社群详情、所属导师团及导师团主页；导师视角保留个人信息配置。</p>
       </div>
       <button class="btn btn-rule" id="ruleBtn" type="button" aria-expanded="false">需求规则</button>
     </header>
@@ -224,7 +224,7 @@
           <div id="contextRules"></div>
         </aside>
         <div class="mockup-board">
-          <iframe id="phone" title="社群页完整还原" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=12"></iframe>
+          <iframe id="phone" title="我的社群与社群详情" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=17"></iframe>
         </div>
       </div>
     </section>
@@ -262,7 +262,7 @@
   <div class="drawer-overlay" id="ruleOverlay"></div>
   <aside class="drawer rule" id="ruleDrawer" role="dialog" aria-labelledby="ruleTitle">
     <div class="drawer-header">
-      <h2 id="ruleTitle">FR-CoCo-002 · v1 需求规则</h2>
+      <h2 id="ruleTitle">FR-CoCo-002 · v2 需求规则</h2>
       <button class="drawer-close" id="ruleClose" type="button" aria-label="关闭">×</button>
     </div>
     <div class="rule-tab-bar">
@@ -376,24 +376,31 @@
     var perspectiveRules = {
       "user": [
         ["页面与入口", [
-          "页面面向已加入社群的成员，展示深色头图、社群头像、社群名称、已加入天数和社群负责项目。",
-          "内容按长页顺序展示「社群介绍」「社群导师」「社区战绩」三个纵向分区，不使用内容 Tab；介绍无内容时隐藏介绍分区，两个战绩模块都关闭时隐藏整个社区战绩分区。",
-          "负责项目始终展示图标和名称，一行放不下时可横向浏览；Demo 不实现项目详情跳转。"
+          "用户视角默认进入「我的社群」列表，可搜索社群名称、负责人或导师团；社群卡展示名称、加入天数、成员数、社群负责人和所属导师团。",
+          "点击社群卡进入对应社群详情，返回后回到列表并恢复原滚动位置；点击卡片内所属导师团可直接进入导师团主页。",
+          "社群详情保持深色头图、社群头像、社群名称、成员数、公告、负责项目、导师、介绍、战绩与底部飞书入口的既有长页结构。",
+          "「所属导师团」是社群级关系，以独立入口显示在列表卡片及详情头部白色信息卡下方，不属于任何单个导师。",
+          "入口显示导师团图标、「所属导师团」、当前导师团名称、负责赛道和右箭头；点击进入导师团主页。"
         ]],
-        ["导师展示", [
-          "导师团负责人（导师长）固定第一；其余导师按后端身份层级从高到低，同层级保持后端返回顺序。",
-          "前端不把创业导师、助理导师等身份名称写死为排序规则；每行显示后台配置的身份 Tag。",
-          "导师卡片和浮层使用导师保存后的头像、昵称；浮层的导师介绍与个人介绍使用同一份内容。"
+        ["社群详情交互", [
+          "公告入口打开公告浮层；社群介绍默认收起，可展开或再次收起。",
+          "社群负责导师按负责人和导师团成员分组展示；点击导师打开资料浮层，导师卡片内不展示所属导师团。",
+          "社群负责项目横向排列；点击项目打开项目说明浮层，真实项目详情页不在本 Demo 内。",
+          "社群战绩展示总产出、活跃成员、新增成员和个人排行；收益荣誉榜展示本月收益 TOP 5。",
+          "底部按钮固定为「进入社群飞书」，仅展示说明浮层，不打开真实飞书。"
         ]],
-        ["战绩显隐", [
-          "社群战绩与收益荣誉榜由后端分别控制，关闭其中一个不影响另一个。",
-          "社群战绩展示社区本月总产出、活跃成员、你的社区排行、本月收益及团队成员收益。",
-          "收益荣誉榜显示头像、脱敏昵称和收益；数值按返回原文展示，未返回留空，返回 0 显示 0。"
+        ["导师团主页", [
+          "导师团主页使用深色 Hero，展示导师团名称、负责赛道和服务社群数、导师团成员数、服务会员数。",
+          "导师团介绍默认收起，可查看完整介绍或收起。",
+          "负责人单独展示；其余成员按专项导师、创业导师等层级分组展示。",
+          "点击负责人或成员打开资料浮层；页面不提供加入、退出、编辑或后台配置入口。",
+          "从导师团主页返回后，恢复进入前的列表或社群详情及滚动位置。"
         ]],
         ["操作与边界", [
-          "底部按钮固定为「进入社区飞书」；Demo 不打开真实飞书。",
-          "用户不能在社群页编辑社群或导师信息；不展示公告、社群案例、月收益排行榜或加入社群。",
-          "Demo 不调用真实接口、不登录、不持久化；刷新外壳恢复示例资料与两个战绩模块都展示的默认状态。"
+          "用户不能在列表、社群详情或导师团主页编辑社群、导师或导师团资料。",
+          "本 Demo 只覆盖有数据的完整示例，不演示加载、失败、缺失、异常和空数据场景。",
+          "Demo 不调用真实接口、不登录、不持久化；搜索、展开、浮层和页面切换都只作用于当前页面。",
+          "社群公告、导师团深色 Hero、介绍展开和 TOP 5 均为本锁定 Demo 的验收内容，不得由历史文档规则删除。"
         ]]
       ],
       "mentor": [
@@ -405,8 +412,8 @@
         ["编辑与保存", [
           "选择新头像后在当前页预览；未选择新头像时保留原头像。",
           "点击保存统一保存头像、昵称和个人介绍，保存中按钮不可重复点击。",
-          "保存成功仅提示「保存成功」，停留当前页；切回用户视角后列表与浮层同步最新资料。",
-          "资料只保存在外壳当前页面生命周期内，刷新后恢复示例数据。"
+          "保存成功仅提示「保存成功」，停留当前页。",
+          "当前静态 Demo 只演示配置页保存反馈，不改写已锁定的用户视角示例内容；刷新后恢复示例资料。"
         ]],
         ["其他导师端调整", [
           "服务记录页面成员列表增加「右豹ID」「飞书手机号」。",
@@ -436,9 +443,9 @@
       return groups.map(function(group){return '<section class="rule-section"><h3>'+escapeRule(group[0])+'</h3><div class="rule-content"><ul>'+group[1].map(function(line){return '<li>'+escapeRule(line)+'</li>'}).join('')+'</ul></div></section>'}).join('');
     }
     document.getElementById('rule-fe').innerHTML =
-      '<section class="rule-section"><h3>用户视角 · 社群页</h3><div class="rule-content"><p>已加入成员沿长页依次查看社群介绍、按层级排序的社群导师，以及由后端独立控制的社群战绩与收益荣誉榜；页面不使用内容 Tab。</p></div></section>' +
+      '<section class="rule-section"><h3>用户视角 · 我的社群</h3><div class="rule-content"><p>默认先展示社群列表；进入详情后保持锁定 Demo 的原有结构，在列表卡片及详情头部展示独立的社群级「所属导师团」入口。</p></div></section>' +
       ruleMarkup(perspectiveRules.user) +
-      '<section class="rule-section"><h3>导师视角 · 个人介绍</h3><div class="rule-content"><p>导师统一编辑并保存头像、昵称和个人介绍；保存后的资料同步到用户视角。</p></div></section>' +
+      '<section class="rule-section"><h3>导师视角 · 个人介绍</h3><div class="rule-content"><p>导师统一编辑并保存头像、昵称和个人介绍；当前静态 Demo 只演示配置页保存反馈。</p></div></section>' +
       ruleMarkup(perspectiveRules.mentor) +
       '<section class="rule-section"><h3>业务流程</h3><div class="rule-content">本次尚未写入业务流程图。</div></section>';
     function setPerspective(view) {
@@ -447,10 +454,10 @@
         var active = btn.getAttribute('data-perspective') === view;
         btn.classList.toggle('on', active); btn.setAttribute('aria-selected', String(active));
       });
-      phone.src = view === 'mentor' ? 'fr-coco-002-mentor-intro-fe.html?embed=1' : 'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=12';
-      document.getElementById('contextTitle').textContent = (view === 'mentor' ? '导师视角 · 个人介绍' : '用户视角 · 社群页') + ' · 需求规则';
+      phone.src = view === 'mentor' ? 'fr-coco-002-mentor-intro-fe.html?embed=1' : 'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=17';
+      document.getElementById('contextTitle').textContent = (view === 'mentor' ? '导师视角 · 个人介绍' : '用户视角 · 我的社群') + ' · 需求规则';
       document.getElementById('contextRules').innerHTML = ruleMarkup(perspectiveRules[view]);
-      phone.title = view === 'mentor' ? '导师个人信息及介绍配置' : '用户社群详情页';
+      phone.title = view === 'mentor' ? '导师个人信息及介绍配置' : '我的社群与社群详情';
       var params = new URLSearchParams(location.search); params.set('view',view);
       history.replaceState(null,'','?'+params.toString()+location.hash);
     }
