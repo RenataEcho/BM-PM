@@ -62,16 +62,18 @@
       <aside class="scene-panel" aria-label="V4.2 场景">
         <h2>场景演示</h2>
         <div class="scene-list" id="scenes" role="tablist" aria-label="需求场景">
-          <button class="scene-btn active" type="button" role="tab" aria-selected="true" data-screen="project-board" data-summary-variant="b"><strong>项目排行榜</strong><span>奖励 / 流水构成与三种出单排序</span></button>
+          <button class="scene-btn active" type="button" role="tab" aria-selected="true" data-screen="entry"><strong>团队数据入口</strong><span>成员数据卡片内嵌项目数据入口</span></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="project-board" data-summary-variant="b"><strong>项目排行榜</strong><span>奖励 / 流水构成与三种出单排序</span></button>
           <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="global-members"><strong>全项目成员榜</strong><span>搜索、关系、周期与三种排序</span></button>
           <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="detail-reward"><strong>单项目奖励榜</strong><span>固定按团队奖励降序</span></button>
           <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="detail-orders"><strong>单项目出单榜</strong><span>固定按出单流水降序</span></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="error"><strong>加载失败</strong><span>失败不伪装成 0，支持重试</span></button>
         </div>
         <p class="scene-help">示例数据假定已授权、非负、无并列，且不含多项目关联订单；不代表生产口径。</p>
       </aside>
       <div class="mockup-board">
         <div class="board-caption"><div><b>团队数据优化 · V4.2</b><p>375px 逻辑宽度，手机内容在 iframe 内纵向滚动。</p></div><span>右豹主业务</span></div>
-        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-003 团队数据 V4.2 手机演示" src="fr-coco-03-project-mobile.html?embed=1&amp;screen=project-board&amp;variant=b"></iframe></div></div>
+        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-003 团队数据 V4.2 手机演示" src="fr-coco-03-project-mobile.html?embed=1&amp;screen=entry&amp;variant=b"></iframe></div></div>
         <details class="rules-compact">
           <summary>查看当前场景需求摘要</summary>
           <div class="context-rules-body" data-context-rule-body></div>
@@ -161,8 +163,14 @@
     if(new URLSearchParams(location.search).get('embed')==='1')document.documentElement.classList.add('embedded','fr-003-embedded');
     const phone=document.getElementById('phone');
     const sceneButtons=[...document.querySelectorAll('[data-screen]')];
-    const sceneTitles={'project-board':'项目排行榜','global-members':'全项目成员榜','detail-reward':'单项目成员奖励榜','detail-orders':'单项目成员出单榜'};
+    const sceneTitles={entry:'团队数据入口','project-board':'项目排行榜','global-members':'全项目成员榜','detail-reward':'单项目成员奖励榜','detail-orders':'单项目成员出单榜',error:'加载失败'};
     let pageRules={
+      entry:[
+        ['业务目标',['在既有团队数据页的「成员数据」卡片内提供项目数据入口，不新增独立“项目分析”分区。']],
+        ['字段规则',['保留成员总数、今日活跃、昨日活跃；入口展示「项目数据」及「查看项目奖励构成与成员排行」。']],
+        ['交互规则',['点击整行进入项目数据页；返回后回到团队数据页。']],
+        ['边界与待确认',['入口不展示固定项目数、金额或成员数；Demo 使用静态示例数据。']]
+      ],
       'project-board':[
         ['业务目标',['同时比较各项目的团队奖励与出单流水；项目榜只按出单流水排序，且列表排序不影响构成图。']],
         ['字段规则',['顶部概览用一个组件展示累计、今日团队奖励与对应出单流水，不展示昨日统计；今日值使用灰色辅助文字，奖励值不单独高亮。','构成图支持项目奖励与项目流水，均展示 Top 5 与「更多项目」。','页头问号图标打开页面统计规则说明，说明内容由后台 data.tips 字段配置。','项目卡展示项目名称、Icon 与六项金额字段。']],
@@ -186,20 +194,26 @@
         ['字段规则',['展示昵称、用户 ID、成员关系。','以出单流水为主指标。','同时展示有效出单量与团队奖励。']],
         ['交互规则',['与奖励榜共用搜索、五类关系和五种时间。','固定按出单流水降序，不提供排序下拉。','点击成员交接既有详情页，传成员 ID 与项目 ID。']],
         ['边界与待确认',['出单流水是有效订单交易金额，不是成员个人收益。','敏感指标必须由后端再次鉴权。','正式口径受 P06、P07、P08、P09、P11 约束。']]
+      ],
+      error:[
+        ['业务目标',['区分接口失败与真实零值，避免把异常数据展示为 0 或空榜。']],
+        ['字段规则',['错误态保留项目数据页面身份，显示「加载失败，请重试」。']],
+        ['交互规则',['点击「重新加载」回到项目排行榜正常场景。']],
+        ['边界与待确认',['本 Demo 仅演示整体失败；正式产品按接口拆分决定局部或整体错误态。']]
       ]
     };
     function escapeRule(text){return text.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
     function ruleMarkup(groups){return groups.map(group=>`<section class="context-rule-block"><h3>${escapeRule(group[0])}</h3><ul>${group[1].map(line=>`<li>${escapeRule(line)}</li>`).join('')}</ul></section>`).join('')}
     function renderFullRules(){document.getElementById('fullSceneRules').innerHTML=Object.keys(sceneTitles).map(scene=>`<section class="rule-section"><h2 style="font-size:15px;margin:0 0 8px">${escapeRule(sceneTitles[scene])}</h2>${ruleMarkup(pageRules[scene])}</section>`).join('')}
-    let currentRuleScene='project-board';
+    let currentRuleScene='entry';
     function renderContextRules(screen){
-      currentRuleScene=pageRules[screen]?screen:'project-board';
+      currentRuleScene=pageRules[screen]?screen:'entry';
       document.querySelectorAll('[data-context-rule-title]').forEach(node=>node.textContent=sceneTitles[currentRuleScene]+' · 需求规则');
       document.querySelectorAll('[data-context-rule-body]').forEach(node=>node.innerHTML=ruleMarkup(pageRules[currentRuleScene]));
     }
     function selectScene(button){sceneButtons.forEach(item=>{const selected=item===button;item.classList.toggle('active',selected);item.setAttribute('aria-selected',String(selected))});renderContextRules(button.dataset.screen);phone.contentWindow.postMessage({type:'project-screen',screen:button.dataset.screen,summaryVariant:button.dataset.summaryVariant},location.origin)}
     sceneButtons.forEach(button=>button.addEventListener('click',()=>selectScene(button)));
-    renderContextRules('project-board');
+    renderContextRules('entry');
     renderFullRules();
     let editingRules=false,ruleBase=null;
     const ruleEditor=document.getElementById('ruleEditor'),editStatus=document.getElementById('ruleEditStatus'),editRulesButton=document.getElementById('editRules'),saveRulesButton=document.getElementById('saveRules'),cancelRulesButton=document.getElementById('cancelRules'),contextOpenRulesButton=document.getElementById('contextOpenRules');

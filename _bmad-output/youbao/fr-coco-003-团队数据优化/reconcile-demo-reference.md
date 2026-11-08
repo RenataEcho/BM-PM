@@ -3,8 +3,8 @@
 ## 1. 对账范围
 
 - Demo 参考：`/Users/maziluo/Desktop/视频教程/project_data_brand_orange_v3.html`
-- 产品需求：`/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-03-项目分析数据/prd.md`
-- 下游补充：`/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-03-项目分析数据/addendum.md`
+- 产品需求：`/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队数据优化/prd.md`
+- 下游补充：`/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队数据优化/addendum.md`
 - 产品规则来源复核：`/Users/maziluo/BM-PM/团队数据页优化.md`
 
 本次仅做边界对账，不修改 PRD 或 addendum。

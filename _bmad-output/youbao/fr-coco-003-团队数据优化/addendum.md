@@ -60,7 +60,7 @@
 
 ## 3. 实现边界
 
-- 本轮只更新 PRD 与补充说明，不修改 `DESIGN.md`、`EXPERIENCE.md`、`SPEC.md` 或 Demo。
+- 本轮已完成 `prd.md`、`DESIGN.md`、`EXPERIENCE.md`、`SPEC.md`、`frontend-rules.json` 与静态 Demo 的 V4.2 对账；这些文件共同作为当前 UX、静态演示与研发评审输入。
 - 静态 Demo 继续不连接真实接口、登录、权限、生产数据或持久化。
 - 正式产品的统计、去重、Top 100 截断、时间窗口和权限判定由服务端合同负责；前端不得从已加载 Mock 或局部列表自行推导生产汇总。
 - 出单流水与有效出单量是敏感经营数据，必须同时执行前端可见性控制和后端账号、团队、项目范围校验。
@@ -80,13 +80,18 @@
 - P13 决定跨项目订单归属，以及全项目成员抽屉的分项目明细合计与去重总计之间的合同。
 - 所有门禁均不阻塞 UX 与静态 Demo 的明确主路径；它们阻塞正式开发、接口冻结与生产验收。
 
-## 5. 已过时草稿资产
+## 5. 当前交付与历史资产边界
 
-下列资产仍可用于迁移和比对，但当前内容与 V4.2 存在已知冲突，完成对账前不得作为实现或验收依据：
+当前实现与验收依据为本目录的 `prd.md`、`DESIGN.md`、`EXPERIENCE.md`、`SPEC.md`、`frontend-rules.json`，以及：
 
-- 当前目录 `DESIGN.md`、`EXPERIENCE.md`、`SPEC.md`。
-- 当前目录旧 Demo/参考对账文档及 `demo/iteration/fr-coco-03-project-data.html`、`demo/iteration/fr-coco-03-project-mobile.html`。
+- `demo/iteration/fr-coco-03-project-data.html`
+- `demo/iteration/fr-coco-03-project-mobile.html`
+- `references/team_project_member_data_mobile_h5_v4_2_with_requirements.html`
+- `references/team-data-member-card-embedded-entry-2026-11-05.png`
+
+`reconcile-*`、`review-*` 与 validation 报告仅记录对账和评审过程，不形成第二套产品合同。以下资产仍可用于迁移和比对，但不得覆盖当前交付：
+
 - 历史目录 `_bmad-output/youbao/fr-coco-03-项目分析数据/` 及其文档、Mock 和需求单。
 - 旧参考 `references/project_data_brand_orange_v3.html` 与根目录 `团队数据页优化.md`。
 
-对账时必须删除或替换 Top 4、自定义日期、奖励归属筛选、成员升序/昵称排序、项目详情顶部四项 KPI、奖励成员数字段、单项目新建底部抽屉和备注操作；不得把这些旧草稿能力与 V4.2 并存。
+当前 Demo 已移除 Top 4、自定义日期、奖励归属筛选、成员升序/昵称排序、项目详情顶部四项 KPI、奖励成员数字段、单项目新建底部抽屉和备注操作；后续维护不得恢复这些旧草稿能力。
