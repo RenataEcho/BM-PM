@@ -169,6 +169,18 @@
     html.embedded body > .topnav,
     html.embedded body > .sidebar { display: none; }
     html.embedded body > .main { width: 100%; height: 100%; }
+    .page-header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .tab-review-exit { display: none; position: fixed; top: 16px; right: 16px; z-index: 720; }
+    html.is-tab-review .tab-review-exit { display: inline-flex; }
+    html.is-tab-review .page-view.active {
+      position: fixed; inset: 0; z-index: 640; height: 100vh; min-height: 0; margin: 0;
+      padding: 64px 16px 16px; background: #f0f4f8; box-sizing: border-box; overflow: hidden;
+    }
+    html.is-tab-review #view-flow.active { overflow: auto; }
+    html.is-tab-review #view-flow .flow-page,
+    html.is-tab-review #view-flow .flow-svg-wrap { max-height: none; }
+    html.is-tab-review .drawer-overlay { z-index: 760; }
+    html.is-tab-review .drawer { z-index: 761; }
   </style>
 </head>
 <body>
@@ -197,7 +209,10 @@
         <h1>FR-CoCo-001 · AI申词 · v1.1 当前</h1>
         <p class="page-desc">小明逐行填书并提取信息，让 AI 出词，再题词。示例数据，提交后不保存。</p>
       </div>
-      <button class="btn btn-rule" id="ruleBtn" type="button" aria-expanded="false">需求规则</button>
+      <div class="page-header-actions">
+        <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
+        <button class="btn btn-rule" id="ruleBtn" type="button" aria-expanded="false">需求规则</button>
+      </div>
     </header>
     <div class="page-tabs" role="tablist">
       <button type="button" class="active" data-tab="fe">前端交互</button>
@@ -369,6 +384,7 @@
     </section>
   </main>
 
+  <button class="btn btn-ghost tab-review-exit" id="exitTabReview" type="button">退出全屏</button>
   <div class="drawer-overlay" id="ruleOverlay"></div>
   <aside class="drawer rule" id="ruleDrawer" role="dialog" aria-labelledby="ruleTitle">
     <div class="drawer-header">
@@ -519,8 +535,31 @@
     document.querySelectorAll('.rule-tab-bar button').forEach(function (btn) {
       btn.addEventListener('click', function () { showRule(btn.getAttribute('data-rule')); });
     });
+    var openTabReviewButton = document.getElementById('openTabReview');
+    var exitTabReviewButton = document.getElementById('exitTabReview');
+    function setShellReview(on) {
+      try {
+        if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle('fr-review', on);
+      } catch (err) {}
+    }
+    function openTabReview() {
+      setRule(false);
+      document.documentElement.classList.add('is-tab-review');
+      setShellReview(true);
+      exitTabReviewButton.focus();
+    }
+    function closeTabReview() {
+      if (!document.documentElement.classList.contains('is-tab-review')) return;
+      document.documentElement.classList.remove('is-tab-review');
+      setShellReview(false);
+      openTabReviewButton.focus();
+    }
+    openTabReviewButton.addEventListener('click', openTabReview);
+    exitTabReviewButton.addEventListener('click', closeTabReview);
     document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape') setRule(false);
+      if (event.key !== 'Escape') return;
+      if (document.getElementById('ruleDrawer').classList.contains('open')) { setRule(false); return; }
+      if (document.documentElement.classList.contains('is-tab-review')) { event.preventDefault(); closeTabReview(); }
     });
 
     function pointSidebarHome() {

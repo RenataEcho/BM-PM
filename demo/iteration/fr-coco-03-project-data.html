@@ -33,6 +33,15 @@
     .rule-panel{display:block}.rule-content p{margin:0 0 8px}.rule-content strong{color:var(--text-primary)}.gate-list{padding-left:18px}.gate-list li{margin:7px 0}
     .drawer-overlay.open{opacity:1;pointer-events:auto}.drawer.open{transform:translateX(0)}
     .embedded .topnav,.embedded .sidebar{display:none}.embedded .main{top:0;left:0}.embedded .view#view-fe,.embedded .view#view-flow{height:calc(100vh - 146px)}
+    .page-header-actions{display:flex;gap:8px;flex-shrink:0}
+    .tab-review-exit{display:none;position:fixed;top:16px;right:16px;z-index:720}
+    html.is-tab-review .tab-review-exit{display:inline-flex}
+    html.is-tab-review .view:not([hidden]){position:fixed;inset:0;z-index:640;height:100vh;min-height:0;margin:0;padding:64px 16px 16px;background:#f0f4f8;box-sizing:border-box;overflow:hidden}
+    html.is-tab-review .view#view-fe:not([hidden]),html.is-tab-review .view#view-flow:not([hidden]){height:100vh;min-height:0}
+    html.is-tab-review .view#view-flow:not([hidden]){overflow:auto}
+    html.is-tab-review .view#view-flow .flow-page,html.is-tab-review .view#view-flow .flow-svg-wrap{max-height:none}
+    html.is-tab-review .drawer-overlay{z-index:760}
+    html.is-tab-review .drawer{z-index:761}
     @media(max-width:1000px){.view#view-fe{grid-template-columns:minmax(220px,1fr) minmax(375px,1fr);overflow:auto}}
     @media(max-width:760px){.view#view-fe{grid-template-columns:1fr;grid-template-rows:auto auto minmax(720px,1fr);grid-template-areas:"scenes" "rules" "demo";height:auto;overflow:visible}.scene-list{gap:18px;padding:0 4px}.context-rules{max-height:420px}.mockup-board{min-height:720px}}
     @media(max-height:820px){.device.phone iframe{height:700px}}
@@ -46,7 +55,10 @@
     <nav class="breadcrumb"><a href="framework-shell.html#youbao/overview">右豹主业务</a> / 团队数据优化</nav>
     <header class="page-header">
       <div><h1>FR-CoCo-003 · 团队数据优化 · V4.2</h1><p class="page-desc">对比项目奖励与出单表现，查看全项目成员聚合排行，并从单项目双榜交接到既有成员奖励详情。</p></div>
-      <button class="btn btn-rule" id="rulesOpen" type="button" aria-expanded="false" aria-controls="rulesDrawer">需求规则</button>
+      <div class="page-header-actions">
+        <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
+        <button class="btn btn-rule" id="rulesOpen" type="button" aria-expanded="false" aria-controls="rulesDrawer">需求规则</button>
+      </div>
     </header>
     <nav class="page-tabs" role="tablist" aria-label="需求视图">
       <button class="btn btn-ghost active" id="tab-fe" type="button" role="tab" aria-selected="true" aria-controls="view-fe" data-tab="fe">前端交互</button>
@@ -148,6 +160,7 @@
     </section>
   </main>
 
+  <button class="btn btn-ghost tab-review-exit" id="exitTabReview" type="button">退出全屏</button>
   <div class="drawer-overlay" id="ruleMask" hidden></div>
   <aside class="drawer rule" id="rulesDrawer" hidden role="dialog" aria-modal="true" aria-labelledby="ruleTitle">
     <div class="drawer-header"><h2 id="ruleTitle">FR-CoCo-003 · V4.2 需求规则</h2><button class="drawer-close" id="rulesClose" type="button" aria-label="关闭需求规则">×</button></div>
@@ -253,7 +266,12 @@
     function closeRules(){mask.classList.remove('open');drawer.classList.remove('open');mask.hidden=true;drawer.hidden=true;openButton.classList.remove('active');openButton.setAttribute('aria-expanded','false');setBackgroundInert(false);if(lastFocus&&lastFocus.focus)lastFocus.focus()}
     openButton.addEventListener('click',()=>drawer.hidden?openRules():closeRules());closeButton.addEventListener('click',closeRules);mask.addEventListener('click',closeRules);
     document.getElementById('contextOpenRules').addEventListener('click',openRules);
-    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&(scenePanel.classList.contains('review-panel-open')||sideRules.classList.contains('review-panel-open'))){event.preventDefault();closeReviewPanels();return}if(drawer.hidden)return;if(event.key==='Escape'){event.preventDefault();closeRules();return}if(event.key==='Tab'){const focusable=[...drawer.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])')];if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}}});
+    const openTabReviewButton=document.getElementById('openTabReview'),exitTabReviewButton=document.getElementById('exitTabReview');
+    function setShellReview(on){try{if(window.parent&&window.parent!==window)window.parent.document.documentElement.classList.toggle('fr-review',on)}catch(error){}}
+    function openTabReview(){if(!drawer.hidden)closeRules();document.documentElement.classList.add('is-tab-review');setShellReview(true);exitTabReviewButton.focus()}
+    function closeTabReview(){if(!document.documentElement.classList.contains('is-tab-review'))return;document.documentElement.classList.remove('is-tab-review');setShellReview(false);openTabReviewButton.focus()}
+    openTabReviewButton.addEventListener('click',openTabReview);exitTabReviewButton.addEventListener('click',closeTabReview);
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&(scenePanel.classList.contains('review-panel-open')||sideRules.classList.contains('review-panel-open'))){event.preventDefault();closeReviewPanels();return}if(event.key==='Escape'&&drawer.hidden&&document.documentElement.classList.contains('is-tab-review')){event.preventDefault();closeTabReview();return}if(drawer.hidden)return;if(event.key==='Escape'){event.preventDefault();closeRules();return}if(event.key==='Tab'){const focusable=[...drawer.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])')];if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}}});
   </script>
 </body>
 </html>

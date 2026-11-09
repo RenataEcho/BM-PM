@@ -261,6 +261,36 @@
     .rule-content li { margin-bottom: 5px; }
     .drawer.rule { width: var(--drawer-w); }
 
+    .tab-sample {
+      display: grid; grid-template-rows: auto minmax(220px, 1fr); gap: 12px;
+      min-height: 280px; padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: #f8fafc;
+    }
+    .tab-sample-scenes { display: flex; gap: 18px; overflow: auto; border-bottom: 1px solid var(--border); }
+    .tab-sample-scenes button {
+      border: 0; border-bottom: 2px solid transparent; background: transparent; padding: 8px 0;
+      color: var(--text-secondary); font-size: 13px; cursor: pointer; white-space: nowrap;
+    }
+    .tab-sample-scenes button.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 700; }
+    .tab-sample-body { display: grid; grid-template-columns: minmax(180px, 280px) minmax(0, 1fr); gap: 12px; min-height: 0; }
+    .tab-sample-rules, .tab-sample-phone {
+      min-height: 0; overflow: auto; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px;
+    }
+    .tab-sample-rules span { display: block; color: var(--primary); font-size: 11px; font-weight: 700; }
+    .tab-sample-rules h3 { margin: 4px 0 8px; font-size: 15px; }
+    .tab-sample-rules p { margin: 0 0 8px; color: var(--text-secondary); font-size: 12px; line-height: 1.6; }
+    .tab-sample-phone { position: relative; display: flex; align-items: center; justify-content: center; }
+    .review-sheet { position: absolute; inset: 0; background: rgba(15,23,42,.52); display: flex; align-items: flex-end; border-radius: 14px; }
+    .review-sheet[hidden] { display: none !important; }
+    .review-sheet-card { width: 100%; background: #fff; border-radius: 16px 16px 14px 14px; padding: 16px; }
+    .tab-review-exit {
+      display: none; position: fixed; top: 16px; right: 16px; z-index: 720;
+    }
+    html.is-tab-review .tab-review-exit { display: inline-flex; }
+    html.is-tab-review #specTabSample {
+      position: fixed; inset: 0; z-index: 640; height: 100vh; margin: 0;
+      padding: 64px 16px 16px; border: 0; border-radius: 0; background: var(--bg);
+    }
+
     .onescreen-frame {
       display: grid; grid-template-columns: 88px 1fr; height: 380px;
       border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff;
@@ -325,7 +355,7 @@
 
     <header class="page-header">
       <h1>组件规范 <span class="badge badge-spec">Design System</span></h1>
-      <p class="page-desc">迭代需求 Demo 内按钮、文字链、弹窗、抽屉、Toast、流程图，以及<strong>需求规则抽屉</strong>和<strong>Demo 一屏展示</strong>的统一规范。所有 FR 页须复用以下 class 与布局，保证全站一致。</p>
+      <p class="page-desc">迭代需求 Demo 内按钮、文字链、弹窗、抽屉、Toast、流程图，以及<strong>需求规则抽屉</strong>、<strong>Demo 一屏展示</strong>和<strong>评审全屏</strong>的统一规范。所有 FR 页须复用以下 class 与布局，保证全站一致。</p>
     </header>
 
     <nav class="spec-nav" aria-label="规范章节">
@@ -337,6 +367,7 @@
       <a href="#sec-detail">详情抽屉</a>
       <a href="#sec-rule">需求规则</a>
       <a href="#sec-onescreen">一屏展示</a>
+      <a href="#sec-review">评审全屏</a>
       <a href="#sec-toast">Toast</a>
       <a href="#sec-tag">Tag</a>
       <a href="#sec-flow">业务流程图</a>
@@ -609,10 +640,53 @@
           <li>不要让 <code>body</code> 跟着 Demo 变长：评审要滚整页才能看到手机，算不合格。</li>
           <li>不要把场景说明写成大段把 Demo 台顶出视口；长说明放需求规则。</li>
           <li>不要在 Demo 台外再挂第二份手机或后台表。</li>
-          <li>打开需求规则后 Demo 仍完整露在左侧，不要改成规则独占一屏。</li>
+          <li>打开需求规则后 Demo 仍完整露在左侧，不要改成规则独占一屏。评审另用「全屏预览」，见下一节。</li>
         </ol>
         <div class="limit-note">改完用 1280×800 视口目视：不滚 body 就能点场景、看到一台完整手机、打开需求规则后 Demo 仍在。</div>
         <div class="usage-note">参考实现：<code class="spec-code">fr-alias-bind.html</code>、<code class="spec-code">fr-creator-home-2-opt.html</code> 的 <code>#view-fe</code> 高度写法。</div>
+      </div>
+    </section>
+
+    <section class="glass-card" id="sec-review">
+      <div class="spec-section-head">
+        <div>
+          <h2>8.1 · 评审全屏</h2>
+          <p>全屏的是需求页签下面的内容：场景条、当前场景需求和手机。右上角固定「退出全屏」。</p>
+        </div>
+        <button class="btn btn-ghost" id="openReviewBtn" type="button" onclick="openReview()">全屏预览</button>
+      </div>
+      <div class="spec-body">
+        <div class="tab-sample" id="specTabSample">
+          <div class="tab-sample-scenes" role="tablist">
+            <button class="active" type="button" data-sample="团队数据入口" onclick="setSampleScene(this)">团队数据入口</button>
+            <button type="button" data-sample="项目排行榜" onclick="setSampleScene(this)">项目排行榜</button>
+            <button type="button" data-sample="加载失败" onclick="setSampleScene(this)">加载失败</button>
+          </div>
+          <div class="tab-sample-body">
+            <aside class="tab-sample-rules">
+              <span>当前场景需求</span>
+              <h3 id="sampleRuleTitle">团队数据入口 · 需求规则</h3>
+              <p id="sampleRuleBody">场景条、左侧需求和右侧手机一起进入全屏，不另组一栏规则。</p>
+            </aside>
+            <div class="tab-sample-phone">
+              <div>
+                <p id="samplePhoneCopy">团队数据入口</p>
+                <button class="btn btn-primary btn-sm" type="button" onclick="openReviewSheet()">打开浮层</button>
+              </div>
+              <div class="review-sheet" id="reviewSheet" hidden>
+                <div class="review-sheet-card">
+                  <p>手机内浮层</p>
+                  <button class="btn btn-ghost btn-sm" type="button" onclick="closeReviewSheet()">关闭</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ol class="spec-list">
+          <li><strong>范围</strong>：当前需求页签以下的原有内容。页头、需求页签和侧栏不进入这一层。</li>
+          <li><strong>退出</strong>：进入后右上角固定 <code>.btn.btn-ghost</code>「退出全屏」，不随内容滚动。Esc 在没有手机浮层时也退出。</li>
+          <li><strong>外壳</strong>：总览 iframe 中打开时，父页面 <code>html.fr-review</code> 把 <code>#spec-frame</code> 铺满视口。</li>
+        </ol>
       </div>
     </section>
 
@@ -836,7 +910,7 @@
       <button type="button" class="active" data-rule="fe" onclick="showRulePanel('fe')">前端需求</button>
       <button type="button" data-rule="admin" onclick="showRulePanel('admin')">后台需求</button>
     </div>
-    <div class="drawer-body" style="padding:0;">
+    <div class="drawer-body" id="rulePanelHome" style="padding:0;">
       <div class="rule-panel active" id="rule-fe">
         <div class="rule-section">
           <h3>1 业务目标</h3>
@@ -879,6 +953,8 @@
       </div>
     </div>
   </aside>
+
+  <button class="btn btn-ghost tab-review-exit" id="reviewExit" type="button" onclick="closeReview()">退出全屏</button>
 
   <div class="toast" id="toast"></div>
 
@@ -963,6 +1039,50 @@
       document.getElementById('rule-admin').classList.toggle('active', which === 'admin');
     }
 
+    function setShellReview(on) {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.document.documentElement.classList.toggle('fr-review', on);
+        }
+      } catch (err) {}
+    }
+
+    function setSampleScene(btn) {
+      document.querySelectorAll('#specTabSample .tab-sample-scenes button').forEach(function (item) {
+        item.classList.toggle('active', item === btn);
+      });
+      var name = btn.getAttribute('data-sample');
+      document.getElementById('sampleRuleTitle').textContent = name + ' · 需求规则';
+      document.getElementById('samplePhoneCopy').textContent = name;
+    }
+
+    function openReviewSheet() {
+      document.getElementById('reviewSheet').hidden = false;
+    }
+
+    function closeReviewSheet() {
+      document.getElementById('reviewSheet').hidden = true;
+    }
+
+    function openReview() {
+      closeConfirm();
+      closeEdit();
+      closeDetail();
+      closeRule();
+      closeReviewSheet();
+      document.documentElement.classList.add('is-tab-review');
+      setShellReview(true);
+      document.getElementById('reviewExit').focus();
+    }
+
+    function closeReview() {
+      if (!document.documentElement.classList.contains('is-tab-review')) return;
+      closeReviewSheet();
+      document.documentElement.classList.remove('is-tab-review');
+      setShellReview(false);
+      document.getElementById('openReviewBtn').focus();
+    }
+
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -971,7 +1091,11 @@
     }
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { closeConfirm(); closeEdit(); closeDetail(); closeRule(); }
+      if (e.key !== 'Escape') return;
+      var sheet = document.getElementById('reviewSheet');
+      if (sheet && !sheet.hidden) { closeReviewSheet(); return; }
+      if (document.documentElement.classList.contains('is-tab-review')) { closeReview(); return; }
+      closeConfirm(); closeEdit(); closeDetail(); closeRule();
     });
   </script>
   <script src="sidebar-nav.js?v=6"></script>

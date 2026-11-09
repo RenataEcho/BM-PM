@@ -162,6 +162,7 @@ python3 -m http.server 19889 --directory demo/iteration
 | 主按钮 | `.btn .btn-primary` | 查询、保存、提交 |
 | 次要按钮 | `.btn .btn-ghost` / `.btn-sm` | 取消、重置 |
 | 需求规则 | `.btn .btn-rule` | Page Header 入口 |
+| 全屏预览 | `.btn .btn-ghost` | Page Header「全屏预览」；退出也用 Ghost |
 | 危险按钮 | `.btn-danger` / `.btn-danger-ghost` | 确认弹窗内删除 |
 | 文字链 | `.link` / `.link-muted` / `.link-danger` | 表格操作列 |
 | 确认弹窗 | `.modal-overlay` + `.modal`（400px） | 删除、不可逆操作 |
@@ -188,6 +189,12 @@ python3 -m http.server 19889 --directory demo/iteration
 64. **一屏内必须同时看到**场景列表和至少一台完整手机。多场景在台内滚，禁止靠 `body` 滚出页头。
 65. 后台表、流程图同样在 Tab 内滚（流程 `max-height: 72vh`）。页头描述最多两行，避免 Chrome 超过 188px。
 66. 打开需求规则后，Demo 仍露在左侧，不要改成规则独占一屏。展示细则与可点示例见 `component-spec-demo.html#sec-rule`、`#sec-onescreen`。
+67. **评审全屏**是页头另一个动作，不替换需求规则抽屉。按钮文案「全屏预览」，class 用 `.btn.btn-ghost`。退出按钮文案「退出全屏」，同样用 Ghost。
+68. 全屏铺满视口，不调用浏览器 Fullscreen API。页面在总览 iframe 里时，通知父页面给 `html` 加上 `fr-review`，把 `#spec-frame` 铺满视口。单独打开 FR 页时，全屏层自己铺满视口。
+69. 全屏的是当前需求页签以下的原有内容，不另做顶栏，也不另组规则栏。前端交互含场景条、当前场景需求和手机；管理后台是当前表；业务流程是本页流程图。
+70. 「退出全屏」用 `position: fixed` 钉在视口右上角，不随内容滚动。规则第 5 节仍只写「见本页业务流程」，全屏里不把流程图再嵌进内容。
+71. 进入时关闭需求规则抽屉，焦点移到「退出全屏」。Esc 先关手机内最上层浮层，再退出全屏。关闭后焦点回到「全屏预览」，页签和场景保持进入前的状态。
+72. 之后新建的 FR 页带上这个按钮。已上线、已归档、别人名下的页面不补。可点示例：`component-spec-demo.html#sec-review`。
 
 ---
 

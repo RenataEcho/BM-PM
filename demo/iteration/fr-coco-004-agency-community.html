@@ -240,6 +240,15 @@
     html.embedded body > .topnav,
     html.embedded body > .sidebar { display: none; }
     html.embedded body > .main { width: 100%; height: 100%; }
+    .page-header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .tab-review-exit { display: none; position: fixed; top: 16px; right: 16px; z-index: 720; }
+    html.is-tab-review .tab-review-exit { display: inline-flex; }
+    html.is-tab-review .demo-layout {
+      position: fixed; inset: 0; z-index: 640; height: 100vh; min-height: 0; margin: 0;
+      padding: 64px 16px 16px; background: #f0f4f8; box-sizing: border-box; overflow: hidden;
+    }
+    html.is-tab-review .drawer-overlay { z-index: 760; }
+    html.is-tab-review .drawer { z-index: 761; }
     @media (max-width: 1000px) {
       .demo-layout { grid-template-columns: minmax(260px,1fr) minmax(390px,1fr); overflow: auto; }
     }
@@ -268,7 +277,10 @@
         <h1>FR-CoCo-004 · 机构社群优化</h1>
         <p class="page-desc">前端交互：查看机构详情、社群详情、社群负责导师与所属导师团，并保留社群对接说明。</p>
       </div>
-      <button class="btn btn-rule" id="ruleBtn" type="button" aria-expanded="false">需求规则</button>
+      <div class="page-header-actions">
+        <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
+        <button class="btn btn-rule" id="ruleBtn" type="button" aria-expanded="false">需求规则</button>
+      </div>
     </header>
     <div class="page-label">前端交互</div>
     <section class="demo-layout">
@@ -291,6 +303,7 @@
       </div>
     </section>
   </main>
+  <button class="btn btn-ghost tab-review-exit" id="exitTabReview" type="button">退出全屏</button>
   <div class="drawer-overlay" id="ruleOverlay"></div>
   <aside class="drawer" id="ruleDrawer" role="dialog" aria-labelledby="ruleTitle">
     <div class="drawer-header">
@@ -437,7 +450,32 @@
     ruleBtn.onclick = function () { setRule(!document.getElementById("ruleDrawer").classList.contains("open")); };
     document.getElementById("ruleClose").onclick = function () { setRule(false); };
     document.getElementById("ruleOverlay").onclick = function () { setRule(false); };
-    document.addEventListener("keydown", function (event) { if (event.key === "Escape") setRule(false); });
+    var openTabReviewButton = document.getElementById("openTabReview");
+    var exitTabReviewButton = document.getElementById("exitTabReview");
+    function setShellReview(on) {
+      try {
+        if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle("fr-review", on);
+      } catch (err) {}
+    }
+    function openTabReview() {
+      setRule(false);
+      document.documentElement.classList.add("is-tab-review");
+      setShellReview(true);
+      exitTabReviewButton.focus();
+    }
+    function closeTabReview() {
+      if (!document.documentElement.classList.contains("is-tab-review")) return;
+      document.documentElement.classList.remove("is-tab-review");
+      setShellReview(false);
+      openTabReviewButton.focus();
+    }
+    openTabReviewButton.addEventListener("click", openTabReview);
+    exitTabReviewButton.addEventListener("click", closeTabReview);
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape") return;
+      if (document.getElementById("ruleDrawer").classList.contains("open")) { setRule(false); return; }
+      if (document.documentElement.classList.contains("is-tab-review")) { event.preventDefault(); closeTabReview(); }
+    });
     renderRules();
   </script>
 </body>
