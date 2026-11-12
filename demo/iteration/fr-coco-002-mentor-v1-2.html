@@ -222,7 +222,7 @@
     <header class="page-header">
       <div>
         <h1>FR-CoCo-002 · 加入导师团优化 · v2 当前</h1>
-        <p class="page-desc">前端交互：「我的社群」列表按绑定状态展示，可搜索、筛选、申请解绑或换绑；社群详情与导师团主页保持原结构。导师视角保留个人信息配置。</p>
+        <p class="page-desc">前端交互：「我的社群」列表直接展示全部社群，不提供搜索、筛选和审核信息。审核进度在申请记录查看。换绑在社群详情底部发起，对接社群打开二维码。导师团主页保持原结构。导师视角保留个人信息配置。</p>
       </div>
       <div class="page-header-actions">
         <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
@@ -253,7 +253,7 @@
           <div id="contextRules"></div>
         </aside>
         <div class="mockup-board">
-          <iframe id="phone" title="我的社群与社群详情" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=26&amp;scene=list"></iframe>
+          <iframe id="phone" title="我的社群与社群详情" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=32&amp;scene=list"></iframe>
         </div>
       </div>
     </section>
@@ -267,7 +267,7 @@
         <div class="item"><b>飞书社群人员</b><span>显示该社群在飞书的成员信息。</span></div>
         <p class="kind">现有后台优化</p>
         <div class="item"><b>社群负责人</b><span>在已有社群管理里选择一名导师写入。一个社群同一时间只能有 1 个。再选一名导师并保存，替换原来的那位。</span></div>
-        <div class="item"><b>虚拟成员</b><span>可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。前端成员数等于虚拟成员加真实成员数。</span></div>
+        <div class="item"><b>虚拟成员</b><span>可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。社群详情成员数等于虚拟成员加真实成员数。「我的社群」列表不展示成员数。</span></div>
       </section>
       <section class="mod" aria-labelledby="mod-people">
         <h2 id="mod-people">人员管理</h2>
@@ -291,110 +291,72 @@
     </section>
     <section class="page-view" id="view-flow">
       <div class="flow-page">
-        <p class="flow-page-intro">解绑与换绑从「已绑定且没有待审核申请」出发，提交后汇入同一条审核。审核期间原关系保持已绑定。驳回或撤销回到起点，可再次申请。首次绑定不在这张图。</p>
+        <p class="flow-page-intro">换绑从社群详情底部进入。按钮按状态显示「换绑」「换绑审核中」或「已解绑」。只有「换绑」打开换绑页。审核期间原关系保持已绑定。驳回或撤销回到可再次申请。不提供解绑申请。首次绑定不在这张图。</p>
         <div class="flow-svg-wrap">
-          <svg width="1160" height="1040" viewBox="0 0 1160 1040" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="解绑与换绑审核流程">
+          <svg width="860" height="900" viewBox="0 0 860 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="换绑审核流程">
             <defs>
               <marker id="flow-arrow-coco002" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
                 <path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8" />
               </marker>
             </defs>
             <g class="flow-edges" marker-end="url(#flow-arrow-coco002)">
-              <polyline points="550,72 550,102" />
-              <polyline points="642,140 1096,140 1096,530 700,530" />
-              <polyline points="550,178 550,193 255,193 255,208" />
-              <polyline points="550,193 885,193 885,208" />
-              <polyline points="255,264 255,294" />
-              <polyline points="177,330 108,330 108,236 140,236" />
-              <polyline points="255,366 255,396" />
-              <polyline points="177,432 72,432 72,248 140,248" />
-              <polyline points="885,264 885,396" />
-              <polyline points="963,432 1024,432 1024,236 1000,236" />
-              <polyline points="255,468 255,483 550,483 550,498" />
-              <polyline points="885,468 885,483 550,483" />
-              <polyline points="550,562 550,592" />
-              <polyline points="464,628 280,628" />
-              <polyline points="70,628 36,628 36,12 550,12 550,24" />
-              <polyline points="550,664 550,694" />
-              <polyline points="630,730 760,730" />
-              <polyline points="990,730 1052,730 1052,1004 36,1004 36,12 550,12 550,24" />
-              <polyline points="550,766 550,796" />
-              <polyline points="472,832 205,832 205,900" />
-              <polyline points="628,832 885,832 885,900" />
+              <polyline points="390,64 390,94" />
+              <polyline points="474,132 560,132" />
+              <polyline points="390,170 390,200" />
+              <polyline points="312,238 220,238" />
+              <polyline points="390,276 390,306" />
+              <polyline points="390,354 390,384" />
+              <polyline points="312,422 250,422 250,330 300,330" />
+              <polyline points="390,460 390,490" />
+              <polyline points="312,528 220,528 220,346 300,346" />
+              <polyline points="390,566 390,596" />
+              <polyline points="390,652 390,682" />
+              <polyline points="474,720 560,720" />
+              <polyline points="770,744 800,744 800,860 28,860 28,8 390,8 390,16" />
+              <polyline points="390,758 390,788" />
             </g>
             <g class="flow-nodes" font-family="PingFang SC, Inter, sans-serif">
-              <rect x="430" y="24" width="240" height="48" rx="8" fill="#eff6ff" stroke="#2563eb" />
-              <text x="550" y="43" text-anchor="middle" font-size="12" fill="#18222f">我的社群</text>
-              <text x="550" y="60" text-anchor="middle" font-size="10" fill="#64748b">关系状态 = 已绑定</text>
-
-              <polygon points="550,102 642,140 550,178 458,140" fill="#fffbeb" stroke="#d97706" />
-              <text x="550" y="136" text-anchor="middle" font-size="11" fill="#92400e">已有待审核</text>
-              <text x="550" y="152" text-anchor="middle" font-size="11" fill="#92400e">申请?</text>
-              <text x="668" y="132" font-size="11" fill="#dc2626">是 · 不可再点</text>
-              <text x="556" y="190" font-size="11" fill="#16a34a">否 · 可发起</text>
-
-              <rect x="140" y="208" width="230" height="56" rx="8" fill="#eff6ff" stroke="#2563eb" />
-              <text x="255" y="230" text-anchor="middle" font-size="12" fill="#18222f">打开换绑页</text>
-              <text x="255" y="248" text-anchor="middle" font-size="10" fill="#64748b">赛道 → 项目 → 导师 → 社群</text>
-              <rect x="770" y="208" width="230" height="56" rx="8" fill="#eff6ff" stroke="#2563eb" />
-              <text x="885" y="230" text-anchor="middle" font-size="12" fill="#18222f">打开解绑弹窗</text>
-              <text x="885" y="248" text-anchor="middle" font-size="10" fill="#64748b">当前社群与绑定导师</text>
-
-              <polygon points="255,294 333,330 255,366 177,330" fill="#fffbeb" stroke="#d97706" />
-              <text x="255" y="326" text-anchor="middle" font-size="11" fill="#92400e">目标社群</text>
-              <text x="255" y="342" text-anchor="middle" font-size="11" fill="#92400e">已单选?</text>
-              <text x="78" y="322" font-size="11" fill="#dc2626">否</text>
-              <text x="262" y="384" font-size="11" fill="#16a34a">是</text>
-
-              <polygon points="255,396 333,432 255,468 177,432" fill="#fffbeb" stroke="#d97706" />
-              <text x="255" y="428" text-anchor="middle" font-size="11" fill="#92400e">换绑原因</text>
-              <text x="255" y="444" text-anchor="middle" font-size="11" fill="#92400e">已填写?</text>
-              <text x="40" y="424" font-size="11" fill="#dc2626">否</text>
-              <text x="230" y="490" font-size="11" fill="#16a34a">是</text>
-
-              <polygon points="885,396 963,432 885,468 807,432" fill="#fffbeb" stroke="#d97706" />
-              <text x="885" y="428" text-anchor="middle" font-size="11" fill="#92400e">解绑原因</text>
-              <text x="885" y="444" text-anchor="middle" font-size="11" fill="#92400e">已填写?</text>
-              <text x="974" y="424" font-size="11" fill="#dc2626">否</text>
-              <text x="820" y="490" font-size="11" fill="#16a34a">是</text>
-
-              <rect x="400" y="498" width="300" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a" />
-              <text x="550" y="522" text-anchor="middle" font-size="12" fill="#18222f">创建申请 · 审核中</text>
-              <text x="550" y="542" text-anchor="middle" font-size="10" fill="#64748b">原关系仍为已绑定，解绑和换绑不可再点</text>
-
-              <polygon points="550,592 636,628 550,664 464,628" fill="#fffbeb" stroke="#d97706" />
-              <text x="550" y="624" text-anchor="middle" font-size="11" fill="#92400e">申请人</text>
-              <text x="550" y="640" text-anchor="middle" font-size="11" fill="#92400e">撤销?</text>
-              <text x="300" y="616" font-size="11" fill="#dc2626">撤销</text>
-              <text x="556" y="682" font-size="11" fill="#16a34a">否</text>
-
-              <rect x="70" y="600" width="210" height="56" rx="8" fill="#f1f5f9" stroke="#94a3b8" />
-              <text x="175" y="622" text-anchor="middle" font-size="12" fill="#18222f">申请 = 已撤销</text>
-              <text x="175" y="640" text-anchor="middle" font-size="10" fill="#64748b">原关系保持已绑定</text>
-
-              <polygon points="550,694 630,730 550,766 470,730" fill="#fffbeb" stroke="#d97706" />
-              <text x="550" y="726" text-anchor="middle" font-size="11" fill="#92400e">审核通过?</text>
-              <text x="556" y="784" font-size="11" fill="#16a34a">通过</text>
-              <text x="648" y="722" font-size="11" fill="#dc2626">驳回</text>
-
-              <rect x="760" y="702" width="230" height="56" rx="8" fill="#fef2f2" stroke="#dc2626" />
-              <text x="875" y="724" text-anchor="middle" font-size="12" fill="#991b1b">申请 = 审核驳回</text>
-              <text x="875" y="742" text-anchor="middle" font-size="10" fill="#64748b">原绑定不变，并保存原因</text>
-
-              <polygon points="550,796 628,832 550,868 472,832" fill="#fffbeb" stroke="#d97706" />
-              <text x="550" y="828" text-anchor="middle" font-size="11" fill="#92400e">申请是</text>
-              <text x="550" y="844" text-anchor="middle" font-size="11" fill="#92400e">换绑?</text>
-              <text x="360" y="824" font-size="11" fill="#16a34a">换绑</text>
-              <text x="640" y="824" font-size="11" fill="#16a34a">解绑</text>
-
-              <rect x="80" y="900" width="250" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a" />
-              <text x="205" y="922" text-anchor="middle" font-size="12" fill="#18222f">换绑通过</text>
-              <text x="205" y="940" text-anchor="middle" font-size="10" fill="#64748b">原社群改为已解绑</text>
-              <text x="205" y="954" text-anchor="middle" font-size="10" fill="#64748b">目标社群新建已绑定</text>
-
-              <rect x="760" y="900" width="250" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a" />
-              <text x="885" y="924" text-anchor="middle" font-size="12" fill="#18222f">解绑通过</text>
-              <text x="885" y="944" text-anchor="middle" font-size="10" fill="#64748b">原社群改为已解绑，申请 = 审核通过</text>
+              <rect x="270" y="16" width="240" height="48" rx="8" fill="#eff6ff" stroke="#2563eb" />
+              <text x="390" y="35" text-anchor="middle" font-size="12" fill="#18222f">社群详情</text>
+              <text x="390" y="52" text-anchor="middle" font-size="10" fill="#64748b">底部换绑按钮</text>
+              <polygon points="390,94 474,132 390,170 306,132" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="128" text-anchor="middle" font-size="11" fill="#92400e">换绑审核中?</text>
+              <text x="480" y="124" font-size="11" fill="#dc2626">是</text>
+              <text x="396" y="188" font-size="11" fill="#16a34a">否</text>
+              <rect x="560" y="108" width="200" height="48" rx="8" fill="#f1f5f9" stroke="#94a3b8" />
+              <text x="660" y="128" text-anchor="middle" font-size="12" fill="#18222f">显示换绑审核中</text>
+              <text x="660" y="146" text-anchor="middle" font-size="10" fill="#64748b">不可再次发起</text>
+              <polygon points="390,200 468,238 390,276 312,238" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="234" text-anchor="middle" font-size="11" fill="#92400e">已经解绑?</text>
+              <text x="230" y="230" font-size="11" fill="#dc2626">是</text>
+              <text x="396" y="294" font-size="11" fill="#16a34a">否</text>
+              <rect x="40" y="214" width="180" height="48" rx="8" fill="#f1f5f9" stroke="#94a3b8" />
+              <text x="130" y="242" text-anchor="middle" font-size="12" fill="#18222f">显示已解绑</text>
+              <rect x="270" y="306" width="240" height="48" rx="8" fill="#eff6ff" stroke="#2563eb" />
+              <text x="390" y="334" text-anchor="middle" font-size="12" fill="#18222f">打开换绑页</text>
+              <polygon points="390,384 468,422 390,460 312,422" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="418" text-anchor="middle" font-size="11" fill="#92400e">目标社群</text>
+              <text x="390" y="434" text-anchor="middle" font-size="11" fill="#92400e">已单选?</text>
+              <text x="228" y="414" font-size="11" fill="#dc2626">否</text>
+              <text x="396" y="478" font-size="11" fill="#16a34a">是</text>
+              <polygon points="390,490 468,528 390,566 312,528" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="524" text-anchor="middle" font-size="11" fill="#92400e">换绑原因</text>
+              <text x="390" y="540" text-anchor="middle" font-size="11" fill="#92400e">已填写?</text>
+              <text x="198" y="520" font-size="11" fill="#dc2626">否</text>
+              <text x="396" y="584" font-size="11" fill="#16a34a">是</text>
+              <rect x="270" y="596" width="240" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a" />
+              <text x="390" y="618" text-anchor="middle" font-size="12" fill="#18222f">创建换绑申请 · 审核中</text>
+              <text x="390" y="636" text-anchor="middle" font-size="10" fill="#64748b">原关系仍为已绑定</text>
+              <polygon points="390,682 474,720 390,758 306,720" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="724" text-anchor="middle" font-size="11" fill="#92400e">审核通过?</text>
+              <text x="480" y="712" font-size="11" fill="#dc2626">驳回</text>
+              <text x="396" y="776" font-size="11" fill="#16a34a">通过</text>
+              <rect x="560" y="696" width="210" height="48" rx="8" fill="#fef2f2" stroke="#dc2626" />
+              <text x="665" y="716" text-anchor="middle" font-size="12" fill="#991b1b">原绑定保持不变</text>
+              <text x="665" y="734" text-anchor="middle" font-size="10" fill="#64748b">保存驳回原因</text>
+              <rect x="250" y="788" width="280" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a" />
+              <text x="390" y="810" text-anchor="middle" font-size="12" fill="#18222f">换绑通过</text>
+              <text x="390" y="828" text-anchor="middle" font-size="10" fill="#64748b">原社群已解绑，目标社群新建已绑定</text>
             </g>
           </svg>
         </div>
@@ -430,7 +392,7 @@
             <p>新增字段：飞书社群人员。显示该社群在飞书的成员信息。</p>
             <p>现有后台优化。不新开模块，在已有社群管理增加字段。</p>
             <p>新增字段：社群负责人。选择一名导师写入，一个社群同一时间只能有 1 个。再选一名导师并保存，替换原来的那位。</p>
-            <p>新增字段：虚拟成员。可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。前端成员数等于虚拟成员加真实成员数。</p>
+            <p>新增字段：虚拟成员。可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。社群详情成员数等于虚拟成员加真实成员数。「我的社群」列表不展示成员数。</p>
           </div>
         </div>
         <div class="rule-section">
@@ -533,17 +495,17 @@
     [
       "页面与入口",
       [
-        "本场景展示「我的社群」列表。顶栏居中标题，左侧返回，右侧「申请记录」进入申请记录页。可搜索社群名称、导师、赛道或项目，并按全部、已绑定、审核中、已解绑筛选。无匹配时显示「暂无符合条件的社群」。",
-        "R07 换绑使用独立页面。社群列表上的白色社群信息不进入社群详情。",
+        "本场景展示「我的社群」列表。顶栏居中标题，左侧返回，右侧「申请记录」进入申请记录页。列表不提供搜索和筛选，直接展示全部社群。",
+        "R07 换绑使用独立页面，入口在社群详情底部。白色社群信息进入社群详情。列表不提供解绑或换绑按钮。",
         "R13 灰色导师卡展示头像、姓名、赛道和项目。整张灰卡可点击，打开导师浮层；浮层标签展示赛道和项目。"
       ]
     ],
     [
       "社群卡片",
       [
-        "R12 社群信息保留成员数、已加入天数、已获得收益。收益单位为元，保留两位小数。",
-        "卡片同时展示关系状态和申请状态。已有待审核换绑或解绑时，展示「已绑定 + 换绑审核中」或「已绑定 + 解绑审核中」，不得把关系状态改写成「审核中」。",
-        "已绑定且没有待审核申请时，可发起解绑或换绑。已有待审核申请时，这两项不可再点。"
+        "R12 列表社群信息不展示成员数，保留已加入天数和已获得收益。收益单位为元，保留两位小数。",
+        "列表卡片不展示绑定状态，也不展示审核信息。审核进度只在申请记录查看。",
+        "列表不发起解绑或换绑。换绑入口在社群详情底部，按状态显示「换绑」「换绑审核中」或「已解绑」。",
       ]
     ],
     [
@@ -551,10 +513,10 @@
       [
         "R01 用户可同时绑定多个不同社群，每个社群独立维护绑定关系。",
         "R02 换绑需要审核。审核期间原社群关系及权益继续有效。",
-        "R03 解绑需要审核。审核通过后才解除关系。",
+        "当前不提供解绑申请。已解绑是换绑审核通过后原社群的关系状态。",
         "R04 换绑成功后，旧社群仍留在「我的社群」，状态为已解绑。",
         "R09 首次绑定付费社群需要审核，审核通过后绑定生效。首次绑定非付费社群无需审核，校验通过后立即生效。",
-        "R10 换绑与解绑都需要审核，不因目标社群是否付费而豁免。"
+        "R10 换绑需要审核，不因目标社群是否付费而豁免。不提供解绑申请入口。",
       ]
     ],
     [
@@ -568,8 +530,8 @@
     [
       "解绑申请",
       [
-        "点击「解绑」打开申请弹窗，展示当前社群、绑定导师和解绑原因，并说明提交后需审核，审核通过前绑定仍有效。",
-        "确认提交后创建解绑申请，状态为审核中。卡片随后显示「已绑定 + 解绑审核中」。"
+        "列表和社群详情都不提供解绑申请。",
+        "已解绑仍展示在「我的社群」，详情底部换绑按钮显示「已解绑」，不可再发起换绑。"
       ]
     ],
     [
@@ -627,8 +589,8 @@
     [
       "演示边界",
       [
-        "本场景示例覆盖已绑定、审核中、已解绑和换绑审核中。不演示加载、失败和接口异常。",
-        "Demo 不调用真实接口、不登录、不持久化。搜索、筛选和申请只作用于当前页面，刷新后恢复示例。"
+        "列表同时包含已绑定、首次绑定审核中和已解绑的社群，但卡片上不标审核状态。不演示加载、失败和接口异常。",
+        "Demo 不调用真实接口、不登录、不持久化。申请只作用于当前页面，刷新后恢复示例。"
       ]
     ]
   ],
@@ -636,8 +598,8 @@
     [
       "页面结构",
       [
-        "社群详情保持深色头图、社群头像、社群名称、已加入天数、成员数、公告、负责项目、导师、介绍、战绩与底部飞书入口的既有长页结构。",
-        "成员数等于虚拟成员加真实成员数。虚拟成员可在后台编辑，保存时在 200～500 内定一次，再次打开不重新随机。",
+        "社群详情保持深色头图、社群头像、社群名称、已加入天数、成员数、公告、负责项目、导师、介绍、战绩，底部是「换绑」和「对接社群」。",
+        "成员数只在社群详情展示，等于虚拟成员加真实成员数。「我的社群」列表不展示成员数。虚拟成员可在后台编辑，保存时在 200～500 内定一次，再次打开不重新随机。",
         "「所属导师团」是社群级关系，以独立入口显示在详情头部白色信息卡下方，不属于任何单个导师。入口显示导师团图标、「所属导师团」、当前导师团名称、负责赛道和右箭头，点击进入导师团主页。"
       ]
     ],
@@ -648,7 +610,9 @@
         "社群负责导师按负责人和导师团成员分组展示；点击导师打开资料浮层，导师卡片内不展示所属导师团。",
         "社群负责项目横向排列；点击项目打开项目说明浮层，真实项目详情页不在本 Demo 内。",
         "社群战绩展示总产出、活跃成员、新增成员和个人排行；收益荣誉榜展示本月收益 TOP 5。",
-        "底部按钮固定为「进入社群飞书」，仅展示说明浮层，不打开真实飞书。",
+        "底部并列「换绑」和「对接社群」。对接社群是实心主按钮，权重大于换绑。",
+        "未换绑时按钮写「换绑」，点击打开换绑页面。换绑审核中显示「换绑审核中」，已解绑显示「已解绑」，这两种都不可再发起。",
+        "点击「对接社群」从底部打开浮层，标题「联系平台运营」。标题下写「了解」加当前社群名，底部是「截图或长按保存」。点关闭或遮罩可关掉。不跳转真实社群。",
         "返回回到「我的社群」并恢复列表滚动位置。不能在详情页直接改写社群资料或导师资料。",
         "社群公告、介绍展开和 TOP 5 均为本锁定 Demo 的验收内容。"
       ]
@@ -671,7 +635,7 @@
     [
       "入口与列表",
       [
-        "从「我的社群」顶栏右侧「申请记录」进入独立页面。页面列出全部申请，返回后回到列表并恢复滚动位置。",
+        "从「我的社群」顶栏右侧「申请记录」进入独立页面。审核信息只在这里查看。页面列出全部申请，返回后回到列表并恢复滚动位置。",
         "记录展示申请类型、审核状态、申请时间和对应社群。类型包括绑定、解绑和换绑。无记录时显示「暂无申请记录」。",
         "点击一条记录打开申请详情。"
       ]
@@ -715,10 +679,10 @@
     function escapeRule(text){return text.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
     var editingRules=false, ruleView='list', ruleBase=null;
     var sceneMeta={
-      list:{title:'我的社群',frame:'我的社群',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=26&scene=list'},
-      detail:{title:'社群详情',frame:'社群详情',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=26&scene=detail'},
-      group:{title:'导师团',frame:'导师团主页',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=26&scene=group'},
-      records:{title:'申请记录',frame:'申请记录',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=26&scene=records'},
+      list:{title:'我的社群',frame:'我的社群',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=32&scene=list'},
+      detail:{title:'社群详情',frame:'社群详情',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=32&scene=detail'},
+      group:{title:'导师团',frame:'导师团主页',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=32&scene=group'},
+      records:{title:'申请记录',frame:'申请记录',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=32&scene=records'},
       mentor:{title:'导师视角 · 个人介绍',frame:'导师个人信息及介绍配置',src:'fr-coco-002-mentor-intro-fe.html?embed=1'}
     };
     var editStatus=document.getElementById('ruleEditStatus'), ruleEditor=document.getElementById('ruleEditor');
