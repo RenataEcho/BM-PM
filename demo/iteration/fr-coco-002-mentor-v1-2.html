@@ -101,6 +101,13 @@
     .page-tabs button.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
     .page-view { display: none; min-height: 0; flex: 1; }
     .page-view.active { display: flex; flex-direction: column; }
+    .flow-page { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .flow-page-intro { padding: 12px 14px 0; font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+    .flow-svg-wrap { overflow: auto; max-height: 72vh; padding: 8px; }
+    .flow-svg-wrap svg { display: block; }
+    .flow-edges polyline { fill: none; stroke: #94a3b8; stroke-width: 1.5; }
+    .flow-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 4px 14px 14px; font-size: 11px; color: var(--text-muted); }
+    .flow-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: -2px; }
     #view-fe.active { height: calc(100vh - 188px); min-height: 560px; }
     .demo-layout { flex:1;min-height:0;display:grid;grid-template-columns:minmax(280px,540px) minmax(375px,1fr);gap:16px; }
     .context-rules {min-height:0;overflow:auto;padding:20px;background:var(--surface-glass);border:1px solid rgba(255,255,255,.55);border-radius:var(--radius-lg);box-shadow:var(--shadow)}
@@ -184,6 +191,9 @@
       position: fixed; inset: 0; z-index: 640; height: 100vh; min-height: 0; margin: 0;
       padding: 64px 16px 16px; background: #f0f4f8; box-sizing: border-box; overflow: hidden;
     }
+    html.is-tab-review #view-flow.active { overflow: auto; }
+    html.is-tab-review #view-flow .flow-page,
+    html.is-tab-review #view-flow .flow-svg-wrap { max-height: none; }
     html.is-tab-review .drawer-overlay { z-index: 760; }
     html.is-tab-review .drawer { z-index: 761; }
   </style>
@@ -222,6 +232,7 @@
     <div class="page-tabs" role="tablist">
       <button type="button" class="active" data-tab="fe">前端交互</button>
       <button type="button" data-tab="admin">管理后台</button>
+      <button type="button" data-tab="flow">业务流程</button>
     </div>
     <section class="page-view active" id="view-fe">
       <div class="perspective-tabs" role="tablist" aria-label="页面场景">
@@ -277,6 +288,124 @@
         <div class="item"><b>该导师群内身份</b><span>社群弹窗。机器人拉回的群内身份，如群主、管理员。</span></div>
       </section>
     </div>
+    </section>
+    <section class="page-view" id="view-flow">
+      <div class="flow-page">
+        <p class="flow-page-intro">解绑与换绑从「已绑定且没有待审核申请」出发，提交后汇入同一条审核。审核期间原关系保持已绑定。驳回或撤销回到起点，可再次申请。首次绑定不在这张图。</p>
+        <div class="flow-svg-wrap">
+          <svg width="1160" height="1040" viewBox="0 0 1160 1040" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="解绑与换绑审核流程">
+            <defs>
+              <marker id="flow-arrow-coco002" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <g class="flow-edges" marker-end="url(#flow-arrow-coco002)">
+              <polyline points="550,72 550,102" />
+              <polyline points="642,140 1096,140 1096,530 700,530" />
+              <polyline points="550,178 550,193 255,193 255,208" />
+              <polyline points="550,193 885,193 885,208" />
+              <polyline points="255,264 255,294" />
+              <polyline points="177,330 108,330 108,236 140,236" />
+              <polyline points="255,366 255,396" />
+              <polyline points="177,432 72,432 72,248 140,248" />
+              <polyline points="885,264 885,396" />
+              <polyline points="963,432 1024,432 1024,236 1000,236" />
+              <polyline points="255,468 255,483 550,483 550,498" />
+              <polyline points="885,468 885,483 550,483" />
+              <polyline points="550,562 550,592" />
+              <polyline points="464,628 280,628" />
+              <polyline points="70,628 36,628 36,12 550,12 550,24" />
+              <polyline points="550,664 550,694" />
+              <polyline points="630,730 760,730" />
+              <polyline points="990,730 1052,730 1052,1004 36,1004 36,12 550,12 550,24" />
+              <polyline points="550,766 550,796" />
+              <polyline points="472,832 205,832 205,900" />
+              <polyline points="628,832 885,832 885,900" />
+            </g>
+            <g class="flow-nodes" font-family="PingFang SC, Inter, sans-serif">
+              <rect x="430" y="24" width="240" height="48" rx="8" fill="#eff6ff" stroke="#2563eb" />
+              <text x="550" y="43" text-anchor="middle" font-size="12" fill="#18222f">我的社群</text>
+              <text x="550" y="60" text-anchor="middle" font-size="10" fill="#64748b">关系状态 = 已绑定</text>
+
+              <polygon points="550,102 642,140 550,178 458,140" fill="#fffbeb" stroke="#d97706" />
+              <text x="550" y="136" text-anchor="middle" font-size="11" fill="#92400e">已有待审核</text>
+              <text x="550" y="152" text-anchor="middle" font-size="11" fill="#92400e">申请?</text>
+              <text x="668" y="132" font-size="11" fill="#dc2626">是 · 不可再点</text>
+              <text x="556" y="190" font-size="11" fill="#16a34a">否 · 可发起</text>
+
+              <rect x="140" y="208" width="230" height="56" rx="8" fill="#eff6ff" stroke="#2563eb" />
+              <text x="255" y="230" text-anchor="middle" font-size="12" fill="#18222f">打开换绑页</text>
+              <text x="255" y="248" text-anchor="middle" font-size="10" fill="#64748b">赛道 → 项目 → 导师 → 社群</text>
+              <rect x="770" y="208" width="230" height="56" rx="8" fill="#eff6ff" stroke="#2563eb" />
+              <text x="885" y="230" text-anchor="middle" font-size="12" fill="#18222f">打开解绑弹窗</text>
+              <text x="885" y="248" text-anchor="middle" font-size="10" fill="#64748b">当前社群与绑定导师</text>
+
+              <polygon points="255,294 333,330 255,366 177,330" fill="#fffbeb" stroke="#d97706" />
+              <text x="255" y="326" text-anchor="middle" font-size="11" fill="#92400e">目标社群</text>
+              <text x="255" y="342" text-anchor="middle" font-size="11" fill="#92400e">已单选?</text>
+              <text x="78" y="322" font-size="11" fill="#dc2626">否</text>
+              <text x="262" y="384" font-size="11" fill="#16a34a">是</text>
+
+              <polygon points="255,396 333,432 255,468 177,432" fill="#fffbeb" stroke="#d97706" />
+              <text x="255" y="428" text-anchor="middle" font-size="11" fill="#92400e">换绑原因</text>
+              <text x="255" y="444" text-anchor="middle" font-size="11" fill="#92400e">已填写?</text>
+              <text x="40" y="424" font-size="11" fill="#dc2626">否</text>
+              <text x="230" y="490" font-size="11" fill="#16a34a">是</text>
+
+              <polygon points="885,396 963,432 885,468 807,432" fill="#fffbeb" stroke="#d97706" />
+              <text x="885" y="428" text-anchor="middle" font-size="11" fill="#92400e">解绑原因</text>
+              <text x="885" y="444" text-anchor="middle" font-size="11" fill="#92400e">已填写?</text>
+              <text x="974" y="424" font-size="11" fill="#dc2626">否</text>
+              <text x="820" y="490" font-size="11" fill="#16a34a">是</text>
+
+              <rect x="400" y="498" width="300" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a" />
+              <text x="550" y="522" text-anchor="middle" font-size="12" fill="#18222f">创建申请 · 审核中</text>
+              <text x="550" y="542" text-anchor="middle" font-size="10" fill="#64748b">原关系仍为已绑定，解绑和换绑不可再点</text>
+
+              <polygon points="550,592 636,628 550,664 464,628" fill="#fffbeb" stroke="#d97706" />
+              <text x="550" y="624" text-anchor="middle" font-size="11" fill="#92400e">申请人</text>
+              <text x="550" y="640" text-anchor="middle" font-size="11" fill="#92400e">撤销?</text>
+              <text x="300" y="616" font-size="11" fill="#dc2626">撤销</text>
+              <text x="556" y="682" font-size="11" fill="#16a34a">否</text>
+
+              <rect x="70" y="600" width="210" height="56" rx="8" fill="#f1f5f9" stroke="#94a3b8" />
+              <text x="175" y="622" text-anchor="middle" font-size="12" fill="#18222f">申请 = 已撤销</text>
+              <text x="175" y="640" text-anchor="middle" font-size="10" fill="#64748b">原关系保持已绑定</text>
+
+              <polygon points="550,694 630,730 550,766 470,730" fill="#fffbeb" stroke="#d97706" />
+              <text x="550" y="726" text-anchor="middle" font-size="11" fill="#92400e">审核通过?</text>
+              <text x="556" y="784" font-size="11" fill="#16a34a">通过</text>
+              <text x="648" y="722" font-size="11" fill="#dc2626">驳回</text>
+
+              <rect x="760" y="702" width="230" height="56" rx="8" fill="#fef2f2" stroke="#dc2626" />
+              <text x="875" y="724" text-anchor="middle" font-size="12" fill="#991b1b">申请 = 审核驳回</text>
+              <text x="875" y="742" text-anchor="middle" font-size="10" fill="#64748b">原绑定不变，并保存原因</text>
+
+              <polygon points="550,796 628,832 550,868 472,832" fill="#fffbeb" stroke="#d97706" />
+              <text x="550" y="828" text-anchor="middle" font-size="11" fill="#92400e">申请是</text>
+              <text x="550" y="844" text-anchor="middle" font-size="11" fill="#92400e">换绑?</text>
+              <text x="360" y="824" font-size="11" fill="#16a34a">换绑</text>
+              <text x="640" y="824" font-size="11" fill="#16a34a">解绑</text>
+
+              <rect x="80" y="900" width="250" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a" />
+              <text x="205" y="922" text-anchor="middle" font-size="12" fill="#18222f">换绑通过</text>
+              <text x="205" y="940" text-anchor="middle" font-size="10" fill="#64748b">原社群改为已解绑</text>
+              <text x="205" y="954" text-anchor="middle" font-size="10" fill="#64748b">目标社群新建已绑定</text>
+
+              <rect x="760" y="900" width="250" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a" />
+              <text x="885" y="924" text-anchor="middle" font-size="12" fill="#18222f">解绑通过</text>
+              <text x="885" y="944" text-anchor="middle" font-size="10" fill="#64748b">原社群改为已解绑，申请 = 审核通过</text>
+            </g>
+          </svg>
+        </div>
+        <div class="flow-legend">
+          <span><i style="background:#eff6ff;border:1px solid #2563eb"></i>前端 / 操作</span>
+          <span><i style="background:#f0fdf4;border:1px solid #16a34a"></i>后端 / 写入</span>
+          <span><i style="background:#fffbeb;border:1px solid #d97706"></i>校验 / 分支</span>
+          <span><i style="background:#fef2f2;border:1px solid #dc2626"></i>阻断 / 驳回</span>
+          <span><i style="background:#f1f5f9;border:1px solid #94a3b8"></i>撤销</span>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -363,7 +492,7 @@
     });
 
     function showTab(name) {
-      if (name !== 'fe' && name !== 'admin') name = 'admin';
+      if (name !== 'fe' && name !== 'admin' && name !== 'flow') name = 'admin';
       currentTab = name;
       document.querySelectorAll('.page-tabs button').forEach(function (btn) {
         var on = btn.getAttribute('data-tab') === name;
@@ -372,6 +501,7 @@
       });
       document.getElementById('view-fe').classList.toggle('active', name === 'fe');
       document.getElementById('view-admin').classList.toggle('active', name === 'admin');
+      document.getElementById('view-flow').classList.toggle('active', name === 'flow');
       var params = new URLSearchParams(location.search);
       if (params.get('tab') !== name) {
         params.set('tab', name);
@@ -613,7 +743,7 @@
     function ruleDrawer(){
       return ['list','detail','group','records','mentor'].map(function(key){
         return '<section class="rule-section"><h3>'+escapeRule(sceneMeta[key].title)+'</h3></section>'+ruleMarkup(perspectiveRules[key]);
-      }).join('')+'<section class="rule-section"><h3>业务流程</h3><div class="rule-content">本次尚未写入业务流程图。</div></section>';
+      }).join('')+'<section class="rule-section"><h3>业务流程</h3><div class="rule-content">见本页业务流程。</div></section>';
     }
     document.getElementById('rule-fe').innerHTML = ruleDrawer();
     function setPerspective(view) {
