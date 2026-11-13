@@ -18,9 +18,9 @@
   }
   var STATUS_BUCKET = { '待开始': '待开始', '开发中': '进行中', '已上线': '归档', '已暂停': '废纸篓' };
   var GROUP_ORDER = ['待开始', '进行中', '归档', '废纸篓'];
-  var STATUS_KEY = 'bm-pm-fr-statuses';
+  var STATUS_KEY = 'bm-pm-fr-statuses-20261113';
   var COLLAPSE_KEY = 'bm-pm-sidebar-groups';
-  var SHELL = 'framework-shell.html?v=20261113-fold';
+  var SHELL = 'framework-shell.html?v=20261113-status';
   function currentStatuses() {
     try { return JSON.parse(localStorage.getItem(STATUS_KEY) || '{}'); } catch (e) { return {}; }
   }

@@ -261,7 +261,7 @@
     <iframe id="spec-frame" title="组件规范" hidden src="about:blank"></iframe>
   </main>
   </div>
-  <script src="sidebar-nav.js?v=20261113-fold"></script>
+  <script src="sidebar-nav.js?v=20261113-status"></script>
   <script>
     var EMPTY_TEXT = {
       pending: '还没有待开始的需求。',
@@ -272,7 +272,7 @@
 
     var STATUS_BUCKET = { '待开始': 'pending', '开发中': 'progress', '已上线': 'archive', '已暂停': 'trash' };
     var STATUS_CLASS = { '待开始': 'tag-warn', '开发中': 'tag-warn', '已上线': 'tag-ok', '已暂停': 'tag-del' };
-    var STATUS_KEY = 'bm-pm-fr-statuses';
+    var STATUS_KEY = 'bm-pm-fr-statuses-20261113';
     function readStatuses() {
       try { return JSON.parse(localStorage.getItem(STATUS_KEY) || '{}'); } catch (e) { return {}; }
     }
