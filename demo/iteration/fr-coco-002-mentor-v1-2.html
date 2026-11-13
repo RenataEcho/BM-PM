@@ -208,9 +208,9 @@
       </div>
     </div>
     <nav class="pnav" aria-label="业务线">
-      <a class="pnav-item" href="framework-shell.html#youbao/overview">右豹主业务</a>
-      <a class="pnav-item active" href="framework-shell.html#mentor/overview">导师商务</a>
-      <a class="pnav-item" href="framework-shell.html#enterprise/overview">企业号</a>
+      <a class="pnav-item" href="framework-shell.html?v=20261113-members#youbao/overview">右豹主业务</a>
+      <a class="pnav-item active" href="framework-shell.html?v=20261113-members#mentor/overview">导师商务</a>
+      <a class="pnav-item" href="framework-shell.html?v=20261113-members#enterprise/overview">企业号</a>
     </nav>
   </header>
   <aside class="sidebar">
@@ -218,7 +218,7 @@
     <div class="sidebar-foot">先写明业务线，再做设计。<br />已上线进归档，已暂停进废纸篓。</div>
   </aside>
   <main class="main">
-    <nav class="breadcrumb"><a href="framework-shell.html#mentor/overview">导师商务</a> / 加入导师团优化</nav>
+    <nav class="breadcrumb"><a href="framework-shell.html?v=20261113-members#mentor/overview">导师商务</a> / 加入导师团优化</nav>
     <header class="page-header">
       <div>
         <h1>FR-CoCo-002 · 加入导师团优化 · v2 当前</h1>
@@ -253,7 +253,7 @@
           <div id="contextRules"></div>
         </aside>
         <div class="mockup-board">
-          <iframe id="phone" title="我的社群与社群详情" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=32&amp;scene=list"></iframe>
+          <iframe id="phone" title="我的社群与社群详情" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=42&amp;scene=list"></iframe>
         </div>
       </div>
     </section>
@@ -267,7 +267,7 @@
         <div class="item"><b>飞书社群人员</b><span>显示该社群在飞书的成员信息。</span></div>
         <p class="kind">现有后台优化</p>
         <div class="item"><b>社群负责人</b><span>在已有社群管理里选择一名导师写入。一个社群同一时间只能有 1 个。再选一名导师并保存，替换原来的那位。</span></div>
-        <div class="item"><b>虚拟成员</b><span>可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。社群详情成员数等于虚拟成员加真实成员数。「我的社群」列表不展示成员数。</span></div>
+        <div class="item"><b>虚拟成员</b><span>可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。「我的社群」列表和社群详情都不展示成员数。</span></div>
       </section>
       <section class="mod" aria-labelledby="mod-people">
         <h2 id="mod-people">人员管理</h2>
@@ -392,7 +392,7 @@
             <p>新增字段：飞书社群人员。显示该社群在飞书的成员信息。</p>
             <p>现有后台优化。不新开模块，在已有社群管理增加字段。</p>
             <p>新增字段：社群负责人。选择一名导师写入，一个社群同一时间只能有 1 个。再选一名导师并保存，替换原来的那位。</p>
-            <p>新增字段：虚拟成员。可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。社群详情成员数等于虚拟成员加真实成员数。「我的社群」列表不展示成员数。</p>
+            <p>新增字段：虚拟成员。可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。「我的社群」列表和社群详情都不展示成员数。</p>
           </div>
         </div>
         <div class="rule-section">
@@ -414,7 +414,7 @@
       </div>
     </div>
   </aside>
-  <script src="sidebar-nav.js?v=9"></script>
+  <script src="sidebar-nav.js?v=20261113-fold"></script>
   <script>
     var phone = document.getElementById('phone');
     var ruleBtn = document.getElementById('ruleBtn');
@@ -598,15 +598,15 @@
     [
       "页面结构",
       [
-        "社群详情保持深色头图、社群头像、社群名称、已加入天数、成员数、公告、负责项目、导师、介绍、战绩，底部是「换绑」和「对接社群」。",
-        "成员数只在社群详情展示，等于虚拟成员加真实成员数。「我的社群」列表不展示成员数。虚拟成员可在后台编辑，保存时在 200～500 内定一次，再次打开不重新随机。",
-        "「所属导师团」是社群级关系，以独立入口显示在详情头部白色信息卡下方，不属于任何单个导师。入口显示导师团图标、「所属导师团」、当前导师团名称、负责赛道和右箭头，点击进入导师团主页。"
+        "社群详情顶部为浅粉头图：居中社群图标，左上按社群显示「免费」或「付费」。名称下是已加入天数和标签「导师团服务中」「项目交流社区」。社群介绍写在标签下方。不展示成立时间。其下是社群负责导师、浅暖色所属导师团卡片、负责项目、战绩。底部是「换绑」和「对接社群」。详情不展示社群成员数和社群公告，不另起社群介绍分区。",
+        "「我的社群」列表和社群详情都不展示成员数。虚拟成员仍可在后台编辑，保存时在 200～500 内定一次，再次打开不重新随机。",
+        "「所属导师团」是社群级关系，以浅暖色卡片显示在社群负责导师下方，不属于任何单个导师。卡片显示导师团图标、「所属导师团」、当前导师团名称、负责赛道和右箭头，点击进入导师团主页。"
       ]
     ],
     [
       "交互",
       [
-        "公告入口打开公告浮层；社群介绍默认收起，可展开或再次收起。",
+        "头像下方的社群介绍完整展示，不截断。按钮写「展开全部介绍」，展开后在这段介绍下方补上其余正文，按钮改为「收起」。收起后这段介绍仍在。没有介绍时不显示正文和按钮。详情不提供社群公告。",
         "社群负责导师按负责人和导师团成员分组展示；点击导师打开资料浮层，导师卡片内不展示所属导师团。",
         "社群负责项目横向排列；点击项目打开项目说明浮层，真实项目详情页不在本 Demo 内。",
         "社群战绩展示总产出、活跃成员、新增成员和个人排行；收益荣誉榜展示本月收益 TOP 5。",
@@ -614,7 +614,7 @@
         "未换绑时按钮写「换绑」，点击打开换绑页面。换绑审核中显示「换绑审核中」，已解绑显示「已解绑」，这两种都不可再发起。",
         "点击「对接社群」从底部打开浮层，标题「联系平台运营」。标题下写「了解」加当前社群名，底部是「截图或长按保存」。点关闭或遮罩可关掉。不跳转真实社群。",
         "返回回到「我的社群」并恢复列表滚动位置。不能在详情页直接改写社群资料或导师资料。",
-        "社群公告、介绍展开和 TOP 5 均为本锁定 Demo 的验收内容。"
+        "介绍展开和 TOP 5 均为本锁定 Demo 的验收内容。详情不验收社群成员数和社群公告。"
       ]
     ]
   ],
@@ -679,10 +679,10 @@
     function escapeRule(text){return text.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
     var editingRules=false, ruleView='list', ruleBase=null;
     var sceneMeta={
-      list:{title:'我的社群',frame:'我的社群',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=32&scene=list'},
-      detail:{title:'社群详情',frame:'社群详情',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=32&scene=detail'},
-      group:{title:'导师团',frame:'导师团主页',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=32&scene=group'},
-      records:{title:'申请记录',frame:'申请记录',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=32&scene=records'},
+      list:{title:'我的社群',frame:'我的社群',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=42&scene=list'},
+      detail:{title:'社群详情',frame:'社群详情',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=42&scene=detail'},
+      group:{title:'导师团',frame:'导师团主页',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=42&scene=group'},
+      records:{title:'申请记录',frame:'申请记录',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=42&scene=records'},
       mentor:{title:'导师视角 · 个人介绍',frame:'导师个人信息及介绍配置',src:'fr-coco-002-mentor-intro-fe.html?embed=1'}
     };
     var editStatus=document.getElementById('ruleEditStatus'), ruleEditor=document.getElementById('ruleEditor');
@@ -765,7 +765,7 @@
     function pointSidebarHome() {
       document.querySelectorAll('[data-iteration-sidebar] a').forEach(function (link) {
         var href = link.getAttribute('href') || '';
-        if (href.charAt(0) === '#') link.setAttribute('href', 'framework-shell.html' + href);
+        if (href.charAt(0) === '#') link.setAttribute('href', 'framework-shell.html?v=20261113-members' + href);
       });
     }
     document.addEventListener('DOMContentLoaded', pointSidebarHome);

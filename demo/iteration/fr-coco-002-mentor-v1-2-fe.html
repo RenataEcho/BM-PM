@@ -8,16 +8,16 @@
 :root{--orange:#ff4b1f;--orange2:#ff6a35;--ink:#171923;--muted:#8b909b;--line:#edf0f4;--bg:#f5f6fa;--card:#fff;--gold:#ffd58a}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#e9ebf1;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
 button{font:inherit;border:0;cursor:pointer} .phone{width:100%;max-width:430px;min-height:100vh;margin:0 auto;background:var(--bg);position:relative;padding-bottom:100px;overflow:hidden;box-shadow:0 0 36px #151a2a14}
-.hero{height:290px;padding:env(safe-area-inset-top) 20px 0;background:radial-gradient(ellipse at 80% 0%,#6a3425 0,transparent 42%),radial-gradient(ellipse at 5% 80%,#3a1d19 0,transparent 48%),linear-gradient(145deg,#100d0d 0%,#21100f 58%,#120e0e 100%);color:white;position:relative;overflow:hidden}
-.hero:before{content:"";position:absolute;width:260px;height:260px;border:1px solid #ffb17824;border-radius:50%;right:-105px;top:20px;box-shadow:0 0 0 18px #ffb17808,0 0 0 42px #ffb17806}
-.hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:100px;background:linear-gradient(transparent,#f5f6fa)}
-.nav{height:48px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}.back{font-size:27px;color:white;background:none;padding:0 8px 4px 0}.nav-label{font-size:12px;color:#ffffff9c;letter-spacing:1px}.more{background:#ffffff14;border:1px solid #ffffff22;border-radius:20px;color:#fff;padding:6px 11px;font-size:12px}
-.hero-title{position:relative;z-index:2;margin-top:8px;display:flex;align-items:center;gap:13px}.logo{width:66px;height:66px;border-radius:19px;background:linear-gradient(145deg,#28201b,#0b0b0d);border:1px solid #ffffff30;display:grid;place-items:center;box-shadow:0 8px 25px #0005;flex-shrink:0}.logo-mark{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#d7ff78,#92e600 52%,#5fba00);box-shadow:0 0 24px #a8ef2480}
-.community-name{font-size:23px;font-weight:800;letter-spacing:.2px}.subline{margin-top:8px;color:#d1c5c1;font-size:12px}.hero-badges{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}.hero-badge{font-size:10px;color:#ffd8c9;background:#ffffff12;border:1px solid #ffffff20;border-radius:20px;padding:5px 9px}
-.summary{position:relative;z-index:3;margin:-42px 16px 0;background:linear-gradient(135deg,#fff 0%,#fffaf7 100%);border:1px solid #fff;border-radius:18px;padding:16px 15px;box-shadow:0 8px 24px #20243608}
-.summary-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.summary-label{font-size:12px;color:#9296a0}.member-count{font-size:20px;font-weight:800;color:#20222b;margin-top:3px}.member-count small{font-size:11px;color:#9a9da6;font-weight:500}.announce{border-radius:9px;background:#fff4ed;color:#e65a32;font-size:11px;padding:8px 10px;max-width:145px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.project-line{border-top:1px solid #f0ece9;margin-top:13px;padding-top:12px;display:flex;gap:8px;align-items:center}.project-title{font-size:11px;color:#a0a2aa;white-space:nowrap}.project-chips{display:flex;gap:6px;flex-wrap:wrap}.chip{font-size:11px;background:#fff1e9;color:#e65a32;padding:5px 8px;border-radius:6px}.chip.dark{background:#f3f4f7;color:#535866}
-.mentor-group-entry{width:calc(100% - 32px);margin:11px 16px 0;padding:12px;background:#fff6ed;border:1px solid #f6dcc6;border-radius:13px;display:flex;align-items:center;gap:10px;text-align:left;color:var(--ink)}.mentor-group-icon{width:40px;height:40px;border-radius:11px;background:linear-gradient(145deg,#ffad72,#ff7f45);color:#fff;display:grid;place-items:center;font-size:17px;flex:0 0 auto}.mentor-group-copy{min-width:0;flex:1}.mentor-group-name{display:block;font-size:13px;font-weight:750}.mentor-group-meta{display:block;font-size:10px;color:#a9a0a0;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mentor-group-entry .chev{font-size:18px}
+.hero{height:auto;padding:calc(env(safe-area-inset-top) + 6px) 16px 18px;background:linear-gradient(180deg,#ffe4ee 0%,#f7eef6 46%,#f5f6fa 100%);color:#252836;position:relative}
+.nav{height:44px;display:flex;align-items:center;position:relative;z-index:2}.back{font-size:28px;color:#252836;background:none;padding:0 8px 2px 0;line-height:1}
+.hero-identity{display:flex;flex-direction:column;align-items:center;text-align:center;padding:2px 6px 0}
+.logo{position:relative;width:76px;height:76px;border-radius:22px;background:#111214;display:grid;place-items:center;box-shadow:0 10px 22px #1a102018;flex-shrink:0}.logo-mark{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 35% 32%,#e8ff8a,#7dff1a 48%,#3dcc00);box-shadow:0 0 18px #9ef24a66}
+.fee-badge{position:absolute;top:-7px;left:-4px;z-index:2;background:#3b6cff;color:#fff;font-size:10px;font-weight:700;line-height:1;padding:3px 5px;border-radius:4px}.fee-badge.is-paid{background:#ff4d22}
+.community-name{margin:14px 0 0;font-size:22px;font-weight:800;letter-spacing:.2px;text-align:center}
+.joined{margin-top:10px;font-size:12px;color:#8b909b}
+.hero-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}.hero-badges span{font-size:12px;color:#8b909b;background:#f3f4f7;border-radius:999px;padding:4px 10px}
+.hero-desc,.hero-more-copy{margin:14px 0 0;width:min(340px,100%);font-size:13px;line-height:1.65;color:#3c4250;text-align:left}.hero-more-copy{margin-top:8px}.hero-desc[hidden],.hero-more-copy[hidden],.hero-more[hidden]{display:none !important}.hero-more{margin-top:8px;width:min(340px,100%);padding:4px 0;background:none;color:#ff4d22;font-size:12px;font-weight:650;text-align:left}
+.mentor-group-entry{width:calc(100% - 32px);margin:12px 16px 0;padding:12px;background:#fff6ed;border:1px solid #f6dcc6;border-radius:13px;display:flex;align-items:center;gap:10px;text-align:left;color:var(--ink)}.mentor-group-icon{width:40px;height:40px;border-radius:11px;background:linear-gradient(145deg,#ffad72,#ff7f45);color:#fff;display:grid;place-items:center;font-size:17px;flex:0 0 auto}.mentor-group-copy{min-width:0;flex:1}.mentor-group-name{display:block;font-size:13px;font-weight:750}.mentor-group-meta{display:block;font-size:10px;color:#a9a0a0;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mentor-group-entry .chev{font-size:18px}
 .cl-app,.cl-change{width:100%;max-width:430px;margin:0 auto;min-height:100vh;background:#f5f6fb;color:#202530;position:relative;box-shadow:0 0 36px #151a2a14}.cl-app{padding-bottom:34px}.cl-change{display:none;padding-bottom:90px}.cl-change.show{display:block}.cl-top{height:58px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:750;position:sticky;top:0;z-index:5}.cl-back{position:absolute;border:0;background:transparent;cursor:pointer;color:#202530;left:18px;font-size:28px;font-weight:400;line-height:1;padding:0 6px}.cl-main{padding:14px 14px 28px}.cl-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px #e9ebf24d}.cl-head{display:flex;gap:12px;align-items:center}.cl-logo{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;color:#fff;font-size:30px;font-weight:800;flex-shrink:0;background:linear-gradient(140deg,#7787ff,#3b52fb)}.cl-logo.video{background:linear-gradient(140deg,#ff8552,#ff4527);font-size:25px}.cl-headinfo{min-width:0;flex:1}.cl-name{font-size:17px;font-weight:750;display:flex;align-items:center;gap:7px;flex-wrap:wrap}.cl-namebtn{border:0;background:none;padding:0;margin:0;font:inherit;font-weight:750;color:inherit;cursor:pointer;text-align:left}.cl-meta{color:#99a2b3;margin-top:6px;font-size:13px}.cl-badge{font-size:12px;border-radius:15px;padding:3px 9px;font-weight:600;white-space:nowrap;line-height:1.4}.cl-green{background:#53cb71;color:#fff}.cl-orange{border:1px solid #ff652c;color:#ff5b22;background:#fff7f2}.cl-amber{border:1px solid #ffac3e;color:#ed8b0a;background:#fffaf1}.cl-grey{border:1px solid #bbc3cf;color:#717987;background:#f8f9fb}.cl-details{border-top:1px solid #e8eaf0;margin-top:13px;padding-top:11px}.cl-field{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:27px;font-size:14px}.cl-k{color:#929baa;flex-shrink:0}.cl-v{text-align:right;font-weight:500;min-width:0}.cl-avatar{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#e59b7b;color:#fff;font-size:12px;margin-right:6px;vertical-align:-6px}.cl-grouplink{border:0;background:none;padding:0;font:inherit;font-weight:500;color:inherit;cursor:pointer}.cl-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.cl-btn{border:1px solid #cbd0dc;border-radius:25px;padding:8px 23px;background:#fff;color:#404859;font-weight:600;cursor:pointer;font:inherit}.cl-btn.cl-primary{border-color:#ff5b2b;color:#ff5524}.cl-btn.cl-fill{background:linear-gradient(110deg,#ff793d,#ff471f);color:#fff;border:0}.cl-btn:disabled{opacity:.4;cursor:not-allowed}.cl-empty{text-align:center;color:#929baa;padding:70px 10px}.cl-overlay{position:fixed;inset:0;background:#1b233877;z-index:70;display:flex;align-items:flex-end;justify-content:center}.cl-sheet{width:min(430px,100%);background:#fff;border-radius:22px 22px 0 0;max-height:90vh;overflow:auto;padding:22px 20px 28px;color:#202530}.cl-sheethead{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.cl-sheethead strong{font-size:19px}.cl-x{border:0;background:#f4f5f8;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:20px}.cl-section{font-weight:700;font-size:15px;margin:18px 0 12px}.cl-formrow{margin-bottom:16px}.cl-formrow label{display:block;color:#717989;margin-bottom:8px}.cl-formrow textarea{width:100%;border:1px solid #e0e4eb;border-radius:10px;padding:12px;font:inherit;background:#fff;outline:0;min-height:78px;resize:vertical}.cl-hint{font-size:12px;color:#8d95a4;line-height:1.8}.cl-sheetfoot{display:flex;gap:10px;margin-top:22px}.cl-sheetfoot .cl-btn{flex:1;padding:12px}.cl-timeline{padding-left:15px;border-left:2px solid #e5e8ee;margin:14px 0 18px 8px}.cl-step{position:relative;padding:0 0 22px 16px}.cl-step:before{content:'';position:absolute;left:-22px;top:2px;width:12px;height:12px;background:#d3d8e0;border-radius:50%;border:3px solid #fff}.cl-step.done:before{background:#ff652f}.cl-step strong{display:block}.cl-step small{color:#9ca3b0;display:block;margin-top:5px}.cl-rule{background:#f6f7fa;padding:13px;border-radius:10px;color:#6f7787;font-size:12px;line-height:1.9}.cl-menuitem{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #eceef2;padding:15px 0;cursor:pointer;font:inherit;color:inherit}.cl-review{border:1px solid #e7e9ee;border-radius:12px;padding:13px;margin:10px 0}.cl-review p{margin:7px 0;color:#727b8b;font-size:12px}.cl-review .cl-actions{justify-content:flex-start}.cl-body{padding:12px 14px 24px}.cl-source{padding:12px 14px;border:1px solid #edf0f4;border-radius:12px;background:#fff;display:grid;grid-template-columns:1fr auto;gap:5px 8px}.cl-source span{grid-column:1/-1;color:#9099aa;font-size:12px}.cl-source strong{font-size:15px}.cl-source small{text-align:right;align-self:center;color:#9099aa;font-size:12px}.cl-stages{display:flex;justify-content:space-between;margin:18px 0 20px;padding:0 3px;position:relative}.cl-stages:before{content:'';position:absolute;top:13px;left:11%;right:11%;height:2px;background:#e4e6ee}.cl-stage{position:relative;z-index:1;display:flex;align-items:center;flex-direction:column;gap:6px;color:#a1a8b5;width:25%;font-size:11px;border:0;background:none;padding:0;cursor:pointer;font-family:inherit}.cl-stage-dot{height:27px;width:27px;border-radius:50%;background:#e7e9ef;color:#8993a2;display:grid;place-items:center;font-weight:700;font-size:12px}.cl-stage.current .cl-stage-dot,.cl-stage.finished .cl-stage-dot{background:#ff602d;color:#fff}.cl-stage.current{color:#ff602d;font-weight:700}.cl-panel{background:#fff;border-radius:16px;padding:16px 14px;margin-top:12px;box-shadow:0 2px 12px #182e4a06}.cl-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}.cl-heading h2{font-size:17px;margin:0;font-weight:750}.cl-heading em{font-size:12px;font-style:normal;color:#f26736;background:#fff1e9;border-radius:20px;padding:4px 9px}.cl-sub{color:#939aaa;font-size:12px;margin:0 0 14px;line-height:1.6}.cl-pick,.cl-mentor{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e9ecf2;border-radius:12px;padding:12px;margin-bottom:9px;cursor:pointer;width:100%;text-align:left;font:inherit;color:inherit}.cl-panel .cl-pick:last-child,.cl-panel .cl-mentor:last-child,.cl-panel .cl-cpick:last-child{margin-bottom:0}.cl-pick-icon{height:40px;width:40px;border-radius:10px;background:linear-gradient(135deg,#ff8751,#ff4a25);display:grid;place-items:center;color:#fff;font-weight:800;font-size:17px;flex-shrink:0}.cl-pick-body{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}.cl-pick-body b{font-size:14px}.cl-pick-body small{color:#98a1b1;font-size:12px}.cl-arrow{color:#a8b0bd;font-size:19px}.cl-mavatar{height:42px;width:42px;border-radius:50%;background:linear-gradient(135deg,#f9bb96,#e78562);color:#fff;display:grid;place-items:center;font-size:18px;flex-shrink:0}.cl-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.cl-tags span{font-size:11px;background:#fff2eb;color:#d96c38;border-radius:5px;padding:3px 7px}.cl-crumb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;color:#858f9d;font-size:12px}.cl-crumb strong{color:#e96937;font-weight:600}.cl-profile-head{display:flex;align-items:center;gap:10px}.cl-profile-head div{display:flex;flex-direction:column;gap:6px}.cl-profile-head b{font-size:15px}.cl-profile-head small{color:#929bac}.cl-intro{font-size:13px;line-height:1.8;margin:12px 0 0;color:#677182}.cl-app[hidden]{display:none !important}.cl-cpick{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid #e9ecf2;border-radius:12px;padding:12px;margin-bottom:9px;cursor:pointer;width:100%;text-align:left;font:inherit;color:inherit}.cl-cpick b{font-size:14px}.cl-cpick small{color:#98a1b1;font-size:11px;display:block;margin-top:4px}.cl-cpick.selected{border-color:#ff6331;background:#fff8f4;box-shadow:0 0 0 1px #ff6331 inset}.cl-radio{width:22px;height:22px;border:1.5px solid #ccd2dc;border-radius:50%;display:grid;place-items:center;color:#fff;flex-shrink:0}.cl-cpick.selected .cl-radio{background:#ff602d;border-color:#ff602d}.cl-mini{font-size:13px;font-weight:700;margin-bottom:10px}.cl-reason{width:100%;border:1px solid #e5e8ee;border-radius:9px;padding:12px;min-height:88px;resize:vertical;font:inherit;outline:0}.cl-flow-rule{background:#fff7f1;color:#ad653f;border-radius:10px;padding:12px;font-size:12px;line-height:1.75;margin-top:12px}.cl-foot{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(430px,100%);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:12px;background:#fff;border-top:1px solid #e9ebf1;z-index:9;box-shadow:0 -5px 20px #2630470b}.cl-foot .cl-btn{padding:12px 8px}.cl-foot .cl-btn:first-child{flex:0 0 30%}.cl-foot .cl-btn:last-child{flex:1}
 @media(min-width:600px){.cl-app,.cl-change{border-radius:26px;min-height:850px}.cl-foot{bottom:22px;border-radius:0 0 26px 26px}}
 .section{margin:22px 16px 0;scroll-margin-top:14px}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}.section-title{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}.section-title:before{content:"";width:3px;height:15px;background:var(--orange);border-radius:4px}.section-action{font-size:12px;color:#9a9da6;background:none;padding:4px 0}
@@ -53,25 +53,17 @@ button{font:inherit;border:0;cursor:pointer} .phone{width:100%;max-width:430px;m
 
 <div class="phone" id="communityPage" hidden>
   <header class="hero">
-    <div class="nav"><button class="back" onclick="closeCommunity()" aria-label="返回我的社群">‹</button><span class="nav-label">COMMUNITY · 社群主页</span><button class="more" onclick="openModal('announce')">社群公告</button></div>
-    <div class="hero-title">
-      <div class="logo"><div class="logo-mark"></div></div>
-      <div><div class="community-name" id="communityName">网盘交流社区</div><div class="subline" id="communityJoined">已加入 22 天　·　持续成长中</div><div class="hero-badges"><span class="hero-badge">导师团服务中</span><span class="hero-badge">项目交流社区</span></div></div>
+    <div class="nav"><button class="back" onclick="closeCommunity()" aria-label="返回我的社群">‹</button></div>
+    <div class="hero-identity">
+      <div class="logo"><span class="fee-badge" id="feeBadge">免费</span><div class="logo-mark"></div></div>
+      <h1 class="community-name" id="communityName">网盘交流社区</h1>
+      <div class="joined" id="heroJoined">已加入 22 天　·　持续成长中</div>
+      <div class="hero-badges"><span>导师团服务中</span><span>项目交流社区</span></div>
+      <p class="hero-desc" id="heroBio">聚焦网盘类内容运营：资源整理、白嫖工作流、爆款资源拆解。日常分享每周热门资源池与平台玩法，把当周能做的资源、标题和发布节奏放在一起，方便成员直接对照执行。</p>
+      <p class="hero-more-copy" id="heroBioMore" hidden>本社群围绕网盘推广与拉新项目，提供项目方法、运营策略、基础教学和日常答疑支持。新成员可以先阅读项目要求，再根据自己的时间与能力选择参与方式。遇到执行问题，可在社群内描述具体场景并附上相关截图，导师团会根据问题类型提供建议。请遵守平台规则，不发布无关广告，不泄露个人及他人隐私，涉及收益的内容以平台实际结算为准。</p>
+      <button class="hero-more" id="heroIntroToggle" type="button" onclick="toggleIntro()" aria-expanded="false">展开全部介绍</button>
     </div>
   </header>
-
-  <div class="summary">
-    <div class="summary-top">
-      <div><div class="summary-label">社群成员</div><div class="member-count"><span id="communityMemberCount">2,010</span> <small>位成员</small></div></div>
-      <button class="announce" onclick="openModal('announce')">● 最新公告　点击查看 ›</button>
-    </div>
-    <div class="project-line"><span class="project-title">负责项目</span><div class="project-chips"><span class="chip">网盘拉新</span><span class="chip">网盘推广</span><span class="chip dark">+1 项</span></div></div>
-  </div>
-  <button class="mentor-group-entry" type="button" onclick="openMentorGroup()" aria-label="进入星火成长导师团主页">
-    <span class="mentor-group-icon">♛</span>
-    <span class="mentor-group-copy"><span class="mentor-group-name">所属导师团</span><span class="mentor-group-meta">星火成长导师团 · 网盘推广赛道</span></span>
-    <span class="chev">›</span>
-  </button>
 
   <section class="section" id="mentors">
     <div class="section-head"><div class="section-title">社群负责导师</div><button class="section-action" onclick="openModal('mentorAll')">查看全部成员 ›</button></div>
@@ -86,14 +78,11 @@ button{font:inherit;border:0;cursor:pointer} .phone{width:100%;max-width:430px;m
     </div>
   </section>
 
-  <section class="section" id="intro">
-    <div class="section-head"><div class="section-title">社群介绍</div><button class="section-action" onclick="toggleIntro()">展开介绍⌄</button></div>
-    <div class="intro-card">
-      <div class="intro-top"><span class="intro-title">在这里，找到适合你的项目节奏</span><span class="tiny-tag">社群须知</span></div>
-      <div class="intro-copy collapsed" id="introCopy">本社群围绕网盘推广与拉新项目，提供项目方法、运营策略、基础教学和日常答疑支持。新成员可以先阅读项目要求，再根据自己的时间与能力选择参与方式。遇到执行问题，可在社群内描述具体场景并附上相关截图，导师团会根据问题类型提供建议。请遵守平台规则，不发布无关广告，不泄露个人及他人隐私，涉及收益的内容以平台实际结算为准。</div>
-      <button class="text-btn" id="introToggle" onclick="toggleIntro()">查看完整介绍 ↓</button>
-    </div>
-  </section>
+  <button class="mentor-group-entry" type="button" onclick="openMentorGroup()" aria-label="进入星火成长导师团主页">
+    <span class="mentor-group-icon">♛</span>
+    <span class="mentor-group-copy"><span class="mentor-group-name">所属导师团</span><span class="mentor-group-meta">星火成长导师团 · 网盘推广赛道</span></span>
+    <span class="chev">›</span>
+  </button>
 
   <section class="section" id="projects">
     <div class="section-head"><div class="section-title">社群负责项目</div><button class="section-action" onclick="toast('当前展示社群负责项目')">横向滑动查看更多 ›</button></div>
@@ -187,7 +176,7 @@ function renderBoard(){
  document.getElementById('leaderRows').innerHTML=sorted.slice(1,5).map((p,j)=>{const i=j+1;return `<div class="leader-row compact"><div class="rank-no">${i+1<10?'0'+(i+1):i+1}</div><div class="avatar ${p.cls}">${p.avatar}</div><div class="leader-info"><div class="leader-name">${p.name}<span class="leader-tag">${p.tag}</span></div></div><div class="leader-money">¥${p.income.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</div></div>`}).join('');
 }
 renderBoard();
-function toggleIntro(){const el=document.getElementById('introCopy'),btn=document.getElementById('introToggle');el.classList.toggle('collapsed');const expanded=!el.classList.contains('collapsed');btn.textContent=expanded?'收起介绍 ↑':'查看完整介绍 ↓';document.querySelector('#intro .section-action').textContent=expanded?'收起介绍⌃':'展开介绍⌄'}
+function toggleIntro(){const lead=document.getElementById('heroBio'),extra=document.getElementById('heroBioMore'),btn=document.getElementById('heroIntroToggle');if(lead.hidden)return;const open=extra.hidden;extra.hidden=!open;btn.textContent=open?'收起':'展开全部介绍';btn.setAttribute('aria-expanded',open?'true':'false')}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2100)}
 let communityListScrollY=0,communityDetailOpen=false,detailGroupName='';
 function detailChangeState(g){
@@ -207,12 +196,38 @@ function renderDetailActions(){
  btn.disabled=state!=='change';
  btn.textContent=state==='review'?'换绑审核中':state==='unbound'?'已解绑':'换绑';
 }
+const driveHeader={bio:'聚焦网盘类内容运营：资源整理、白嫖工作流、爆款资源拆解。日常分享每周热门资源池与平台玩法，把当周能做的资源、标题和发布节奏放在一起，方便成员直接对照执行。',more:'本社群围绕网盘推广与拉新项目，提供项目方法、运营策略、基础教学和日常答疑支持。新成员可以先阅读项目要求，再根据自己的时间与能力选择参与方式。遇到执行问题，可在社群内描述具体场景并附上相关截图，导师团会根据问题类型提供建议。请遵守平台规则，不发布无关广告，不泄露个人及他人隐私，涉及收益的内容以平台实际结算为准。'};
+function communityIntro(name,g){
+ if(name==='网盘交流社区')return driveHeader;
+ const track=g&&g.track?g.track:'项目';
+ const project=g&&g.project?g.project:'当前项目';
+ return {bio:`围绕${track}与${project}，分享项目方法、运营策略和可直接对照的执行节奏。`,more:'新成员可以先阅读项目要求，再根据自己的时间与能力选择参与方式。遇到执行问题，可在社群内描述具体场景并附上相关截图，导师团会根据问题类型提供建议。请遵守平台规则，不发布无关广告，不泄露个人及他人隐私，涉及收益的内容以平台实际结算为准。'};
+}
+function paintDetailHeader(name,days){
+ const g=clGroups.find(x=>x.name===name);
+ const shot=communityIntro(name,g);
+ const joined=days!=null&&days!==''?days:(g?g.days:0);
+ document.getElementById('heroJoined').textContent=`已加入 ${joined} 天　·　持续成长中`;
+ const bio=document.getElementById('heroBio');
+ const extra=document.getElementById('heroBioMore');
+ const more=document.getElementById('heroIntroToggle');
+ bio.textContent=shot.bio;
+ bio.hidden=false;
+ extra.textContent=shot.more;
+ extra.hidden=true;
+ more.hidden=false;
+ more.textContent='展开全部介绍';
+ more.setAttribute('aria-expanded','false');
+ const badge=document.getElementById('feeBadge');
+ const paid=g&&g.fee==='paid';
+ badge.textContent=paid?'付费':'免费';
+ badge.classList.toggle('is-paid',!!paid);
+}
 function openCommunity(name,members,days,silent){
  communityListScrollY=window.scrollY;
  detailGroupName=name;
  document.getElementById('communityName').textContent=name;
- document.getElementById('communityJoined').textContent=`已加入 ${days} 天　·　持续成长中`;
- document.getElementById('communityMemberCount').textContent=members;
+ paintDetailHeader(name,days);
  document.getElementById('qrSub').textContent='了解'+name;
  document.getElementById('communityListPage').hidden=true;
  document.getElementById('communityPage').hidden=false;
@@ -227,7 +242,7 @@ function closeCommunity(fromHistory){
  communityDetailOpen=false;
  requestAnimationFrame(()=>window.scrollTo(0,communityListScrollY));
 }
-const clInitialGroups=[{id:1,name:'天机·短故事',kind:'book',days:21,members:'2,010',owner:'顾远航',group:'星火成长导师团',mentor:'林小满',track:'小说推文',project:'知乎故事',earnings:268.50,status:'bound',bound:'2026-10-21 14:30'},{id:2,name:'超前点播项目组',kind:'book',days:36,members:'826',owner:'林小满',group:'星火成长导师团',mentor:'陈克明',track:'短剧推广',project:'红果漫剧',earnings:1268.20,status:'bound',bound:'2026-10-06 09:20'},{id:3,name:'灵境·AI动态漫剧',kind:'video',days:0,members:'1,380',owner:'陈知夏',group:'星火成长导师团',mentor:'陈知夏',track:'AI漫剧',project:'红果漫剧',earnings:0,status:'pending',bound:'',requestTime:'2026-11-11 10:24'},{id:4,name:'意境·AI漫剧拉新',kind:'video',days:42,members:'962',owner:'别暴躁',group:'星火成长导师团',mentor:'李晚晴',track:'小说推文',project:'番茄小说',earnings:518.60,status:'unbound',bound:'2026-09-29 15:20',unbound:'2026-11-08 18:05'}];
+const clInitialGroups=[{id:1,name:'天机·短故事',kind:'book',days:21,members:'2,010',fee:'free',owner:'顾远航',group:'星火成长导师团',mentor:'林小满',track:'小说推文',project:'知乎故事',earnings:268.50,status:'bound',bound:'2026-10-21 14:30'},{id:2,name:'超前点播项目组',kind:'book',days:36,members:'826',fee:'free',owner:'林小满',group:'星火成长导师团',mentor:'陈克明',track:'短剧推广',project:'红果漫剧',earnings:1268.20,status:'bound',bound:'2026-10-06 09:20'},{id:3,name:'灵境·AI动态漫剧',kind:'video',days:0,members:'1,380',fee:'paid',owner:'陈知夏',group:'星火成长导师团',mentor:'陈知夏',track:'AI漫剧',project:'红果漫剧',earnings:0,status:'pending',bound:'',requestTime:'2026-11-11 10:24'},{id:4,name:'意境·AI漫剧拉新',kind:'video',days:42,members:'962',fee:'free',owner:'别暴躁',group:'星火成长导师团',mentor:'李晚晴',track:'小说推文',project:'番茄小说',earnings:518.60,status:'unbound',bound:'2026-09-29 15:20',unbound:'2026-11-08 18:05'},{id:8,name:'网盘交流社区',kind:'book',days:22,members:'2,010',fee:'free',owner:'别暴躁',group:'星火成长导师团',mentor:'别暴躁',track:'小说推文',project:'夸克网盘',earnings:245.2,status:'bound',bound:'2024-06-18 10:00',showcase:true}];
 const clInitialRequests=[{id:101,type:'change',source:1,target:3,mentor:'陈知夏',time:'2026-11-11 18:23',status:'pending',reason:'希望参与漫剧项目'},{id:102,type:'bind',target:3,mentor:'陈知夏',time:'2026-11-11 10:24',status:'pending',reason:'申请加入社群'}];
 const clCatalog=[
  {track:'小说推文',projects:[{name:'知乎故事',mentors:[{name:'林小满',title:'小说推文导师',intro:'专注知乎故事选题、内容制作与推广实操，擅长新人入门和项目节奏规划。',tags:['小说推文','新人指导'],communities:['知乎故事·实战交流社','知乎故事·新人学习社']},{name:'顾远航',title:'内容运营导师',intro:'长期负责故事内容运营，侧重选题拆解、发布策略与数据复盘。',tags:['内容运营','数据复盘'],communities:['故事创作成长营','知乎故事进阶社群']}]},{name:'番茄小说',mentors:[{name:'陈克明',title:'小说推广导师',intro:'聚焦番茄小说项目，提供关键词申请、素材制作和发布指导。',tags:['番茄小说','项目实操'],communities:['番茄小说·推广一群','番茄小说·创作交流群']}]}]},
@@ -244,7 +259,8 @@ function clNow(){const d=new Date();const p=n=>String(n).padStart(2,'0');return 
 function clFields(rows){return rows.map(([k,v])=>`<div class="cl-field"><span class="cl-k">${k}</span><span class="cl-v">${v}</span></div>`).join('')}
 function clClone(v){return JSON.parse(JSON.stringify(v))}
 function renderList(){
- document.getElementById('clCards').innerHTML=clGroups.length?clGroups.map(clCard).join(''):'<div class="cl-empty">暂无社群</div>';
+ const visible=clGroups.filter(g=>!g.showcase);
+ document.getElementById('clCards').innerHTML=visible.length?visible.map(clCard).join(''):'<div class="cl-empty">暂无社群</div>';
  if(communityDetailOpen)renderDetailActions();
 }
 function clCard(g){
@@ -454,12 +470,9 @@ function openModal(type){
  }else if(projectData[type]){
   const d=projectData[type];content.innerHTML=`<div class="sheet-head"><div class="logo" style="width:52px;height:52px;border-radius:14px"><div class="logo-mark" style="width:26px;height:26px"></div></div><div><div class="sheet-name">${d[0]}</div><div class="sheet-role">社群负责项目</div></div><button class="sheet-close" onclick="closeModal()">×</button></div><div class="sheet-intro">${d[1]}</div><div class="detail-grid">${d.slice(2).map(x=>`<div class="detail-box"><div class="detail-label">${x[0]}</div><div class="detail-value">${x[1]}</div></div>`).join('')}</div><div class="sheet-section">开发规则</div><div class="intro-card" style="padding:13px;background:#f8f9fc"><div class="intro-copy" style="font-size:12px;line-height:1.85;color:#626875">点击下方按钮后，跳转至「${d[0]}」对应的项目详情页，查看完整项目介绍、参与条件、执行要求及最新规则。当前为交互演示，暂未接入真实项目详情页。</div></div><div class="sheet-section">社群支持内容</div><div class="tag-list"><span>项目规则说明</span><span>执行问题答疑</span><span>经验复盘</span></div><button class="sheet-button" onclick="closeModal();toast('演示环境：跳转对应项目详情页')">跳转项目详情页　›</button>`;
  }else{
-  const data={
-   announce:['社群公告','欢迎加入网盘交流社区。请先阅读项目资料与社群规则，参与项目时以官方最新要求为准。涉及收益、结算和活动规则的内容，请以平台实际页面为准。','公告更新于 2026-10-27'],
-   feishu:['进入社群飞书','即将前往社群飞书，与导师团及其他成员交流项目进度、问题和经验。当前为交互演示，不会跳转到真实社群。','进入前建议先阅读社群公告'],
-   mentorAll:['导师团成员','导师团成员资料已展示。点击创业导师或导师团成员卡片，可分别查看职责、负责项目、服务范围和加入时间。','共 3 位导师']
-  };
-  const d=data[type]||data.announce;content.innerHTML=`<div class="sheet-head"><div><div class="sheet-name">${d[0]}</div><div class="sheet-role">${d[2]}</div></div><button class="sheet-close" onclick="closeModal()">×</button></div><div class="sheet-intro">${d[1]}</div><button class="sheet-button" onclick="closeModal();toast('${type==='feishu'?'演示环境：未连接真实飞书链接':'已关闭'}')">${type==='feishu'?'我知道了':'完成'}</button>`;
+  if(type!=='feishu')return;
+  const d=['进入社群飞书','即将前往社群飞书，与导师团及其他成员交流项目进度、问题和经验。当前为交互演示，不会跳转到真实社群。','当前不会跳转到真实飞书'];
+  content.innerHTML=`<div class="sheet-head"><div><div class="sheet-name">${d[0]}</div><div class="sheet-role">${d[2]}</div></div><button class="sheet-close" onclick="closeModal()">×</button></div><div class="sheet-intro">${d[1]}</div><button class="sheet-button" onclick="closeModal();toast('演示环境：未连接真实飞书链接')">我知道了</button>`;
  }
  overlay.classList.add('show');
 }
@@ -472,7 +485,7 @@ document.getElementById('joinCommunityBtn').addEventListener('click',()=>documen
 document.getElementById('qrClose').addEventListener('click',()=>document.getElementById('qrMask').classList.remove('show'));
 document.getElementById('qrMask').addEventListener('click',e=>{if(e.target.id==='qrMask')document.getElementById('qrMask').classList.remove('show')});
 document.getElementById('qrSave').addEventListener('click',()=>toast('请截图或长按保存'));
-if(demoScene==='detail')openCommunity('天机·短故事','2,010',21,true);
+if(demoScene==='detail')openCommunity('网盘交流社区','2,010',22,true);
 else if(demoScene==='group')openMentorGroup(true);
 else if(demoScene==='records')clOpenRecords(true);
 </script>
