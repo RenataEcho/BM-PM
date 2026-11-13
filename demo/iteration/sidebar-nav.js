@@ -16,10 +16,43 @@
         title: row.cells[0].textContent + ' · ' + row.cells[1].textContent };
     });
   }
-  var STATUS_BUCKET = { '待开始': '进行中', '开发中': '进行中', '已上线': '归档', '已暂停': '废纸篓' };
+  var STATUS_BUCKET = { '待开始': '待开始', '开发中': '进行中', '已上线': '归档', '已暂停': '废纸篓' };
+  var GROUP_ORDER = ['待开始', '进行中', '归档', '废纸篓'];
   var STATUS_KEY = 'bm-pm-fr-statuses';
+  var COLLAPSE_KEY = 'bm-pm-sidebar-groups';
+  var SHELL = 'framework-shell.html?v=20261113-fold';
   function currentStatuses() {
     try { return JSON.parse(localStorage.getItem(STATUS_KEY) || '{}'); } catch (e) { return {}; }
+  }
+  function readCollapsed() {
+    try { return JSON.parse(localStorage.getItem(COLLAPSE_KEY) || '{}'); } catch (e) { return {}; }
+  }
+  function collapsedFor(line) {
+    var map = readCollapsed();
+    return map[line] || {};
+  }
+  function setCollapsed(line, group, collapsed) {
+    var map = readCollapsed();
+    if (!map[line]) map[line] = {};
+    map[line][group] = collapsed;
+    try { localStorage.setItem(COLLAPSE_KEY, JSON.stringify(map)); } catch (e) {}
+  }
+  function shellHref(hash) {
+    return (document.getElementById('view-overview') ? '' : SHELL) + hash;
+  }
+  function ensureGroupStyle() {
+    if (document.getElementById('bm-nav-group-style')) return;
+    var style = document.createElement('style');
+    style.id = 'bm-nav-group-style';
+    style.textContent = [
+      '.nav-group{margin-top:6px}',
+      '.nav-group-label{display:flex;align-items:center;gap:6px;width:calc(100% - 16px);margin:2px 8px;padding:8px 8px 8px 10px;border:0;border-radius:8px;background:transparent;color:var(--text-muted,#9aa5b4);cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;line-height:1.4;text-align:left}',
+      '.nav-group-label:hover{background:rgba(99,102,241,0.06);color:var(--text-primary,#18222f)}',
+      '.nav-group-caret{width:0;height:0;flex:0 0 auto;border-style:solid;border-width:4px 0 4px 5px;border-color:transparent transparent transparent currentColor;transform-origin:2px 4px;transition:transform .18s}',
+      '.nav-group-label[aria-expanded="true"] .nav-group-caret{transform:rotate(90deg)}',
+      '.nav-group-items[hidden]{display:none !important}'
+    ].join('');
+    document.head.appendChild(style);
   }
 
   function parseHash() {
@@ -45,13 +78,16 @@
     return LINES[0].label;
   }
 
-  function render(container) {
+  function render(container, options) {
+    ensureGroupStyle();
     var state = parseHash();
     var html = [];
+    var focusedGroup = document.activeElement && document.activeElement.getAttribute && document.activeElement.closest('[data-iteration-sidebar]') === container
+      ? document.activeElement.getAttribute('data-nav-group') : '';
     ITEMS.forEach(function (item) {
       var current = state.view === item.id;
       html.push(
-        '<a class="nav-item' + (current ? ' active' : '') + '" href="' + (document.getElementById('view-overview') ? '' : 'framework-shell.html') + '#' + state.line + '/' + item.id + '"' +
+        '<a class="nav-item' + (current ? ' active' : '') + '" href="' + shellHref('#' + state.line + '/' + item.id) + '"' +
         (current ? ' aria-current="page"' : '') + '>' + item.label + '</a>'
       );
     });
@@ -63,19 +99,40 @@
       var group = STATUS_BUCKET[status] || '进行中';
       (groups[group] || (groups[group] = [])).push({ demo: demo, status: status });
     });
-    ['进行中', '归档', '废纸篓'].forEach(function (group) {
+    var folded = collapsedFor(state.line);
+    if (!(options && options.keepCollapsed)) {
+      GROUP_ORDER.forEach(function (group) {
+        if (!groups[group]) return;
+        if (groups[group].some(function (entry) { return entry.demo.id === state.view; }) && folded[group]) {
+          setCollapsed(state.line, group, false);
+          folded[group] = false;
+        }
+      });
+    }
+    GROUP_ORDER.forEach(function (group, index) {
       if (!groups[group]) return;
-      html.push('<div class="nav-group-label">' + group + '（' + groups[group].length + '）</div>');
+      var open = !folded[group];
+      var panelId = 'nav-group-' + state.line + '-' + index;
+      html.push('<div class="nav-group">');
+      html.push('<button type="button" class="nav-group-label" data-nav-group="' + group + '" aria-expanded="' + (open ? 'true' : 'false') + '" aria-controls="' + panelId + '"><span class="nav-group-caret" aria-hidden="true"></span><span>' + group + '（' + groups[group].length + '）</span></button>');
+      html.push('<div class="nav-group-items" id="' + panelId + '"' + (open ? '' : ' hidden') + '>');
       groups[group].forEach(function (entry) {
         var demo = entry.demo;
-        html.push('<a class="nav-item' + (state.view === demo.id ? ' active' : '') + '" href="#' + demo.line + '/' + demo.id + '"' + (state.view === demo.id ? ' aria-current="page"' : '') + '>' + demo.label + '</a>');
+        html.push('<a class="nav-item' + (state.view === demo.id ? ' active' : '') + '" href="' + shellHref('#' + demo.line + '/' + demo.id) + '"' + (state.view === demo.id ? ' aria-current="page"' : '') + '>' + demo.label + '</a>');
       });
+      html.push('</div></div>');
     });
     container.innerHTML = html.join('');
+    if (focusedGroup) {
+      var next = container.querySelector('[data-nav-group="' + focusedGroup + '"]');
+      if (next) next.focus();
+    }
   }
 
-  function init() {
-    document.querySelectorAll('[data-iteration-sidebar]').forEach(render);
+  function init(options) {
+    document.querySelectorAll('[data-iteration-sidebar]').forEach(function (container) {
+      render(container, options);
+    });
   }
 
   window.bmDemos = demos;
@@ -89,5 +146,13 @@
     init();
   }
 
-  window.addEventListener('hashchange', init);
+  window.addEventListener('hashchange', function () { init(); });
+  document.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-nav-group]');
+    if (!button || !button.closest('[data-iteration-sidebar]')) return;
+    event.preventDefault();
+    var state = parseHash();
+    setCollapsed(state.line, button.getAttribute('data-nav-group'), button.getAttribute('aria-expanded') === 'true');
+    init({ keepCollapsed: true });
+  });
 })();

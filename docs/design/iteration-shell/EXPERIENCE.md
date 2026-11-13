@@ -24,7 +24,7 @@ sources:
 
 | Surface | 路径 / 入口 | 模板 | 用途 |
 |---------|-------------|------|------|
-| Sprint 概览 | Sidebar → 迭代 | — | 当前 Sprint FR 清单；已上线归归档，已暂停归废纸篓 |
+| Sprint 概览 | Sidebar → 迭代 | — | 当前 Sprint FR 清单；待开始单独成组，开发中归进行中，已上线归归档，已暂停归废纸篓 |
 | Sprint 列表 | Sidebar → 迭代 | — | 小批次迭代列表 |
 | Sprint 详情 | Sprint 列表 → 详情 | — | 本批次需求包 + FR 版本 |
 | 业务 Demo 页 | Sidebar 模块分组下 | A / B / C | 可交互 Demo + 需求规则 |
