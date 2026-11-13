@@ -15,7 +15,7 @@ ROUTES = {
         ('home', 'records'),
     ),
     '/__local/coco003-rules': (
-        ROOT / '_bmad-output/youbao/fr-coco-003-团队数据优化/frontend-rules.json',
+        ROOT / '_bmad-output/youbao/fr-coco-003-团队项目数据分析/frontend-rules.json',
         ('entry', 'project-board', 'global-members', 'detail-reward', 'detail-orders', 'error'),
     ),
     '/__local/coco004-rules': (

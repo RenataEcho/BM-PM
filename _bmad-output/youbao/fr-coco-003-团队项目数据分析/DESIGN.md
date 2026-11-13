@@ -1,5 +1,5 @@
 ---
-name: FR-CoCo-003 团队数据优化
+name: FR-CoCo-003 团队项目数据分析
 description: 基于最终 V4.2 PRD 与用户 V4.2 Demo 快照的移动端视觉合同，覆盖项目、全项目成员、单项目双榜与汇总成员 Sheet，并保持手机画布与迭代外壳隔离。
 status: final
 updated: 2026-11-02
