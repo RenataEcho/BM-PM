@@ -74,7 +74,7 @@
       </aside>
       <div class="mockup-board">
         <div class="board-caption"><div><b>团长数据优化 · v1</b><p>414px 逻辑宽度。手机内容在画面内滚动，示例账本不作为对账依据。</p></div><span>右豹主业务</span></div>
-        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-005 团长数据手机演示" src="fr-coco-005-phone.html?v=20261113-scenes2"></iframe></div></div>
+        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-005 团长数据手机演示" src="fr-coco-005-phone.html?v=20261113-reward-entry"></iframe></div></div>
       </div>
       <aside class="context-rules" aria-label="当前场景需求" aria-live="polite">
         <div class="context-rules-head">
@@ -175,7 +175,7 @@
     const sceneButtons = [...document.querySelectorAll('[data-screen]')];
     const sceneTitles = {data:'数据首页', team:'团队奖励', memberList:'团队成员', serviceDetail:'服务带动成员', orders:'成员奖励详情'};
     let sceneRules = {
-      data:[['入口',['奖励数据下单独放「服务带动奖励」，只展示，不响应点击。','成员数据下单独放「服务带动成员」。','「成员数据」旁有说明。点击打开浮层，读取后台 team_member_rule。','项目排行榜、奖励日历、身份权益只展示，不响应点击。','服务带动奖励已计入团队奖励。']]],
+      data:[['入口',['奖励数据下的「服务带动奖励」可下钻，进入服务带动成员。','成员数据下单独放「服务带动成员」。','「成员数据」旁有说明。点击打开浮层，读取后台 team_member_rule。','项目排行榜、奖励日历、身份权益只展示，不响应点击。','服务带动奖励已计入团队奖励。']]],
       team:[['团队奖励',['按成员查看各项目等级的累计奖励和今日新增。','不提供「全部奖励来源」筛选。','点成员或「奖励详情」进入共用详情。']]],
       memberList:[['四项统计',['TA的团队人数：该成员自己团队的成员总数。','团队总流水：该成员自己团队的总流水，包含个人。','TA的个人流水：该成员自己的项目收益。','TA贡献的团队奖励：该成员给团长贡献的团队奖励。']]],
       serviceDetail:[['服务带动成员',['样式和数据与团队成员相同。','增加服务承接社群。','服务带动奖励金额只展示，不进入明细。','服务带动不改变团队归属。']]],
