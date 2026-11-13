@@ -22,6 +22,10 @@ ROUTES = {
         ROOT / '_bmad-output/mentor/fr-coco-004-机构社群优化/frontend-rules.json',
         ('user',),
     ),
+    '/__local/coco005-rules': (
+        ROOT / '_bmad-output/youbao/fr-coco-005-团长数据优化/frontend-rules.json',
+        ('data', 'team', 'memberList', 'serviceDetail', 'orders'),
+    ),
 }
 
 class Handler(SimpleHTTPRequestHandler):

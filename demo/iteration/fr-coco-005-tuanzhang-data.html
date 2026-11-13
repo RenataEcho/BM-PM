@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FR-CoCo-005 · 团长数据优化 · v1 当前</title>
+  <link rel="stylesheet" href="fr-003-fusion-task.css">
+  <style>
+    [hidden]{display:none!important}
+    .page-header{align-items:flex-start}.page-header>div{min-width:0}.page-desc{max-width:760px}
+    .view#view-fe{display:grid;grid-template-columns:minmax(280px,460px) minmax(414px,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"scenes scenes" "rules demo";gap:12px 16px;height:calc(100vh - 200px);min-height:640px}
+    .scene-panel{grid-area:scenes;min-height:0!important;overflow:visible!important;border:0!important;border-bottom:1px solid var(--border)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+    .scene-panel h2,.scene-help{display:none}.scene-list{display:flex;align-items:flex-end;gap:24px;overflow-x:auto;padding:0 16px}
+    .scene-btn{width:auto!important;min-height:42px!important;padding:10px 0!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:transparent!important;color:var(--text-secondary)!important;white-space:nowrap}
+    .scene-btn strong{font-size:13px}.scene-btn span{display:none}.scene-btn.active{border-bottom-color:var(--primary)!important;color:var(--primary)!important}
+    .scene-btn:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+    .mockup-board{grid-area:demo;min-height:0}.board-caption{align-items:flex-start}.board-caption span{font-size:11px;color:var(--text-muted)}
+    .board-scroll{padding:14px!important;align-items:flex-start;overflow:auto}.device.phone{width:432px;height:auto;min-height:0;padding:8px;border-radius:30px;flex:none}
+    .device.phone iframe{display:block;width:414px;height:780px;border:0;border-radius:23px;background:#f6f4fb}
+    .context-rules{grid-area:rules;min-width:0;overflow:auto;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.78);box-shadow:0 8px 32px rgba(30,40,80,.06)}
+    .context-rules-head{position:sticky;top:0;z-index:1;padding:14px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--border)}
+    .context-rules-head span{display:block;color:var(--primary);font-size:11px;font-weight:700}.context-rules-head h2{margin:4px 0 10px;font-size:16px}
+    .context-rule-actions{display:flex;flex-wrap:wrap;gap:7px}.context-rule-actions .btn{height:32px;padding:0 11px;font-size:12px}
+    .rule-edit-status{margin:8px 0 0;color:var(--text-secondary);font-size:11px;line-height:1.55}
+    .rule-editor{width:100%;min-height:430px;resize:vertical;border:1px solid var(--border);border-radius:8px;padding:11px;background:#fff;color:var(--text-primary);font:12px/1.75 inherit}
+    .context-rules-body{padding:4px 14px 16px}.context-rule-block{padding:12px 0;border-bottom:1px solid var(--border)}.context-rule-block:last-child{border-bottom:0}
+    .context-rule-block h3{margin:0 0 7px;font-size:12px;color:var(--text-primary)}.context-rule-block ul{margin:0;padding-left:18px;color:var(--text-secondary);font-size:12px;line-height:1.6}.context-rule-block li+li{margin-top:5px}
+    .view#view-flow{height:calc(100vh - 200px);min-height:560px}.flow-page{padding:0;max-height:72vh}.flow-svg-wrap{max-height:calc(72vh - 96px);overflow:auto}
+    .flow-edges polyline{stroke:#94a3b8;stroke-width:1.5;fill:none}
+    .rule-panel{display:block}.rule-content p{margin:0 0 8px}.rule-content strong{color:var(--text-primary)}
+    .drawer-overlay.open{opacity:1;pointer-events:auto}.drawer.open{transform:translateX(0)}
+    .embedded .topnav,.embedded .sidebar{display:none}.embedded .main{top:0;left:0}.embedded .view#view-fe,.embedded .view#view-flow{height:calc(100vh - 146px)}
+    .page-header-actions{display:flex;gap:8px;flex-shrink:0}
+    .tab-review-exit{display:none;position:fixed;top:16px;right:16px;z-index:720}
+    html.is-tab-review .tab-review-exit{display:inline-flex}
+    html.is-tab-review .view:not([hidden]){position:fixed;inset:0;z-index:640;height:100vh;min-height:0;margin:0;padding:64px 16px 16px;background:#f0f4f8;box-sizing:border-box;overflow:hidden}
+    html.is-tab-review .view#view-fe:not([hidden]),html.is-tab-review .view#view-flow:not([hidden]){height:100vh;min-height:0}
+    html.is-tab-review .view#view-flow:not([hidden]){overflow:auto}
+    html.is-tab-review .view#view-flow .flow-page,html.is-tab-review .view#view-flow .flow-svg-wrap{max-height:none}
+    html.is-tab-review .drawer-overlay{z-index:760}
+    html.is-tab-review .drawer{z-index:761}
+    @media(max-width:1100px){.view#view-fe{grid-template-columns:minmax(220px,1fr) minmax(320px,1fr);overflow:auto}}
+    @media(max-width:760px){.view#view-fe{grid-template-columns:1fr;grid-template-rows:auto auto minmax(780px,1fr);grid-template-areas:"scenes" "rules" "demo";height:auto}.scene-list{gap:18px;padding:0 4px}.context-rules{max-height:360px}.mockup-board{min-height:780px}}
+  </style>
+</head>
+<body>
+  <header class="topnav" id="topnav"><a href="framework-shell.html#youbao/overview" class="brand-text">BM-PM · 迭代需求</a><span class="business-line">右豹主业务</span><span class="topnote">产品交互演示</span></header>
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><b>右豹主业务</b><p class="brand-sub">需求与设计</p></div><nav class="sidebar-scroll" aria-label="项目导航"><a class="nav-item" href="framework-shell.html#youbao/overview">概览</a><a class="nav-item" href="framework-shell.html#youbao/components">组件规范</a></nav><div class="sidebar-foot">FR-CoCo-005<br>团长数据优化 · v1</div></aside>
+
+  <main class="main" id="pageMain">
+    <nav class="breadcrumb"><a href="framework-shell.html#youbao/overview">右豹主业务</a> / 团长数据优化</nav>
+    <header class="page-header">
+      <div><h1>FR-CoCo-005 · 团长数据优化 · v1 当前</h1><p class="page-desc">团长在数据页分别进入服务带动奖励和服务带动成员，再从共用奖励详情看筛选、项目贡献和规则说明。手机画面按给定 Demo 还原。</p></div>
+      <div class="page-header-actions">
+        <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
+        <button class="btn btn-rule" id="rulesOpen" type="button" aria-expanded="false" aria-controls="rulesDrawer">需求规则</button>
+      </div>
+    </header>
+    <nav class="page-tabs" role="tablist" aria-label="需求视图">
+      <button class="btn btn-ghost active" id="tab-fe" type="button" role="tab" aria-selected="true" aria-controls="view-fe" data-tab="fe">前端交互</button>
+      <button class="btn btn-ghost" id="tab-flow" type="button" role="tab" aria-selected="false" aria-controls="view-flow" data-tab="flow">业务流程</button>
+    </nav>
+
+    <section id="view-fe" class="view" role="tabpanel" aria-labelledby="tab-fe">
+      <aside class="scene-panel" aria-label="团长数据场景">
+        <h2>场景演示</h2>
+        <div class="scene-list" id="scenes" role="tablist" aria-label="需求场景">
+          <button class="scene-btn active" type="button" role="tab" aria-selected="true" data-screen="data"><strong>数据首页</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="team"><strong>团队奖励</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="memberList"><strong>团队成员</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="serviceDetail"><strong>服务带动成员</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="orders"><strong>成员奖励详情</strong></button>
+        </div>
+      </aside>
+      <div class="mockup-board">
+        <div class="board-caption"><div><b>团长数据优化 · v1</b><p>414px 逻辑宽度。手机内容在画面内滚动，示例账本不作为对账依据。</p></div><span>右豹主业务</span></div>
+        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-005 团长数据手机演示" src="fr-coco-005-phone.html?v=20261113-scenes2"></iframe></div></div>
+      </div>
+      <aside class="context-rules" aria-label="当前场景需求" aria-live="polite">
+        <div class="context-rules-head">
+          <span>当前场景需求</span>
+          <h2 id="contextTitle">数据首页 · 需求规则</h2>
+          <div class="context-rule-actions">
+            <button class="btn btn-ghost" id="editRules" type="button">编辑规则</button>
+            <button class="btn btn-ghost" id="copyDemoCode" type="button">复制 Demo 代码</button>
+            <button class="btn btn-rule" id="contextOpenRules" type="button">查看完整规则</button>
+            <button class="btn btn-primary" id="saveRules" type="button" hidden>保存到项目</button>
+            <button class="btn btn-ghost" id="cancelRules" type="button" hidden>取消</button>
+          </div>
+          <p class="rule-edit-status" id="copyDemoStatus" role="status"></p>
+          <p class="rule-edit-status" id="ruleEditStatus" role="status"></p>
+        </div>
+        <textarea class="rule-editor" id="ruleEditor" aria-label="编辑当前场景需求规则" hidden></textarea>
+        <div class="context-rules-body" id="contextRules"></div>
+      </aside>
+    </section>
+
+    <section id="view-flow" class="view" role="tabpanel" aria-labelledby="tab-flow" hidden>
+      <div class="flow-page">
+        <p class="flow-page-intro">团长从数据页进入奖励或成员。服务带动是独立入口。成员奖励详情全员共用，被服务带动时才显示带动金额。</p>
+        <div class="flow-svg-wrap">
+          <svg width="1080" height="760" viewBox="0 0 1080 760" role="img" aria-labelledby="flowTitle flowDesc" xmlns="http://www.w3.org/2000/svg">
+            <title id="flowTitle">团长数据优化业务流程</title>
+            <desc id="flowDesc">团长打开数据页后，选择普通团队入口或服务带动入口，再进入共用的成员奖励详情。被服务带动的成员显示带动奖励，并可筛选、查看项目分析和规则说明。</desc>
+            <defs><marker id="flow-arrow-coco005" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8"/></marker></defs>
+            <g class="flow-edges" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#flow-arrow-coco005)">
+              <polyline points="540,68 540,96"/>
+              <polyline points="540,146 540,168"/>
+              <polyline points="440,214 320,214"/>
+              <polyline points="640,214 760,214"/>
+              <polyline points="180,238 180,325 410,325"/>
+              <polyline points="900,238 900,325 670,325"/>
+              <polyline points="540,370 540,392"/>
+              <polyline points="440,438 320,438"/>
+              <polyline points="640,438 760,438"/>
+              <polyline points="180,462 180,545 410,545"/>
+              <polyline points="900,462 900,545 670,545"/>
+              <polyline points="540,570 540,596"/>
+              <polyline points="540,644 540,668"/>
+            </g>
+            <g class="flow-nodes" font-family="Inter, PingFang SC, sans-serif" text-anchor="middle" fill="#18222f">
+              <rect x="410" y="20" width="260" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="540" y="49" font-size="12">前端：打开团长数据页</text>
+              <rect x="410" y="96" width="260" height="50" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="540" y="117" font-size="12"><tspan x="540">后端：汇总团队奖励、成员</tspan><tspan x="540" dy="16">和服务带动</tspan></text>
+              <polygon points="540,168 640,214 540,260 440,214" fill="#fffbeb" stroke="#d97706"/><text x="540" y="210" font-size="11"><tspan x="540">点的是服务</tspan><tspan x="540" dy="14">带动入口？</tspan></text>
+              <text x="360" y="204" font-size="11" fill="#dc2626">否</text>
+              <rect x="40" y="190" width="280" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="180" y="219" font-size="12">团队奖励或团队成员</text>
+              <text x="700" y="204" font-size="11" fill="#16a34a">是</text>
+              <rect x="760" y="190" width="280" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="900" y="219" font-size="12">服务带动成员列表</text>
+              <rect x="410" y="320" width="260" height="50" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="540" y="341" font-size="12"><tspan x="540">点击成员</tspan><tspan x="540" dy="16">进入共用奖励详情</tspan></text>
+              <polygon points="540,392 640,438 540,484 440,438" fill="#fffbeb" stroke="#d97706"/><text x="540" y="434" font-size="11"><tspan x="540">该成员被</tspan><tspan x="540" dy="14">服务带动？</tspan></text>
+              <text x="360" y="428" font-size="11" fill="#dc2626">否</text>
+              <rect x="40" y="414" width="280" height="48" rx="8" fill="#f1f5f9" stroke="#94a3b8"/><text x="180" y="443" font-size="12">详情不单列带动金额</text>
+              <text x="700" y="428" font-size="11" fill="#16a34a">是</text>
+              <rect x="760" y="414" width="280" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="900" y="443" font-size="12">显示服务带动奖励</text>
+              <rect x="410" y="520" width="260" height="50" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="540" y="541" font-size="12"><tspan x="540">筛选常规团队奖励</tspan><tspan x="540" dy="16">或服务带动奖励</tspan></text>
+              <rect x="410" y="596" width="260" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="540" y="625" font-size="12">前端：打开项目分析</text>
+              <rect x="390" y="668" width="300" height="50" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="540" y="689" font-size="12"><tspan x="540">后端：返回规则文案</tspan><tspan x="540" dy="16">team_reward_rule</tspan></text>
+            </g>
+          </svg>
+        </div>
+        <div class="flow-legend"><span><i style="background:#eff6ff;border:1px solid #2563eb"></i>前端 / 操作</span><span><i style="background:#f0fdf4;border:1px solid #16a34a"></i>后端 / 数据</span><span><i style="background:#fffbeb;border:1px solid #d97706"></i>校验 / 分支</span><span><i style="background:#f1f5f9;border:1px solid #94a3b8"></i>结果</span></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="btn btn-ghost tab-review-exit" id="exitTabReview" type="button">退出全屏</button>
+  <div class="drawer-overlay" id="ruleMask" hidden></div>
+  <aside class="drawer rule" id="rulesDrawer" hidden role="dialog" aria-modal="true" aria-labelledby="ruleTitle">
+    <div class="drawer-header"><h2 id="ruleTitle">FR-CoCo-005 · v1 需求规则</h2><button class="drawer-close" id="rulesClose" type="button" aria-label="关闭需求规则">×</button></div>
+    <div class="rule-tab-bar" role="tablist" aria-label="规则类型">
+      <button class="active" type="button" role="tab" id="ruleTabFe" aria-selected="true">前端需求</button>
+      <button type="button" role="tab" id="ruleTabAdmin" aria-selected="false">后台需求</button>
+    </div>
+    <div class="drawer-body" style="padding:0">
+      <section class="rule-panel" id="rulePanelFe" aria-label="前端需求规则">
+        <div id="fullSceneRules"></div>
+        <div class="rule-section"><h3>1 业务目标</h3><div class="rule-content"><p>团长分清团队奖励和成员数据里的服务带动，并从共用详情看到筛选、项目贡献和规则说明。</p></div></div>
+        <div class="rule-section"><h3>2 页面与入口</h3><div class="rule-content"><p>数据页奖励区下是「服务带动奖励」，成员区下是「服务带动成员」。团队成员看四项：TA的团队人数、团队总流水、TA的个人流水、TA贡献的团队奖励。服务带动成员增加服务承接社群和服务带动奖励。</p></div></div>
+        <div class="rule-section"><h3>3 交互规则</h3><div class="rule-content"><p>所有成员共用一个奖励详情。被服务带动时显示服务带动奖励金额。筛选项包含「常规团队奖励」「服务带动奖励」。项目分析用浮层，导师托管的项目显示服务带动，并带今日贡献奖励、持续贡献奖励、近期无贡献。规则说明用浮层。</p></div></div>
+        <div class="rule-section"><h3>4 边界规则</h3><div class="rule-content"><p>服务带动不改变团队归属。示例金额不是对账依据。点击社群只说明进入未加入的社群页，本 Demo 不打开社群详情。历史收益不包含历史账单。</p></div></div>
+        <div class="rule-section"><h3>5 业务流程</h3><div class="rule-content"><p>见本页业务流程。</p></div></div>
+      </section>
+      <section class="rule-panel" id="rulePanelAdmin" aria-label="后台需求规则" hidden>
+        <div class="rule-section"><h3>1 业务目标</h3><div class="rule-content"><p>后台提供奖励详情里的规则文案。本 Demo 不做可点的配置页。</p></div></div>
+        <div class="rule-section"><h3>2 数据表与字段</h3><div class="rule-content"><p>规则字段标识 <strong>team_reward_rule</strong>。奖励详情的「规则说明」读取这段文案。</p><p>规则字段标识 <strong>team_member_rule</strong>。数据首页「成员数据」旁的说明读取这段文案。</p></div></div>
+        <div class="rule-section"><h3>3 列表与筛选</h3><div class="rule-content"><p>本增量没有后台列表。筛选发生在团长的奖励详情：全部、常规团队奖励、服务带动奖励。</p></div></div>
+        <div class="rule-section"><h3>4 边界规则</h3><div class="rule-content"><p>文案未配置时，详情仍可打开说明浮层，并标明内容来自后台配置。Demo 使用固定示例文案。</p></div></div>
+      </section>
+    </div>
+  </aside>
+
+  <script>
+    if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embedded');
+    const phone = document.getElementById('phone');
+    const sceneButtons = [...document.querySelectorAll('[data-screen]')];
+    const sceneTitles = {data:'数据首页', team:'团队奖励', memberList:'团队成员', serviceDetail:'服务带动成员', orders:'成员奖励详情'};
+    let sceneRules = {
+      data:[['入口',['奖励数据下单独放「服务带动奖励」，只展示，不响应点击。','成员数据下单独放「服务带动成员」。','「成员数据」旁有说明。点击打开浮层，读取后台 team_member_rule。','项目排行榜、奖励日历、身份权益只展示，不响应点击。','服务带动奖励已计入团队奖励。']]],
+      team:[['团队奖励',['按成员查看各项目等级的累计奖励和今日新增。','不提供「全部奖励来源」筛选。','点成员或「奖励详情」进入共用详情。']]],
+      memberList:[['四项统计',['TA的团队人数：该成员自己团队的成员总数。','团队总流水：该成员自己团队的总流水，包含个人。','TA的个人流水：该成员自己的项目收益。','TA贡献的团队奖励：该成员给团长贡献的团队奖励。']]],
+      serviceDetail:[['服务带动成员',['样式和数据与团队成员相同。','增加服务承接社群。','服务带动奖励金额只展示，不进入明细。','服务带动不改变团队归属。']]],
+      orders:[['共用详情',['示例成员为棠宁，ID 3930131。','被服务带动时显示服务带动奖励金额。','可筛常规团队奖励、服务带动奖励。','项目分析用浮层。导师托管的项目显示服务带动。','规则说明读取后台 team_reward_rule。']]]
+    };
+    let currentScreen = 'data';
+    let editingRules = false;
+    let ruleBase = null;
+    function escapeHtml(text){return text.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));}
+    function ruleMarkup(groups){return groups.map(group => `<section class="context-rule-block"><h3>${escapeHtml(group[0])}</h3><ul>${group[1].map(line => `<li>${escapeHtml(line)}</li>`).join('')}</ul></section>`).join('');}
+    function renderContext(screen){
+      document.getElementById('contextTitle').textContent = sceneTitles[screen] + ' · 需求规则';
+      document.getElementById('contextRules').innerHTML = ruleMarkup(sceneRules[screen]);
+    }
+    function renderFullRules(){
+      document.getElementById('fullSceneRules').innerHTML = Object.keys(sceneTitles).map(screen => `<section class="rule-section"><h2 style="font-size:15px;margin:0 0 8px">${escapeHtml(sceneTitles[screen])}</h2>${ruleMarkup(sceneRules[screen])}</section>`).join('');
+    }
+    function postScreen(screen){
+      if (!phone.contentWindow) return;
+      phone.contentWindow.postMessage({type:'coco005', screen:screen}, '*');
+    }
+    function selectScene(button){
+      if (editingRules) return;
+      currentScreen = button.dataset.screen;
+      sceneButtons.forEach(item => {const selected = item === button; item.classList.toggle('active', selected); item.setAttribute('aria-selected', String(selected));});
+      renderContext(currentScreen);
+      postScreen(currentScreen);
+    }
+    sceneButtons.forEach(button => button.addEventListener('click', () => selectScene(button)));
+    phone.addEventListener('load', () => postScreen(currentScreen));
+    renderContext('data');
+    renderFullRules();
+    const ruleEditor = document.getElementById('ruleEditor');
+    const editStatus = document.getElementById('ruleEditStatus');
+    const editRulesButton = document.getElementById('editRules');
+    const saveRulesButton = document.getElementById('saveRules');
+    const cancelRulesButton = document.getElementById('cancelRules');
+    const copyDemoButton = document.getElementById('copyDemoCode');
+    const contextOpenRulesButton = document.getElementById('contextOpenRules');
+    function editingState(active){
+      editingRules = active;
+      ruleEditor.hidden = !active;
+      document.getElementById('contextRules').hidden = active;
+      editRulesButton.hidden = active;
+      copyDemoButton.hidden = active;
+      contextOpenRulesButton.hidden = active;
+      saveRulesButton.hidden = !active;
+      cancelRulesButton.hidden = !active;
+      sceneButtons.forEach(button => { button.disabled = active; });
+    }
+    editRulesButton.addEventListener('click', () => {
+      ruleBase = JSON.parse(JSON.stringify(sceneRules[currentScreen]));
+      ruleEditor.value = ruleBase.map(group => `## ${group[0]}\n${group[1].map(line => `- ${line}`).join('\n')}`).join('\n\n');
+      editingState(true);
+      editStatus.textContent = '每个分区以 ## 标题开始，每条规则以 - 开始。保存将写入本需求 frontend-rules.json。';
+      ruleEditor.focus();
+    });
+    cancelRulesButton.addEventListener('click', () => {
+      editingState(false);
+      renderContext(currentScreen);
+      editStatus.textContent = '已取消编辑';
+    });
+    saveRulesButton.addEventListener('click', async function () {
+      const groups = [];
+      try {
+        ruleEditor.value.split('\n').forEach(raw => {
+          const line = raw.trim();
+          if (!line) return;
+          if (line.startsWith('## ')) groups.push([line.slice(3).trim(), []]);
+          else if (line.startsWith('- ') && groups.length) groups.at(-1)[1].push(line.slice(2).trim());
+          else throw Error('请使用 ## 分区标题和 - 规则条目');
+        });
+        if (!groups.length || groups.some(group => !group[0] || !group[1].length)) throw Error('每个分区需要标题和至少一条规则');
+        this.disabled = true;
+        const response = await fetch('/__local/coco005-rules', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({view:currentScreen, groups, base:ruleBase})});
+        if (!response.ok) {
+          const error = await response.json().catch(() => ({error:'保存服务不可用，请用 python3 scripts/preview_server.py 启动预览'}));
+          throw Error(error.error);
+        }
+        sceneRules[currentScreen] = groups;
+        renderFullRules();
+        editingState(false);
+        renderContext(currentScreen);
+        editStatus.textContent = '保存成功，已写入本需求 frontend-rules.json';
+      } catch (error) {
+        editStatus.textContent = error.message;
+      } finally {
+        this.disabled = false;
+      }
+    });
+    copyDemoButton.addEventListener('click', async () => {
+      const status = document.getElementById('copyDemoStatus');
+      try {
+        const response = await fetch('fr-coco-005-phone.html');
+        if (!response.ok) throw Error();
+        await navigator.clipboard.writeText(await response.text());
+        status.textContent = '已复制当前 Demo HTML';
+      } catch (error) {
+        status.textContent = '复制失败，请直接打开 Demo 文件复制。';
+      }
+    });
+    fetch('/__local/coco005-rules').then(response => { if (!response.ok) throw Error(); return response.json(); }).then(data => {
+      if (editingRules) return;
+      sceneRules = data;
+      renderContext(currentScreen);
+      renderFullRules();
+      editStatus.textContent = '规则已从项目文件加载';
+    }).catch(() => { editStatus.textContent = '当前为只读预览；保存请使用 python3 scripts/preview_server.py 启动本地服务。'; });
+
+    const tabButtons = [...document.querySelectorAll('[data-tab]')];
+    function showTab(name, updateUrl){
+      if (name !== 'flow') name = 'fe';
+      tabButtons.forEach(button => {const selected = button.dataset.tab === name; button.classList.toggle('active', selected); button.setAttribute('aria-selected', String(selected)); document.getElementById('view-' + button.dataset.tab).hidden = !selected;});
+      if (updateUrl){const url = new URL(location.href); url.searchParams.set('tab', name); history.replaceState(null, '', url);}
+    }
+    tabButtons.forEach(button => button.addEventListener('click', () => showTab(button.dataset.tab, true)));
+    showTab(new URLSearchParams(location.search).get('tab'), false);
+
+    const mask = document.getElementById('ruleMask'), drawer = document.getElementById('rulesDrawer'), openButton = document.getElementById('rulesOpen'), closeButton = document.getElementById('rulesClose');
+    const ruleTabFe = document.getElementById('ruleTabFe'), ruleTabAdmin = document.getElementById('ruleTabAdmin');
+    function showRuleTab(which){
+      const fe = which === 'fe';
+      document.getElementById('rulePanelFe').hidden = !fe;
+      document.getElementById('rulePanelAdmin').hidden = fe;
+      ruleTabFe.classList.toggle('active', fe); ruleTabAdmin.classList.toggle('active', !fe);
+      ruleTabFe.setAttribute('aria-selected', String(fe)); ruleTabAdmin.setAttribute('aria-selected', String(!fe));
+    }
+    ruleTabFe.addEventListener('click', () => showRuleTab('fe'));
+    ruleTabAdmin.addEventListener('click', () => showRuleTab('admin'));
+    let lastFocus = null;
+    function setBackgroundInert(value){[document.getElementById('topnav'), document.getElementById('sidebar'), document.getElementById('pageMain')].forEach(node => {if (node) node.inert = value;});}
+    function openRules(){lastFocus = document.activeElement; showRuleTab('fe'); mask.hidden = false; drawer.hidden = false; requestAnimationFrame(() => {mask.classList.add('open'); drawer.classList.add('open');}); openButton.classList.add('active'); openButton.setAttribute('aria-expanded', 'true'); setBackgroundInert(true); closeButton.focus();}
+    function closeRules(){mask.classList.remove('open'); drawer.classList.remove('open'); mask.hidden = true; drawer.hidden = true; openButton.classList.remove('active'); openButton.setAttribute('aria-expanded', 'false'); setBackgroundInert(false); if (lastFocus && lastFocus.focus) lastFocus.focus();}
+    contextOpenRulesButton.addEventListener('click', openRules);
+    openButton.addEventListener('click', () => drawer.hidden ? openRules() : closeRules());
+    closeButton.addEventListener('click', closeRules);
+    mask.addEventListener('click', closeRules);
+    const openTabReviewButton = document.getElementById('openTabReview'), exitTabReviewButton = document.getElementById('exitTabReview');
+    function setShellReview(on){try{if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle('fr-review', on);}catch (error){}}
+    function openTabReview(){if (!drawer.hidden) closeRules(); document.documentElement.classList.add('is-tab-review'); setShellReview(true); exitTabReviewButton.focus();}
+    function closeTabReview(){if (!document.documentElement.classList.contains('is-tab-review')) return; document.documentElement.classList.remove('is-tab-review'); setShellReview(false); openTabReviewButton.focus();}
+    openTabReviewButton.addEventListener('click', openTabReview);
+    exitTabReviewButton.addEventListener('click', closeTabReview);
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' && event.key !== 'Tab') return;
+      if (event.key === 'Escape' && drawer.hidden && document.documentElement.classList.contains('is-tab-review')){event.preventDefault(); closeTabReview(); return;}
+      if (drawer.hidden) return;
+      if (event.key === 'Escape'){event.preventDefault(); closeRules(); return;}
+      const focusable = [...drawer.querySelectorAll('button:not([disabled]),[href],input:not([disabled])')];
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first){event.preventDefault(); last.focus();}
+      else if (!event.shiftKey && document.activeElement === last){event.preventDefault(); first.focus();}
+    });
+  </script>
+</body>
+</html>
