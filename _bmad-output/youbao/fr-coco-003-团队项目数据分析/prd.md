@@ -1,17 +1,17 @@
 ---
-title: 团队数据优化
+title: 团队项目数据分析
 iteration_id: FR-CoCo-003
 business_line: 右豹主业务
 status: final
 created: 2026-11-02
-updated: 2026-11-02
+updated: 2026-11-13
 ---
 
-# PRD：团队数据优化
+# PRD：团队项目数据分析
 
 ## 0. Document Purpose
 
-本文件定义右豹主业务增量 `FR-CoCo-003`「团队数据优化」的产品范围、信息架构、统计口径和验收结果，供产品、UX、研发与测试共同使用。正文中的 `FR-1`～`FR-11` 是本增量内全局稳定的功能需求编号。
+本文件定义右豹主业务增量 `FR-CoCo-003`「团队项目数据分析」的产品范围、信息架构、统计口径和验收结果，供产品、UX、研发与测试共同使用。正文中的 `FR-1`～`FR-11` 是本增量内全局稳定的功能需求编号。
 
 本版最新且完整的需求真源是仓库快照 `references/team_project_member_data_mobile_h5_v4_2_with_requirements.html`，SHA-256 为 `f3ae9a24e103845c3b0acb9e959f66707cada5a4aec4d43493d1c064f467bae2`。其中内嵌的「团队项目数据 · 完整需求规则 V4.2」是明确产品规则；可见页面用于补充信息架构、字段和交互结果，但具体 Mock 数据、造数脚本、样式及代码实现不自动构成需求。
 

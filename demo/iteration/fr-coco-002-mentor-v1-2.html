@@ -101,15 +101,22 @@
     .page-tabs button.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
     .page-view { display: none; min-height: 0; flex: 1; }
     .page-view.active { display: flex; flex-direction: column; }
+    .flow-page { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .flow-page-intro { padding: 12px 14px 0; font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+    .flow-svg-wrap { overflow: auto; max-height: 72vh; padding: 8px; }
+    .flow-svg-wrap svg { display: block; }
+    .flow-edges polyline { fill: none; stroke: #94a3b8; stroke-width: 1.5; }
+    .flow-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 4px 14px 14px; font-size: 11px; color: var(--text-muted); }
+    .flow-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: -2px; }
     #view-fe.active { height: calc(100vh - 188px); min-height: 560px; }
     .demo-layout { flex:1;min-height:0;display:grid;grid-template-columns:minmax(280px,540px) minmax(375px,1fr);gap:16px; }
     .context-rules {min-height:0;overflow:auto;padding:20px;background:var(--surface-glass);border:1px solid rgba(255,255,255,.55);border-radius:var(--radius-lg);box-shadow:var(--shadow)}
     .context-rules h2 {font-size:16px;margin-bottom:6px}
     .context-rules .intro {font-size:12px;line-height:1.6;color:var(--text-secondary);margin-bottom:20px}
     .context-rules .rule-section h3 {font-size:13px}
-    .context-rules .rule-content {font-size:12px}
-    .perspective-tabs{display:flex;gap:24px;flex-shrink:0;padding:0 16px;margin-bottom:12px;border-bottom:1px solid var(--border)}
-    .perspective-tabs button{border:0;border-bottom:2px solid transparent;background:none;padding:10px 0;color:var(--text-secondary);font:inherit;font-size:13px;cursor:pointer}.perspective-tabs button.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+    .context-rules .rule-content {font-size:12px}.context-rules .rule-content b{font-weight:750;color:var(--text-primary)}
+    .perspective-tabs{display:flex;gap:20px;flex-shrink:0;padding:0 16px;margin-bottom:12px;border-bottom:1px solid var(--border);overflow:auto}
+    .perspective-tabs button{flex:none;white-space:nowrap;border:0;border-bottom:2px solid transparent;background:none;padding:10px 0;color:var(--text-secondary);font:inherit;font-size:13px;cursor:pointer}.perspective-tabs button.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
     @media(max-width:1000px){.demo-layout{grid-template-columns:minmax(220px,1fr) minmax(375px,1fr);overflow:auto}}
     .mockup-board {
       background: var(--surface-glass); border: 1px solid rgba(255,255,255,0.55);
@@ -184,6 +191,9 @@
       position: fixed; inset: 0; z-index: 640; height: 100vh; min-height: 0; margin: 0;
       padding: 64px 16px 16px; background: #f0f4f8; box-sizing: border-box; overflow: hidden;
     }
+    html.is-tab-review #view-flow.active { overflow: auto; }
+    html.is-tab-review #view-flow .flow-page,
+    html.is-tab-review #view-flow .flow-svg-wrap { max-height: none; }
     html.is-tab-review .drawer-overlay { z-index: 760; }
     html.is-tab-review .drawer { z-index: 761; }
   </style>
@@ -198,9 +208,9 @@
       </div>
     </div>
     <nav class="pnav" aria-label="业务线">
-      <a class="pnav-item" href="framework-shell.html#youbao/overview">右豹主业务</a>
-      <a class="pnav-item active" href="framework-shell.html#mentor/overview">导师商务</a>
-      <a class="pnav-item" href="framework-shell.html#enterprise/overview">企业号</a>
+      <a class="pnav-item" href="framework-shell.html?v=20261113-members#youbao/overview">右豹主业务</a>
+      <a class="pnav-item active" href="framework-shell.html?v=20261113-members#mentor/overview">导师商务</a>
+      <a class="pnav-item" href="framework-shell.html?v=20261113-members#enterprise/overview">企业号</a>
     </nav>
   </header>
   <aside class="sidebar">
@@ -208,11 +218,11 @@
     <div class="sidebar-foot">先写明业务线，再做设计。<br />已上线进归档，已暂停进废纸篓。</div>
   </aside>
   <main class="main">
-    <nav class="breadcrumb"><a href="framework-shell.html#mentor/overview">导师商务</a> / 加入导师团优化</nav>
+    <nav class="breadcrumb"><a href="framework-shell.html?v=20261113-members#mentor/overview">导师商务</a> / 加入导师团优化</nav>
     <header class="page-header">
       <div>
         <h1>FR-CoCo-002 · 加入导师团优化 · v2 当前</h1>
-        <p class="page-desc">前端交互：从「我的社群」列表进入社群详情、所属导师团及导师团主页；导师视角保留个人信息配置。</p>
+        <p class="page-desc">前端交互：「我的社群」列表直接展示全部社群，不提供搜索、筛选和审核信息。审核进度在申请记录查看。换绑在社群详情底部发起，对接社群打开二维码。导师团主页保持原结构。导师视角保留个人信息配置。</p>
       </div>
       <div class="page-header-actions">
         <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
@@ -222,16 +232,20 @@
     <div class="page-tabs" role="tablist">
       <button type="button" class="active" data-tab="fe">前端交互</button>
       <button type="button" data-tab="admin">管理后台</button>
+      <button type="button" data-tab="flow">业务流程</button>
     </div>
     <section class="page-view active" id="view-fe">
-      <div class="perspective-tabs" role="tablist" aria-label="页面视角">
-        <button type="button" role="tab" class="on" data-perspective="user" aria-selected="true">用户视角</button>
+      <div class="perspective-tabs" role="tablist" aria-label="页面场景">
+        <button type="button" role="tab" class="on" data-perspective="list" aria-selected="true">我的社群</button>
+        <button type="button" role="tab" data-perspective="detail" aria-selected="false">社群详情</button>
+        <button type="button" role="tab" data-perspective="group" aria-selected="false">导师团</button>
+        <button type="button" role="tab" data-perspective="records" aria-selected="false">申请记录</button>
         <button type="button" role="tab" data-perspective="mentor" aria-selected="false">导师视角</button>
       </div>
       <div class="demo-layout">
-        <aside class="context-rules" aria-label="当前视角前端需求规则">
-          <h2 id="contextTitle">用户视角 · 前端需求</h2>
-          <p class="intro">对照右侧页面查看字段、操作与边界。切换视角后，说明同步切换。</p>
+        <aside class="context-rules" aria-label="当前场景前端需求规则">
+          <h2 id="contextTitle">我的社群 · 需求规则</h2>
+          <p class="intro">对照右侧当前场景查看字段、操作与边界。切换场景后，规则和页面一起切换。</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"><button type="button" class="btn btn-ghost" id="editRules">编辑规则</button><button type="button" class="btn btn-ghost" id="copyDemoCode">复制 Demo 代码</button><button type="button" class="btn btn-primary" id="saveRules" hidden>保存到项目</button><button type="button" class="btn btn-ghost" id="cancelRules" hidden>取消</button></div>
           <p id="copyDemoStatus" role="status" style="font-size:12px;line-height:1.6;color:var(--text-secondary)"></p>
           <p id="ruleEditStatus" role="status" style="font-size:12px;line-height:1.6"></p>
@@ -239,7 +253,7 @@
           <div id="contextRules"></div>
         </aside>
         <div class="mockup-board">
-          <iframe id="phone" title="我的社群与社群详情" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=17"></iframe>
+          <iframe id="phone" title="我的社群与社群详情" src="fr-coco-002-mentor-v1-2-fe.html?embed=1&amp;v=42&amp;scene=list"></iframe>
         </div>
       </div>
     </section>
@@ -251,6 +265,9 @@
         <div class="item"><b>同步飞书信息</b><span>按飞书机器人归属的群，用社群名称和现有社群一对一同步。</span></div>
         <p class="kind">新增字段</p>
         <div class="item"><b>飞书社群人员</b><span>显示该社群在飞书的成员信息。</span></div>
+        <p class="kind">现有后台优化</p>
+        <div class="item"><b>社群负责人</b><span>在已有社群管理里选择一名导师写入。一个社群同一时间只能有 1 个。再选一名导师并保存，替换原来的那位。</span></div>
+        <div class="item"><b>虚拟成员</b><span>可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。「我的社群」列表和社群详情都不展示成员数。</span></div>
       </section>
       <section class="mod" aria-labelledby="mod-people">
         <h2 id="mod-people">人员管理</h2>
@@ -271,6 +288,86 @@
         <div class="item"><b>该导师群内身份</b><span>社群弹窗。机器人拉回的群内身份，如群主、管理员。</span></div>
       </section>
     </div>
+    </section>
+    <section class="page-view" id="view-flow">
+      <div class="flow-page">
+        <p class="flow-page-intro">换绑从社群详情底部进入。按钮按状态显示「换绑」「换绑审核中」或「已解绑」。只有「换绑」打开换绑页。审核期间原关系保持已绑定。驳回或撤销回到可再次申请。不提供解绑申请。首次绑定不在这张图。</p>
+        <div class="flow-svg-wrap">
+          <svg width="860" height="900" viewBox="0 0 860 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="换绑审核流程">
+            <defs>
+              <marker id="flow-arrow-coco002" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <g class="flow-edges" marker-end="url(#flow-arrow-coco002)">
+              <polyline points="390,64 390,94" />
+              <polyline points="474,132 560,132" />
+              <polyline points="390,170 390,200" />
+              <polyline points="312,238 220,238" />
+              <polyline points="390,276 390,306" />
+              <polyline points="390,354 390,384" />
+              <polyline points="312,422 250,422 250,330 300,330" />
+              <polyline points="390,460 390,490" />
+              <polyline points="312,528 220,528 220,346 300,346" />
+              <polyline points="390,566 390,596" />
+              <polyline points="390,652 390,682" />
+              <polyline points="474,720 560,720" />
+              <polyline points="770,744 800,744 800,860 28,860 28,8 390,8 390,16" />
+              <polyline points="390,758 390,788" />
+            </g>
+            <g class="flow-nodes" font-family="PingFang SC, Inter, sans-serif">
+              <rect x="270" y="16" width="240" height="48" rx="8" fill="#eff6ff" stroke="#2563eb" />
+              <text x="390" y="35" text-anchor="middle" font-size="12" fill="#18222f">社群详情</text>
+              <text x="390" y="52" text-anchor="middle" font-size="10" fill="#64748b">底部换绑按钮</text>
+              <polygon points="390,94 474,132 390,170 306,132" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="128" text-anchor="middle" font-size="11" fill="#92400e">换绑审核中?</text>
+              <text x="480" y="124" font-size="11" fill="#dc2626">是</text>
+              <text x="396" y="188" font-size="11" fill="#16a34a">否</text>
+              <rect x="560" y="108" width="200" height="48" rx="8" fill="#f1f5f9" stroke="#94a3b8" />
+              <text x="660" y="128" text-anchor="middle" font-size="12" fill="#18222f">显示换绑审核中</text>
+              <text x="660" y="146" text-anchor="middle" font-size="10" fill="#64748b">不可再次发起</text>
+              <polygon points="390,200 468,238 390,276 312,238" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="234" text-anchor="middle" font-size="11" fill="#92400e">已经解绑?</text>
+              <text x="230" y="230" font-size="11" fill="#dc2626">是</text>
+              <text x="396" y="294" font-size="11" fill="#16a34a">否</text>
+              <rect x="40" y="214" width="180" height="48" rx="8" fill="#f1f5f9" stroke="#94a3b8" />
+              <text x="130" y="242" text-anchor="middle" font-size="12" fill="#18222f">显示已解绑</text>
+              <rect x="270" y="306" width="240" height="48" rx="8" fill="#eff6ff" stroke="#2563eb" />
+              <text x="390" y="334" text-anchor="middle" font-size="12" fill="#18222f">打开换绑页</text>
+              <polygon points="390,384 468,422 390,460 312,422" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="418" text-anchor="middle" font-size="11" fill="#92400e">目标社群</text>
+              <text x="390" y="434" text-anchor="middle" font-size="11" fill="#92400e">已单选?</text>
+              <text x="228" y="414" font-size="11" fill="#dc2626">否</text>
+              <text x="396" y="478" font-size="11" fill="#16a34a">是</text>
+              <polygon points="390,490 468,528 390,566 312,528" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="524" text-anchor="middle" font-size="11" fill="#92400e">换绑原因</text>
+              <text x="390" y="540" text-anchor="middle" font-size="11" fill="#92400e">已填写?</text>
+              <text x="198" y="520" font-size="11" fill="#dc2626">否</text>
+              <text x="396" y="584" font-size="11" fill="#16a34a">是</text>
+              <rect x="270" y="596" width="240" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a" />
+              <text x="390" y="618" text-anchor="middle" font-size="12" fill="#18222f">创建换绑申请 · 审核中</text>
+              <text x="390" y="636" text-anchor="middle" font-size="10" fill="#64748b">原关系仍为已绑定</text>
+              <polygon points="390,682 474,720 390,758 306,720" fill="#fffbeb" stroke="#d97706" />
+              <text x="390" y="724" text-anchor="middle" font-size="11" fill="#92400e">审核通过?</text>
+              <text x="480" y="712" font-size="11" fill="#dc2626">驳回</text>
+              <text x="396" y="776" font-size="11" fill="#16a34a">通过</text>
+              <rect x="560" y="696" width="210" height="48" rx="8" fill="#fef2f2" stroke="#dc2626" />
+              <text x="665" y="716" text-anchor="middle" font-size="12" fill="#991b1b">原绑定保持不变</text>
+              <text x="665" y="734" text-anchor="middle" font-size="10" fill="#64748b">保存驳回原因</text>
+              <rect x="250" y="788" width="280" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a" />
+              <text x="390" y="810" text-anchor="middle" font-size="12" fill="#18222f">换绑通过</text>
+              <text x="390" y="828" text-anchor="middle" font-size="10" fill="#64748b">原社群已解绑，目标社群新建已绑定</text>
+            </g>
+          </svg>
+        </div>
+        <div class="flow-legend">
+          <span><i style="background:#eff6ff;border:1px solid #2563eb"></i>前端 / 操作</span>
+          <span><i style="background:#f0fdf4;border:1px solid #16a34a"></i>后端 / 写入</span>
+          <span><i style="background:#fffbeb;border:1px solid #d97706"></i>校验 / 分支</span>
+          <span><i style="background:#fef2f2;border:1px solid #dc2626"></i>阻断 / 驳回</span>
+          <span><i style="background:#f1f5f9;border:1px solid #94a3b8"></i>撤销</span>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -293,6 +390,9 @@
           <div class="rule-content">
             <p>新增按钮：同步飞书信息。按飞书机器人归属的群，用社群名称和现有社群一对一同步。</p>
             <p>新增字段：飞书社群人员。显示该社群在飞书的成员信息。</p>
+            <p>现有后台优化。不新开模块，在已有社群管理增加字段。</p>
+            <p>新增字段：社群负责人。选择一名导师写入，一个社群同一时间只能有 1 个。再选一名导师并保存，替换原来的那位。</p>
+            <p>新增字段：虚拟成员。可编辑的 200～500 整数。保存时定一次，再次打开不重新随机。「我的社群」列表和社群详情都不展示成员数。</p>
           </div>
         </div>
         <div class="rule-section">
@@ -314,7 +414,7 @@
       </div>
     </div>
   </aside>
-  <script src="sidebar-nav.js?v=9"></script>
+  <script src="sidebar-nav.js?v=20261113-status"></script>
   <script>
     var phone = document.getElementById('phone');
     var ruleBtn = document.getElementById('ruleBtn');
@@ -354,7 +454,7 @@
     });
 
     function showTab(name) {
-      if (name !== 'fe' && name !== 'admin') name = 'admin';
+      if (name !== 'fe' && name !== 'admin' && name !== 'flow') name = 'admin';
       currentTab = name;
       document.querySelectorAll('.page-tabs button').forEach(function (btn) {
         var on = btn.getAttribute('data-tab') === name;
@@ -363,6 +463,7 @@
       });
       document.getElementById('view-fe').classList.toggle('active', name === 'fe');
       document.getElementById('view-admin').classList.toggle('active', name === 'admin');
+      document.getElementById('view-flow').classList.toggle('active', name === 'flow');
       var params = new URLSearchParams(location.search);
       if (params.get('tab') !== name) {
         params.set('tab', name);
@@ -390,55 +491,200 @@
       btn.addEventListener('click', function () { showTab(btn.getAttribute('data-tab')); });
     });
     var perspectiveRules = {
-      "user": [
-        ["页面与入口", [
-          "用户视角默认进入「我的社群」列表，可搜索社群名称、负责人或导师团；社群卡展示名称、加入天数、成员数、社群负责人和所属导师团。",
-          "点击社群卡进入对应社群详情，返回后回到列表并恢复原滚动位置；点击卡片内所属导师团可直接进入导师团主页。",
-          "社群详情保持深色头图、社群头像、社群名称、成员数、公告、负责项目、导师、介绍、战绩与底部飞书入口的既有长页结构。",
-          "「所属导师团」是社群级关系，以独立入口显示在列表卡片及详情头部白色信息卡下方，不属于任何单个导师。",
-          "入口显示导师团图标、「所属导师团」、当前导师团名称、负责赛道和右箭头；点击进入导师团主页。"
-        ]],
-        ["社群详情交互", [
-          "公告入口打开公告浮层；社群介绍默认收起，可展开或再次收起。",
-          "社群负责导师按负责人和导师团成员分组展示；点击导师打开资料浮层，导师卡片内不展示所属导师团。",
-          "社群负责项目横向排列；点击项目打开项目说明浮层，真实项目详情页不在本 Demo 内。",
-          "社群战绩展示总产出、活跃成员、新增成员和个人排行；收益荣誉榜展示本月收益 TOP 5。",
-          "底部按钮固定为「进入社群飞书」，仅展示说明浮层，不打开真实飞书。"
-        ]],
-        ["导师团主页", [
-          "导师团主页使用深色 Hero，展示导师团名称、负责赛道和服务社群数、导师团成员数、服务会员数。",
-          "导师团介绍默认收起，可查看完整介绍或收起。",
-          "负责人单独展示；其余成员按专项导师、创业导师等层级分组展示。",
-          "点击负责人或成员打开资料浮层；页面不提供加入、退出、编辑或后台配置入口。",
-          "从导师团主页返回后，恢复进入前的列表或社群详情及滚动位置。"
-        ]],
-        ["操作与边界", [
-          "用户不能在列表、社群详情或导师团主页编辑社群、导师或导师团资料。",
-          "本 Demo 只覆盖有数据的完整示例，不演示加载、失败、缺失、异常和空数据场景。",
-          "Demo 不调用真实接口、不登录、不持久化；搜索、展开、浮层和页面切换都只作用于当前页面。",
-          "社群公告、导师团深色 Hero、介绍展开和 TOP 5 均为本锁定 Demo 的验收内容，不得由历史文档规则删除。"
-        ]]
-      ],
-      "mentor": [
-        ["页面与字段", [
-          "个人介绍配置页包含头像、昵称、当前身份和个人介绍；当前身份由后台配置，置灰只读。",
-          "头像、昵称和个人介绍进入页面即可编辑，不需要先点击编辑图标。",
-          "头像文件规则、昵称和个人介绍的必填与字数限制待确认，Demo 不自行增加校验。"
-        ]],
-        ["编辑与保存", [
-          "选择新头像后在当前页预览；未选择新头像时保留原头像。",
-          "点击保存统一保存头像、昵称和个人介绍，保存中按钮不可重复点击。",
-          "保存成功仅提示「保存成功」，停留当前页。",
-          "当前静态 Demo 只演示配置页保存反馈，不改写已锁定的用户视角示例内容；刷新后恢复示例资料。"
-        ]],
-        ["其他导师端调整", [
-          "服务记录页面成员列表增加「右豹ID」「飞书手机号」。",
-          "导师管理的群移除「新建群」「群规模」按钮。"
-        ]]
+  "list": [
+    [
+      "页面与入口",
+      [
+        "本场景展示「我的社群」列表。顶栏居中标题，左侧返回，右侧「申请记录」进入申请记录页。列表不提供搜索和筛选，直接展示全部社群。",
+        "R07 换绑使用独立页面，入口在社群详情底部。白色社群信息进入社群详情。列表不提供解绑或换绑按钮。",
+        "R13 灰色导师卡展示头像、姓名、赛道和项目。整张灰卡可点击，打开导师浮层；浮层标签展示赛道和项目。"
       ]
-    };
+    ],
+    [
+      "社群卡片",
+      [
+        "R12 列表社群信息不展示成员数，保留已加入天数和已获得收益。收益单位为元，保留两位小数。",
+        "列表卡片不展示绑定状态，也不展示审核信息。审核进度只在申请记录查看。",
+        "列表不发起解绑或换绑。换绑入口在社群详情底部，按状态显示「换绑」「换绑审核中」或「已解绑」。",
+      ]
+    ],
+    [
+      "绑定规则",
+      [
+        "R01 用户可同时绑定多个不同社群，每个社群独立维护绑定关系。",
+        "R02 换绑需要审核。审核期间原社群关系及权益继续有效。",
+        "当前不提供解绑申请。已解绑是换绑审核通过后原社群的关系状态。",
+        "R04 换绑成功后，旧社群仍留在「我的社群」，状态为已解绑。",
+        "R09 首次绑定付费社群需要审核，审核通过后绑定生效。首次绑定非付费社群无需审核，校验通过后立即生效。",
+        "R10 换绑需要审核，不因目标社群是否付费而豁免。不提供解绑申请入口。",
+      ]
+    ],
+    [
+      "换绑",
+      [
+        "R05 换绑按赛道、项目、导师、该导师下的社群顺序选择。目标社群只能单选。",
+        "R06 选择导师后展示该导师的介绍。标签展示赛道和项目。",
+        "换绑原因必填。确认后提交审核。"
+      ]
+    ],
+    [
+      "解绑申请",
+      [
+        "列表和社群详情都不提供解绑申请。",
+        "已解绑仍展示在「我的社群」，详情底部换绑按钮显示「已解绑」，不可再发起换绑。"
+      ]
+    ],
+    [
+      "关系状态",
+      [
+        "已绑定：关系生效，有绑定时间，解绑时间为空。",
+        "已解绑：关系已结束，保留绑定时间和解绑时间。",
+        "付费社群首次绑定在审核通过前尚未形成生效关系，不创建已绑定关系。此阶段通过申请记录展示「绑定审核中」。"
+      ]
+    ],
+    [
+      "申请状态",
+      [
+        "申请类型分为首次绑定、换绑、解绑。",
+        "审核中：等待平台审核，申请人可以撤销。",
+        "审核通过：已经生效，不可撤销。",
+        "审核驳回：原绑定不变，并保存驳回原因。",
+        "已撤销：由申请人撤销，原绑定不变。",
+        "R08 申请只在待审核阶段可以撤销。已完成的审核不得撤销。撤销后保留申请历史。"
+      ]
+    ],
+    [
+      "状态迁移",
+      [
+        "换绑：提交时原关系仍为已绑定，申请为审核中。通过后原关系变为已解绑，并创建目标社群的已绑定关系，申请为审核通过。驳回或撤销后，原关系保持已绑定。",
+        "解绑：提交时原关系仍为已绑定，申请为审核中。通过后原关系变为已解绑，申请为审核通过。驳回或撤销后，原关系保持已绑定。",
+        "首次绑定付费社群：提交时没有生效关系，申请为审核中。通过后创建已绑定关系。驳回或撤销不创建关系。",
+        "首次绑定非付费社群：校验通过后直接创建已绑定关系，没有人工审核。"
+      ]
+    ],
+    [
+      "申请详情",
+      [
+        "展示申请类型与状态：换绑或解绑，以及审核中、审核通过、审核驳回、已撤销。",
+        "申请编号取申请 ID，可复制，便于客服定位。",
+        "申请时间格式为 YYYY-MM-DD HH:mm。",
+        "换绑和解绑都展示原社群、原绑定导师，取来源关系提交时的快照。",
+        "仅换绑展示目标赛道、项目、导师和社群，取目标选择提交时的快照。",
+        "申请原因展示用户提交内容，只读。",
+        "审核进度依次为已提交、审核中，然后是审核通过、审核驳回或已撤销。",
+        "审核结束后展示审核时间和审核意见。驳回必须展示原因。",
+        "仅审核中可以撤销。撤销前二次确认，并由服务端再次核对状态。成功后变为已撤销。撤销后原绑定不变，申请记录保留。",
+        "「我知道了」关闭弹窗。",
+        "不展示未经确认的审核时效，例如「预计 1–2 个工作日」。"
+      ]
+    ],
+    [
+      "后台审核",
+      [
+        "在现有绑定审核管理中写入审核数据。",
+        "增加字段「审核类型」，取值为解绑审核、换绑审核、付费社群审核。",
+        "申请加入的社群信息中，为社群显示「付费」或「免费」标签。"
+      ]
+    ],
+    [
+      "演示边界",
+      [
+        "列表同时包含已绑定、首次绑定审核中和已解绑的社群，但卡片上不标审核状态。不演示加载、失败和接口异常。",
+        "Demo 不调用真实接口、不登录、不持久化。申请只作用于当前页面，刷新后恢复示例。"
+      ]
+    ]
+  ],
+  "detail": [
+    [
+      "页面结构",
+      [
+        "社群详情顶部为浅粉头图：居中社群图标，左上按社群显示「免费」或「付费」。名称下是已加入天数和标签「导师团服务中」「项目交流社区」。社群介绍写在标签下方。不展示成立时间。其下是社群负责导师、浅暖色所属导师团卡片、负责项目、战绩。底部是「换绑」和「对接社群」。详情不展示社群成员数和社群公告，不另起社群介绍分区。",
+        "「我的社群」列表和社群详情都不展示成员数。虚拟成员仍可在后台编辑，保存时在 200～500 内定一次，再次打开不重新随机。",
+        "「所属导师团」是社群级关系，以浅暖色卡片显示在社群负责导师下方，不属于任何单个导师。卡片显示导师团图标、「所属导师团」、当前导师团名称、负责赛道和右箭头，点击进入导师团主页。"
+      ]
+    ],
+    [
+      "交互",
+      [
+        "头像下方的社群介绍完整展示，不截断。按钮写「展开全部介绍」，展开后在这段介绍下方补上其余正文，按钮改为「收起」。收起后这段介绍仍在。没有介绍时不显示正文和按钮。详情不提供社群公告。",
+        "社群负责导师按负责人和导师团成员分组展示；点击导师打开资料浮层，导师卡片内不展示所属导师团。",
+        "社群负责项目横向排列；点击项目打开项目说明浮层，真实项目详情页不在本 Demo 内。",
+        "社群战绩展示总产出、活跃成员、新增成员和个人排行；收益荣誉榜展示本月收益 TOP 5。",
+        "底部并列「换绑」和「对接社群」。对接社群是实心主按钮，权重大于换绑。",
+        "未换绑时按钮写「换绑」，点击打开换绑页面。换绑审核中显示「换绑审核中」，已解绑显示「已解绑」，这两种都不可再发起。",
+        "点击「对接社群」从底部打开浮层，标题「联系平台运营」。标题下写「了解」加当前社群名，底部是「截图或长按保存」。点关闭或遮罩可关掉。不跳转真实社群。",
+        "返回回到「我的社群」并恢复列表滚动位置。不能在详情页直接改写社群资料或导师资料。",
+        "介绍展开和 TOP 5 均为本锁定 Demo 的验收内容。详情不验收社群成员数和社群公告。"
+      ]
+    ]
+  ],
+  "group": [
+    [
+      "导师团主页",
+      [
+        "导师团主页使用深色 Hero，展示导师团名称、负责赛道和服务社群数、导师团成员数、服务会员数。",
+        "导师团介绍默认收起，可查看完整介绍或收起。",
+        "负责人单独展示；其余成员按专项导师、创业导师等层级分组展示。",
+        "点击负责人或成员打开资料浮层；页面不提供加入、退出、编辑或后台配置入口。",
+        "返回后恢复进入前的列表或社群详情及滚动位置。",
+        "导师团深色 Hero 和介绍展开均为本锁定 Demo 的验收内容。"
+      ]
+    ]
+  ],
+  "records": [
+    [
+      "入口与列表",
+      [
+        "从「我的社群」顶栏右侧「申请记录」进入独立页面。审核信息只在这里查看。页面列出全部申请，返回后回到列表并恢复滚动位置。",
+        "记录展示申请类型、审核状态、申请时间和对应社群。类型包括绑定、解绑和换绑。无记录时显示「暂无申请记录」。",
+        "点击一条记录打开申请详情。"
+      ]
+    ],
+    [
+      "申请详情",
+      [
+        "详情展示申请类型、申请时间、原社群、目标社群、目标导师、申请原因和审核状态；已审核的再展示审核时间和审核意见。",
+        "审核进度按已提交、审核中或审核结果展示。审核完成前可以撤销；撤销后原绑定关系不受影响，申请历史仍保留。审核完成后不能撤销。",
+        "Demo 中的模拟审核和重置只改变当前页示例，刷新后恢复，不持久化。"
+      ]
+    ]
+  ],
+  "mentor": [
+    [
+      "页面与字段",
+      [
+        "个人介绍配置页包含头像、昵称、当前身份和个人介绍；当前身份由后台配置，置灰只读。",
+        "头像、昵称和个人介绍进入页面即可编辑，不需要先点击编辑图标。",
+        "头像文件规则、昵称和个人介绍的必填与字数限制待确认，Demo 不自行增加校验。"
+      ]
+    ],
+    [
+      "编辑与保存",
+      [
+        "选择新头像后在当前页预览；未选择新头像时保留原头像。",
+        "点击保存统一保存头像、昵称和个人介绍，保存中按钮不可重复点击。",
+        "保存成功仅提示「保存成功」，停留当前页。",
+        "当前静态 Demo 只演示配置页保存反馈，不改写已锁定的用户场景示例内容；刷新后恢复示例资料。"
+      ]
+    ],
+    [
+      "其他导师端调整",
+      [
+        "服务记录页面成员列表增加「右豹ID」「飞书手机号」。",
+        "导师管理的群移除「新建群」「群规模」按钮。"
+      ]
+    ]
+  ]
+};
     function escapeRule(text){return text.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-    var editingRules=false, ruleView='user', ruleBase=null;
+    var editingRules=false, ruleView='list', ruleBase=null;
+    var sceneMeta={
+      list:{title:'我的社群',frame:'我的社群',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=42&scene=list'},
+      detail:{title:'社群详情',frame:'社群详情',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=42&scene=detail'},
+      group:{title:'导师团',frame:'导师团主页',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=42&scene=group'},
+      records:{title:'申请记录',frame:'申请记录',src:'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=42&scene=records'},
+      mentor:{title:'导师视角 · 个人介绍',frame:'导师个人信息及介绍配置',src:'fr-coco-002-mentor-intro-fe.html?embed=1'}
+    };
     var editStatus=document.getElementById('ruleEditStatus'), ruleEditor=document.getElementById('ruleEditor');
     function editingState(active){editingRules=active;ruleEditor.hidden=!active;document.getElementById('contextRules').hidden=active;document.getElementById('editRules').hidden=active;document.getElementById('saveRules').hidden=!active;document.getElementById('cancelRules').hidden=!active;document.querySelectorAll('[data-perspective]').forEach(function(btn){btn.disabled=active})}
     document.getElementById('editRules').onclick=function(){ruleBase=JSON.parse(JSON.stringify(perspectiveRules[ruleView]));ruleEditor.value=ruleBase.map(function(g){return '## '+g[0]+'\n'+g[1].map(function(line){return '- '+line}).join('\n')}).join('\n\n');editingState(true);editStatus.textContent='每个分区以 ## 标题开始，每条规则以 - 开始。保存将写入本项目 frontend-rules.json。';};
@@ -454,31 +700,33 @@
         perspectiveRules[ruleView]=groups;document.getElementById('contextRules').innerHTML=ruleMarkup(groups);editingState(false);editStatus.textContent='保存成功，已写入项目 frontend-rules.json';
       }catch(error){editStatus.textContent=error.message}finally{this.disabled=false}
     };
-    fetch('/__local/mentor-rules').then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(data){if(editingRules)return;perspectiveRules=data;document.getElementById('contextRules').innerHTML=ruleMarkup(data[ruleView])}).catch(function(){editStatus.textContent='本地编辑需使用 python3 scripts/preview_server.py 启动预览服务。'});
+    fetch('/__local/mentor-rules').then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(data){if(editingRules||!data[ruleView])return;perspectiveRules=data;document.getElementById('contextRules').innerHTML=ruleMarkup(data[ruleView]);document.getElementById('rule-fe').innerHTML=ruleDrawer()}).catch(function(){editStatus.textContent='本地编辑需使用 python3 scripts/preview_server.py 启动预览服务。'});
     function ruleMarkup(groups) {
-      return groups.map(function(group){return '<section class="rule-section"><h3>'+escapeRule(group[0])+'</h3><div class="rule-content"><ul>'+group[1].map(function(line){return '<li>'+escapeRule(line)+'</li>'}).join('')+'</ul></div></section>'}).join('');
+      return groups.map(function(group){return '<section class="rule-section"><h3>'+escapeRule(group[0])+'</h3><div class="rule-content"><ul>'+group[1].map(function(line){return '<li>'+escapeRule(line).replace(/^(R\d+)\b/,'<b>$1</b>')+'</li>'}).join('')+'</ul></div></section>'}).join('');
     }
-    document.getElementById('rule-fe').innerHTML =
-      '<section class="rule-section"><h3>用户视角 · 我的社群</h3><div class="rule-content"><p>默认先展示社群列表；进入详情后保持锁定 Demo 的原有结构，在列表卡片及详情头部展示独立的社群级「所属导师团」入口。</p></div></section>' +
-      ruleMarkup(perspectiveRules.user) +
-      '<section class="rule-section"><h3>导师视角 · 个人介绍</h3><div class="rule-content"><p>导师统一编辑并保存头像、昵称和个人介绍；当前静态 Demo 只演示配置页保存反馈。</p></div></section>' +
-      ruleMarkup(perspectiveRules.mentor) +
-      '<section class="rule-section"><h3>业务流程</h3><div class="rule-content">本次尚未写入业务流程图。</div></section>';
+    function ruleDrawer(){
+      return ['list','detail','group','records','mentor'].map(function(key){
+        return '<section class="rule-section"><h3>'+escapeRule(sceneMeta[key].title)+'</h3></section>'+ruleMarkup(perspectiveRules[key]);
+      }).join('')+'<section class="rule-section"><h3>业务流程</h3><div class="rule-content">见本页业务流程。</div></section>';
+    }
+    document.getElementById('rule-fe').innerHTML = ruleDrawer();
     function setPerspective(view) {
+      if(!sceneMeta[view])view='list';
       ruleView=view;
       document.querySelectorAll('[data-perspective]').forEach(function(btn){
         var active = btn.getAttribute('data-perspective') === view;
         btn.classList.toggle('on', active); btn.setAttribute('aria-selected', String(active));
       });
-      phone.src = view === 'mentor' ? 'fr-coco-002-mentor-intro-fe.html?embed=1' : 'fr-coco-002-mentor-v1-2-fe.html?embed=1&v=17';
-      document.getElementById('contextTitle').textContent = (view === 'mentor' ? '导师视角 · 个人介绍' : '用户视角 · 我的社群') + ' · 需求规则';
-      document.getElementById('contextRules').innerHTML = ruleMarkup(perspectiveRules[view]);
-      phone.title = view === 'mentor' ? '导师个人信息及介绍配置' : '我的社群与社群详情';
+      phone.src = sceneMeta[view].src;
+      document.getElementById('contextTitle').textContent = sceneMeta[view].title + ' · 需求规则';
+      document.getElementById('contextRules').innerHTML = ruleMarkup(perspectiveRules[view]||[]);
+      phone.title = sceneMeta[view].frame;
       var params = new URLSearchParams(location.search); params.set('view',view);
       history.replaceState(null,'','?'+params.toString()+location.hash);
     }
     document.querySelectorAll('[data-perspective]').forEach(function(btn){btn.addEventListener('click',function(){setPerspective(btn.getAttribute('data-perspective'))})});
-    setPerspective(new URLSearchParams(location.search).get('view') === 'mentor' ? 'mentor' : 'user');
+    var requestedView=new URLSearchParams(location.search).get('view');
+    setPerspective(requestedView==='user'?'list':requestedView);
     ruleBtn.addEventListener('click', function () {
       setRule(!document.getElementById('ruleDrawer').classList.contains('open'));
     });
@@ -517,7 +765,7 @@
     function pointSidebarHome() {
       document.querySelectorAll('[data-iteration-sidebar] a').forEach(function (link) {
         var href = link.getAttribute('href') || '';
-        if (href.charAt(0) === '#') link.setAttribute('href', 'framework-shell.html' + href);
+        if (href.charAt(0) === '#') link.setAttribute('href', 'framework-shell.html?v=20261113-members' + href);
       });
     }
     document.addEventListener('DOMContentLoaded', pointSidebarHome);

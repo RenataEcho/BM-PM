@@ -1,5 +1,5 @@
 ---
-name: FR-CoCo-003 团队数据优化
+name: FR-CoCo-003 团队项目数据分析
 status: final
 updated: 2026-11-02
 sources:

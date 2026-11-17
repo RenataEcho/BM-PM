@@ -4,8 +4,8 @@
 
 - 输入：`/Users/maziluo/BM-PM/团队数据页优化.md`
 - 目标：
-  - `_bmad-output/youbao/fr-coco-003-团队数据优化/prd.md`
-  - `_bmad-output/youbao/fr-coco-003-团队数据优化/addendum.md`
+  - `_bmad-output/youbao/fr-coco-003-团队项目数据分析/prd.md`
+  - `_bmad-output/youbao/fr-coco-003-团队项目数据分析/addendum.md`
 - 判定原则：仅记录输入中已经明确、但目标文档缺失、写错或被错误降级为假设的规则；P01-P05 本身属于明确保留的待确认项，不按缺口处理。
 
 ## 2. Verdict

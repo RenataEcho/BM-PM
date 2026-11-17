@@ -1,7 +1,7 @@
 # Validation Report — FR-CoCo-003 团队数据优化
 
-- **DESIGN.md:** `/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队数据优化/DESIGN.md`
-- **EXPERIENCE.md:** `/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队数据优化/EXPERIENCE.md`
+- **DESIGN.md:** `/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队项目数据分析/DESIGN.md`
+- **EXPERIENCE.md:** `/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队项目数据分析/EXPERIENCE.md`
 - **Run at:** 2026-11-02T17:39:00+08:00
 
 ## Overall verdict
@@ -45,5 +45,5 @@ Spine pair 的八个验证维度全部为 **strong**。FR-1～FR-11 的精确映
 
 ## Reviewer files
 
-- `/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队数据优化/review-ux-rubric.md`
-- `/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队数据优化/review-accessibility.md`
+- `/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队项目数据分析/review-ux-rubric.md`
+- `/Users/maziluo/BM-PM/_bmad-output/youbao/fr-coco-003-团队项目数据分析/review-accessibility.md`
