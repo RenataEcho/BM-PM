@@ -18,6 +18,7 @@ python3 -m http.server 19889 --directory demo/iteration
 
 | 业务线 | 编号 | 需求 | 状态 | 页面 |
 |---|---|---|---|---|
+| 右豹主业务 | FR-wen-005 | 一键代发用户定向约稿； | 开发中 | [查看 Demo](demo/iteration/fr-wen-005-directed.html?tab=fe) |
 | 右豹主业务 | FR-wen-004 | 代发素材类型领取门槛 | 开发中 | [查看 Demo](demo/iteration/fr-wen-004-claim.html?tab=fe) |
 | 右豹主业务 | FR-XIAOYU-002 | 推广文案 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-002) |
 | 右豹主业务 | FR-CoCo-003 | 团队数据优化 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-003) |
@@ -43,6 +44,8 @@ FR-wen-003 初始状态为「开发中」，属于「进行中」；状态保存
 AI申词、团队数据优化与导师需求的本地规则编辑：运行 `python3 scripts/preview_server.py`（端口 19889）。保存写入对应需求目录的 `frontend-rules.json`，普通静态服务不支持保存。
 
 FR-wen-004 初始状态为「开发中」（[ASSUMPTION]，待产品确认），属于「进行中」；状态保存范围同上。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-wen-004)、[管理后台](http://127.0.0.1:19889/framework-shell.html?tab=admin#youbao/fr-wen-004)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-wen-004)。
+
+FR-wen-005 初始状态为「开发中」（2026-11-17 已确认），属于「进行中」；状态保存范围同上。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-wen-005)、[管理后台](http://127.0.0.1:19889/framework-shell.html?tab=admin#youbao/fr-wen-005)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-wen-005)。
 
 ## 待编号需求草稿
 
