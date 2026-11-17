@@ -318,17 +318,40 @@ function setSummaryVariant(){
 const navigateFromProjectRoot=navigate;
 navigate=function(next){
  navigateFromProjectRoot(next);
- document.querySelector('.back').style.visibility=next==='detail'?'visible':'hidden';
+ document.querySelector('.back').style.visibility=next==='dashboard'?'hidden':'visible';
  document.getElementById('statsTipsButton').classList.toggle('visible',next==='projects');
 };
 back=function(){
  if(activeMember!==null){closeDrawer();return;}
  if(page==='detail')navigate('projects');
+ else if(page==='projects')navigate('dashboard');
 };
-function closeDrawer(){activeMember=null;document.getElementById('shade').classList.remove('open')}document.getElementById('grandTotal').textContent=fmt(projectTotals.reduce((a,b)=>a+b,0));document.getElementById('grandToday').textContent=fmt(projectToday.reduce((a,b)=>a+b,0));document.getElementById('grandYesterday').textContent=fmt(projectYesterday.reduce((a,b)=>a+b,0));navigate('projects');
+let projectErrorPanel=null;
+function clearProjectError(){
+ if(!projectErrorPanel)return;
+ projectErrorPanel.remove();
+ projectErrorPanel=null;
+ document.querySelectorAll('#projects > *').forEach(node=>node.hidden=false);
+}
+function showProjectError(){
+ clearProjectError();
+ navigate('projects');
+ const screen=document.getElementById('projects');
+ [...screen.children].forEach(node=>node.hidden=true);
+ projectErrorPanel=document.createElement('section');
+ projectErrorPanel.className='card';
+ projectErrorPanel.setAttribute('role','alert');
+ projectErrorPanel.style.cssText='margin:72px 0;padding:28px 20px;text-align:center';
+ projectErrorPanel.innerHTML='<div style="font-size:34px;margin-bottom:12px">!</div><h2 style="font-size:18px;margin:0 0 9px">加载失败，请重试</h2><p class="muted" style="line-height:1.7">项目数据暂时无法加载，本次失败不会显示为 0 或空榜。</p><button class="btn" type="button" style="min-width:128px;margin-top:16px">重新加载</button>';
+ projectErrorPanel.querySelector('button').addEventListener('click',()=>showProjectScene('project-board'));
+ screen.append(projectErrorPanel);
+}
+function closeDrawer(){activeMember=null;document.getElementById('shade').classList.remove('open')}document.getElementById('grandTotal').textContent=fmt(projectTotals.reduce((a,b)=>a+b,0));document.getElementById('grandToday').textContent=fmt(projectToday.reduce((a,b)=>a+b,0));document.getElementById('grandYesterday').textContent=fmt(projectYesterday.reduce((a,b)=>a+b,0));navigate('dashboard');
 function showProjectScene(screen){
  closeDrawer();
- if(screen==='entry'){navigate('projects');setProjectView('stats');return;}
+ clearProjectError();
+ if(screen==='entry'){navigate('dashboard');return;}
+ if(screen==='error'){showProjectError();return;}
  if(screen==='projects'||screen==='project-board'){navigate('projects');setProjectView('stats');return;}
  if(screen==='global-members'){navigate('projects');setProjectView('members');return;}
  if(screen==='detail-reward'||screen==='detail-orders'){openProject(0);setDetailBoard(screen==='detail-orders'?'orders':'reward');}

@@ -2,7 +2,7 @@
 name: 右豹迭代需求记录后台
 description: 产品侧迭代需求 Demo 与规则交付台；玻璃拟态 B 端风格，继承右豹管理后台原型视觉语言。
 status: draft
-updated: 2026-09-23
+updated: 2026-11-09
 colors:
   primary: '#2563eb'
   primary-hover: '#1d4ed8'
@@ -174,7 +174,7 @@ components:
 
 - **单层左侧导航**：品牌 + Sprint 上下文 + 全部需求入口均在 Sidebar；**不使用 TopNav 一级域 Tab**（该模式保留给 SaaS 多版本/多模块复杂场景，本台不采用）。
 - 内容区左边距 = `{spacing.sidebar-w}`；主区从视口顶部起，无顶栏占用高度。
-- 页内结构：面包屑 → Page Header（标题 + FR/版本 + 需求规则）→ 页内 Tab → Demo 台。
+- 页内结构：面包屑 → Page Header（标题 + FR/版本 + 需求规则 + 全屏预览）→ 页内 Tab → Demo 台。
 - **一屏**：Chrome（侧栏 + 页头 + 页签）钉在视口顶部；Demo 台高度 `calc(100vh - 188px)`，只在台内滚动。评审不滚 `body` 就要能看到场景和至少一台完整手机。
 - 规则抽屉宽 `{spacing.drawer-w}`（默认 480px），从右侧滑入；Demo 区不被永久挤压，抽屉 overlay，Demo 仍完整可见。
 - 模板 B 上场景 / 下手机墙，或左场景 : 右 mockup ≈ **5 : 7**（≥1280px）；<1024px 上下堆叠。
@@ -184,6 +184,7 @@ components:
 - TopNav / Sidebar：轻度玻璃 + 浅阴影，z-index 300 / 200。
 - Demo 卡片：`{components.glass-card}` 阴影。
 - 抽屉 / Modal：`{components.drawer}` 级阴影；Modal z-index 500，抽屉 z-index 400。
+- 评审全屏：当前页签内容 z-index 640，右上角「退出全屏」z-index 720。打开期间抽屉抬到 761。总览里先把内容区抬到顶栏和侧栏之上，再让 iframe 以 z-index 800 铺满视口。
 - Mockup 手机框：深色实底 `{colors.mockup-frame}`，与玻璃后台形成对比，突出 C 端预览。
 
 ## Shapes
@@ -200,11 +201,11 @@ components:
 
 - 左：标题 + 一行 `{typography.caption}` 描述。
 - 中：`{components.fr-badge}` + `{components.version-badge}` 下拉。
-- 右：`{components.btn-rule}`「需求规则」。
+- 右：`{components.btn-rule}`「需求规则」，旁边 `.btn.btn-ghost`「全屏预览」。
 
 ### 交互组件（全站统一）
 
-- **Button**：`.btn-primary` 主操作；`.btn-ghost` 取消/重置；`.btn-rule` 规则入口；`.btn-danger` 确认删除。
+- **Button**：`.btn-primary` 主操作；`.btn-ghost` 取消/重置，也用于「全屏预览」和「退出全屏」；`.btn-rule` 规则入口；`.btn-danger` 确认删除。
 - **文字链**：`.link` 详情/编辑；`.link-muted` 日志；`.link-danger` 删除（须配合确认弹窗）。
 - **Confirm Modal**：居中 400px；Footer = Ghost 取消 + Primary/Danger 确认。
 - **Edit Modal**：居中 480px；含表单 + Footer 取消/保存。
@@ -240,6 +241,19 @@ components:
 - 体：`.rule-section` 编号列表。前端第 5 节只指向页内「业务流程」Tab，**不嵌流程图、不用 Mermaid**。
 - 宽默认 `{spacing.drawer-w}`；超长可用 wide 720px。
 - 滚动独立；overlay 不挤压 Demo。可点示例：`component-spec-demo.html#sec-rule`。
+
+### 评审全屏
+
+日常对照仍用需求规则抽屉。评审时用页头「全屏预览」，把当前需求页签下面的原有内容铺满视口。可点示例：`component-spec-demo.html#sec-review`。
+
+| 区域 | 规格 |
+|------|------|
+| 入口 | Page Header 右侧，「需求规则」左边。`.btn.btn-ghost`，文案「全屏预览」 |
+| 范围 | 当前页签以下的原有内容。前端交互含场景条、当前场景需求和手机；管理后台是当前表；业务流程是本页流程图。页头、需求页签和侧栏不进入这一层 |
+| 层 | 该内容 `position: fixed; inset: 0`，背景 `{colors.bg}`，顶部留出退出按钮。不调用浏览器 Fullscreen API。在总览 iframe 中打开时，父页面把 iframe 铺满视口，盖住侧栏和业务线顶栏 |
+| 退出 | `.btn.btn-ghost`「退出全屏」，`position: fixed` 钉在视口右上角，不随内容滚动 |
+| 进入 | 先关闭需求规则抽屉，焦点移到「退出全屏」。页签和场景保持进入前的状态 |
+| 适用 | 之后新建的 FR 页复制这套。已有页面不补这个按钮 |
 
 ### Demo 表格（模板 A）
 
@@ -279,6 +293,7 @@ components:
 - Demo 弹窗只做 Mock 反馈（toast / 列表刷新），不假装真实后端。
 - 规则抽屉与 Demo 同屏对照。
 - Demo 一屏：不滚整页就能点场景、看到手机、打开规则。
+- 评审全屏复用 `.btn-ghost`，把当前页签下的原有内容铺满，不另起颜色。
 
 **Don't**
 
@@ -286,4 +301,6 @@ components:
 - 不要加入登录、头像菜单、通知铃铛（无权限产品 Demo 台）。
 - 不要堆运营向大盘组件作为框架默认（除非该 Sprint 有变更）。
 - 不要用角标浮窗替代结构化规则抽屉（角标可作为后续增强层）。
+- 不要用评审全屏替换需求规则抽屉，也不要在全屏里另组一栏规则或再嵌一张流程图。
+- 不要给已有 FR 页补「全屏预览」。
 - 提现风控提示不要用后台确认弹窗（400px、取消 + 危险确认），也不要写成红色告警。

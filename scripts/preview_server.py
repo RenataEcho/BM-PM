@@ -6,7 +6,7 @@ import os
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-RULES = ROOT / '_bmad-output/mentor/fr-coco-002-导师迭代V1.2/frontend-rules.json'
+RULES = ROOT / '_bmad-output/mentor/fr-coco-002-加入导师团优化/frontend-rules.json'
 ENDPOINT = '/__local/mentor-rules'
 ROUTES = {
     ENDPOINT: (RULES, ('user', 'mentor')),
@@ -16,7 +16,11 @@ ROUTES = {
     ),
     '/__local/coco003-rules': (
         ROOT / '_bmad-output/youbao/fr-coco-003-团队数据优化/frontend-rules.json',
-        ('project-board', 'global-members', 'detail-reward', 'detail-orders'),
+        ('entry', 'project-board', 'global-members', 'detail-reward', 'detail-orders', 'error'),
+    ),
+    '/__local/coco004-rules': (
+        ROOT / '_bmad-output/mentor/fr-coco-004-机构社群优化/frontend-rules.json',
+        ('user',),
     ),
 }
 
