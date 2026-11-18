@@ -165,7 +165,7 @@
   <div class="shell">
   <aside class="sidebar">
     <div class="sidebar-scroll" data-iteration-sidebar></div>
-    <div class="sidebar-foot">先写明业务线，再做设计。<br />待开始单独成组。已上线进归档，已暂停进废纸篓。</div>
+    <div class="sidebar-foot">先写明业务线，再做设计。<br />待开始、开发中进入进行中。已上线进归档，已暂停进废纸篓。</div>
   </aside>
 
   <main class="main">
@@ -176,17 +176,18 @@
     </header>
 
     <div id="view-overview">
-    <section class="glass-card" id="not-started" aria-labelledby="not-started-title">
+
+    <section class="glass-card" id="in-progress" aria-labelledby="in-progress-title">
       <div class="spec-section-head">
-        <h2 id="not-started-title">待开始</h2>
-        <p>状态为「待开始」。</p>
+        <h2 id="in-progress-title">进行中</h2>
+        <p>状态为「待开始」或「开发中」。</p>
       </div>
       <div class="spec-body">
         <table class="mini-table">
           <thead>
             <tr><th>编号</th><th>需求</th><th>状态</th><th>页面</th></tr>
           </thead>
-          <tbody data-bucket="pending">
+          <tbody data-bucket="progress">
 <tr data-id="fr-xy-03" data-line="enterprise" data-demo="https://cicichak00.github.io/Enterprise-Systems/ux/team-statistics.html"><td>FR-XY-03</td><td>新增团队数据页</td><td><select class="status-select" aria-label="FR-XY-03 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#enterprise/fr-xy-03">查看 Demo</a></td></tr>
 <tr data-id="fr-xy-02" data-line="enterprise" data-demo="https://cicichak00.github.io/Enterprise-Systems/enterprise-tools/employee.html"><td>FR-XY-02</td><td>新增工具配置项</td><td><select class="status-select" aria-label="FR-XY-02 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#enterprise/fr-xy-02">查看 Demo</a></td></tr>
 <tr data-id="fr-xy-01" data-line="enterprise" data-demo="https://cicichak00.github.io/Enterprise-Systems/drafts/employee-management/"><td>FR-XY-01</td><td>员工列表优化</td><td><select class="status-select" aria-label="FR-XY-01 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#enterprise/fr-xy-01">查看 Demo</a></td></tr>
@@ -196,23 +197,8 @@
 <tr data-id="fr-coco-001" data-line="youbao" data-demo="fr-coco-001-ai-shen-ci.html"><td>FR-CoCo-001</td><td>AI申词</td><td><select class="status-select" aria-label="AI申词 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-coco-001">查看 Demo</a></td></tr>
 <tr data-id="fr-003" data-line="youbao" data-demo="fr-003-fusion-task.html"><td>FR-003</td><td>代发上融合任务</td><td><select class="status-select" aria-label="FR-003 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-003">查看 Demo</a></td></tr>
 <tr data-id="fr-wen-003" data-line="youbao" data-demo="fr-wen-003-message.html"><td>FR-wen-003</td><td>支持团长留言给直属下级</td><td><select class="status-select" aria-label="FR-wen-003 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-wen-003">查看 Demo</a></td></tr>
-          </tbody>
-        </table>
-        <p class="page-desc" data-empty="pending">还没有待开始的需求。</p>
-      </div>
-    </section>
 
-    <section class="glass-card" id="in-progress" aria-labelledby="in-progress-title">
-      <div class="spec-section-head">
-        <h2 id="in-progress-title">进行中</h2>
-        <p>状态为「开发中」。</p>
-      </div>
-      <div class="spec-body">
-        <table class="mini-table">
-          <thead>
-            <tr><th>编号</th><th>需求</th><th>状态</th><th>页面</th></tr>
-          </thead>
-          <tbody data-bucket="progress">
+<tr data-id="fr-wen-005" data-line="youbao" data-demo="fr-wen-005-directed.html"><td>FR-wen-005</td><td>一键代发用户定向约稿；</td><td><select class="status-select" aria-label="FR-wen-005 状态" data-status-select><option value="待开始">待开始</option><option value="开发中" selected>开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-wen-005">查看 Demo</a></td></tr>
             <tr data-id="fr-wen-004" data-line="youbao" data-demo="fr-wen-004-claim.html"><td>FR-wen-004</td><td>代发素材类型领取门槛</td><td><select class="status-select" aria-label="FR-wen-004 状态" data-status-select><option value="待开始">待开始</option><option value="开发中" selected>开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-wen-004">查看 Demo</a></td></tr>
 <tr data-id="fr-coco-003" data-line="youbao" data-demo="fr-coco-03-project-data.html"><td>FR-CoCo-003</td><td>团队项目数据分析</td><td><select class="status-select" aria-label="团队项目数据分析 状态" data-status-select><option value="待开始">待开始</option><option value="开发中" selected>开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-coco-003">查看 Demo</a></td></tr>
 <tr data-id="fr-coco-004" data-line="mentor" data-demo="fr-coco-004-agency-community.html"><td>FR-CoCo-004</td><td>机构社群优化</td><td><select class="status-select" aria-label="机构社群优化 状态" data-status-select><option value="待开始">待开始</option><option value="开发中" selected>开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#mentor/fr-coco-004">查看 Demo</a></td></tr>
@@ -264,13 +250,12 @@
   <script src="sidebar-nav.js?v=20261113-status"></script>
   <script>
     var EMPTY_TEXT = {
-      pending: '还没有待开始的需求。',
       progress: '还没有进行中的需求。',
       archive: '还没有已上线的需求。',
       trash: '还没有已暂停的需求。'
     };
 
-    var STATUS_BUCKET = { '待开始': 'pending', '开发中': 'progress', '已上线': 'archive', '已暂停': 'trash' };
+    var STATUS_BUCKET = { '待开始': 'progress', '开发中': 'progress', '已上线': 'archive', '已暂停': 'trash' };
     var STATUS_CLASS = { '待开始': 'tag-warn', '开发中': 'tag-warn', '已上线': 'tag-ok', '已暂停': 'tag-del' };
     var STATUS_KEY = 'bm-pm-fr-statuses-20261113';
     function readStatuses() {
@@ -326,7 +311,7 @@
           if (show) visible += 1;
         });
         var title = tbody.closest('section').querySelector('h2');
-        title.textContent = ({pending:'待开始',progress:'进行中',archive:'归档',trash:'废纸篓'})[tbody.dataset.bucket] + '（' + visible + '）';
+        title.textContent = ({progress:'进行中',archive:'归档',trash:'废纸篓'})[tbody.dataset.bucket] + '（' + visible + '）';
         var note = tbody.closest('.spec-body').querySelector('[data-empty]');
         if (!note) return;
         note.hidden = visible > 0;
