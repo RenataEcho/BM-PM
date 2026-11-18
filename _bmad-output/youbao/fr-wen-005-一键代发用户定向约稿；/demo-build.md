@@ -1,3 +1,5 @@
+> 历史记录：以下记录对应 v4／ux-v1，不是本轮验收结论。本轮生效范围见 prd.md v5 与 annotation-v2-verification.md。
+
 ---
 title: 'FR-wen-005 定向约稿静态 Demo'
 type: 'feature'
