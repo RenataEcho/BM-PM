@@ -1,3 +1,5 @@
+> 历史记录：以下记录对应 v4／ux-v1，不是本轮验收结论。本轮生效范围见 prd.md v5 与 annotation-v2-verification.md。
+
 # FR-wen-005 浏览器批注修订
 
 业务线：右豹主业务。范围仅本FR，不修改既有FR及总览。

@@ -1,3 +1,5 @@
+> 历史记录：以下记录对应 v4／ux-v1，不是本轮验收结论。本轮生效范围见 prd.md v5 与 annotation-v2-verification.md。
+
 # FR-wen-005 后续登记与验证
 
 验证日期：2026-11-17。

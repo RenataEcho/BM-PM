@@ -24,3 +24,6 @@ html.fr-wen-005-embedded .main > .breadcrumb,
 html.fr-wen-005-embedded .main > .page-header,
 html.fr-wen-005-embedded .main > .page-tabs{flex-shrink:0}
 html.fr-wen-005-embedded .main > .view{flex:1 1 0;min-height:0;height:auto}
+
+/* 沿用原表格样式，完整字段通过横向滚动查看。 */
+.youbao-manuscripts{min-width:3400px}.youbao-manuscripts th,.youbao-manuscripts td{white-space:nowrap;max-width:240px}.youbao-manuscripts td:last-child,.youbao-manuscripts th:last-child{position:sticky;right:0;background:#fff;min-width:160px;box-shadow:-2px 0 4px #00000008}.youbao-manuscripts .cover{width:42px;height:54px}
