@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>设备前端交互</title>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#17213d;background:#eef0f5;font:14px "PingFang SC",system-ui,sans-serif}.devices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:20px 10px;max-width:1150px;margin:auto}.label{margin:0 0 12px;font-size:14px;color:#5b657c}.phone{height:760px;border:6px solid #242630;border-radius:36px;background:#f6f6fa;overflow:hidden;box-shadow:0 12px 25px #18233c16;position:relative}.status{height:35px;display:flex;align-items:center;justify-content:space-between;padding:8px 18px;font-size:11px;background:white}.island{width:70px;height:18px;border-radius:20px;background:#222}.screen{height:calc(100% - 35px);overflow:auto;padding-bottom:35px}header{height:51px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:white;font-size:16px;font-weight:650;position:sticky;top:0;z-index:1}.dark{background:#221019;color:white}.capsule{font-size:12px;border:1px solid #ccd0da;border-radius:15px;padding:4px 9px}.content{padding:12px}.card{padding:13px;background:white;border-radius:12px;margin-bottom:12px}.row{display:flex;gap:10px;align-items:center;justify-content:space-between}h2{font-size:15px;margin:0 0 6px}p{margin:6px 0;line-height:1.6}small,.muted{font-size:11px;color:#7a849b}.tag{display:inline-block;border-radius:4px;background:#eef2ff;color:#627bed;font-size:11px;padding:3px 5px}.action{border:0;border-radius:20px;background:#ff421d;color:white;padding:8px 13px;white-space:nowrap;cursor:pointer}.icon{background:#16171c;color:white;border-radius:10px;width:43px;height:43px;display:grid;place-items:center;font-size:22px;flex-shrink:0}.meta{background:#f6f7fc;padding:8px;margin-top:10px;font-size:11px;color:#78829b;border-radius:5px}.meta b{color:#ed5a36}.tabs{display:flex;gap:7px;margin:10px 0;flex-wrap:wrap}.tabs button{background:white;border:1px solid #ececf2;border-radius:7px;padding:7px 9px;color:#45506a;font-size:12px;cursor:pointer}.tabs .active{color:#f44c29;border-color:#ffad98;background:#fff3ec}input{width:100%;padding:10px 13px;border:0;border-radius:20px;background:white;margin-bottom:8px;font:inherit;font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{border:0;background:white;border-radius:9px;padding:0;overflow:hidden;text-align:left;color:inherit;cursor:pointer}.cover{height:155px;background:linear-gradient(155deg,#572c35,#bb7856);color:#fff1db;display:flex;flex-direction:column;justify-content:space-between;padding:10px;font-size:20px;font-family:serif}.cover em{font:10px system-ui;background:#182238bb;align-self:flex-start;border-radius:3px;padding:3px 5px;font-style:normal}.cover strong{font-weight:500;text-shadow:0 2px 3px #0007}.tile:nth-child(even) .cover{background:linear-gradient(150deg,#253843,#628f86)}.tile .name{font-size:12px;font-weight:650;padding:6px}.rate{font-size:11px;color:#f45b31;background:#fff5ed;padding:5px}.bottom{display:flex;justify-content:space-around;padding:12px 6px;background:white;font-size:11px;color:#7c8497}.bottom b{color:#f44c29}.hero{display:flex;gap:12px;margin-bottom:16px}.hero .cover{width:82px;height:116px;flex-shrink:0;font-size:16px;border-radius:9px}.split{background:#ffe9df;color:#f17650}.rates{display:flex;justify-content:space-around;background:#fff9f6;padding:17px 4px;margin-top:10px;border-radius:7px;font-size:11px;color:#dd4827}.rates b{display:block;font-size:22px;margin-top:6px}.join{background:#f6f6fb;padding:17px;text-align:center;margin-top:12px;border-radius:8px}.qr{width:136px;min-height:136px;margin:0 auto 10px;border:6px solid white;border-radius:14px;display:grid;place-items:center;background:#f8f2ef;color:#eb6a47;font-size:12px}.back{background:none;border:0;color:inherit;font-size:22px;cursor:pointer}summary{cursor:pointer}dialog{border:0;border-radius:18px;max-width:280px;padding:22px;color:#25304c}dialog::backdrop{background:#17213680}@media(max-width:900px){.devices{gap:10px;padding:10px 0}.phone{border-width:4px}.content{padding:8px}.cover{height:130px}}@media(max-width:650px){.devices{display:block;max-width:365px}.device{display:none}.device.active{display:block}}
+
+body{padding:16px;background:#eef0f5}
+.preview-note{text-align:center;font-size:12px;color:#7c8495;margin:0 0 12px}
+main{display:block!important;width:390px;max-width:100%;height:720px;padding:0!important;border:9px solid #20232b;border-radius:44px;box-shadow:0 20px 50px #27324d26;position:relative;overflow:hidden;background:#f7f7fa}
+.statusbar{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:11px;font-weight:700;background:#fff}
+.camera{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:94px;height:23px;border-radius:20px;background:#20232b}
+main>section{display:none!important;height:calc(100% - 58px);min-height:0!important;overflow-y:auto;border:0;border-radius:0}
+main>section.active{display:block!important}
+section:focus{outline:none}
+header{position:sticky;top:0;z-index:2;min-height:54px;font-size:17px}
+.home-indicator{height:4px;width:110px;border-radius:5px;background:#292c33;position:absolute;bottom:7px;left:50%;transform:translateX(-50%)}
+.cover{height:178px;font-size:20px;letter-spacing:1px}
+.tile:nth-child(3n) .cover{background:linear-gradient(145deg,#1f4652,#70a09b)}
+.tile:nth-child(4n) .cover{background:linear-gradient(145deg,#8a5a30,#d9ae67)}
+.banner{padding:22px 18px;background:linear-gradient(120deg,#fff0df,#ffe0d4);border-radius:12px;margin-bottom:14px}
+.banner h2{font-size:22px;color:#aa3a20}
+#detail h2{margin-top:12px}
+.join button{margin:6px}
+@media(max-width:420px){body{padding:8px}main{height:720px}}
+ .devices{display:block;max-width:385px;padding:16px}.device{display:none}.device.active{display:block}.phone{height:760px}.label{display:none}html,body{height:100%;overflow:hidden}.devices{height:100%;padding:8px;display:flex;justify-content:center;align-items:flex-start}.device.active{height:100%;display:flex;flex-direction:column;width:min(100%,350px)}.phone{height:100%;max-height:760px;min-height:0;width:100%;flex:1}.screen{overflow:auto}.status{flex-shrink:0}</style></head><body><div class="devices">
+<div class="device active" id="list"><p class="label">① 选择项目</p><div class="phone"><div class="status">9:41 <span class="island"></span> ▴ ▰</div><div class="screen"><header>发现 <span class="capsule">••• ｜ ◉</span></header><div class="content"><div class="tabs"><button class="active">综合推荐</button></div><div id="projects"></div></div><div class="bottom"><span>⌂ 首页</span><b>◈ 发现</b><span>▣ 工具</span><span>♙ 我的</span></div></div></div></div>
+<div class="device" id="project"><p class="label">② 查找任务</p><div class="phone"><div class="status">9:41 <span class="island"></span> ▴ ▰</div><div class="screen"><header class="dark"><button class="back" onclick="navigate('list')" aria-label="返回项目列表">‹</button>推广计划<span class="capsule">••• ｜ ◉</span></header><div class="content"><input id="search" placeholder="输入任务名称搜索" aria-label="搜索任务"><div id="filters" class="tabs"></div><p class="muted" id="count"></p><div class="grid" id="tasks"></div></div></div></div></div>
+<div class="device" id="detail"><p class="label">③ 查看详情并参与</p><div class="phone"><div class="status">9:41 <span class="island"></span> ▴ ▰</div><div class="screen"><header><button class="back" onclick="navigate('project')" aria-label="返回任务列表">‹</button>任务详情<span class="capsule">••• ｜ ◉</span></header><div class="content" id="detailBody"></div></div></div></div>
+</div><dialog id="participate"><h2>参与步骤演示</h2><p>1. 打开抖音合作链接并完成团长绑定。</p><p>2. 找到对应任务并点击接任务。</p><p>3. 发布带小程序锚点的视频。</p><p class="muted">正式参与链接和二维码待接口接入。</p><button class="action" onclick="document.querySelector('dialog').close()">我知道了</button></dialog>
+<script>
+const projects=[{name:'爱奇艺',type:'短剧',icon:'爱'},{name:'示例漫剧项目',type:'漫剧',icon:'漫'}];
+const tasks=[
+{id:'DEMO-001',name:'一辈子暖暖的',project:'爱奇艺',rate:71,douyin:1},
+{id:'DEMO-002',name:'凤定九州',project:'爱奇艺',rate:75,douyin:1},
+{id:'DEMO-003',name:'初唐咸鱼',project:'示例漫剧项目',rate:68,douyin:1},
+{id:'DEMO-004',name:'山海奇遇记',project:'示例漫剧项目',rate:72,douyin:1},
+{id:'DEMO-005',name:'春风知我意',project:'爱奇艺',rate:70,douyin:1},
+{id:'DEMO-006',name:'长安旧梦',project:'爱奇艺',rate:73,douyin:1}
+];
+let current='爱奇艺';
+function navigate(id){document.querySelectorAll('.device').forEach(el=>el.classList.toggle('active',el.id===id));window.parent.postMessage({type:'frontend-page',page:id},'*')}
+function chooseProject(name){current=name;document.querySelector('#search').value='';render();navigate('project')}
+document.querySelector('#projects').innerHTML=projects.map(p=>'<article class="card"><div class="row"><div class="icon">'+p.icon+'</div><div style="flex:1"><h2>'+p.name+'</h2><span class="tag">小程序推广计划 · '+p.type+'</span></div><button class="action" data-project="'+p.name+'">查看</button></div><div class="meta">可推广任务 <b>'+tasks.filter(t=>t.project===p.name).length+' 个</b></div></article>').join('');
+document.querySelector('#projects').onclick=e=>{if(e.target.dataset.project)chooseProject(e.target.dataset.project)};
+function render(){
+ document.querySelector('#filters').innerHTML=['全部',...projects.map(p=>p.name)].map(name=>'<button class="'+(current===name?'active':'')+'" data-filter="'+name+'">'+name+'</button>').join('');
+ const query=document.querySelector('#search').value.trim();
+ const shown=tasks.filter(t=>(current==='全部'||t.project===current)&&t.name.includes(query));
+ document.querySelector('#count').textContent='共 '+shown.length+' 个任务';
+ document.querySelector('#tasks').innerHTML=shown.map(t=>'<button class="tile" data-task="'+t.id+'"><div class="cover"><em>抖音 · '+t.project+'</em><strong>'+t.name+'</strong></div><div class="rate">CPS '+t.rate+'%</div><div class="name">'+t.name+'</div></button>').join('');
+}
+function openTask(id,move=true){
+ const t=tasks.find(t=>t.id===id);
+ document.querySelector('#detailBody').innerHTML='<div class="hero"><div class="cover"><strong>'+t.name+'</strong></div><div><h2>《'+t.name+'》推广任务</h2><span class="tag">'+t.project+'</span><p class="muted">任务 ID '+t.id+'</p><small>模拟投稿期 2026.11.17—2026.12.31</small></div></div><article class="card split"><strong>结算方式 · CPS 分成</strong><div class="rates"><div>右豹前端分成<b>'+t.rate+'%</b></div><div>抖音分成<b>'+t.douyin+'%</b></div></div></article><article class="card"><strong>抖音扫码参与</strong><div class="join"><div class="qr" id="qr">待获取合作二维码</div><button class="action" id="getQr">获取参与入口</button><p class="muted">模拟数据 · 供交互评审</p></div></article><article class="card"><details><summary>项目说明</summary><p>发布与剧集相关的原创视频，接取对应任务后挂载小程序锚点。</p></details></article>';
+ document.querySelector('#getQr').onclick=()=>{document.querySelector('#qr').textContent='演示入口已准备';document.querySelector('#participate').showModal();window.parent.postMessage({type:'frontend-page',page:'participate'},'*')};
+ if(move)navigate('detail');
+}
+document.querySelector('#filters').onclick=e=>{if(e.target.dataset.filter){current=e.target.dataset.filter;render()}};
+document.querySelector('#tasks').onclick=e=>{const button=e.target.closest('[data-task]');if(button)openTask(button.dataset.task)};
+document.querySelector('#search').oninput=render;
+document.querySelector('#participate').addEventListener('close',()=>navigate('detail'));
+render();openTask(tasks[0].id,false);navigate('list');
+</script></body></html>
