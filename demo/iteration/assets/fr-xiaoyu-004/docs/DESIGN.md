@@ -28,5 +28,5 @@
 
 ## 页面交付
 
-交互场景入口：`demo/iteration/fr-xiaoyu-003.html`。业务原型：`批量传订单/dist/index.html`。流程图：本目录 `路径图.svg`。
+交互场景入口：`demo/iteration/fr-xiaoyu-004.html`。业务原型：`批量传订单/dist/index.html`。流程图：本目录 `路径图.svg`。
 

@@ -41,6 +41,6 @@
 ## 原型验证入口
 
 - 主交互页面：`../../../../批量传订单/dist/index.html`
-- 需求池场景入口：`../../../../demo/iteration/fr-xiaoyu-003.html`
+- 需求池场景入口：`../../../../demo/iteration/fr-xiaoyu-004.html`
 - 路径图：`路径图.svg`
 

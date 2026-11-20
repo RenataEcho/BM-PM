@@ -1,7 +1,7 @@
 ---
 title: 批量传订单
 business_line: youbao
-iteration_id: FR-XIAOYU-003
+iteration_id: FR-XIAOYU-004
 status: 待开始
 ---
 
@@ -9,7 +9,7 @@ status: 待开始
 
 ## 1. Document Purpose
 
-定义右豹后台品牌项目批量上传订单、处理、审核和分发的交互与服务边界。页面原型为 `批量传订单/dist/index.html`，需求池交互入口为 `demo/iteration/fr-xiaoyu-003.html`。全局编号为 FR-XIAOYU-003，由产品分配，本文内部条目 FR-1 等不代表全局编号。本需求已获用户授权登记，编号为 FR-XIAOYU-003。
+定义右豹后台品牌项目批量上传订单、处理、审核和分发的交互与服务边界。页面原型为 `批量传订单/dist/index.html`，需求池交互入口为 `demo/iteration/fr-xiaoyu-004.html`。全局编号为 FR-XIAOYU-004，由产品分配，本文内部条目 FR-1 等不代表全局编号。本需求已获用户授权登记，编号为 FR-XIAOYU-004。
 
 ## 2. Vision
 
