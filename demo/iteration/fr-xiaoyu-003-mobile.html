@@ -58,5 +58,14 @@ document.querySelector('#filters').onclick=e=>{if(e.target.dataset.filter){curre
 document.querySelector('#tasks').onclick=e=>{const button=e.target.closest('[data-task]');if(button)openTask(button.dataset.task)};
 document.querySelector('#search').oninput=render;
 document.querySelector('#participate').addEventListener('close',()=>navigate('detail'));
-render();openTask(tasks[0].id,false);navigate('list');
+window.addEventListener('message',event=>{
+ if(event.source!==window.parent||event.data?.type!=='frontend-navigate')return;
+ const page=event.data.page;
+ if(!['list','project','detail'].includes(page))return;
+ if(page==='detail')openTask(tasks[0].id);
+ else navigate(page);
+});
+render();openTask(tasks[0].id,false);
+const initialScreen=new URLSearchParams(location.search).get('screen');
+navigate(['list','project','detail'].includes(initialScreen)?initialScreen:'list');
 </script></body></html>
