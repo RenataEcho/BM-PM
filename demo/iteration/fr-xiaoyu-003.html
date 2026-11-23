@@ -138,21 +138,32 @@ button{min-height:34px;border-radius:7px}
 #rules[open]{display:flex}
 #rules>h2,#rules>.rule-tabs,#rules>form{flex-shrink:0}
 #rules .rule-scroll{overflow:auto;min-height:0;flex:1}
-#scenarioNext:empty{display:none!important}</style></head><body>
-<header><div><h1>FR-XIAOYU-003 · 小程序推广计划 <span style="font-size:12px;font-weight:400;color:#a8b5cc;margin-left:14px">v1 当前</span></h1><nav class="top" aria-label="需求视图"><button id="frontTab" aria-selected="true">前端</button><button id="businessTab" aria-selected="false">后台</button><button id="mapTab" aria-selected="false">流程图</button><button id="reviewFullscreen">全屏预览</button><button class="primary" id="openRules" aria-expanded="false">需求规则</button></nav></div></header>
-<main><section id="front"><div class="box" style="margin-top:0"><h2>前端交互</h2><nav class="toolbar" aria-label="前端场景"><button data-front-scene="list">项目列表</button><button data-front-scene="project">项目任务列表</button><button data-front-scene="detail">任务详情页</button></nav><p id="frontLocation">当前页面 · 项目列表</p><p class="muted">点击项目的「查看」，选择任务进入详情，再获取参与入口。使用返回按钮逐页返回。</p></div><iframe id="frontFrame" title="设备前端连续交互" src="fr-xiaoyu-003-mobile.html" style="height:850px"></iframe></section><section id="business" hidden><div class="box" style="margin-top:0;margin-bottom:16px"><strong>场景演示</strong><div class="toolbar" style="margin-top:12px;margin-bottom:0"><button data-scenario="launch">管理后台配置并上架</button><button data-scenario="commission">调整分佣规则</button><button data-scenario="ledger">查询流水</button></div><p id="scenarioNote" class="muted">先在管理后台准备任务，再到设备前端查看和参与。</p></div><div id="sceneGuide" class="box"></div><nav id="steps" class="steps" aria-label="流程步骤"></nav><div class="box" id="stepNote"></div><section class="box layout" id="admin"><nav class="menu" id="menu" aria-label="后台菜单"></nav><div class="stage"><div id="stage"></div><div id="scenarioNext" class="toolbar" style="margin-top:20px"></div></div></section><section class="box" id="mobile" hidden><h2>设备前端</h2><p class="muted">从左侧手机选择项目，再在中间选择任务，右侧展示所选任务详情。数据均为交互演示。</p><iframe title="项目列表、项目页和任务详情页" src="fr-xiaoyu-003-mobile.html"></iframe></section></section>
+#scenarioNext:empty{display:none!important}#commissionHelp{margin:0 0 0 auto;height:100%;max-height:100%;width:480px;border-radius:0;overflow:auto}#commissionHelp p{color:#667188;font-size:14px}#edit{max-height:85vh;overflow:auto}.rule-preview{background:#f4f7fc;padding:16px;border-radius:8px}.rule-preview label{display:block;margin:10px 0}#trialFormula{color:#2852d9;font-weight:600}#admin button[data-action=commissionHelp]{margin-left:auto}
+/* Keep scene controls beside the device so the phone can use the full height. */
+@media(min-width:760px){
+ #front{display:grid;grid-template-columns:240px minmax(0,1fr);gap:16px}
+ #front>.box{align-self:start;margin:0;padding:16px}
+ #front>.box .toolbar{display:flex;flex-direction:column;margin-bottom:16px}
+ #front>.box .toolbar button{text-align:left;width:100%}
+ #frontFrame{height:100%!important}
+}
+.rule-relationship{background:#f8f9fc;border:1px solid #e4e8f1;border-radius:8px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6}.rule-relationship p{margin:8px 0}.field-note{font-size:12px;color:#667188;margin-top:-4px}.trial-step{padding:10px 0;border-bottom:1px solid #e1e6f1}.trial-step strong{font-size:20px}#trialFormula small{display:block;font-weight:400;color:#667188;margin-top:12px}#trialDisplay,#trialScope{font-size:13px}#trialAgency:disabled{background:#e9edf3;color:#98a0af}
+.config-row,#editFields:has(#ruleMethod)>p>label,.rule-preview>label{display:grid;grid-template-columns:124px minmax(0,1fr);align-items:start;gap:12px;margin:16px 0}#editFields .config-row input,#editFields .config-row select{margin:0}#editFields .config-row input:is([type=radio],[type=checkbox]){display:inline;width:auto;margin:0 4px 0 0}.config-row label{display:inline-block;margin:4px}#rich{min-height:90px;padding:8px;border:1px solid #ccd2de;border-radius:5px;margin-top:6px}
+</style></head><body>
+<header><div><h1>FR-XIAOYU-003 · 小程序推广计划 <span style="font-size:12px;font-weight:400;color:#a8b5cc;margin-left:14px">v2 · 优化草稿</span></h1><nav class="top" aria-label="需求视图"><button id="frontTab" aria-selected="true">前端</button><button id="businessTab" aria-selected="false">后台</button><button id="mapTab" aria-selected="false">流程图</button><button id="reviewFullscreen">全屏预览</button><button class="primary" id="openRules" aria-expanded="false">需求规则</button></nav></div></header>
+<main><section id="front"><div class="box" style="margin-top:0"><h2>前端交互</h2><nav class="toolbar" aria-label="前端场景"><button data-front-scene="list">项目列表</button><button data-front-scene="project">项目任务列表</button><button data-front-scene="detail">任务详情页</button></nav><div class="toolbar"><button data-order-scenario="none">项目无订单 · 隐藏月榜</button><button data-order-scenario="has">项目有订单 · 展示月榜</button></div><p id="frontLocation">当前页面 · 项目列表</p><p class="muted">点击项目的「查看」，选择任务进入详情，再获取参与入口。使用返回按钮逐页返回。</p></div><iframe id="frontFrame" title="设备前端连续交互" src="fr-xiaoyu-003-mobile.html" style="height:850px"></iframe></section><section id="business" hidden><div class="box" style="margin-top:0;margin-bottom:16px"><strong>场景演示</strong><div class="toolbar" style="margin-top:12px;margin-bottom:0"><button data-scenario="launch">管理后台配置并上架</button><button data-scenario="commission">调整分佣规则</button><button data-scenario="ledger">查询流水</button></div><p id="scenarioNote" class="muted">先在管理后台准备任务，再到设备前端查看和参与。</p></div><div id="sceneGuide" class="box"></div><nav id="steps" class="steps" aria-label="流程步骤"></nav><div class="box" id="stepNote"></div><section class="box layout" id="admin"><nav class="menu" id="menu" aria-label="后台菜单"></nav><div class="stage"><div id="stage"></div><div id="scenarioNext" class="toolbar" style="margin-top:20px"></div></div></section><section class="box" id="mobile" hidden><h2>设备前端</h2><p class="muted">从左侧手机选择项目，再在中间选择任务，右侧展示所选任务详情。数据均为交互演示。</p><iframe title="项目列表、项目页和任务详情页" src="fr-xiaoyu-003-mobile.html"></iframe></section></section>
 <section id="map" class="flow" hidden></section></main>
-<dialog id="rules"><form method="dialog"><button>关闭</button></form><h2>FR-XIAOYU-003 · 小程序推广计划 · v1 需求规则</h2><nav class="rule-tabs"><button type="button" id="frontRulesTab">前端需求</button><button type="button" id="adminRulesTab">后台需求</button></nav><div class="rule-scroll"><p id="ruleContext" class="muted"></p>
-<h3>管理后台前端</h3><ul><li>项目 → 小程序推广计划下提供项目方管理、任务管理、比例设置、分佣计算规则和流水管理。任务列表默认展示同步任务，按后端结果刷新归属和上架状态。</li><li>比例设置包含通用和任务自定义两页。已创建规则通过删除后重建调整，删除后原规则立即失效。</li></ul>
+<dialog id="rules"><form method="dialog"><button>关闭</button></form><h2>FR-XIAOYU-003 · 小程序推广计划 · v2 优化草稿需求规则</h2><nav class="rule-tabs"><button type="button" id="frontRulesTab">前端需求</button><button type="button" id="adminRulesTab">后台需求</button></nav><div class="rule-scroll"><p id="ruleContext" class="muted"></p>
+<h3>管理后台前端</h3><p>新建项目统一归属于“小程序推广计划”，项目方管理仅配置二级页面的项目名称、项目ID、展示状态、项目说明和排序。一级赛道和短剧链接由其他后台接口统一维护。任务管理获取撮合平台任务数据，流水管理获取撮合平台订单数据。比例设置同时支持前端展示和原始订单拉取后的达人收益计算，分佣计算规则解释公式与用户入账方式。</p><ul><li>项目 → 小程序推广计划下提供项目方管理、任务管理、分佣设置和流水管理。任务列表默认展示同步任务，按后端结果刷新归属和上架状态。</li><li>比例设置包含通用和任务自定义两页。已创建规则通过删除后重建调整，删除后原规则立即失效。</li></ul>
 <h3>后端</h3><ul><li>查询合作小程序任务 ID，再按 ID 拉取详情，按任务 ID 去重入库。ID 接口单次查询时间范围最长 7 天。手动新增时用任务路径查详情，取得 ID 后走同一入库流程。</li><li>后端处理任务与项目方关联及批量上架。重新同步更新抖音任务数据，保留右豹归属与上架配置。</li><li>有效任务自定义规则优先，未命中按订单类型和右豹用户身份匹配通用规则。删除时旧规则失效，新规则按创建时间生效。自定义规则删除后、重建前按通用规则计算。历史流水保留实际采用的比例及计算方式。</li><li>任务统计和流水逐项映射文档支持的返回参数。接待数、投稿数、逐笔订单及用户映射等字段的数据来源待确认。</li></ul>
 <h3>终端前端</h3><ul><li>展示后端返回的已上架任务。发现页进入项目列表，项目页展示项目方和任务卡片，任务详情展示结算方式、右豹前端分成和抖音分成，并提供参与入口。</li><li>达人在抖音完成绑定、接单和挂链投稿。右豹到抖音的正式跳转与二维码对接方式待确认。</li></ul></div></dialog>
-<dialog id="edit"><form id="editForm"><h2 id="editTitle"></h2><div id="editFields"></div><p><button type="button" id="cancel">取消</button> <button class="primary">确定</button></p></form></dialog>
+<dialog id="commissionHelp"><form method="dialog"><button>关闭</button></form><h2>计算与发放说明</h2><h3>比例与公式的关系</h3><p>一条分佣规则同时保存适用范围、结算比例、前端展示比例和计算方式。结算比例作用于计算基数；前端比例仅展示，不重复参与计算。新增弹窗中的试算只使用当前未保存的表单值。</p><h3>如何确定佣金</h3><p>任务自定义规则优先；未命中时按订单类型和用户身份匹配通用规则。</p><p>按官方流水计算：试算基数 × 用户结算比例。</p><p>按机构分佣后计算：试算基数 × 机构分成比例 × 用户结算比例。</p><p>试算暂用订单净额并四舍五入到分，正式金额字段与公式待确认。前端展示比例用于任务页展示，收益计算使用结算比例。</p><h3>动态试算如何变化</h3><p>输入净额或结算比例后实时重算；选择按机构分佣后计算时启用机构分成，并新增机构分佣计算步骤。选择按官方流水计算时禁用机构分成。空值和越界输入不输出金额，0 是有效值。修改前端比例只更新展示预览。</p><h3>如何给到用户</h3><p>应得佣金 → 结算校验 → 关联右豹用户 → 按确认后的发放条件入账。保存规则不触发打款，试算金额不等于已到账金额。未命中任何规则时标记待配置，不默认按 0 元结算（本版草稿建议）。</p><p>通过订单、任务和达人映射关联右豹用户 ID。到账账户、发放条件、到账时间和退款扣回规则待确认。</p><h3>何时生效</h3><p>新建规则按创建时间生效。删除自定义规则后按通用规则计算，历史流水保留原结果。</p></dialog><dialog id="edit"><form id="editForm"><h2 id="editTitle"></h2><div id="editFields"></div><p><button type="button" id="cancel">取消</button> <button class="primary">确定</button></p></form></dialog>
 <script>
 const model=[
  ['合作与建任务','抖音侧','MCN 获取 ClientKey 并与小程序完成合作授权。爱奇艺运营方在抖音开放平台创建任务。',''],
- ['配置项目方','右豹后台','维护项目方名称和项目类型，供右豹终端展示。','项目方管理'],
+ ['配置项目方','右豹后台','维护二级页面项目名称及展示配置，供右豹终端展示。','项目方管理'],
  ['同步与上架','右豹后台','查询任务 ID 和详情并入库。可按路径手动补录，由后端处理项目归属与上架。','任务管理'],
- ['配置分佣','右豹后台','通用规则按订单类型与用户身份配置，任务例外按已同步任务 ID 配置。','比例设置'],
+ ['配置分佣','右豹后台','通用规则按订单类型与用户身份配置，任务例外按已同步任务 ID 配置。','分佣设置'],
  ['浏览与参与','右豹终端 → 抖音','达人从项目列表进入项目页和任务详情，再进入抖音接单及挂链投稿。','终端'],
  ['归因与流水','抖音侧 → 右豹后台','观众付费后关联任务、视频与渠道。右豹流水展示接口支持的数据及实际采用的分佣规则。','流水管理'],
  ['查看分佣计算规则','右豹后台','查看任务规则匹配顺序、生效时间及历史流水处理。','分佣计算规则']
@@ -166,12 +177,26 @@ const scenarioSteps = {
  ledger: {label:'运营查询订单流水',note:'按任务 ID 或用户 ID 查询流水，核对任务信息、三个分成比例和计算方式。'}
 };
 const by=id=>document.getElementById(id);
-const menus=['项目方管理','任务管理','比例设置','分佣计算规则','流水管理'];
+const menus=['项目方管理','任务管理','分佣设置','流水管理'];
 let step=1, custom=false, published=false, nextRule=3;
 const publishedIds = new Set();
-const projects=[['爱奇艺','短剧']];
-const tasks=[['示例-001','首发AI真人剧《一辈子暖暖的》','爱奇艺'],['示例-002','精品AI漫剧《凤定九州》','爱奇艺']];
-const rules=[{id:2,custom:false,key:'CPS / 新人创作者',rate:'70',time:'示例配置'},{id:1,custom:true,key:'示例-001',rate:'71',time:'示例配置'}];
+// 开发维护的项目表在草稿中使用模拟数据。
+const catalog=['爱奇艺','原生剧场','微剧吧'];
+const sharedBooklists={IQY:'https://example.com/demo-booklist'};
+const notes={};
+function cleanRich(){
+ const copy=by('rich').cloneNode(true);
+ for(const el of copy.querySelectorAll('*')){
+ if(!['P','DIV','BR','STRONG','B','UL','OL','LI','I','EM'].includes(el.tagName))el.replaceWith(...el.childNodes);
+ else for(const attr of [...el.attributes])el.removeAttribute(attr.name);
+ }
+ return copy.textContent.trim()?copy.innerHTML:'';
+}
+function sendProjects(){by('frontFrame').contentWindow.postMessage({type:'project-links',projects:projects.map(r=>({name:r[0],url:sharedBooklists[r[3]]||'',visible:r[4],description:r[5]})),notes,owners:Object.fromEntries(tasks.map(t=>[t[0],t[2]]))},'*')}
+by('frontFrame').addEventListener('load',sendProjects);
+const projects=[['爱奇艺',null,null,'IQY','是','<p>发布原创推广视频并挂载任务小程序。</p>',100]];
+const tasks=[['DEMO-001','首发AI真人剧《一辈子暖暖的》','爱奇艺'],['DEMO-002','精品AI漫剧《凤定九州》','爱奇艺']];
+const rules=[{id:2,custom:false,key:'CPS / 新人创作者',rate:'70',time:'示例配置'},{id:1,custom:true,key:'DEMO-001',rate:'71',time:'示例配置'}];
 const table=(heads,rows)=>'<div class="scroll"><table><thead><tr>'+heads.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map(value=>'<td>'+value+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
 const escapeText=value=>String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const act=(label,action)=>'<button data-action="'+action+'">'+label+'</button>';
@@ -185,7 +210,7 @@ const scenePaths = {
 const pageGuides = {
  6:['订单佣金计算与发放','输入订单金额、退款和分成比例，试算这笔钱如何分给用户。','确定计算基数，匹配结算规则并关联用户，按确认后的发放条件入账。','可以看到计算过程、用户应得佣金和待确认的到账规则。'],
  0:['完成合作接入','MCN 与小程序建立合作关系，运营方创建任务。','后端使用具备权限的凭证调用任务查询接口。','任务可通过接口查询。'],
- 1:['建立项目展示信息','点击新增，填写项目方名称、项目类型并保存。','保存项目方，提供给任务关联和终端展示。','列表出现新项目方，名称和类型与填写内容一致。'],
+ 1:['建立项目展示信息','点击新增，选择项目名称并填写项目ID并保存。','保存项目方，提供给任务关联和终端展示。','列表出现新项目方，名称和ID与配置一致。'],
  2:['同步任务并提交上架','点击更新同步任务查看结果，勾选任务后点击任务批量上架。','查询任务 ID 和详情并去重入库，处理归属与上架，返回逐条结果。','同步任务出现在列表，上架成功的任务状态更新并可在终端展示。'],
  3:['确定任务使用的分佣规则','通用规则按订单类型和用户身份创建，特殊任务在自定义 Tab 中按已同步任务 ID 配置。','按创建时间启用规则，有效自定义优先，未命中时匹配通用规则。','新规则出现在列表，删除后从列表移除，历史流水保留原规则。'],
  4:['让达人找到并参与任务','从项目入口打开项目页，搜索任务，打开详情并点击参与入口。','提供已上架任务和用户对应展示比例，正式接入后提供参与链接。','任务信息与后台一致，详情展示右豹前端比例和抖音分成。'],
@@ -214,7 +239,7 @@ function show(index){
 const next = by('scenarioNext');
 next.replaceChildren();
 if(scenario==='launch' && page){
- const destinations = {'项目方管理':[2,'下一步 · 同步任务'],'任务管理':[3,'下一步 · 配置分佣'],'比例设置':[2,'返回任务管理 · 上架任务']};
+ const destinations = {'项目方管理':[2,'下一步 · 同步任务'],'任务管理':[3,'下一步 · 配置分佣'],'分佣设置':[2,'返回任务管理 · 上架任务']};
  if(destinations[page]){
  const [destination,label] = destinations[page];
  const button=document.createElement('button');
@@ -239,11 +264,11 @@ function render(page){
  ['给到用户','需明确佣金进入哪个账户、何时变为可用余额，以及如何提现或打款。当前不模拟真实到账。'],
  ['退款与历史流水','历史流水保留当时规则及计算结果；退款后的佣金扣回方式、时间和状态待确认。']
  ]);
- if(page==='项目方管理') body='<div class="toolbar">'+act('新增','project')+'</div>'+table(['项目方名称','项目类型'],projects.map(row=>row.map(escapeText)));
- if(page==='任务管理') body='<div class="metrics"><span>累计任务 '+tasks.length+'</span><span>每日新增 '+tasks.length+'</span><span>接待数量 —</span><span>投稿数量 —</span></div><div class="toolbar">'+act('任务批量上架','publish')+act('更新同步任务','sync')+act('新增','task')+'</div>'+table(['选择','任务 ID','任务名称','所属项目','右豹状态'],tasks.map(row=>['<input type="checkbox" value="'+escapeText(row[0])+'" aria-label="选择任务">',...row.map(escapeText),publishedIds.has(row[0])?'已上架':'待上架']));
- if(page==='比例设置') body='<div class="toolbar"><button data-action="general" aria-selected="'+!custom+'">通用比例设置</button><button data-action="custom" aria-selected="'+custom+'">自定义任务比例设置</button>'+act('新增','rule')+(custom?act('导入数据','import'):'')+'</div>'+table([custom?'任务 ID':'订单类型 / 用户身份','结算比例','前端比例','计算方式','创建时间','操作'],rules.filter(r=>r.custom===custom).map(r=>[escapeText(r.key),escapeText(r.rate)+'%',escapeText(r.front??r.rate)+'%',escapeText(r.method||'按官方流水计算'),r.time,act('删除','delete-'+r.id)]));
+ if(page==='项目方管理') body='<div class="toolbar">'+act('新增','project')+'</div>'+table(['归属业务','项目名称','项目ID','是否展示','排序','操作'],projects.map((row,index)=>['小程序推广计划',escapeText(row[0]),escapeText(row[3]),row[4],row[6],act('编辑','editProject-'+index)]));
+ if(page==='任务管理') body='<div class="metrics"><span>累计任务 '+tasks.length+'</span><span>每日新增 '+tasks.length+'</span><span>接待数量 —</span><span>投稿数量 —</span></div><div class="toolbar">'+act('任务批量上架','publish')+act('更新同步任务','sync')+act('新增','task')+'</div>'+table(['选择','任务 ID','任务名称','所属项目','右豹状态','操作'],tasks.map(row=>['<input type="checkbox" value="'+escapeText(row[0])+'" aria-label="选择任务">',...row.map(escapeText),publishedIds.has(row[0])?'已上架':'待上架',act('编辑项目说明','taskNote-'+row[0])]));
+ if(page==='分佣设置') body='<div class="toolbar"><button data-action="general" aria-selected="'+!custom+'">通用比例设置</button><button data-action="custom" aria-selected="'+custom+'">自定义任务比例设置</button>'+act('新增','rule')+act('计算与发放说明','commissionHelp')+(custom?act('导入数据','import'):'')+'</div>'+table([custom?'任务 ID':'订单类型 / 用户身份','右豹团队身份','结算比例','前端比例','计算方式','创建时间','操作'],rules.filter(r=>r.custom===custom).map(r=>[escapeText(r.key),escapeText(r.teams?.join('、')||'不限'),escapeText(r.rate)+'%',escapeText(r.front??r.rate)+'%',escapeText(r.method||'按官方流水计算'),r.time,act('删除','delete-'+r.id)]));
  if(page==='流水管理') body='<div class="toolbar"><input id="ledgerQuery" placeholder="任务 ID / 用户 ID">'+act('查询','queryLedger')+'</div>'+'<div class="metrics"><span>累计流水 —</span><span>今日新增 —</span><span>待结算金额 —</span></div>'+table(['流水 ID','所属项目','用户 ID','任务名称 / ID','结算方式','小程序分成','右豹结算比例','右豹前端比例','计算方式','创建时间'],[])+'<p class="muted" style="text-align:center;padding:65px 0">暂无流水数据<br><small>接口同步后展示订单及对应结算规则</small></p>';
- const filterFields = page==='项目方管理' ? ['项目方名称','项目类型'] : page==='任务管理' ? ['任务 ID','任务名称','所属项目'] : page==='比例设置' ? [custom?'任务 ID':'用户身份','计算方式'] : [];
+ const filterFields = page==='项目方管理' ? ['项目名称','项目ID'] : page==='任务管理' ? ['任务 ID','任务名称','所属项目'] : page==='分佣设置' ? [custom?'任务 ID':'用户身份','计算方式'] : [];
 const filters = filterFields.length ? '<div class="filter-panel">'+filterFields.map(label=>'<label>'+label+'<input data-filter placeholder="请输入'+label+'"></label>').join('')+act('查询','filter')+act('重置','resetFilter')+'</div>' : '';
 by('stage').innerHTML='<h2>项目 / 小程序推广计划 / '+page+'</h2>'+filters+body+'<p class="muted" style="font-size:12px;margin-top:20px">预览数据 · 操作仅在本次页面会话生效</p><p id="status" role="status" class="muted"></p>';
 }
@@ -287,7 +312,8 @@ if(target.dataset.step!==undefined){tab(false);show(Number(target.dataset.step))
  tab(false);show({launch:1,commission:3,creator:4,ledger:5}[scenario]);return;
 }
 const action=target.dataset.action;
- if(!action)return;
+ if(!action&&!target.dataset.format)return;
+ if(action==='commissionHelp'){by('commissionHelp').showModal();return;}
  if(action==='filter'||action==='resetFilter'){
   const inputs=[...by('stage').querySelectorAll('[data-filter]')];
   if(action==='resetFilter')inputs.forEach(input=>input.value='');
@@ -302,7 +328,27 @@ const action=target.dataset.action;
  }
  if(action==='queryLedger')by('status').textContent='查询完成，暂无匹配流水。当前原型未连接订单接口。';
  if(action==='general'||action==='custom'){custom=action==='custom';show(step);}
- if(action==='project')form('新增项目方',field('name','项目方名称')+field('type','项目类型'),data=>{projects.push([data.get('name'),data.get('type')]);return '示例项目方已添加';});
+
+ const line=(label,control)=>'<div class="config-row"><span>'+label+'</span><div>'+control+'</div></div>';
+ const select=(name,options)=>'<select aria-label="'+name+'" name="'+name+'">'+options.map(v=>'<option>'+v+'</option>').join('')+'</select>';
+ const rich=line('项目说明','<button type="button" data-action="format" onmousedown="event.preventDefault()" data-format="bold">加粗</button> <button type="button" data-action="format" onmousedown="event.preventDefault()" data-format="insertUnorderedList">列表</button><div contenteditable="true" role="textbox" aria-label="项目说明" id="rich"></div>');
+ if(target.dataset.format){document.execCommand(target.dataset.format);return}
+ if(action==='project'||action.startsWith('editProject-')){
+ const index=action==='project'?-1:Number(action.split('-')[1]);
+ const row=projects[index]||[catalog[0],null,null,'','是','',0];
+ form(index<0?'新增项目方':'编辑项目方',line('项目名称',select('projectName',catalog))+line('项目ID','<input required name="pid">')+line('是否展示',['是','否'].map(v=>'<label><input type="radio" name="visible" value="'+v+'">'+v+'</label>').join(' '))+rich+line('排序','<input name="sort" type="number" required step="1"><small>数字越大越靠前</small>'),d=>{
+ const next=[d.get('projectName'),null,null,d.get('pid'),d.get('visible'),cleanRich(),Number(d.get('sort'))];
+ if(index<0)projects.push(next);else {tasks.forEach(t=>{if(t[2]===row[0])t[2]=next[0]});projects[index]=next}
+ projects.sort((a,b)=>b[6]-a[6]);sendProjects();return '项目配置已保存';
+ });
+ const f=by('editForm').elements;
+ f.projectName.value=row[0];f.pid.value=row[3];f.visible.value=row[4];by('rich').innerHTML=row[5];f.sort.value=row[6];
+ }
+ if(action.startsWith('taskNote-')){
+ const task=tasks.find(t=>t[0]===action.slice(9));
+ form('编辑任务项目说明',rich,()=>{const note=cleanRich();if(note)notes[task[0]]=note;else delete notes[task[0]];sendProjects();return '任务说明已保存'});
+ by('rich').innerHTML=notes[task[0]]||projects.find(r=>r[0]===task[2])?.[5]||'';
+ }
  if(action==='task')form('按任务路径新增',field('path','抖音任务路径'),data=> {
  const path=data.get('path');
  const match=String(path).match(/taskId=([^&]+)/);
@@ -319,7 +365,19 @@ const action=target.dataset.action;
   if(!by('stage').querySelector('input:checked')){by('status').textContent='请勾选要上架的任务。';return;}
   by('stage').querySelectorAll('input:checked').forEach(input=>publishedIds.add(input.value));show(step);by('status').textContent='示例任务已上架。';
  }
- if(action==='rule')form('新增分佣规则',(custom?'<p><label>任务 ID <select name="key">'+tasks.map(t=>'<option>'+escapeText(t[0])+'</option>').join('')+'</select></label></p>':field('order','订单类型')+field('identity','右豹用户身份'))+field('rate','右豹结算比例（%）','number')+field('front','右豹前端比例（%）','number')+field('method','计算方式'),data=>{rules.push({id:nextRule++,custom,key:custom?data.get('key'):data.get('order')+' / '+data.get('identity'),rate:data.get('rate'),front:data.get('front'),method:data.get('method'),time:new Date().toLocaleString()});return '示例规则已创建，自创建时间生效。';});
+ if(action==='rule'){
+ form('新增分佣规则',
+ '<div class="rule-relationship"><strong>一条规则 = 适用范围 + 结算比例 + 展示比例 + 计算方式</strong><p>先确定订单用哪条规则，再按该规则的计算方式和结算比例算出达人应得。前端比例用于展示，不重复参与收益计算。</p><p>匹配顺序：有效任务自定义 → 按订单类型和用户身份匹配通用规则。均未命中时标记待配置，不默认按 0 元结算。</p></div>'+
+ (custom?'<p><label>任务 ID <select name="key">'+tasks.map(t=>'<option>'+escapeText(t[0])+'</option>').join('')+'</select></label></p>':line('订单类型',['CPS','CPA','CPM'].map(v=>'<label><input required type="radio" name="order" value="'+v+'">'+v+'</label>').join(' '))+line('右豹用户身份',['全部','L1','L2','L3','L4','L5','L6','L7'].map(v=>'<label><input type="checkbox" name="identity" value="'+v+'" '+(v==='全部'?'checked':'')+'>'+v+'</label>').join(' ')))+
+ line('右豹团队身份',['V1','V2','V3'].map(level=>'<label><input type="checkbox" name="teams" value="'+level+'">'+level+'</label>').join(' ')+'<small>可多选，留空表示不限团队身份</small>')+
+ field('rate','右豹结算比例（%）','number')+'<p class="field-note">用于计算达人收益；作用于下面计算方式确定的基数。</p>'+
+ field('front','右豹前端比例（%）','number')+'<p class="field-note">用于任务详情页展示，不与结算比例连乘。</p>'+
+ '<p><label>计算方式<select name="method" id="ruleMethod"><option>按官方流水计算</option><option>按机构分佣后计算</option></select></label></p>'+
+ '<div class="rule-preview"><strong>动态收益试算</strong><p class="muted">试算当前表单，不代表已生效规则。示例采用订单净额，正式接口字段及精度待确认。</p><p id="trialScope"></p><label>订单净额（元）<input id="trialAmount" type="number" min="0" step="0.01" value="100"></label><small>假设已扣除退款；已为机构分佣后金额时，不可再次乘机构分成。</small><label>机构分成（%）<input id="trialAgency" type="number" min="0" max="100" step="0.01" value="20"></label><p id="trialAgencyNote" class="field-note"></p><div id="trialFormula" role="status" aria-live="polite"></div><p id="trialDisplay"></p></div>'+
+ '<div class="rule-relationship"><strong>保存后如何给用户</strong><p>保存即按创建时间生效；通过订单、任务与达人映射找到右豹用户，记录规则及比例快照。计算出的应得佣金须经结算校验后再入账，不在保存规则时发钱。</p><p>到账账户、结算条件、发放时间及退款扣回规则待确认。删除自定义后，新流水回退通用规则；历史流水保留原计算结果。</p></div>',
+ data=>{rules.push({id:nextRule++,custom,teams:data.getAll('teams'),key:custom?data.get('key'):data.get('order')+' / '+data.getAll('identity').join('、'),rate:data.get('rate'),front:data.get('front'),method:data.get('method'),time:new Date().toLocaleString()});return '示例规则已创建，自创建时间生效。';});
+ updateRulePreview();
+ }
  if(action.startsWith('delete-'))form('删除分佣规则','<p>确定删除此分佣规则？删除后立即停止用于新流水，自定义规则删除后按通用规则计算。</p>',()=>{const index=rules.findIndex(r=>r.id===Number(action.slice(7)));if(index>=0)rules.splice(index,1);return '规则已删除。';});
  if(action==='import')form('导入自定义任务比例','<p><label>选择文件 <input type="file" required accept=".csv,.xlsx"></label></p>',()=> '预览已选择文件。正式导入由后端校验任务 ID 和比例。');
 });
@@ -347,10 +405,42 @@ document.addEventListener('submit',event=>{
  by('commissionResult').textContent='试算净额 '+net.toFixed(2)+' 元 → 计算基数 '+base.toFixed(2)+' 元 × '+values.get('userRate')+'% = 用户佣金 '+commission.toFixed(2)+' 元。归属用户 '+values.get('user')+'。待确认发放条件后入账。';
 });
 
+document.addEventListener('input',event=>{
+ if(event.target.name==='identity'){
+ const boxes=[...by('editForm').querySelectorAll('[name=identity]')];
+ if(event.target.checked)boxes.filter(b=>(b.value==='全部')!==(event.target.value==='全部')).forEach(b=>b.checked=false);
+ boxes[0].setCustomValidity(boxes.some(b=>b.checked)?'':'请选择右豹用户身份');
+ }
+ updateRulePreview();
+});
+document.addEventListener('change',updateRulePreview);
+function updateRulePreview(){
+ if(!by('trialFormula'))return;
+ const form=by('editForm'),rateField=form.elements.rate,frontField=form.elements.front;
+ const amountField=by('trialAmount'),agencyField=by('trialAgency');
+ const useAgency=by('ruleMethod').value==='按机构分佣后计算';
+ agencyField.disabled=!useAgency;
+ by('trialAgencyNote').textContent=useAgency?'参与计算：先算机构分佣金额，再乘右豹结算比例。':'当前方式不使用机构分成，已禁用；切换方式后恢复。';
+ const scope=custom?'任务 '+form.elements.key.value:(form.elements.order.value||'待选择订单类型')+' / '+(new FormData(form).getAll('identity').join('、')||'待选择用户身份');
+ by('trialScope').textContent='当前试算范围：'+scope+' / 右豹团队身份 '+(new FormData(form).getAll('teams').join('、')||'不限')+'（'+(custom?'任务自定义规则':'通用规则')+'，尚未保存）';
+ const front=frontField.value;
+ by('trialDisplay').textContent=front===''?'任务页展示：请填写前端比例。':!frontField.validity.valid?'前端比例需为 0–100%。':'任务页展示 '+front+'%；该值不参与下方收益计算。'+(rateField.value!==''&&Number(front)!==Number(rateField.value)?' 展示比例与结算比例不同，请核对展示口径。':'');
+ const fields=[amountField,rateField,...(useAgency?[agencyField]:[])];
+ if(fields.some(f=>f.value===''||!f.validity.valid)){
+ by('trialFormula').textContent='请填写有效订单净额和结算比例'+(useAgency?'、机构分成':'')+'。净额不得小于 0，比例范围 0–100%。';return;
+ }
+ const amount=Number(amountField.value),agency=Number(agencyField.value),rate=Number(rateField.value);
+ const base=amount*(useAgency?agency/100:1),result=base*rate/100;
+ by('trialFormula').innerHTML='<div class="trial-step">① 订单净额：'+amount.toFixed(2)+' 元</div><div class="trial-step">② 计算基数：'+(useAgency?amount.toFixed(2)+' × '+agency+'% = '+base.toFixed(2)+' 元（机构分佣后）':amount.toFixed(2)+' 元（直接使用官方流水净额）')+'</div><div class="trial-step">③ 达人应得：'+base.toFixed(2)+' × '+rate+'% = <strong>'+result.toFixed(2)+' 元</strong></div><small>示例保留中间精度，最终结果四舍五入至分；这是应得金额，不表示已入账。</small>';
+}
+
 function tab(map){selectTab(map?'map':'business')}
-by('frontTab').onclick=()=>selectTab(({fe:'front',admin:'business',flow:'map'})[new URLSearchParams(location.search).get('tab')]||'front');
+by('frontTab').onclick=()=>selectTab('front');show(3);
 by('businessTab').onclick=()=>selectTab('business');
 by('mapTab').onclick=()=>selectTab('map');
+document.querySelectorAll('[data-order-scenario]').forEach(button=>{
+ button.onclick=()=>by('frontFrame').contentWindow.postMessage({type:'order-scenario',hasOrders:button.dataset.orderScenario==='has'},'*');
+});
 document.querySelectorAll('[data-front-scene]').forEach(button=>{
  button.onclick=()=>by('frontFrame').contentWindow.postMessage({type:'frontend-navigate',page:button.dataset.frontScene},'*');
 });
@@ -366,9 +456,9 @@ by('openRules').onclick=()=>{
  if(old)old.remove();
  const note=document.createElement('div');note.id='contextRule';note.className='box';
  const frontRules={
- list:'展示后台维护的项目方名称和项目类型。点击查看，带项目标识进入该项目任务列表。',
- project:'仅展示后端返回的已上架任务。按名称搜索，点击任务卡片携带任务 ID 进入详情。',
- detail:'按任务 ID 获取详情，展示右豹前端分成与抖音分成。获取参与入口后衔接抖音绑定、接单和投稿。',
+ list:'一级赛道读取统一配置，二级页面展示项目方管理选定的项目名称。点击查看，带项目标识进入该项目任务列表。',
+ project:'展示顶部搜索栏、项目名称、任务推荐区。月榜和剧单入口共用模块，左侧为已配置链接的「查看剧单」按钮，右侧为有订单时展示的月榜。无订单且未配置链接时隐藏整个模块。剧场数为 1，项目名称为爱奇艺。热门榜和任务推荐区按后台返回内容展示，点击任务进入任务详情。',
+ detail:'任务推荐区点击进入项目详情，展示任务内容及配置的分成比例。获取参与入口后衔接抖音绑定、接单和投稿。',
  participate:'演示弹窗说明绑定、接单和挂链投稿。正式合作链接、二维码以及绑定状态接口仍待确认。'
  };
  note.textContent=activeTab==='front'?frontRules[frontPage]:activeTab==='business'?pageGuides[step].slice(1).join(' '):'四条泳道分别表示管理后台、右豹后端、设备前端和抖音侧。判断节点标注是与否的后续处理。';
@@ -381,7 +471,7 @@ by('cancel').onclick=()=>by('edit').close();
 const flowLanes = ['管理后台 · 运营操作','右豹后端 · 数据与规则','终端前端 · 达人操作','抖音 / 第三方'];
 const flowNodes = [
  ['partner',3,0,'合作授权与创建任务',0],
- ['project',0,0,'新增项目方名称 / 项目类型',1],
+ ['project',0,0,'配置二级页面项目名称',1],
  ['saveProject',1,0,'保存项目方与关联配置',1],
  ['sync',0,1,'更新同步任务 / 按路径新增',2],
  ['fetch',1,1,'查询任务 ID → 查询任务详情',2],
@@ -472,5 +562,5 @@ by('openRules').onclick=()=>{switchRuleTab(activeTab!=='business');originalOpenR
 
 by('scenarioNote').textContent=scenarioSteps.launch.note;
 show(1);
-selectTab(({fe:'front',admin:'business',flow:'map'})[new URLSearchParams(location.search).get('tab')]||'front');
+selectTab('front');show(3);
 </script></body></html>
