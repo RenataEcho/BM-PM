@@ -40,6 +40,7 @@ const addMore=document.querySelector('#addMore');
 const processPending=document.querySelector('#processPending');
 let pendingFiles=[];
 function detectProject(fileName){return projectNames.find(project=>fileName.toLowerCase().includes(project.toLowerCase()))||'';}
+function escapeHTML(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function supportedFile(file){return /\.(csv|xls|xlsx)$/i.test(file.name);}
 document.querySelector('#openUpload').onclick=()=>fileInput.click();
 addMore.onclick=()=>fileInput.click();
@@ -52,12 +53,12 @@ fileInput.addEventListener('change',()=>{
   renderPending();
 });
 function renderPending(){
-  pendingList.innerHTML=pendingFiles.map((item,index)=>`<div class="attachment-row"><div class="attachment-name">${item.file.name}<div class="attachment-meta ${item.project?'':'red'}">${editingPendingIndex===index?`<label class="pending-project-label">项目<select data-pending-project="${index}"><option value="">请选择项目</option>${projectNames.map(project=>`<option value="${project}" ${item.project===project?'selected':''}>${project}</option>`).join('')}</select></label>`:item.project?'项目：'+item.project:'未匹配项目，请编辑并选择项目'}</div></div><div class="attachment-actions">${editingPendingIndex===index?`<button data-pending-save="${index}">保存</button>`:`<button data-pending-edit="${index}">编辑</button>`}<button class="remove" data-pending-remove="${index}">删除</button></div></div>`).join('');
+  pendingList.innerHTML=pendingFiles.map((item,index)=>`<div class="attachment-row"><div class="attachment-name">${escapeHTML(item.file.name)}<div class="attachment-meta ${item.project?'':'red'}">${editingPendingIndex===index?`<label class="pending-project-label">项目<select data-pending-project="${index}"><option value="">请选择项目</option>${projectNames.map(project=>`<option value="${project}" ${item.project===project?'selected':''}>${project}</option>`).join('')}</select></label>`:item.project?'项目：'+item.project:'未匹配项目，请编辑并选择项目'}</div></div><div class="attachment-actions">${editingPendingIndex===index?`<button data-pending-save="${index}">保存</button>`:`<button data-pending-edit="${index}">编辑</button>`}<button class="remove" data-pending-remove="${index}">删除</button></div></div>`).join('');
   pendingList.hidden=!pendingFiles.length;
   addMore.hidden=!pendingFiles.length;
   processPending.hidden=!pendingFiles.length;
-  processPending.disabled=pendingFiles.some(item=>!item.project);
-  if(processPending.disabled)processPending.title='请先删除未匹配项目的文件';
+  processPending.disabled=editingPendingIndex!==-1||pendingFiles.some(item=>!item.project);
+  if(processPending.disabled)processPending.title='请先选择项目并保存编辑';
   else processPending.removeAttribute('title');
   document.querySelector('#openUpload').hidden=!!pendingFiles.length;
 }
@@ -70,7 +71,7 @@ pendingList.addEventListener('click',event=>{
   if(save){const index=Number(save.dataset.pendingSave);const project=pendingList.querySelector(`[data-pending-project="${index}"]`).value;if(!project){notice.textContent='请选择一个项目后保存';return;}pendingFiles[index].project=project;editingPendingIndex=-1;renderPending();notice.textContent=pendingFiles[index].file.name+' 项目已设置为 '+project;}
 });
 processPending.addEventListener('click',()=>{
-  if(!pendingFiles.length||pendingFiles.some(item=>!item.project))return;
+  if(editingPendingIndex!==-1||!pendingFiles.length||pendingFiles.some(item=>!item.project))return;
   const time=new Date().toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
   pendingFiles.reverse().forEach((item,index)=>batches.unshift({id:Date.now()+index,file:item.file.name,project:item.project,time,status:'处理中',ok:null,failed:null,amount:null,approved:false,progress:2,sourceFile:item.file}));
   const count=pendingFiles.length;
@@ -78,7 +79,7 @@ processPending.addEventListener('click',()=>{
   editingPendingIndex=-1;
   criteria={};form.reset();renderPending();render();notice.textContent=count+' 个订单表单已进入下方处理列表';
 });
-setInterval(()=>{let changed=false;for(const batch of batches){if(batch.status==='处理中'){batch.progress=Math.min(100,batch.progress+5);if(batch.progress===100&&(batch.sourceFile||batch.retryFile)){batch.status='处理完成';if(batch.retryCount){batch.ok=(batch.ok||0)+(batch.failed||0);batch.failed=0;batch.retryCount=0;}else{batch.ok=1;batch.failed=0;batch.amount=0;}}changed=true;}}if(changed)render();},900);
+setInterval(()=>{let changed=false;for(const batch of batches){if(batch.status==='处理中'){batch.progress=Math.min(batch.sourceFile||batch.retryFile?100:95,batch.progress+5);if(batch.progress===100&&(batch.sourceFile||batch.retryFile)){batch.status='处理完成';if(batch.retryCount){batch.ok=(batch.ok||0)+(batch.failed||0);batch.failed=0;batch.retryCount=0;}else{batch.ok=1;batch.failed=0;batch.amount=0;}}changed=true;}}if(changed)render();},900);
 function render(){
   const visible = batches.filter(batch =>
     (!criteria.filename || batch.file.includes(criteria.filename.trim())) &&
@@ -88,13 +89,17 @@ function render(){
   rows.innerHTML = visible.map(batch => {
     const canReview = !batch.approved && batch.status === '处理完成';
     const progress = batch.status==='处理完成' || batch.status==='部分失败' ? '<div class="progress-label">100%</div><div class="progress-track"><div class="progress-fill done" style="width:100%"></div></div>' : batch.status==='处理中' ? `<div class="progress-label">${batch.progress}%</div><div class="progress-track"><div class="progress-fill" style="width:${batch.progress}%"></div></div>` : '<div class="progress-label error">异常</div><div class="progress-track"><div class="progress-fill error" style="width:100%"></div></div>';
-    return `<tr><td><button class="link" data-action="source" data-id="${batch.id}" title="下载源文件">${batch.file}</button></td><td>${batch.project}</td><td>2026-${batch.time}</td><td><span class="tag ${tone[batch.status]}">${batch.status}</span></td><td class="progress-cell">${progress}</td><td>成功 ${batch.ok ?? '—'}<small class="${batch.failed ? 'red' : ''}">失败 ${batch.failed ?? '—'}</small></td><td>${batch.ok === null ? '—' : batch.ok+' 单'}<small>${batch.amount === null ? '—' : money.format(batch.amount)}</small></td><td><span class="tag ${batch.approved ? 'green' : 'amber'}">${batch.approved ? '已通过' : '未审核'}</span></td><td class="actions"><button data-action="review" data-id="${batch.id}" ${canReview ? '' : 'disabled'}>一键审核分发</button><button data-action="failed" data-id="${batch.id}" ${batch.failed ? '' : 'disabled'}>下载失败文件</button><button data-action="retry" data-id="${batch.id}" ${batch.failed && batch.status!=='处理中' ? '' : 'disabled'}>重传失败表单</button></td></tr>`;
+    return `<tr><td><button class="link" data-action="source" data-id="${batch.id}" title="下载源文件">${escapeHTML(batch.file)}</button></td><td>${batch.project}</td><td>2026-${batch.time}</td><td><span class="tag ${tone[batch.status]}">${batch.status}</span></td><td class="progress-cell">${progress}</td><td>成功 ${batch.ok ?? '—'}<small class="${batch.failed ? 'red' : ''}">失败 ${batch.failed ?? '—'}</small></td><td>${batch.ok === null ? '—' : batch.ok+' 单'}<small>${batch.amount === null ? '—' : money.format(batch.amount)}</small></td><td><span class="tag ${batch.approved ? 'green' : 'amber'}">${batch.approved ? '已通过' : '未审核'}</span></td><td class="actions"><button data-action="review" data-id="${batch.id}" ${canReview ? '' : 'disabled'}>一键审核分发</button><button data-action="failed" data-id="${batch.id}" ${batch.failed && batch.status!=='处理中' ? '' : 'disabled'}>下载失败文件</button><button data-action="retry" data-id="${batch.id}" ${batch.failed && batch.status!=='处理中' ? '' : 'disabled'}>重传失败表单</button></td></tr>`;
   }).join('') || '<tr><td colspan="9" class="empty">没有符合条件的批次，请调整筛选条件。</td></tr>';
   document.querySelector('#total').textContent = '共 '+visible.length+' 个批次 · 演示数据';
-  document.querySelector('#distributionRows').innerHTML=distributionRecords.map(record=>{const batch=batches.find(item=>item.id===record.batchId);if(!batch)return '';return `<tr><td>${batch.file}</td><td>${batch.project}</td><td>${record.time}</td><td><span class="tag ${record.status==='分发成功'?'green':'amber'}">${record.status}</span></td><td><span class="tag ${record.orderStatus==='已审核'?'green':'amber'}">${record.orderStatus}</span></td><td>${record.status==='分发失败'?`<button class="dist-action" data-distribution-retry="${record.batchId}">重传</button>`:''}</td></tr>`;}).join('')||'<tr><td colspan="6" class="empty">暂无分发记录</td></tr>';
+  document.querySelector('#distributionRows').innerHTML=distributionRecords.map(record=>{const batch=batches.find(item=>item.id===record.batchId);if(!batch)return '';return `<tr><td>${escapeHTML(batch.file)}</td><td>${batch.project}</td><td>${record.time}</td><td><span class="tag ${record.status==='分发成功'?'green':'amber'}">${record.status}</span></td><td><span class="tag ${record.orderStatus==='已审核'?'green':'amber'}">${record.orderStatus}</span></td><td>${record.status==='分发失败'?`<button class="dist-action" data-distribution-retry="${record.batchId}">重传</button>`:''}</td></tr>`;}).join('')||'<tr><td colspan="6" class="empty">暂无分发记录</td></tr>';
   document.querySelector('#distributionTotal').textContent='共 '+distributionRecords.length+' 个分发批次';
 }
 function download(batch, onlyFailed){
+  if(!onlyFailed && batch.sourceFile){
+    const url=URL.createObjectURL(batch.sourceFile);const a=document.createElement('a');a.href=url;a.download=batch.file;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);return;
+  }
+  if(onlyFailed && (!batch.failed || batch.status==='处理中'))return;
   const successCount = batch.ok ?? 0;
   const failureCount = batch.failed ?? 0;
   const submittedCount = successCount + failureCount || 4;
@@ -105,12 +110,12 @@ function download(batch, onlyFailed){
     const amount = index < successCount
       ? (Math.floor(cents / successCount) + (index < cents % successCount ? 1 : 0)) / 100
       : '';
-    content.push(`DEMO-${batch.id+1}-${index+1},${batch.project},${amount}${onlyFailed?',订单金额缺失':''}`);
+    content.push(`DEMO-${batch.id+1}-${index+1},${batch.project},${amount}${onlyFailed?',订单与关键词归因关系校验异常':''}`);
   }
   const url = URL.createObjectURL(new Blob(['\uFEFF'+content.join('\r\n')],{type:'text/csv;charset=utf-8'}));
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = onlyFailed ? batch.file.replace('.csv','_失败记录.csv') : batch.file;
+  anchor.download = onlyFailed ? batch.file.replace(/\.(csv|xls|xlsx)$/i,'_失败记录.csv') : batch.file;
   document.body.append(anchor);
   anchor.click();
   anchor.remove();
@@ -157,7 +162,7 @@ retryUpload.addEventListener('change',()=>{
 });
 document.querySelector('#cancel').onclick = ()=>dialog.close();
 document.querySelector('#confirm').onclick = ()=>{
-  if(selected.status!=='处理完成'){dialog.close();notice.textContent='仅处理完成的批次可审核';return;}
+  if(!selected||selected.approved||selected.status!=='处理完成'){dialog.close();notice.textContent='仅处理完成的批次可审核';return;}
   selected.approved = true;
   const distributionTime=new Date().toLocaleString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
   const existingRecord=distributionRecords.find(record=>record.batchId===selected.id);
@@ -176,7 +181,8 @@ document.querySelector('#distributionRows').addEventListener('click',event=>{
   if(!button)return;
   distributionSelected=batches.find(batch=>String(batch.id)===button.dataset.distributionRetry);
   const record=distributionRecords.find(item=>String(item.batchId)===button.dataset.distributionRetry);
-  if(record.orderStatus!=='已审核'){
+  if(!record||record.status!=='分发失败'||!distributionSelected)return;
+  if(record.orderStatus!=='已审核'||!distributionSelected.approved){
     document.querySelector('#distributionConfirmDetails').textContent=distributionSelected.file+'｜'+distributionSelected.project;
     document.querySelector('#distributionConfirm').showModal();
     return;
@@ -187,6 +193,8 @@ function startDistributionRetry(file){
   if(!file||!distributionSelected)return;
   if(!supportedFile(file)){notice.textContent='订单重传支持 CSV、XLS、XLSX 格式';return;}
   const record=distributionRecords.find(item=>item.batchId===distributionSelected.id);
+  if(!record||record.status!=='分发失败')return;
+  if(record.orderStatus!=='已审核'||!distributionSelected.approved){record.retryFile=file;notice.textContent='重传文件已暂存，订单尚未审核，请完成审核后再分发';return;}
   record.retryOrderStatus=record.orderStatus;record.status='分发中';record.time=new Date().toLocaleString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});render();
   notice.textContent=file.name+' 已开始重新分发';
   setTimeout(()=>{record.status='分发成功';record.orderStatus=record.retryOrderStatus;delete record.retryOrderStatus;record.time=new Date().toLocaleString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});render();notice.textContent=file.name+' 重新分发成功';},1500);
