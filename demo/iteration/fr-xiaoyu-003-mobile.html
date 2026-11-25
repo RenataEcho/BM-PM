@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>设备前端交互</title>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#17213d;background:#eef0f5;font:14px "PingFang SC",system-ui,sans-serif}.devices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:20px 10px;max-width:1150px;margin:auto}.label{margin:0 0 12px;font-size:14px;color:#5b657c}.phone{height:760px;border:6px solid #242630;border-radius:36px;background:#f6f6fa;overflow:hidden;box-shadow:0 12px 25px #18233c16;position:relative}.status{height:35px;display:flex;align-items:center;justify-content:space-between;padding:8px 18px;font-size:11px;background:white}.island{width:70px;height:18px;border-radius:20px;background:#222}.screen{height:calc(100% - 35px);overflow:auto;padding-bottom:35px}header{height:51px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:white;font-size:16px;font-weight:650;position:sticky;top:0;z-index:1}.dark{background:#221019;color:white}.capsule{font-size:12px;border:1px solid #ccd0da;border-radius:15px;padding:4px 9px}.content{padding:12px}.card{padding:13px;background:white;border-radius:12px;margin-bottom:12px}.row{display:flex;gap:10px;align-items:center;justify-content:space-between}h2{font-size:15px;margin:0 0 6px}p{margin:6px 0;line-height:1.6}small,.muted{font-size:11px;color:#7a849b}.tag{display:inline-block;border-radius:4px;background:#eef2ff;color:#627bed;font-size:11px;padding:3px 5px}.action{border:0;border-radius:20px;background:#ff421d;color:white;padding:8px 13px;white-space:nowrap;cursor:pointer}.icon{background:#16171c;color:white;border-radius:10px;width:43px;height:43px;display:grid;place-items:center;font-size:22px;flex-shrink:0}.meta{background:#f6f7fc;padding:8px;margin-top:10px;font-size:11px;color:#78829b;border-radius:5px}.meta b{color:#ed5a36}.tabs{display:flex;gap:7px;margin:10px 0;flex-wrap:wrap}.tabs button{background:white;border:1px solid #ececf2;border-radius:7px;padding:7px 9px;color:#45506a;font-size:12px;cursor:pointer}.tabs .active{color:#f44c29;border-color:#ffad98;background:#fff3ec}input{width:100%;padding:10px 13px;border:0;border-radius:20px;background:white;margin-bottom:8px;font:inherit;font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{border:0;background:white;border-radius:9px;padding:0;overflow:hidden;text-align:left;color:inherit;cursor:pointer}.cover{height:155px;background:linear-gradient(155deg,#572c35,#bb7856);color:#fff1db;display:flex;flex-direction:column;justify-content:space-between;padding:10px;font-size:20px;font-family:serif}.cover em{font:10px system-ui;background:#182238bb;align-self:flex-start;border-radius:3px;padding:3px 5px;font-style:normal}.cover strong{font-weight:500;text-shadow:0 2px 3px #0007}.tile:nth-child(even) .cover{background:linear-gradient(150deg,#253843,#628f86)}.tile .name{font-size:12px;font-weight:650;padding:6px}.rate{font-size:11px;color:#f45b31;background:#fff5ed;padding:5px}.bottom{display:flex;justify-content:space-around;padding:12px 6px;background:white;font-size:11px;color:#7c8497}.bottom b{color:#f44c29}.hero{display:flex;gap:12px;margin-bottom:16px}.hero .cover{width:82px;height:116px;flex-shrink:0;font-size:16px;border-radius:9px}.split{background:#ffe9df;color:#f17650}.rates{display:flex;justify-content:space-around;background:#fff9f6;padding:17px 4px;margin-top:10px;border-radius:7px;font-size:11px;color:#dd4827}.rates b{display:block;font-size:22px;margin-top:6px}.join{background:#f6f6fb;padding:17px;text-align:center;margin-top:12px;border-radius:8px}.qr{width:136px;min-height:136px;margin:0 auto 10px;border:6px solid white;border-radius:14px;display:grid;place-items:center;background:#f8f2ef;color:#eb6a47;font-size:12px}.back{background:none;border:0;color:inherit;font-size:22px;cursor:pointer}summary{cursor:pointer}dialog{border:0;border-radius:18px;max-width:280px;padding:22px;color:#25304c}dialog::backdrop{background:#17213680}@media(max-width:900px){.devices{gap:10px;padding:10px 0}.phone{border-width:4px}.content{padding:8px}.cover{height:130px}}@media(max-width:650px){.devices{display:block;max-width:365px}.device{display:none}.device.active{display:block}}
+
+body{padding:16px;background:#eef0f5}
+.preview-note{text-align:center;font-size:12px;color:#7c8495;margin:0 0 12px}
+main{display:block!important;width:390px;max-width:100%;height:720px;padding:0!important;border:9px solid #20232b;border-radius:44px;box-shadow:0 20px 50px #27324d26;position:relative;overflow:hidden;background:#f7f7fa}
+.statusbar{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:11px;font-weight:700;background:#fff}
+.camera{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:94px;height:23px;border-radius:20px;background:#20232b}
+main>section{display:none!important;height:calc(100% - 58px);min-height:0!important;overflow-y:auto;border:0;border-radius:0}
+main>section.active{display:block!important}
+section:focus{outline:none}
+header{position:sticky;top:0;z-index:2;min-height:54px;font-size:17px}
+.home-indicator{height:4px;width:110px;border-radius:5px;background:#292c33;position:absolute;bottom:7px;left:50%;transform:translateX(-50%)}
+.cover{height:178px;font-size:20px;letter-spacing:1px}
+.tile:nth-child(3n) .cover{background:linear-gradient(145deg,#1f4652,#70a09b)}
+.tile:nth-child(4n) .cover{background:linear-gradient(145deg,#8a5a30,#d9ae67)}
+.banner{padding:22px 18px;background:linear-gradient(120deg,#fff0df,#ffe0d4);border-radius:12px;margin-bottom:14px}
+.banner h2{font-size:22px;color:#aa3a20}
+#detail h2{margin-top:12px}
+.join button{margin:6px}
+@media(max-width:420px){body{padding:8px}main{height:720px}}
+/* Fixed phone canvas; resize the whole device, never compress its height. */
+html,body{height:100%;overflow:hidden;padding:0}
+.devices{position:relative;width:100%;height:100%;max-width:none;margin:0;padding:0;display:block}
+.label,.device{display:none}
+.device.active{position:absolute;display:block;width:414px;height:886px;left:50%;top:50%;transform:translate(-50%,-50%) scale(var(--phone-scale,1));transform-origin:center}
+.phone{display:flex;flex-direction:column;width:414px;height:886px;min-height:886px;max-height:none;flex:none;border:6px solid #242630;border-radius:56px;box-shadow:0 12px 25px #18233c16}
+.phone>.status{position:relative;flex:0 0 54px;height:54px;padding:0 27px;font-size:14px;font-weight:600}
+.island{position:absolute;left:50%;top:10px;transform:translateX(-50%);width:112px;height:32px;border-radius:20px}
+.phone>.screen{height:auto;flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+.screen>header{position:relative;flex:0 0 51px}
+.screen>.content{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding:12px}
+.screen>.content::-webkit-scrollbar{display:none}
+.screen>.bottom{flex:0 0 83px;height:83px;border-top:1px solid #eceef4;padding:9px 6px 30px}
+.phone::after{content:"";position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:5px;background:#17171b;pointer-events:none}
+#project .screen::after,#detail .screen::after{content:"";display:block;flex:0 0 30px;background:#f6f6fa}
+
+.entry-banner{padding:20px 14px;background:linear-gradient(120deg,#ff4c27,#ff9c6d);border-radius:12px;color:white;margin-bottom:14px}
+.entry-banner h2{font-size:22px;margin-top:8px}.entry-banner small{color:#fff0e6}
+.bottom{text-align:center;line-height:1.8}
+#project .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 8px}
+#project .cover{height:125px;padding:7px;font-size:16px}
+#project .cover em{font-size:9px}
+#project .tile{background:transparent}
+#project .name{padding:8px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#project .rate{font-size:10px;border:1px solid #f8d9cd;border-radius:0 0 6px 6px}
+.list-tools{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.list-tools p{flex:1}.list-tools button{border:0;background:transparent;font-size:11px;color:#7a8293;padding:4px 0;cursor:pointer}
+#detail .hero{margin-top:8px}.hero .cover{width:86px;height:120px}
+#detail .split{background:linear-gradient(#fbe0d7,#fff4ee)}
+#detail .rates{padding:20px 5px;background:white;border-radius:7px}
+#detail .join{padding:22px 12px 16px}
+#detail .qr{width:180px;height:180px;max-width:100%;border:0;border-radius:4px;background:white;color:#8790a1}
+.save-code{background:#fff1ed;border:0;border-radius:20px;color:#df795e;padding:8px 10px;font-size:11px;cursor:pointer}
+#detail summary{list-style:none;display:flex;justify-content:space-between;padding:4px 0}
+#detail summary::after{content:'⌄'}#detail details[open] summary::after{content:'⌃'}
+#detail h3{font-size:13px;margin:14px 0 6px}#detail details p{font-size:12px;color:#677185}
+#projectHeading{font-size:14px}#project .content>.card:has(#projectHeading){display:none}
+.recommend-layout{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px}
+#hotRank{background:white;border-radius:7px;padding:9px 6px;align-self:start}
+#hotRank>strong{font-size:12px;color:#f34b28}
+#hotTasks button{display:block;background:none;border:0;width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:left;font-size:10px;padding:10px 0;color:#202844;cursor:pointer}
+#hotTasks b{color:#f95b40;margin-right:3px}
+#project .recommend-layout .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+#project .recommend-layout .cover{height:130px}
+.recommend-layout:has(#hotRank[hidden]){grid-template-columns:1fr}
+#project .recommend-layout:has(#hotRank[hidden]) .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+.discovery-head{gap:7px;padding:0 10px;font-size:11px}.region-tabs{display:flex;background:#eceef4;border-radius:20px;padding:3px}
+.region-tabs button{border:0;background:none;padding:5px 9px;font-size:11px;border-radius:18px}.region-tabs .selected{background:white;box-shadow:0 1px 3px #0002}
+.top-search{background:white;border-radius:20px;padding:6px 8px;color:#929aab;font-weight:400}
+.discovery{background:#f6f7f9}.entry-hero{background:linear-gradient(125deg,#3260ff,#1f3cde);color:white;border-radius:8px;padding:18px 13px 8px;margin-bottom:8px}.entry-hero h2{font-size:19px;margin:8px 0}.entry-hero small{color:#dce9ff;font-size:11px}.entry-hero button{border:1px solid #ffb0ca;background:#fc4883;color:white;border-radius:16px;padding:5px 12px;font-size:10px}.banner-dots{text-align:center;font-size:13px;margin-top:10px}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:white;border-radius:9px;padding:8px}
+.feature-grid button{text-align:left;border:0;border-radius:7px;padding:11px;cursor:pointer}.feature-grid strong{display:block;font-size:14px}.feature-grid small{display:block;font-size:9px;margin-top:5px}.feature-grid span{display:block;font-size:10px;color:#ec5c26;margin-top:8px}
+.feature-main{grid-row:span 2;background:linear-gradient(135deg,#161054,#38275f);color:white;position:relative;overflow:hidden}.feature-main small{color:#aeb3df}.feature-main b{display:block;font-size:38px;color:#ff783e;text-align:right}.feature-side{background:#f1f4fa;color:#202639}
+.activity-strip{width:100%;display:flex;justify-content:space-between;background:#eaf0ff;border:0;padding:11px 9px;margin:7px 0 12px;border-radius:5px;font-size:10px;color:#55678e;cursor:pointer}.activity-strip b{color:#4577ff}
+.track-title{display:flex;justify-content:space-between;margin-bottom:12px}.track-title strong{font-size:13px}
+.track-options{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.track-options button{border:1px solid #ffe0d6;background:#fffdfc;color:#c15b3b;border-radius:6px;padding:11px 2px;font-size:11px;cursor:pointer}
+.track-options small{display:block;color:inherit;font-size:9px;margin-top:3px}.track-options .selected{background:linear-gradient(#ff5334,#f8a18b);color:white}
+.recommend-tabs{display:flex;gap:5px;margin:13px 0}.recommend-tabs button{font-size:10px;padding:7px;border:1px solid transparent;background:white;color:#657087;border-radius:5px;cursor:pointer}.recommend-tabs .selected{border-color:#ffc1ad;color:#ed603a}
+.discovery .card{padding:12px 10px}.discovery .card h2{font-size:14px}.discovery .meta{font-size:10px}.discovery .icon{background:linear-gradient(140deg,#ff9b42,#eb431f)}.discovery .card:last-child .icon{background:#15151e}
+
+#monthlyRank{padding:12px}
+.monthly-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.monthly-heading h2{margin:0;font-size:14px}
+.monthly-users{display:flex;gap:12px;overflow-x:auto;padding-bottom:2px}
+.monthly-user{flex:1 0 72px;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.monthly-avatar{width:42px;height:42px;position:relative;overflow:hidden;border-radius:50%;background:var(--avatar-bg)}
+.monthly-avatar::before{content:"";position:absolute;width:14px;height:14px;border-radius:50%;left:14px;top:8px;background:var(--avatar-color)}
+.monthly-avatar::after{content:"";position:absolute;width:30px;height:23px;border-radius:50% 50% 0 0;left:6px;top:25px;background:var(--avatar-color)}
+.monthly-name{font-size:10px;color:#7a849b}
+.monthly-income{font-size:12px;color:#ff512c;white-space:nowrap}
+#monthlyRank{display:flex;align-items:center;gap:12px}#monthlyRank[hidden],#monthlyContent[hidden],#booklistButton[hidden]{display:none}#monthlyContent{flex:1;min-width:0}#booklistButton{flex:0 0 72px;display:flex;align-items:center;justify-content:center;min-height:92px;border-radius:8px;background:linear-gradient(145deg,#713bff,#b894ff);color:white;text-decoration:none;font-size:13px;font-weight:600}.monthly-users{gap:8px}.monthly-user{flex-basis:64px}
+
+/* The ranking is the first item in the same three-column task grid. */
+#project .recommend-layout,
+#project .recommend-layout:has(#hotRank[hidden]){
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:12px 8px;
+ align-items:start;
+}
+#project .recommend-layout #tasks{display:contents}
+#project #hotRank{min-width:0;min-height:190px;align-self:stretch;padding:10px 6px}
+#project .recommend-layout .tile{min-width:0}
+#project .recommend-layout .cover{height:130px}
+#project .recommend-layout .name{max-width:100%}
+
+#monthlyRank{align-items:stretch;padding:12px;gap:0;min-height:118px}
+#booklistButton{flex:0 0 76px;min-height:100px;flex-direction:column;gap:9px;background:linear-gradient(145deg,#7144f7,#b39afa);text-align:center;font-size:12px;border-radius:8px}
+#monthlyContent{padding:0 0 0 12px;display:flex;flex-direction:column;justify-content:center}
+#monthlyRank:has(#booklistButton:not([hidden])) #monthlyContent{margin-left:12px;border-left:1px solid #ebe7f4}
+#monthlyRank:has(#booklistButton[hidden]) #monthlyContent{padding-left:0}
+#monthlyContent[hidden]{display:none}
+.booklist-symbol{display:flex;flex-direction:column;gap:4px;justify-content:center;width:28px;height:33px;background:#ffffff25;border:1.5px solid #ffffffc0;border-radius:4px;padding:5px}
+.booklist-symbol i{display:block;height:2px;border-radius:2px;background:#fff}
+.booklist-symbol i:last-child{width:65%}
+#monthlyRank .monthly-heading{margin-bottom:9px}
+#monthlyRank .monthly-users{gap:8px}
+#monthlyRank .monthly-user{flex-basis:62px}
+/* Each recommendation occupies one equal-sized cell, including the ranking. */
+#project .recommend-layout{grid-auto-rows:202px;align-items:stretch}
+#project #hotRank,#project .recommend-layout .tile{height:202px;min-height:0;width:100%;overflow:hidden;margin:0}
+#project .recommend-layout .tile{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch}
+#project .recommend-layout .cover{height:148px;min-height:148px;flex:0 0 148px}
+#project .recommend-layout .rate{height:24px;flex:0 0 24px;padding:4px 6px}
+#project .recommend-layout .name{height:30px;flex:0 0 30px;line-height:18px;padding:6px 0}
+#project #hotRank{display:flex;flex-direction:column;padding:10px 6px}
+#project #hotRank[hidden]{display:none}
+#hotRank>strong{flex:0 0 22px}
+#hotTasks{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none}
+#hotTasks button{height:26px;padding:5px 0;line-height:16px}
+#monthlyRank .monthly-users{gap:6px}
+#monthlyRank .monthly-user{flex:1 0 62px}
+#monthlyRank:has(#booklistButton:not([hidden])) #monthlyContent{margin-left:10px;padding-left:10px}
+#booklistDialog{width:330px;max-width:90vw;max-height:80vh;overflow:auto}
+#booklistDialog button[data-task]{display:block;width:100%;border:0;border-bottom:1px solid #eee;background:white;text-align:left;padding:14px 0;color:#17213d;cursor:pointer}
+#booklistButton{border:0;cursor:pointer}#copyNotice{position:absolute;bottom:65px;left:50%;transform:translateX(-50%);background:#222;color:white;border-radius:8px;padding:8px 16px;z-index:4}</style></head><body><div class="devices">
+<div class="device active" id="list"><div class="phone"><div class="status">9:41 <span class="island"></span> ▴ ▰</div><div class="screen">
+<header class="discovery-head"><div class="region-tabs"><button class="selected" data-region="国内">国内</button><button data-region="海外">海外</button></div><span class="top-search">⌕ 搜一搜</span><span class="capsule">••• ｜ ◉</span></header>
+<div class="content discovery">
+<div class="entry-hero"><small>共同维护健康的推广环境</small><h2>字节违规作品举报入口</h2><button data-info="举报入口">立即查看</button><div class="banner-dots">━ · ·</div></div>
+<div class="feature-grid"><button class="feature-main" data-info="官方任务台"><strong>官方任务台</strong><small>官方合作 · 选书提词回填</small><span>立即查看 ›</span><b>豹</b></button><button class="feature-side" data-info="知乎专题"><strong>知乎专题</strong><small>知乎项目合集</small><span>立即查看 ›</span></button><button class="feature-side" data-info="组合提词"><strong>组合提词</strong><small>组合搭配快捷提词</small><span>立即使用 ›</span></button></div>
+<button class="activity-strip" data-info="活动中心"><b>进行中</b><span>迅雷网盘推广 CPS 活动激励 ›</span></button>
+<div class="track-title"><strong>项目赛道</strong><small>有网的地方就有工作</small></div>
+<div id="trackOptions" class="track-options"></div>
+<div class="recommend-tabs"><button class="selected" data-recommend="综合推荐">综合推荐</button><button data-recommend="新人可做">新人可做</button><button data-recommend="门槛低">门槛低</button><button data-recommend="收益高">收益高</button></div>
+<div id="projects"></div></div>
+<div class="bottom"><span>⌂<br>首页</span><b>◈<br>变现</b><span>▣<br>工具</span><span>▤<br>数据</span><span>♙<br>我的</span></div></div></div></div>
+<div class="device" id="project"><p class="label">② 查找任务</p><div class="phone"><div class="status">9:41 <span class="island"></span> ▴ ▰</div><div class="screen"><header class="dark"><button class="back" onclick="navigate('list')" aria-label="返回项目列表">‹</button>推广计划<span class="capsule">••• ｜ ◉</span></header><div class="content"><input id="search" placeholder="输入任务名称搜索" aria-label="搜索任务"><div class="card"><h2 id="projectHeading">小程序推广计划</h2><small>项目任务</small></div><div id="filters" class="tabs"></div><article class="card" id="monthlyRank" hidden><button type="button" id="booklistButton" hidden aria-label="查看剧单"><span class="booklist-symbol" aria-hidden="true"><i></i><i></i><i></i></span><span>查看剧单</span></button><span id="copyNotice" role="status" hidden></span><div id="monthlyContent"><div class="monthly-heading"><h2>月榜</h2><small>订单收益</small></div><div class="monthly-users" id="monthlyUsers" aria-label="用户订单收益月榜"></div></div></article><div class="list-tools"><p class="muted" id="count"></p><button id="sortTasks">比例排序</button><button id="expandFilters">收起筛选</button></div><div class="recommend-layout"><aside id="hotRank"><strong>热门榜 ›</strong><div id="hotTasks"></div></aside><div class="grid" id="tasks"></div></div></div></div></div></div>
+<div class="device" id="detail"><p class="label">③ 查看详情并参与</p><div class="phone"><div class="status">9:41 <span class="island"></span> ▴ ▰</div><div class="screen"><header><button class="back" onclick="navigate('project')" aria-label="返回任务列表">‹</button>任务详情<span class="capsule">••• ｜ ◉</span></header><div class="content" id="detailBody"></div></div></div></div>
+</div><dialog id="entryInfo"><h2 id="entryInfoTitle"></h2><p>此入口用于展示现有页面布局。请在短剧推广赛道点击「推广计划」体验本需求。</p><button class="action" onclick="document.querySelector('#entryInfo').close()">知道了</button></dialog><dialog id="participate"><h2>参与步骤演示</h2><p>1. 打开抖音合作链接并完成团长绑定。</p><p>2. 找到对应任务并点击接任务。</p><p>3. 发布带小程序锚点的视频。</p><p class="muted">正式参与链接和二维码待接口接入。</p><button class="action" onclick="document.querySelector('dialog').close()">我知道了</button></dialog>
+<script>
+const projects=[{name:'爱奇艺',type:'短剧',icon:'爱'},];
+const tasks=[
+{id:'DEMO-001',name:'一辈子暖暖的',project:'爱奇艺',rate:71,douyin:1},
+{id:'DEMO-002',name:'凤定九州',project:'爱奇艺',rate:75,douyin:1},
+{id:'DEMO-003',name:'初唐咸鱼',project:'爱奇艺',rate:68,douyin:1},
+{id:'DEMO-004',name:'山海奇遇记',project:'爱奇艺',rate:72,douyin:1},
+{id:'DEMO-005',name:'春风知我意',project:'爱奇艺',rate:70,douyin:1},
+{id:'DEMO-006',name:'长安旧梦',project:'爱奇艺',rate:73,douyin:1}
+];
+let current='爱奇艺';
+let sortDescending=false;
+const backendRecommendations={hotTaskIds:['DEMO-001','DEMO-002','DEMO-003','DEMO-004','DEMO-005','DEMO-006'],taskIds:tasks.map(task=>task.id)};
+const monthlyUsers=[
+ {name:'小林',income:2680,background:'#d8edf5',color:'#5a8da8'},
+ {name:'阿悦',income:1920,background:'#f9e1db',color:'#ba786c'},
+ {name:'小陈',income:1360,background:'#e7e0f5',color:'#8d77b3'}
+];
+document.querySelector('#monthlyUsers').innerHTML=monthlyUsers.map(user=>
+ '<div class="monthly-user"><div class="monthly-avatar" role="img" aria-label="'+user.name+'的模拟头像" style="--avatar-bg:'+user.background+';--avatar-color:'+user.color+'"></div><span class="monthly-name">'+user.name+'</span><strong class="monthly-income">¥'+user.income.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})+'</strong></div>'
+).join('');
+const demoBooklistUrl='https://example.com/demo-booklist';
+let booklistUrl=demoBooklistUrl;
+const projectOrders=Object.fromEntries(projects.map(project=>[project.name,false]));
+function navigate(id){document.querySelectorAll('.device').forEach(el=>el.classList.toggle('active',el.id===id));window.parent.postMessage({type:'frontend-page',page:id},'*')}
+function chooseProject(name){current=name;document.querySelector('#search').value='';render();navigate('project')}
+
+let selectedTrack='短剧推广';
+let selectedRegion='国内';
+const tracks=['小说推文','短剧推广','漫剧推广','网盘资源','AI工具','泛应用','AI短漫剧','游戏达人','泛知识','项目内测'];
+const entryProjects=[
+ {name:'红果短剧APP-短剧',track:'短剧推广',badge:'拉新 9.5 元 · 拉旧 4 元',icon:'▶',income:'97,893.00'},
+ {name:'悟空短剧',track:'短剧推广',badge:'拉新 8 元',icon:'悟',income:'26,410.50'},
+ {name:'番茄小说-短剧',track:'短剧推广',badge:'拉新 10 元 · 拉旧 4.5 元',icon:'番',income:'59,187.30'},
+ {name:'推广计划',track:'短剧推广',badge:'小程序推广计划',icon:'♪',income:'—',promotion:true}
+];
+function renderEntries(){
+ document.querySelector('#trackOptions').innerHTML=tracks.map(name=>'<button class="'+(name===selectedTrack?'selected':'')+'" data-track="'+name+'">'+name+'<small>'+ (name==='短剧推广'?'4 个':'—')+'</small></button>').join('');
+ const entries=selectedRegion==='国内'?entryProjects.filter(item=>item.track===selectedTrack):[];
+ document.querySelector('#projects').innerHTML=entries.length?entries.map(p=>'<article class="card"><div class="row"><div class="icon">'+p.icon+'</div><div style="flex:1"><h2>'+p.name+'</h2><span class="tag">'+p.badge+'</span></div><button class="action" '+(p.promotion?'data-project="爱奇艺"':'data-info="'+p.name+'"')+'>查看</button></div><div class="meta row"><span>◉ 个人最高收益 · <b>'+p.income+'</b></span><small>'+(p.promotion?'暂无订单':'模拟收益')+'</small></div></article>').join(''):'<div class="card muted">当前草稿暂无该分类的项目数据</div>';
+}
+document.querySelector('#list').addEventListener('click',event=>{
+ const button=event.target.closest('button');if(!button)return;
+ if(button.dataset.project)chooseProject(button.dataset.project);
+ if(button.dataset.track){selectedTrack=button.dataset.track;renderEntries()}
+ if(button.dataset.region){selectedRegion=button.dataset.region;document.querySelectorAll('[data-region]').forEach(el=>el.classList.toggle('selected',el===button));renderEntries()}
+ if(button.dataset.recommend){document.querySelectorAll('[data-recommend]').forEach(el=>el.classList.toggle('selected',el===button))}
+ if(button.dataset.info){document.querySelector('#entryInfoTitle').textContent=button.dataset.info;document.querySelector('#entryInfo').showModal()}
+});
+renderEntries();
+let configuredProjects=[{name:'爱奇艺',url:demoBooklistUrl,visible:'是',description:'<p>发布原创推广视频并挂载任务小程序。</p>'}];
+let taskNotes={},detailId='';
+document.querySelector('#booklistButton').onclick=async event=>{
+ event.preventDefault();let ok=false;
+ try{await navigator.clipboard.writeText(booklistUrl);ok=true}catch{
+ const input=document.createElement('textarea');input.value=booklistUrl;document.body.append(input);input.select();try{ok=document.execCommand('copy')}finally{input.remove()}
+ }
+ const toast=document.querySelector('#copyNotice');toast.textContent=ok?'复制成功':'复制失败，请重试';toast.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>toast.hidden=true,2000);
+};
+function render(){
+ const selected=configuredProjects.find(p=>p.visible!=='否'&&(current==='全部'||current===p.name));booklistUrl=selected?.url||'';document.querySelector('#projectHeading').textContent=selected?.name||'';
+ document.querySelector('#monthlyRank').hidden=!projectOrders[selected?.name]&&!booklistUrl;
+ document.querySelector('#monthlyContent').hidden=!projectOrders[selected?.name];
+ const bookButton=document.querySelector('#booklistButton');
+ bookButton.hidden=!booklistUrl;
+ if(booklistUrl)bookButton.href=booklistUrl;else bookButton.removeAttribute('href');
+
+ document.querySelector('#filters').innerHTML=['全部',...configuredProjects.filter(p=>p.visible!=='否').map(p=>p.name)].map(name=>'<button class="'+(current===name?'active':'')+'" data-filter="'+name+'">'+name+'</button>').join('');
+ const query=document.querySelector('#search').value.trim();
+ const shown=tasks.filter(t=>configuredProjects.some(p=>p.visible!=='否'&&p.name===t.project)&&backendRecommendations.taskIds.includes(t.id)&&(current==='全部'||t.project===current)&&t.name.includes(query));
+ if(sortDescending)shown.sort((a,b)=>b.rate-a.rate);
+ document.querySelector('#count').textContent='剧场数 · '+configuredProjects.filter(p=>p.visible!=='否').length;
+ document.querySelector('#hotRank').hidden=!backendRecommendations.hotTaskIds.length;
+ document.querySelector('#hotTasks').innerHTML=backendRecommendations.hotTaskIds.map((id,i)=>{const task=tasks.find(task=>task.id===id);return task&&configuredProjects.some(p=>p.name===task.project&&p.visible!=='否')&&(current==='全部'||current===task.project)?'<button data-task="'+id+'"><b>'+(i+1)+'</b> '+task.name+'</button>':''}).join('');
+ document.querySelector('#tasks').innerHTML=shown.map(t=>'<button class="tile" data-task="'+t.id+'"><div class="cover"><em>抖音 · '+t.project+'</em><strong>'+t.name+'</strong></div><div class="rate">CPS '+t.rate+'%</div><div class="name">'+t.name+'</div></button>').join('');
+}
+function openTask(id,move=true){
+ detailId=id;const t=tasks.find(t=>t.id===id);
+ document.querySelector('#detailBody').innerHTML='<div class="hero"><div class="cover"><strong>'+t.name+'</strong></div><div><h2>《'+t.name+'》推广任务</h2><span class="tag">'+t.project+'</span><p class="muted">任务 ID '+t.id+'</p><small>模拟投稿期 2026.11.17—2026.12.31</small></div></div><article class="card split"><strong>结算方式 · CPS 分成</strong><div class="rates"><div>右豹前端分成<b>'+t.rate+'%</b></div><div>抖音分成<b>'+t.douyin+'%</b></div></div></article><article class="card"><div class="row"><strong>抖音扫码参与</strong><button class="save-code" id="saveCode">保存二维码</button></div><div class="join"><div class="qr" id="qr">待获取合作二维码</div><button class="action" id="getQr">获取参与入口</button><p class="muted">不鸣文化</p><p class="qr-task">'+t.name+'</p></div></article><article class="card"><details><summary>项目说明</summary><h3>投稿要求</h3><p>发布与剧集相关的原创视频，接取对应任务后挂载小程序锚点。</p><h3>参与步骤</h3><p>获取本人任务合作入口，在抖音完成绑定与接单，再发布挂链视频。</p><h3>结算说明</h3><p>分成比例按当前任务展示。到账时间、计费周期与退款处理口径待确认。</p></details></article>';
+ document.querySelector('#detailBody details').innerHTML='<summary>项目说明</summary>'+(taskNotes[id]||configuredProjects.find(p=>p.name===t.project)?.description||'暂无项目说明');
+ document.querySelector('#saveCode').onclick=()=>{document.querySelector('#qr').textContent='当前为草稿，待接入真实合作二维码';};
+ document.querySelector('#detail .content').scrollTop=0;
+ document.querySelector('#getQr').onclick=()=>{document.querySelector('#qr').textContent='演示入口已准备';document.querySelector('#participate').showModal();window.parent.postMessage({type:'frontend-page',page:'participate'},'*')};
+ if(move)navigate('detail');
+}
+document.querySelector('#filters').onclick=e=>{if(e.target.dataset.filter){current=e.target.dataset.filter;render()}};
+document.querySelector('#hotTasks').onclick=e=>{const button=e.target.closest('[data-task]');if(button)openTask(button.dataset.task)};
+document.querySelector('#tasks').onclick=e=>{const button=e.target.closest('[data-task]');if(button)openTask(button.dataset.task)};
+document.querySelector('#sortTasks').onclick=()=>{sortDescending=!sortDescending;document.querySelector('#sortTasks').textContent=sortDescending?'比例从高到低':'比例排序';render()};
+document.querySelector('#expandFilters').onclick=()=>{const filters=document.querySelector('#filters');filters.hidden=!filters.hidden;document.querySelector('#expandFilters').textContent=filters.hidden?'展开筛选':'收起筛选'};
+document.querySelector('#search').oninput=render;
+document.querySelector('#participate').addEventListener('close',()=>navigate('detail'));
+window.addEventListener('message',event=>{
+ if(event.source===window.parent&&event.data?.type==='project-links'){
+  configuredProjects=event.data.projects;taskNotes=event.data.notes||{};
+  tasks.forEach(t=>{t.project=event.data.owners?.[t.id]||t.project});
+  if(current!=='全部'&&!configuredProjects.some(p=>p.name===current&&p.visible!=='否'))current='全部';
+  if(detailId)openTask(detailId,false);
+  render();return;
+ }
+
+ if(event.source===window.parent&&event.data?.type==='order-scenario'){
+  if(current==='全部')current=projects[0].name;
+  projectOrders[current]=event.data.hasOrders;render();navigate('project');return;
+ }
+
+ if(event.source!==window.parent||event.data?.type!=='frontend-navigate')return;
+ const page=event.data.page;
+ if(!['list','project','detail'].includes(page))return;
+ if(page==='detail')openTask(tasks[0].id);
+ else navigate(page);
+});
+render();openTask(tasks[0].id,false);
+const initialScreen=new URLSearchParams(location.search).get('screen');
+navigate(['list','project','detail'].includes(initialScreen)?initialScreen:'list');
+// 402 × 874 logical screen, surrounded by a 6px prototype frame.
+function fitPhone(){
+ const board=document.querySelector('.devices');
+ const scale=Math.max(0.1,Math.min((board.clientWidth-24)/414,(board.clientHeight-24)/886,1));
+ board.style.setProperty('--phone-scale',scale);
+}
+new ResizeObserver(fitPhone).observe(document.querySelector('.devices'));
+fitPhone();
+</script></body></html>
