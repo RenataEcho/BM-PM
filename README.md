@@ -18,6 +18,7 @@ python3 -m http.server 19889 --directory demo/iteration
 
 | 业务线 | 编号 | 需求 | 状态 | 页面 |
 |---|---|---|---|---|
+| 右豹主业务 | FR-wen-006 | PC活动中心的展示样式和交互体验优化 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-wen-006) |
 | 右豹主业务 | FR-XIAOYU-004 | 批量传订单 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-004) |
 | 右豹主业务 | FR-XIAOYU-005 | 项目详情页新增工具列表 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-005) |
 | 右豹主业务 | FR-wen-005 | 一键代发用户定向约稿； | 开发中 | [查看 Demo](demo/iteration/fr-wen-005-directed.html?tab=fe) |
@@ -51,6 +52,8 @@ AI申词、团队项目数据分析与导师需求的本地规则编辑：运行
 FR-wen-004 初始状态为「开发中」（[ASSUMPTION]，待产品确认），属于「进行中」；状态保存范围同上。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-wen-004)、[管理后台](http://127.0.0.1:19889/framework-shell.html?tab=admin#youbao/fr-wen-004)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-wen-004)。
 
 FR-wen-005 初始状态为「开发中」（2026-11-17 已确认），属于「进行中」；状态保存范围同上。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-wen-005)、[管理后台](http://127.0.0.1:19889/framework-shell.html?tab=admin#youbao/fr-wen-005)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-wen-005)。
+
+FR-wen-006 初始状态为「待开始」（2026-11-26 已确认），属于「进行中」；状态沿用上述 localStorage 保存范围。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-wen-006)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-wen-006)。本需求无管理后台增量；直接 Demo 为 [活动体验页](demo/iteration/fr-wen-006-activities.html?tab=fe)。
 
 ## 待编号需求草稿
 
