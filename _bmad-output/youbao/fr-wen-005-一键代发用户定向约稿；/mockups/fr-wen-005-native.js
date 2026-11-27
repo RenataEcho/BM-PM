@@ -3,7 +3,7 @@
   'use strict';
   const M = window.FR005, originalDraw = window.draw, originalClaims = window.claims, originalShell = window.shell;
   let noticeTab='系统',noticeQuery='',noticesRead=false;
-  let pendingClaim='',pcState='', selected = 'A5100', source = 'C4000', origin = 'claims', applyBack = 'claims', sort = 'default', downloadSource = '', note = '', custom = '', pcPane = 'dashboard', reject = '', dialog = '', uploadId = '';
+  let pendingClaim='',pcState='', selected = 'A5100', source = 'C4000', origin = 'claims', applyBack = 'claims', sort = 'default', requestFilter = 'all', downloadSource = '', note = '', custom = '', pcPane = 'dashboard', reject = '', dialog = '', uploadId = '';
   const e = window.esc, money = n => '¥' + Number(n || 0).toFixed(2);
   const b = (label, action, id = '', cls = 'btn-ghost') => `<button type="button" class="${cls}" data-fr="${action}" data-fr-id="${id}">${label}</button>`;
   const fields = r => [['申请编号',r.id],['申请时间',M.format(r.created)],['项目',r.project],['关键词',r.keyword],['书籍名称',r.book],['书籍ID',r.bookId||'未提供'],['书籍链接',r.bookUrl||'未提供'],['剪辑手',r.editor],['申请说明',r.note||'未填写']];
@@ -23,7 +23,7 @@
     sync();
     const doc = new DOMParser().parseFromString(originalClaims(),'text/html');
     doc.querySelectorAll('.c-card').forEach((card,i)=>{
-      const c=M.getClaim(card.querySelector('[data-cid]')?.dataset.cid);if(!c)return;card.dataset.frClaim=c.id;
+      const c=M.getClaim(card.querySelector('[data-cid]')?.dataset.cid);const hasRequest=!!c&&M.keywordRecords(c.id).length>0;if(claimStatus==='已回填'&&requestFilter!=='all'&&(requestFilter==='requested')!==hasRequest){card.remove();return;}if(!c)return;card.dataset.frClaim=c.id;
       const files=M.keywordManuscripts(c.id);if(files.length===1&&M.now>=files[0].due){card.querySelector('[data-act="dl"]').disabled=true;card.querySelector('.c-dl').textContent='下载已失效';}
       if(c.status==='已回填') {
         card.classList.add('fr-income-card');
@@ -32,12 +32,15 @@
         card.querySelector('.c-tools').insertAdjacentHTML('afterbegin',b(hasRecords?'约稿记录':'约稿',hasRecords?'source':'apply',c.id,''));
       }
     });
-    if(claimStatus==='已回填')doc.querySelector('.seg').insertAdjacentHTML('afterend',`<div class="fr-sort" role="group" aria-label="已回填排序">${[['default','默认排序'],['high','收益高到低'],['low','收益低到高']].map(([v,t])=>`<button type="button" data-fr="sort" data-fr-id="${v}" aria-pressed="${sort===v}" class="${sort===v?'active':''}">${t}</button>`).join('')}</div>`);
+    if(claimStatus==='已回填'){
+      doc.querySelector('.seg').insertAdjacentHTML('afterend',`<div class="fr-sort" role="group" aria-label="已回填筛选"><select id="fr-income-sort" aria-label="收益排序">${[['default','默认排序'],['high','收益高到低'],['low','收益低到高']].map(([v,t])=>`<option value="${v}" ${sort===v?'selected':''}>${t}</option>`).join('')}</select><select id="fr-request-filter" aria-label="约稿筛选">${[['all','全部'],['requested','已约稿'],['none','未约稿']].map(([v,t])=>`<option value="${v}" ${requestFilter===v?'selected':''}>${t}</option>`).join('')}</select></div>`);
+      if(!doc.querySelector('.c-card')&&!doc.querySelector('.empty'))doc.querySelector('.fr-sort').insertAdjacentHTML('afterend','<div class="empty">暂无符合条件的已回填记录</div>');
+    }
     return doc.body.innerHTML;
   };
   function downloadSheet(){const c=M.getClaim(downloadSource);return `<div class="kw-mask show" data-fr="downloads-close"></div><section class="kw-sheet show fr-download-sheet" role="dialog" aria-modal="true" aria-label="关键词稿件列表"><div class="kw-head"><h3>稿件列表</h3>${b('×','downloads-close','','x')}</div><p class="desc fr-sheet-note">关键词：${e(c.keyword)}</p><div class="kw-list">${M.keywordManuscripts(c.id).map(m=>{const expired=m.received&&M.now>=m.due;return `<article class="fr-file"><img src="${findWork('fr-'+m.sourceId).cover}" alt="${e(m.title)}缩览图"><div class="fr-file-info"><div class="fr-file-head"><b>${e(M.getClaim(m.sourceId).book)}</b><button class="btn-ghost fr-file-action" type="button" data-fr="${m.received?'download':'file-claim'}" data-fr-id="${m.id}" ${expired?'disabled':''}>${m.received?'下载':'领取稿件'}</button></div><p class="desc">${e(m.kind)} · ${e(m.material)}</p><p class="desc ${expired?'fr-expired':''}">${!m.received?'领取后可下载':expired?'下载已失效':'可下载至 '+M.format(m.due)}</p></div></article>`;}).join('')}</div><div class="kw-foot">${b('关闭','downloads-close','','btn-primary')}</div></section>`;}
   function record(r,full=false) {
-    return `<article class="card fr-record"><div class="pc-drawer-top"><img src="${findWork('fr-'+r.sourceId).cover}" alt="书籍封面"><div><b>${e(r.book)}</b><span class="fr-record-status tag ${r.status==='已领取稿件'?'tag-ok':'tag-warn'}">${r.status}</span><p class="desc">${e(r.project)} · ${e(r.editor)}</p><p class="desc">${r.id} · ${M.format(r.created)}</p></div></div>${full?kv(fields(r)):''}<p class="desc">${e(M.deadline(r))}</p>${r.rejectReason?`<p class="desc">拒绝原因：${e(r.rejectReason)}</p>`:''}${r.rejected?'<p class="desc">稿件已驳回，剪辑手将修改原稿重新送审。</p>':''}<div class="foot-claim">${!full?b('约稿详情','detail',r.id):''}${r.status==='待审核'?b('撤销','revoke',r.id):''}${['待领取','已领取稿件'].includes(r.status)?b('查看稿件详情','manuscript',r.id,'btn-primary'):''}${['已撤销','已拒绝'].includes(r.status)?b('重新申请','apply',r.sourceId):''}</div></article>`;
+    return `<article class="card fr-record"><div class="pc-drawer-top"><img src="${findWork('fr-'+r.sourceId).cover}" alt="书籍封面"><div><b>${e(r.book)}</b><span class="fr-record-status tag ${r.status==='已领取稿件'?'tag-ok':'tag-warn'}">${r.status}</span><p class="desc">${e(r.project)} · ${e(r.editor)}</p><p class="desc">${r.id} · ${M.format(r.created)}</p></div></div>${full?kv(fields(r)):''}<p class="desc">${e(M.deadline(r))}</p>${r.rejectReason?`<p class="desc">拒绝原因：${e(r.rejectReason)}</p>`:''}${r.rejected?'<p class="desc">稿件已驳回，剪辑手将修改原稿重新送审。</p>':''}<div class="foot-claim">${!full?b('约稿详情','detail',r.id):''}${r.status==='待审核'?b('撤销','revoke',r.id):''}${['待领取','已领取稿件'].includes(r.status)?b(r.status==='已领取稿件'?'前往下载':'查看稿件详情','manuscript',r.id,'btn-primary'):''}${['已撤销','已拒绝'].includes(r.status)?b('重新申请','apply',r.sourceId):''}</div></article>`;
   }
   function mobile() {
     let title='约稿记录',body='',foot='',back='claims',tab='';
@@ -154,6 +157,7 @@
       if(act.dataset.act==='fill'){ev.preventDefault();ev.stopImmediatePropagation();source=act.dataset.cid;const c=M.getClaim(source);if(c.status==='超时未回填')return toast('已超时，不能回填');navigate('fill');}
     }
   },true);
+  document.addEventListener('change',ev=>{const id=ev.target.id;if(id==='fr-income-sort'||id==='fr-request-filter'){if(id==='fr-income-sort')sort=ev.target.value;else requestFilter=ev.target.value;draw();document.getElementById(id)?.focus();}});
   document.addEventListener('input',ev=>{if(ev.target.name==='note')note=ev.target.value;});
   document.addEventListener('submit',ev=>{
     if(ev.target.id==='fr-apply'){ev.preventDefault();const result=M.submit({sourceId:source,note});if(!result.ok)return toast(result.error);selected=result.record.id;navigate('records');toast('申请已提交，等待剪辑手审核');}
