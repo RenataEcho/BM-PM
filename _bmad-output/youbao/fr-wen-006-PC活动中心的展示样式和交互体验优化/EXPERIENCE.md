@@ -1,5 +1,5 @@
 ---
-name: PC活动中心的展示样式和交互体验优化
+name: PC活动中心优化
 iteration_id: FR-wen-006
 business_line: 右豹主业务
 business_line_code: youbao
@@ -17,7 +17,7 @@ sources:
   - ../../../demo/iteration/component-spec-demo.html
 ---
 
-# FR-wen-006 · PC活动中心的展示样式和交互体验优化
+# FR-wen-006 · PC活动中心优化
 
 ## Foundation
 

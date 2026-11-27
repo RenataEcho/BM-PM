@@ -1,5 +1,5 @@
 ---
-name: PC活动中心的展示样式和交互体验优化
+name: PC活动中心优化
 description: 右豹主业务 PC 活动发现、列表与详情宽抽屉的增量视觉合同。
 iteration_id: FR-wen-006
 business_line: 右豹主业务
@@ -134,7 +134,7 @@ components:
     radius: '{rounded.sm}'
 ---
 
-# FR-wen-006 · PC活动中心的展示样式和交互体验优化
+# FR-wen-006 · PC活动中心优化
 
 ## Brand & Style
 
