@@ -1,6 +1,6 @@
 ---
 id: SPEC-FR-wen-006
-title: PC活动中心的展示样式和交互体验优化
+title: PC活动中心优化
 iteration_id: FR-wen-006
 business_line: 右豹主业务
 business_line_code: youbao
@@ -17,7 +17,7 @@ sources:
   - ./需求单.md
 ---
 
-# FR-wen-006 · PC活动中心的展示样式和交互体验优化
+# FR-wen-006 · PC活动中心优化
 
 本 SPEC 与 `companions` 共同构成需求合同：DESIGN.md 保留视觉 token、布局和组件细则；EXPERIENCE.md 保留行为、状态、可访问性与核验矩阵；现有活动功能补充.md 保留既有配置能力和证据边界。三份配套文件均须阅读。当前 UX 为草案，本合同保留其假设与待决项，不代表业务口径已确认。全局编号沿用 FR-wen-006；PRD 的 FR-1 至 FR-3 仅为本增量内编号。
 

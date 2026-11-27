@@ -1,5 +1,5 @@
 ---
-title: PC活动中心的展示样式和交互体验优化
+title: PC活动中心优化
 iteration_id: FR-wen-006
 business_line: 右豹主业务
 business_line_code: youbao
@@ -9,11 +9,11 @@ updated: 2026-11-26
 status: final
 ---
 
-# PRD：PC活动中心的展示样式和交互体验优化
+# PRD：PC活动中心优化
 
 ## 0. Document Purpose
 
-本文件定义全局需求 **FR-wen-006**「PC活动中心的展示样式和交互体验优化」的产品范围与可验收行为，供产品、设计与研发共同执行。正文中的 `FR-1`、`FR-2` 等仅表示本增量内部的功能需求编号；它们不替代全局编号 `FR-wen-006`。本 PRD 依据同目录《需求单.md》及《现有活动功能补充.md》编写；本需求配套 DESIGN.md、EXPERIENCE.md、SPEC.md 与 Demo `demo/iteration/fr-wen-006-activities.html` 已形成，范围为 PC 工作台活动入口、活动中心列表及详情宽抽屉，页面提供前端交互与业务流程，不新增管理后台。登记初始状态为「待开始」（2026-11-26 用户确认），归入「进行中」。需求单中“当前阶段不写 PRD”与本次明确的 PRD 产出指令冲突，本文件按本次指令形成，不扩展为其他需求。
+本文件定义全局需求 **FR-wen-006**「PC活动中心优化」的产品范围与可验收行为，供产品、设计与研发共同执行。正文中的 `FR-1`、`FR-2` 等仅表示本增量内部的功能需求编号；它们不替代全局编号 `FR-wen-006`。本 PRD 依据同目录《需求单.md》及《现有活动功能补充.md》编写；本需求配套 DESIGN.md、EXPERIENCE.md、SPEC.md 与 Demo `demo/iteration/fr-wen-006-activities.html` 已形成，范围为 PC 工作台活动入口、活动中心列表及详情宽抽屉，页面提供前端交互与业务流程，不新增管理后台。登记初始状态为「待开始」（2026-11-26 用户确认），归入「进行中」。需求单中“当前阶段不写 PRD”与本次明确的 PRD 产出指令冲突，本文件按本次指令形成，不扩展为其他需求。
 
 ## 1. Vision
 
