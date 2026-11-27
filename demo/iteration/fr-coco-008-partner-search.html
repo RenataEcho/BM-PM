@@ -59,7 +59,7 @@
   <main class="main" id="pageMain">
     <nav class="breadcrumb"><a href="framework-shell.html#youbao/overview">右豹主业务</a> / 合伙人搜索归因</nav>
     <header class="page-header">
-      <div><h1>FR-CoCo-008 · 合伙人搜索归因 · v1 当前</h1><p class="page-desc">从个人中心搜索合伙人或项目，打开合伙人主页。本人可编辑简介、案例、资料和联系方式。搜索归因的统计与结算 [待确认]。</p></div>
+      <div><h1>FR-CoCo-008 · 合伙人搜索归因 · v1 当前</h1><p class="page-desc">从个人中心搜索合伙人或项目。用户视角看合伙人主页，合伙人视角看自己的基础信息和已申请别名。搜索归因的统计与结算 [待确认]。</p></div>
       <div class="page-header-actions">
         <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
         <button class="btn btn-rule" id="rulesOpen" type="button" aria-expanded="false" aria-controls="rulesDrawer">需求规则</button>
@@ -74,13 +74,13 @@
         <h2>场景演示</h2>
         <div class="scene-list" id="scenes" role="tablist" aria-label="需求场景">
           <button class="scene-btn active" type="button" role="tab" aria-selected="true" data-screen="search"><strong>搜索</strong></button>
-          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="home"><strong>合伙人主页</strong></button>
-          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="edit"><strong>编辑主页</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="home"><strong>用户视角</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="mine"><strong>合伙人视角</strong></button>
         </div>
       </aside>
       <div class="mockup-board">
         <div class="board-caption"><div><b id="sceneTitle">搜索</b><p id="sceneDesc">按全部、合伙人或项目看结果。没有命中时显示「暂无相关搜索结果」。</p></div><span>右豹主业务</span></div>
-        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-008 合伙人搜索手机演示" src="fr-coco-008-partner-phone.html?embed=1&amp;screen=search"></iframe></div></div>
+        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-008 合伙人搜索手机演示" src="fr-coco-008-partner-phone.html?embed=1&amp;screen=search&amp;v=20261127-docs"></iframe></div></div>
       </div>
       <aside class="context-rules" aria-label="需求规则" aria-live="polite">
         <div class="context-rules-head">
@@ -112,8 +112,8 @@
     <div class="drawer-body" style="padding:0">
       <section class="rule-panel" id="rulePanelFe" aria-label="前端需求规则">
         <div class="rule-section"><h3>1 业务目标</h3><div class="rule-content"><p>合伙人可以搜索其他合伙人或项目，并打开合伙人主页。本人可以维护主页上的介绍、案例、资料和联系方式。</p><p>搜索归因如何计入、统计和结算，给定 Demo 里没有。[待确认]</p></div></div>
-        <div class="rule-section"><h3>2 页面与入口</h3><div class="rule-content"><p>入口在个人中心。从哪一级点进来，[待确认]。</p><p>本页只演示三块画面：搜索、合伙人主页、编辑主页。分享、联系和删除确认留在手机画面里，不单独拆场景。</p></div></div>
-        <div class="rule-section"><h3>3 交互规则</h3><div class="rule-content"><p>搜索可在全部、合伙人、项目之间切换。命中后进入主页，查看简介、案例和资料，并联系合伙人。</p><p>编辑保存后，主页和搜索结果一起更新，无需审核。不接真实接口、登录和持久化。</p></div></div>
+        <div class="rule-section"><h3>2 页面与入口</h3><div class="rule-content"><p>入口在个人中心。从哪一级点进来，[待确认]。</p><p>本页只演示三块画面：搜索、用户视角、合伙人视角。编辑页从合伙人视角的「编辑主页」进入。申请别名、分享、联系和删除确认留在手机画面里，不单独拆场景。</p></div></div>
+        <div class="rule-section"><h3>3 交互规则</h3><div class="rule-content"><p>搜索结果不切换合伙人或项目。命中后进入主页，查看简介、案例和资料，并联系合伙人。结果标签是「OPC生态合伙人」。</p><p>编辑保存后，主页和搜索结果一起更新，无需审核。不接真实接口、登录和持久化。</p></div></div>
         <div class="rule-section"><h3>4 边界规则</h3><div class="rule-content"><p>别名为空，或案例、资料不完整时不保存，提示与手机 Demo 一致。</p><p>编辑器有未保存修改时，确认后才离开，取消则留下。</p><p>没有微信号和二维码时，联系弹层说明尚未配置，不把空二维码当成已配置。</p><p>本增量不另做管理后台和业务流程图。</p></div></div>
       </section>
       <section class="rule-panel" id="rulePanelAdmin" aria-label="后台需求规则" hidden>
@@ -129,16 +129,16 @@
     if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embedded');
     const phone = document.getElementById('phone');
     const sceneButtons = [...document.querySelectorAll('#scenes [data-screen]')];
-    const sceneTitles = {search:'搜索', home:'合伙人主页', edit:'编辑主页'};
+    const sceneTitles = {search:'搜索', home:'用户视角', mine:'合伙人视角'};
     const sceneDesc = {
-      search:'按全部、合伙人或项目看结果。没有命中时显示「暂无相关搜索结果」。',
-      home:'简介、案例、资料和联系。没有微信号和二维码时说明尚未配置。',
-      edit:'本人编辑主页。缺必填不保存。未保存就返回时要先确认。'
+      search:'按关键词看合伙人。没有命中时显示「暂无相关搜索结果」。',
+      home:'用户看到的合伙人主页。简介、案例、资料和联系。没有微信号和二维码时说明尚未配置。',
+      mine:'合伙人看到自己的基础信息和已申请别名。底部可编辑主页或申请别名。'
     };
     let sceneRules = {
-      search:[['搜索框',['占位是「搜索项目、合伙人」。点「搜索」或按回车，按当前关键词刷新结果。','返回和输入框里的 × 会清空关键词。打开时示例关键词是「阿杰」。']],['结果切换',['可在全部、合伙人、项目之间切换。','关键词能命中示例合伙人别名，且当前不是「项目」时，列出该合伙人，点进主页。','关键词为空时提示「请输入合伙人别名」。没有命中时显示「暂无相关搜索结果」，没有提交动作。']],['项目与归因',['Demo 里没有示例项目。切到「项目」，或关键词对不上别名时，走无结果。[待确认] 项目按什么字段命中。','[待确认] 搜索归因如何记录，以及和统计、结算的关系。本页不补 Demo 里没有的统计或结算。']]],
-      home:[['主页内容',['从搜索结果进入。页头是返回、标题「合伙人主页」和分享。','头部有头像、别名、右豹认证合伙人、个人签名，以及服务成员、经营项目。认证身份和这两项数字由平台维护，编辑页不能改。','关于我超过三行可以展开或收起。擅长领域用标签展示。']],['案例与资料',['案例横向滑动，最多 5 个。点开后在弹层里播放视频。','推荐资料点开后说明即将打开飞书，确认后打开对应链接。','没有案例或资料时，对应区块不展示。']],['分享与联系',['分享弹层说明正式上线后生成专属主页链接，当前为本地演示。','填了微信号时，联系弹层展示微信号。只上传了二维码时，说明扫描二维码添加微信，并展示二维码。','微信号和二维码都没有时，联系弹层说明尚未配置，不展示空二维码。']]],
-      edit:[['编辑范围',['页头说明仅本人可编辑，保存后立即生效，无需审核。','头像和合伙人别名与右豹个人资料同步，别名输入框只读。个人签名、介绍、擅长领域、案例、资料、微信号和二维码可以改。','[待确认] 从个人中心的哪一步进入编辑，以及非本人打开主页时是否看到编辑入口。']],['保存校验',['别名为空时提示「请填写合伙人别名」，不保存。','案例缺名称或视频时提示「请完善案例名称及视频」，不保存。最多 5 个案例。','资料缺名称，或链接不是飞书、Lark 地址时，提示「请完善资料名称及有效飞书链接」，不保存。','微信号选填。二维码只接受 10MB 以内的图片，否则提示上传失败。']],['预览与退出',['预览和保存都先走同一套校验。预览只看未保存内容，不改搜索结果。','保存成功后，主页和搜索结果一起更新，并打开主页。','点返回时确认「退出编辑？未保存修改将丢失。」之后才离开；取消则留在编辑器。','删除案例或资料要先确认。确认后先从草稿去掉，再点保存才同步到主页。']]]
+      search:[['结果列表',['1、搜索内容能命中示例合伙人别名时，列出该合伙人，点进主页。\n2、合伙人别名搜索需要精确匹配']],['绑定关系上报',['用户点击进入合伙人主页时上报给后端进行关系锁定']]],
+      home:[['主页内容',['场景名是用户视角。从搜索结果进入。页头是返回、标题「合伙人主页」和分享。','头部有头像、别名、OPC生态合伙人、个人签名。不展示服务成员、经营项目。认证身份由平台维护，编辑页不能改。','关于我超过三行可以展开或收起。擅长领域用标签展示。']],['案例与资料',['案例横向滑动，最多 5 个。点开后在弹层里播放视频。','推荐资料点开后说明即将打开飞书，确认后打开对应链接。','没有案例或资料时，对应区块不展示。']],['分享与联系',['分享弹层说明正式上线后生成专属主页链接，当前为本地演示。','填了微信号时，联系弹层展示微信号。只上传了二维码时，说明扫描二维码添加微信，并展示二维码。','微信号和二维码都没有时，联系弹层说明尚未配置，不展示空二维码。']]],
+      mine:[['基础信息',['页头标题是「合伙人专属」，没有返回。','顶部沿用当前主页的头像、别名、OPC生态合伙人、个人签名。不展示服务成员、经营项目。','保存主页后，这里的头像、别名和签名跟着更新。认证身份由平台维护。']],['申请的别名',['基础信息下方每条申请单独一张卡片。不显示「别名内容」字段，标题直接是别名，并显示申请时间和状态。','状态只有「审核中」「审核通过」「已驳回」。已驳回时卡片上显示驳回原因，其他状态不显示原因。','示例：小杰陪跑为审核中，推文阿杰为审核通过，星舰笔记为已驳回，原因是「与已有别名重复，请更换后再申请」。','别名记录下方固定一块缺省样式：插图，文案是「申请专属别名，用户搜索查看即刻和您绑定关系」。没有申请时也只显示这块，不另写空列表文案。','新提交的别名出现在最上面，状态为审核中，申请时间取当前时间。本页不接真实审核。']],['底部按钮',['底部从左到右是「编辑主页」「申请别名」。','「编辑主页」进入编辑页。保存成功，或确认退出后，回到合伙人视角。预览仍打开用户看到的主页。','「申请别名」打开浮层，标题是「请输入您需要申请的别名」。输入为空时不新增、不关闭。点「提交」写入一张审核中的卡片，点「取消」或点遮罩关闭。']],['编辑页',['页头说明仅本人可编辑，保存后立即生效，无需审核。','头像和合伙人别名与右豹个人资料同步，别名输入框只读。个人签名、介绍、擅长领域、案例、资料、微信号和二维码可以改。','别名为空时提示「请填写合伙人别名」，不保存。案例缺名称或视频时提示「请完善案例名称及视频」，不保存。最多 5 个案例。','资料缺名称，或链接不是飞书、Lark 地址时，提示「请完善资料名称及有效飞书链接」，不保存。微信号选填。二维码只接受 10MB 以内的图片，否则提示上传失败。','预览和保存都先走同一套校验。预览只看未保存内容，不改搜索结果。','点返回时确认「退出编辑？未保存修改将丢失。」之后才离开；取消则留在编辑器。删除案例或资料要先确认。确认后先从草稿去掉，再点保存才同步到主页。']]]
     };
     let currentScreen = 'search';
     let editingRules = false;

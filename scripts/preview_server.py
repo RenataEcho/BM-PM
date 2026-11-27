@@ -32,7 +32,7 @@ ROUTES = {
     ),
     '/__local/coco008-rules': (
         ROOT / '_bmad-output/youbao/fr-coco-008-合伙人搜索归因/frontend-rules.json',
-        ('search', 'home', 'edit'),
+        ('search', 'home', 'mine'),
     ),
     '/__local/coco006-rules': (
         ROOT / '_bmad-output/youbao/fr-coco-006-收益分配迭代/frontend-rules.json',
@@ -48,9 +48,12 @@ class Handler(SimpleHTTPRequestHandler):
         body = json.dumps(data, ensure_ascii=False).encode()
         self.send_response(status)
         self.send_header('Content-Type', 'application/json; charset=utf-8')
-        self.send_header('Cache-Control', 'no-store')
         self.end_headers()
         self.wfile.write(body)
+
+    def end_headers(self):
+        self.send_header('Cache-Control', 'no-store')
+        super().end_headers()
 
     def local_request(self):
         return self.headers.get('Host') in ('127.0.0.1:19889', 'localhost:19889') and self.headers.get('Sec-Fetch-Site', 'same-origin') in ('same-origin', 'none')
