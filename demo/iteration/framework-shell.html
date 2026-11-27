@@ -319,7 +319,7 @@
       document.querySelector('.main').classList.toggle('show-demo', Boolean(demo));
       var frame = document.getElementById('spec-frame');
       frame.hidden = state.view === 'overview';
-      var source = demo ? demo.url + '?embed=1&tab=' + (new URLSearchParams(location.search).get('tab') || 'fe') + (demo.url === 'fr-wen-005-directed.html' ? '&v=assets-fix-20261127' : '') : 'component-spec-demo.html?embed=1';
+      var source = demo ? demo.url + '?embed=1&tab=' + (new URLSearchParams(location.search).get('tab') || 'fe') + (demo.url === 'fr-wen-005-directed.html' ? '&v=adaptive-height-20261127' : '') : 'component-spec-demo.html?embed=1';
       if (demo && demo.id === 'fr-coco-001') source += '&v=20261109-tab-review';
       if (demo && demo.id === 'fr-coco-002') source += '&v=20261113-members';
       if (demo && demo.id === 'fr-coco-003') source += '&v=20261109-tab-review';
