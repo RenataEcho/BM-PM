@@ -1,3 +1,4 @@
+/* 历史实现（2026-11-27起停用）：当前产品只加载 mobile.html + native.js；领取费用以共享 model.js 和 native.js 为准。 */
 (function(){
   'use strict';
   const M=window.FR005,$=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
