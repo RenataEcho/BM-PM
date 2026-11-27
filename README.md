@@ -29,6 +29,7 @@ python3 -m http.server 19889 --directory demo/iteration
 | 右豹主业务 | FR-XIAOYU-003 | 小程序推广计划 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-003) |
 | 右豹主业务 | FR-CoCo-003 | 团队项目数据分析 | 开发中 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-003) |
 | 右豹主业务 | FR-CoCo-007 | 钱包合并 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-007) |
+| 右豹主业务 | FR-CoCo-008 | 合伙人搜索归因 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-008) |
 | 右豹主业务 | FR-CoCo-006 | 收益分配迭代 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-006) |
 | 右豹主业务 | FR-CoCo-005 | 团长数据优化 | 已上线 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-005) |
 | 导师商务 | FR-CoCo-004 | 机构社群优化 | 开发中 | [查看 Demo](demo/iteration/framework-shell.html#mentor/fr-coco-004) |
@@ -51,7 +52,7 @@ FR-003 总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html
 
 FR-wen-003 初始状态为「开发中」，属于「进行中」；状态保存范围同上。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-wen-003)、[管理后台](http://127.0.0.1:19889/framework-shell.html?tab=admin#youbao/fr-wen-003)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-wen-003)。
 
-AI申词、团队项目数据分析、导师需求、钱包合并与收益分配迭代的本地规则编辑：运行 `python3 scripts/preview_server.py`（端口 19889）。页内点「编辑」，改完点「保存」，写入对应需求目录的 `frontend-rules.json`。普通静态服务不支持保存。
+AI申词、团队项目数据分析、导师需求、钱包合并、收益分配迭代与合伙人搜索归因的本地规则编辑：运行 `python3 scripts/preview_server.py`（端口 19889）。页内点「编辑」，改完点「保存」，写入对应需求目录的 `frontend-rules.json`。普通静态服务不支持保存。
 
 FR-wen-004 初始状态为「开发中」（[ASSUMPTION]，待产品确认），属于「进行中」；状态保存范围同上。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-wen-004)、[管理后台](http://127.0.0.1:19889/framework-shell.html?tab=admin#youbao/fr-wen-004)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-wen-004)。
 
@@ -62,6 +63,8 @@ FR-CoCo-005 初始状态为「已上线」，属于「归档」。
 FR-CoCo-006 初始状态为「待开始」，属于「待开始」。页内需求规则可编辑并保存。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-coco-006)、[管理后台](http://127.0.0.1:19889/framework-shell.html?tab=admin#youbao/fr-coco-006)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-coco-006)。
 
 FR-CoCo-007 初始状态为「待开始」，属于「待开始」。手机画面按给定豹钱包 Demo 还原。页内需求规则可编辑并保存。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-coco-007)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-coco-007)。
+
+FR-CoCo-008 初始状态为「待开始」，属于「待开始」。手机画面按给定合伙人搜索 Demo 还原。页内需求规则可编辑并保存。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-coco-008)。
 
 FR-wen-006 初始状态为「待开始」（2026-11-26 已确认），属于「待开始」；状态沿用上述 localStorage 保存范围。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-wen-006)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-wen-006)。本需求无管理后台增量；直接 Demo 为 [活动体验页](demo/iteration/fr-wen-006-activities.html?tab=fe)。
 

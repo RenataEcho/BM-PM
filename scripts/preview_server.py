@@ -30,6 +30,10 @@ ROUTES = {
         ROOT / '_bmad-output/youbao/fr-coco-007-钱包合并/frontend-rules.json',
         ('home', 'income', 'detail', 'cards', 'bills', 'coin', 'coin-tax', 'history', 'agree', 'books'),
     ),
+    '/__local/coco008-rules': (
+        ROOT / '_bmad-output/youbao/fr-coco-008-合伙人搜索归因/frontend-rules.json',
+        ('search', 'home', 'edit'),
+    ),
     '/__local/coco006-rules': (
         ROOT / '_bmad-output/youbao/fr-coco-006-收益分配迭代/frontend-rules.json',
         ('linchuan', 'records', 'renata', 'admin'),

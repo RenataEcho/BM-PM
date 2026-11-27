@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FR-CoCo-008 · 合伙人搜索归因 · v1 当前</title>
+  <link rel="stylesheet" href="fr-003-fusion-task.css">
+  <style>
+    [hidden]{display:none!important}
+    .main{display:flex;flex-direction:column;overflow:hidden;min-height:0}
+    .breadcrumb,.page-header,.page-tabs{flex:none}
+    .page-header{align-items:flex-start}.page-header>div{min-width:0}
+    .page-desc{max-width:720px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .view#view-fe{flex:1;min-height:0;height:auto;display:grid;grid-template-columns:minmax(280px,46%) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"scenes scenes" "rules demo";gap:8px 16px;overflow:hidden}
+    .scene-panel{grid-area:scenes;min-height:0!important;overflow:visible!important;border:0!important;border-bottom:1px solid var(--border)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+    .scene-panel h2,.scene-help{display:none}.scene-list,.scene-panel #scenes{display:flex;align-items:flex-end;gap:16px;overflow-x:auto;flex:none;min-height:40px;padding:0 12px}
+    .scene-btn{width:auto!important;min-height:42px!important;padding:10px 0!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:transparent!important;color:var(--text-secondary)!important;white-space:nowrap}
+    .scene-btn strong{font-size:12px}.scene-btn span{display:none}.scene-btn.active{border-bottom-color:var(--primary)!important;color:var(--primary)!important}
+    .scene-btn:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+    .mockup-board{grid-area:demo;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}.board-caption{align-items:flex-start;flex:none;min-width:0;padding:8px 12px!important}.board-caption p{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}.board-caption span{font-size:11px;color:var(--text-muted);white-space:nowrap;flex:none}
+    .board-scroll{flex:1;min-height:0;padding:8px!important;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .device.phone{width:auto;height:auto;min-height:0;padding:8px;border-radius:30px;flex:none;overflow:hidden;box-sizing:border-box}
+    .device.phone iframe{display:block;width:390px;height:780px;border:0;border-radius:23px;background:#faf7f3;transform-origin:top left}
+    .context-rules{grid-area:rules;min-width:0;overflow:auto;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.78);box-shadow:0 8px 32px rgba(30,40,80,.06)}
+    .context-rules-head{position:sticky;top:0;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:10px 12px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--border)}
+    .context-rules-head h2{margin:0;font-size:15px}
+    .rule-actions{display:flex;align-items:center;gap:8px;flex:none}
+    .rule-edit-status{margin:6px 12px 0;color:var(--text-secondary);font-size:11px;line-height:1.45}
+    .rule-edit-status:empty{display:none}
+    .scene-rule-table{width:100%;min-width:0;border-collapse:collapse;table-layout:fixed}
+    .scene-rule-table th,.scene-rule-table td{padding:8px;text-align:left;vertical-align:top;font-size:12px;line-height:1.55;border-bottom:1px solid var(--border);white-space:pre-wrap;overflow-wrap:anywhere}
+    .scene-rule-table th{color:var(--text-primary);font-weight:700;background:#f8fafc}
+    .scene-rule-table th:first-child,.scene-rule-table td:first-child{width:108px}
+    .scene-rule-table .rule-op{width:64px;text-align:right;white-space:nowrap}
+    .scene-rule-table:not(.is-editing) .rule-op{display:none}
+    .scene-rule-table .module-cell,.scene-rule-table .rule-cell{width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:7px;padding:6px 8px;background:#fff;color:var(--text-primary);font:12px/1.55 inherit}
+    .scene-rule-table .rule-cell{min-height:32px;overflow:hidden;resize:none}
+    .context-rules-body{padding:0}
+    .rule-panel{display:block}.rule-content p{margin:0 0 8px}.rule-content strong{color:var(--text-primary)}
+    .drawer-overlay.open{opacity:1;pointer-events:auto}.drawer.open{transform:translateX(0)}
+    html.embedded,html.embedded body{height:100%;overflow:hidden}
+    .embedded .topnav,.embedded .sidebar{display:none}.embedded .main{top:0;right:0;bottom:0;left:0;padding:8px 16px 12px}
+    .embedded .breadcrumb,.embedded .page-header,.embedded .page-tabs{margin-bottom:8px}
+    .embedded .page-header h1{font-size:16px}.embedded .page-desc{font-size:12px;line-height:1.45}
+    .page-header-actions{display:flex;gap:8px;flex-shrink:0}
+    .tab-review-exit{display:none;position:fixed;top:16px;right:16px;z-index:720}
+    html.is-tab-review .tab-review-exit{display:inline-flex}
+    html.is-tab-review .view:not([hidden]){position:fixed;inset:0;z-index:640;height:100vh;min-height:0;margin:0;padding:64px 16px 16px;background:#f0f4f8;box-sizing:border-box;overflow:hidden}
+    html.is-tab-review .view#view-fe:not([hidden]){height:100vh;min-height:0;grid-template-columns:minmax(360px,46%) minmax(0,1fr)}
+    html.is-tab-review .drawer-overlay{z-index:760}
+    html.is-tab-review .drawer{z-index:761}
+    @media(max-width:860px){.view#view-fe{grid-template-columns:minmax(240px,42%) minmax(0,1fr)}}
+  </style>
+</head>
+<body>
+  <header class="topnav" id="topnav"><a href="framework-shell.html#youbao/overview" class="brand-text">BM-PM · 迭代需求</a><span class="business-line">右豹主业务</span><span class="topnote">产品交互演示</span></header>
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><b>右豹主业务</b><p class="brand-sub">需求与设计</p></div><nav class="sidebar-scroll" aria-label="项目导航"><a class="nav-item" href="framework-shell.html#youbao/overview">概览</a><a class="nav-item" href="framework-shell.html#youbao/components">组件规范</a></nav><div class="sidebar-foot">FR-CoCo-008<br>合伙人搜索归因 · v1</div></aside>
+
+  <main class="main" id="pageMain">
+    <nav class="breadcrumb"><a href="framework-shell.html#youbao/overview">右豹主业务</a> / 合伙人搜索归因</nav>
+    <header class="page-header">
+      <div><h1>FR-CoCo-008 · 合伙人搜索归因 · v1 当前</h1><p class="page-desc">从个人中心搜索合伙人或项目，打开合伙人主页。本人可编辑简介、案例、资料和联系方式。搜索归因的统计与结算 [待确认]。</p></div>
+      <div class="page-header-actions">
+        <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
+        <button class="btn btn-rule" id="rulesOpen" type="button" aria-expanded="false" aria-controls="rulesDrawer">需求规则</button>
+      </div>
+    </header>
+    <nav class="page-tabs" role="tablist" aria-label="需求视图">
+      <button class="btn btn-ghost active" id="tab-fe" type="button" role="tab" aria-selected="true" aria-controls="view-fe" data-tab="fe">前端交互</button>
+    </nav>
+
+    <section id="view-fe" class="view" role="tabpanel" aria-labelledby="tab-fe">
+      <aside class="scene-panel" aria-label="合伙人搜索场景">
+        <h2>场景演示</h2>
+        <div class="scene-list" id="scenes" role="tablist" aria-label="需求场景">
+          <button class="scene-btn active" type="button" role="tab" aria-selected="true" data-screen="search"><strong>搜索</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="home"><strong>合伙人主页</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="edit"><strong>编辑主页</strong></button>
+        </div>
+      </aside>
+      <div class="mockup-board">
+        <div class="board-caption"><div><b id="sceneTitle">搜索</b><p id="sceneDesc">按全部、合伙人或项目看结果。没有命中时显示「暂无相关搜索结果」。</p></div><span>右豹主业务</span></div>
+        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-008 合伙人搜索手机演示" src="fr-coco-008-partner-phone.html?embed=1&amp;screen=search"></iframe></div></div>
+      </div>
+      <aside class="context-rules" aria-label="需求规则" aria-live="polite">
+        <div class="context-rules-head">
+          <h2 id="contextTitle">搜索</h2>
+          <div class="rule-actions">
+            <button class="btn btn-ghost btn-sm" id="addSceneRule" type="button" hidden>新增一行</button>
+            <button class="btn btn-primary btn-sm" id="editSceneRules" type="button">编辑</button>
+          </div>
+        </div>
+        <p class="rule-edit-status" id="ruleEditStatus" role="status"></p>
+        <div class="context-rules-body">
+          <table class="scene-rule-table">
+            <thead><tr><th>功能/模块</th><th>规则说明</th><th class="rule-op"></th></tr></thead>
+            <tbody id="contextRules"></tbody>
+          </table>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <button class="btn btn-ghost tab-review-exit" id="exitTabReview" type="button">退出全屏</button>
+  <div class="drawer-overlay" id="ruleMask" hidden></div>
+  <aside class="drawer rule" id="rulesDrawer" hidden role="dialog" aria-modal="true" aria-labelledby="ruleTitle">
+    <div class="drawer-header"><h2 id="ruleTitle">FR-CoCo-008 · v1 需求规则</h2><button class="drawer-close" id="rulesClose" type="button" aria-label="关闭需求规则">×</button></div>
+    <div class="rule-tab-bar" role="tablist" aria-label="规则类型">
+      <button class="active" type="button" role="tab" id="ruleTabFe" aria-selected="true">前端需求</button>
+      <button type="button" role="tab" id="ruleTabAdmin" aria-selected="false">后台需求</button>
+    </div>
+    <div class="drawer-body" style="padding:0">
+      <section class="rule-panel" id="rulePanelFe" aria-label="前端需求规则">
+        <div class="rule-section"><h3>1 业务目标</h3><div class="rule-content"><p>合伙人可以搜索其他合伙人或项目，并打开合伙人主页。本人可以维护主页上的介绍、案例、资料和联系方式。</p><p>搜索归因如何计入、统计和结算，给定 Demo 里没有。[待确认]</p></div></div>
+        <div class="rule-section"><h3>2 页面与入口</h3><div class="rule-content"><p>入口在个人中心。从哪一级点进来，[待确认]。</p><p>本页只演示三块画面：搜索、合伙人主页、编辑主页。分享、联系和删除确认留在手机画面里，不单独拆场景。</p></div></div>
+        <div class="rule-section"><h3>3 交互规则</h3><div class="rule-content"><p>搜索可在全部、合伙人、项目之间切换。命中后进入主页，查看简介、案例和资料，并联系合伙人。</p><p>编辑保存后，主页和搜索结果一起更新，无需审核。不接真实接口、登录和持久化。</p></div></div>
+        <div class="rule-section"><h3>4 边界规则</h3><div class="rule-content"><p>别名为空，或案例、资料不完整时不保存，提示与手机 Demo 一致。</p><p>编辑器有未保存修改时，确认后才离开，取消则留下。</p><p>没有微信号和二维码时，联系弹层说明尚未配置，不把空二维码当成已配置。</p><p>本增量不另做管理后台和业务流程图。</p></div></div>
+      </section>
+      <section class="rule-panel" id="rulePanelAdmin" aria-label="后台需求规则" hidden>
+        <div class="rule-section"><h3>1 业务目标</h3><div class="rule-content"><p>[待确认] 后台要看什么。</p></div></div>
+        <div class="rule-section"><h3>2 数据表与字段</h3><div class="rule-content"><p>[待确认]</p></div></div>
+        <div class="rule-section"><h3>3 列表与筛选</h3><div class="rule-content"><p>[待确认]</p></div></div>
+        <div class="rule-section"><h3>4 边界规则</h3><div class="rule-content"><p>[待确认] 不在本页补搜索归因的统计或结算。</p></div></div>
+      </section>
+    </div>
+  </aside>
+
+  <script>
+    if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embedded');
+    const phone = document.getElementById('phone');
+    const sceneButtons = [...document.querySelectorAll('#scenes [data-screen]')];
+    const sceneTitles = {search:'搜索', home:'合伙人主页', edit:'编辑主页'};
+    const sceneDesc = {
+      search:'按全部、合伙人或项目看结果。没有命中时显示「暂无相关搜索结果」。',
+      home:'简介、案例、资料和联系。没有微信号和二维码时说明尚未配置。',
+      edit:'本人编辑主页。缺必填不保存。未保存就返回时要先确认。'
+    };
+    let sceneRules = {
+      search:[['搜索框',['占位是「搜索项目、合伙人」。点「搜索」或按回车，按当前关键词刷新结果。','返回和输入框里的 × 会清空关键词。打开时示例关键词是「阿杰」。']],['结果切换',['可在全部、合伙人、项目之间切换。','关键词能命中示例合伙人别名，且当前不是「项目」时，列出该合伙人，点进主页。','关键词为空时提示「请输入合伙人别名」。没有命中时显示「暂无相关搜索结果」，没有提交动作。']],['项目与归因',['Demo 里没有示例项目。切到「项目」，或关键词对不上别名时，走无结果。[待确认] 项目按什么字段命中。','[待确认] 搜索归因如何记录，以及和统计、结算的关系。本页不补 Demo 里没有的统计或结算。']]],
+      home:[['主页内容',['从搜索结果进入。页头是返回、标题「合伙人主页」和分享。','头部有头像、别名、右豹认证合伙人、个人签名，以及服务成员、经营项目。认证身份和这两项数字由平台维护，编辑页不能改。','关于我超过三行可以展开或收起。擅长领域用标签展示。']],['案例与资料',['案例横向滑动，最多 5 个。点开后在弹层里播放视频。','推荐资料点开后说明即将打开飞书，确认后打开对应链接。','没有案例或资料时，对应区块不展示。']],['分享与联系',['分享弹层说明正式上线后生成专属主页链接，当前为本地演示。','填了微信号时，联系弹层展示微信号。只上传了二维码时，说明扫描二维码添加微信，并展示二维码。','微信号和二维码都没有时，联系弹层说明尚未配置，不展示空二维码。']]],
+      edit:[['编辑范围',['页头说明仅本人可编辑，保存后立即生效，无需审核。','头像和合伙人别名与右豹个人资料同步，别名输入框只读。个人签名、介绍、擅长领域、案例、资料、微信号和二维码可以改。','[待确认] 从个人中心的哪一步进入编辑，以及非本人打开主页时是否看到编辑入口。']],['保存校验',['别名为空时提示「请填写合伙人别名」，不保存。','案例缺名称或视频时提示「请完善案例名称及视频」，不保存。最多 5 个案例。','资料缺名称，或链接不是飞书、Lark 地址时，提示「请完善资料名称及有效飞书链接」，不保存。','微信号选填。二维码只接受 10MB 以内的图片，否则提示上传失败。']],['预览与退出',['预览和保存都先走同一套校验。预览只看未保存内容，不改搜索结果。','保存成功后，主页和搜索结果一起更新，并打开主页。','点返回时确认「退出编辑？未保存修改将丢失。」之后才离开；取消则留在编辑器。','删除案例或资料要先确认。确认后先从草稿去掉，再点保存才同步到主页。']]]
+    };
+    let currentScreen = 'search';
+    let editingRules = false;
+    let ruleBase = null;
+    function escapeHtml(text){return text.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));}
+    function rowsFromGroups(groups){
+      const rows = [];
+      (groups || []).forEach(group => (group[1] || []).forEach(line => rows.push({module:group[0], rule:line})));
+      return rows;
+    }
+    function groupsFromRows(rows){
+      const groups = [];
+      rows.forEach(row => {
+        const moduleName = row.module.trim();
+        const text = row.rule.trim();
+        if (!moduleName && !text) return;
+        if (!moduleName || !text) throw Error('每一行都要填写功能/模块和规则说明');
+        const last = groups.at(-1);
+        if (last && last[0] === moduleName) last[1].push(text);
+        else groups.push([moduleName, [text]]);
+      });
+      if (!groups.length) throw Error('至少保留一行规则');
+      return groups;
+    }
+    function ruleRowsHtml(rows, editing){
+      if (!editing) return rows.map(row => `<tr><td>${escapeHtml(row.module)}</td><td>${escapeHtml(row.rule)}</td></tr>`).join('') || '<tr><td colspan="2">还没有规则。</td></tr>';
+      return rows.map((row, index) => `<tr><td><input class="module-cell" data-field="module" data-index="${index}" value="${escapeHtml(row.module)}" aria-label="功能/模块"></td><td><textarea class="rule-cell" data-field="rule" data-index="${index}" rows="1" aria-label="规则说明">${escapeHtml(row.rule)}</textarea></td><td class="rule-op"><button class="btn btn-danger-ghost btn-sm" type="button" data-remove="${index}">删除</button></td></tr>`).join('') || '<tr><td colspan="3">还没有规则，点击新增一行。</td></tr>';
+    }
+    const contextRules = document.getElementById('contextRules');
+    const sceneRuleTable = document.querySelector('.scene-rule-table');
+    const addSceneRule = document.getElementById('addSceneRule');
+    const editSceneRules = document.getElementById('editSceneRules');
+    const editStatus = document.getElementById('ruleEditStatus');
+    let draftRows = null;
+    function fitRuleField(field){
+      field.style.height = '0';
+      field.style.height = field.scrollHeight + 'px';
+    }
+    function renderContext(screen){
+      const editing = editingRules && screen === currentScreen;
+      document.getElementById('contextTitle').textContent = sceneTitles[screen];
+      document.getElementById('sceneTitle').textContent = sceneTitles[screen];
+      document.getElementById('sceneDesc').textContent = sceneDesc[screen];
+      contextRules.innerHTML = ruleRowsHtml(editing ? draftRows : rowsFromGroups(sceneRules[screen]), editing);
+      sceneRuleTable.classList.toggle('is-editing', editing);
+      addSceneRule.hidden = !editing;
+      editSceneRules.textContent = editing ? '保存' : '编辑';
+      if (editing) requestAnimationFrame(() => contextRules.querySelectorAll('[data-field="rule"]').forEach(fitRuleField));
+    }
+    const PHONE_W = 390, PHONE_H = 780;
+    function fitPhone(){
+      const view = document.getElementById('view-fe');
+      const board = view.querySelector('.board-scroll');
+      const device = view.querySelector('.device.phone');
+      if (!board || !device || view.hidden) return;
+      view.dataset.scene = currentScreen;
+      const availW = board.clientWidth - 16;
+      const availH = board.clientHeight - 16;
+      if (availW < 80 || availH < 80) return;
+      const scale = Math.min(1, availW / (PHONE_W + 16), availH / (PHONE_H + 16));
+      phone.style.transform = 'scale(' + scale + ')';
+      device.style.width = Math.floor(PHONE_W * scale + 16) + 'px';
+      device.style.height = Math.floor(PHONE_H * scale + 16) + 'px';
+    }
+    function scheduleFit(){ requestAnimationFrame(() => requestAnimationFrame(fitPhone)); }
+    function postScreen(screen){
+      if (!phone.contentWindow) return;
+      phone.contentWindow.postMessage({type:'coco008', screen:screen}, '*');
+    }
+    function selectScene(button){
+      editingRules = false;
+      draftRows = null;
+      editStatus.textContent = '';
+      currentScreen = button.dataset.screen;
+      document.getElementById('view-fe').dataset.scene = currentScreen;
+      sceneButtons.forEach(item => {const selected = item === button; item.classList.toggle('active', selected); item.setAttribute('aria-selected', String(selected));});
+      renderContext(currentScreen);
+      postScreen(currentScreen);
+      scheduleFit();
+    }
+    sceneButtons.forEach(button => button.addEventListener('click', () => selectScene(button)));
+    phone.addEventListener('load', () => { postScreen(currentScreen); scheduleFit(); });
+    window.addEventListener('resize', scheduleFit);
+    if (window.ResizeObserver) new ResizeObserver(scheduleFit).observe(document.querySelector('#view-fe .board-scroll'));
+    contextRules.addEventListener('input', event => {
+      if (!editingRules || !draftRows) return;
+      const field = event.target.dataset.field;
+      const index = Number(event.target.dataset.index);
+      if (!field || !draftRows[index]) return;
+      draftRows[index][field] = event.target.value;
+      if (field === 'rule') fitRuleField(event.target);
+    });
+    contextRules.addEventListener('click', event => {
+      const button = event.target.closest('[data-remove]');
+      if (!button || !draftRows) return;
+      draftRows.splice(Number(button.dataset.remove), 1);
+      if (!draftRows.length) draftRows.push({module:'', rule:''});
+      renderContext(currentScreen);
+    });
+    addSceneRule.addEventListener('click', () => {
+      if (!editingRules || !draftRows) return;
+      const last = draftRows.at(-1);
+      draftRows.push({module:last ? last.module : '', rule:''});
+      renderContext(currentScreen);
+      const fields = contextRules.querySelectorAll('[data-field="module"]');
+      fields[fields.length - 1].focus();
+    });
+    editSceneRules.addEventListener('click', async function () {
+      if (!editingRules) {
+        editingRules = true;
+        ruleBase = JSON.parse(JSON.stringify(sceneRules[currentScreen]));
+        draftRows = rowsFromGroups(ruleBase);
+        if (!draftRows.length) draftRows.push({module:'', rule:''});
+        editStatus.textContent = '';
+        renderContext(currentScreen);
+        const first = contextRules.querySelector('input');
+        if (first) first.focus();
+        return;
+      }
+      try {
+        const groups = groupsFromRows(draftRows);
+        this.disabled = true;
+        const response = await fetch('/__local/coco008-rules', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({view:currentScreen, groups, base:ruleBase})});
+        if (!response.ok) {
+          const error = await response.json().catch(() => ({error:'保存服务不可用，请用 python3 scripts/preview_server.py 启动预览'}));
+          throw Error(error.error);
+        }
+        sceneRules[currentScreen] = groups;
+        ruleBase = JSON.parse(JSON.stringify(groups));
+        editingRules = false;
+        draftRows = null;
+        renderContext(currentScreen);
+        editStatus.textContent = '已保存';
+      } catch (error) {
+        editStatus.textContent = error.message;
+      } finally {
+        this.disabled = false;
+      }
+    });
+    scheduleFit();
+    renderContext('search');
+    fetch('/__local/coco008-rules').then(response => { if (!response.ok) throw Error(); return response.json(); }).then(data => {
+      if (editingRules) return;
+      sceneRules = data;
+      renderContext(currentScreen);
+    }).catch(() => { editStatus.textContent = '当前为只读预览；保存请使用 python3 scripts/preview_server.py 启动本地服务。'; });
+
+    const mask = document.getElementById('ruleMask'), drawer = document.getElementById('rulesDrawer'), openButton = document.getElementById('rulesOpen'), closeButton = document.getElementById('rulesClose');
+    const ruleTabFe = document.getElementById('ruleTabFe'), ruleTabAdmin = document.getElementById('ruleTabAdmin');
+    function showRuleTab(which){
+      const fe = which !== 'admin';
+      document.getElementById('rulePanelFe').hidden = !fe;
+      document.getElementById('rulePanelAdmin').hidden = fe;
+      ruleTabFe.classList.toggle('active', fe); ruleTabAdmin.classList.toggle('active', !fe);
+      ruleTabFe.setAttribute('aria-selected', String(fe)); ruleTabAdmin.setAttribute('aria-selected', String(!fe));
+    }
+    ruleTabFe.addEventListener('click', () => showRuleTab('fe'));
+    ruleTabAdmin.addEventListener('click', () => showRuleTab('admin'));
+    let lastFocus = null;
+    function setBackgroundInert(value){[document.getElementById('topnav'), document.getElementById('sidebar'), document.getElementById('pageMain')].forEach(node => {if (node) node.inert = value;});}
+    function openRules(){lastFocus = document.activeElement; showRuleTab('fe'); mask.hidden = false; drawer.hidden = false; requestAnimationFrame(() => {mask.classList.add('open'); drawer.classList.add('open');}); openButton.classList.add('active'); openButton.setAttribute('aria-expanded', 'true'); setBackgroundInert(true); closeButton.focus();}
+    function closeRules(){mask.classList.remove('open'); drawer.classList.remove('open'); mask.hidden = true; drawer.hidden = true; openButton.classList.remove('active'); openButton.setAttribute('aria-expanded', 'false'); setBackgroundInert(false); if (lastFocus && lastFocus.focus) lastFocus.focus();}
+    openButton.addEventListener('click', () => drawer.hidden ? openRules() : closeRules());
+    closeButton.addEventListener('click', closeRules);
+    mask.addEventListener('click', closeRules);
+    const openTabReviewButton = document.getElementById('openTabReview'), exitTabReviewButton = document.getElementById('exitTabReview');
+    function setShellReview(on){try{if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle('fr-review', on);}catch (error){}}
+    function openTabReview(){if (!drawer.hidden) closeRules(); document.documentElement.classList.add('is-tab-review'); setShellReview(true); exitTabReviewButton.focus(); scheduleFit();}
+    function closeTabReview(){if (!document.documentElement.classList.contains('is-tab-review')) return; document.documentElement.classList.remove('is-tab-review'); setShellReview(false); openTabReviewButton.focus(); scheduleFit();}
+    function phoneSheetOpen(){
+      try {
+        const doc = phone.contentDocument;
+        const modal = doc && doc.getElementById('modal');
+        return Boolean(modal && modal.classList.contains('open') && typeof phone.contentWindow.closeSheet === 'function');
+      } catch (error) { return false; }
+    }
+    openTabReviewButton.addEventListener('click', openTabReview);
+    exitTabReviewButton.addEventListener('click', closeTabReview);
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' && event.key !== 'Tab') return;
+      if (event.key === 'Escape' && drawer.hidden && document.documentElement.classList.contains('is-tab-review')){
+        if (phoneSheetOpen()){event.preventDefault(); phone.contentWindow.closeSheet(); return;}
+        event.preventDefault(); closeTabReview(); return;
+      }
+      if (drawer.hidden) return;
+      if (event.key === 'Escape'){event.preventDefault(); closeRules(); return;}
+      const focusable = [...drawer.querySelectorAll('button:not([disabled]),[href],input:not([disabled])')];
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first){event.preventDefault(); last.focus();}
+      else if (!event.shiftKey && document.activeElement === last){event.preventDefault(); first.focus();}
+    });
+  </script>
+</body>
+</html>
