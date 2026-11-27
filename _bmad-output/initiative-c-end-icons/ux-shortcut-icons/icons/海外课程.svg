@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" role="img" aria-label="海外课程">
+  <defs>
+    <linearGradient id="ink" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff7a52"/>
+      <stop offset="1" stop-color="#ff4d22"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.98"/>
+      <stop offset="0.48" stop-color="#fff3ec" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#ffd8c8" stop-opacity="0.9"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="78%" cy="86%" r="58%">
+      <stop offset="0" stop-color="#ff4d22" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ff4d22" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="clip"><rect width="44" height="44" rx="14"/></clipPath>
+  </defs>
+  <g clip-path="url(#clip)">
+    <rect width="44" height="44" fill="#ffffff"/>
+    <rect width="44" height="44" fill="url(#glass)"/>
+    <rect width="44" height="44" fill="url(#glow)"/>
+    <rect x="0" y="0" width="44" height="14" fill="#ffffff" opacity="0.42"/>
+    <rect x="0" y="32" width="44" height="12" fill="#ff6a3c" opacity="0.16"/>
+    <g transform="translate(9 9)"><g>
+    <mask id="globeMask" maskUnits="userSpaceOnUse" x="0" y="0" width="26" height="26">
+      <circle cx="13" cy="13" r="9.7" fill="white"/>
+      <ellipse cx="13" cy="13" rx="4.4" ry="9.35" fill="none" stroke="black" stroke-width="1.7"/>
+      <ellipse cx="13" cy="13" rx="9.35" ry="3.15" fill="none" stroke="black" stroke-width="1.45"/>
+    </mask>
+    <circle cx="13" cy="13" r="9.7" fill="url(#ink)" mask="url(#globeMask)"/>
+  </g></g>
+  </g>
+  <rect x="0.6" y="0.6" width="42.8" height="42.8" rx="13.4" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="1.2"/>
+</svg>

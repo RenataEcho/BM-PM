@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" role="img" aria-label="推文教程">
+  <defs>
+    <linearGradient id="ink" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff7a52"/>
+      <stop offset="1" stop-color="#ff4d22"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.98"/>
+      <stop offset="0.48" stop-color="#fff3ec" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#ffd8c8" stop-opacity="0.9"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="78%" cy="86%" r="58%">
+      <stop offset="0" stop-color="#ff4d22" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ff4d22" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="clip"><rect width="44" height="44" rx="14"/></clipPath>
+  </defs>
+  <g clip-path="url(#clip)">
+    <rect width="44" height="44" fill="#ffffff"/>
+    <rect width="44" height="44" fill="url(#glass)"/>
+    <rect width="44" height="44" fill="url(#glow)"/>
+    <rect x="0" y="0" width="44" height="14" fill="#ffffff" opacity="0.42"/>
+    <rect x="0" y="32" width="44" height="12" fill="#ff6a3c" opacity="0.16"/>
+    <g transform="translate(9 9)"><path fill="url(#ink)" fill-rule="evenodd" d="M5.15 4.4h14.3c1.5 0 2.7 1.18 2.7 2.65v7.7c0 1.47-1.2 2.65-2.7 2.65h-6.15L9.7 21.55v-4.15H5.15c-1.5 0-2.7-1.18-2.7-2.65V7.05c0-1.47 1.2-2.65 2.7-2.65zM6.9 8.55h6.4c.7 0 1.25.52 1.25 1.15S14 10.85 13.3 10.85H6.9c-.7 0-1.25-.52-1.25-1.15s.55-1.15 1.25-1.15zm0 3.85h9.7c.7 0 1.25.52 1.25 1.15s-.55 1.15-1.25 1.15H6.9c-.7 0-1.25-.52-1.25-1.15s.55-1.15 1.25-1.15z"/></g>
+  </g>
+  <rect x="0.6" y="0.6" width="42.8" height="42.8" rx="13.4" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="1.2"/>
+</svg>
