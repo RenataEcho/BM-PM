@@ -9,6 +9,18 @@ const root=path.resolve(__dirname,'../../../../demo/iteration');
   const load=async name=>{await page.goto('http://fr005.test/'+name);};
   const pcScene=async screen=>{await page.evaluate(screen=>window.dispatchEvent(new MessageEvent('message',{source:parent,origin:location.origin,data:{type:'fr-wen-005:screen',role:'pc',screen}})),screen);};
   const click=async(action,id)=>page.locator(`[data-action="${action}"]${id?`[data-id="${id}"]`:''}`).first().click();
+  await load('fr-wen-005-pc.html');await click('directed-list');
+  assert.equal(await page.locator('[name=project] option').count(),await page.evaluate(()=>new Set(FR005.records.filter(r=>r.editorId==='100099').map(r=>r.project)).size+1));
+  for(const q of ['A5100','小林','长安有故人','长安故事']){await page.locator('[name=query]').fill(q);await page.locator('#request-filters button[type=submit]').click();assert(await page.locator('.directed-table tbody tr').count()>0);assert.match(await page.locator('.directed-table tbody').innerText(),new RegExp(q));}
+  await page.locator('[name=query]').fill('不存在的申请');await page.locator('#request-filters button[type=submit]').click();assert.match(await page.locator('.directed-table').innerText(),/暂无符合条件/);await click('request-reset');
+  await page.locator('[name=status]').selectOption('待审核');await page.locator('[data-request-all]').check();assert(await page.locator('[data-action=request-batch-accept]').isEnabled());
+  await click('request-batch-accept');await click('closeDetail');assert.equal(await page.evaluate(()=>FR005.get('A5100').status),'待审核');
+  await click('request-batch-reject');await click('request-batch-confirm');assert.match(await page.locator('#request-batch-error').innerText(),/填写驳回原因/);await page.locator('#request-batch-reason').fill('当前排期已满');await click('request-batch-confirm');assert.equal(await page.evaluate(()=>FR005.get('A5100').status),'已拒绝');assert.equal(await page.evaluate(()=>FR005.get('A5100').rejectReason),'当前排期已满');
+  await page.evaluate(()=>FR005.reset());await click('directed-list');await page.locator('[data-request-all]').check();await click('request-batch-accept');await click('request-batch-confirm');assert.equal(await page.evaluate(()=>FR005.get('A5100').status),'制作中');assert(await page.locator('[data-action=request-batch-accept]').isDisabled());
+  await load('fr-wen-005-mobile.html?embed=1&screen=claimed');await page.locator('#fr-request-filter').selectOption('none');assert.equal(await page.locator('.c-card [data-fr=source]').count(),0);assert(await page.locator('.c-card').count()>0);await page.locator('#fr-request-filter').selectOption('requested');assert(await page.locator('.c-card').count()>0);assert.equal(await page.locator('.c-card').count(),await page.locator('.c-card [data-fr=source]').count());
+  await page.locator('#fr-income-sort').selectOption('high');let values=await page.locator('.fr-income').allTextContents();assert(values.every((v,i)=>!i||Number(values[i-1].replace(/[^0-9.]/g,''))>=Number(v.replace(/[^0-9.]/g,''))));await page.locator('#fr-income-sort').selectOption('low');values=await page.locator('.fr-income').allTextContents();assert(values.every((v,i)=>!i||Number(values[i-1].replace(/[^0-9.]/g,''))<=Number(v.replace(/[^0-9.]/g,''))));
+  await page.locator('[data-fr=source]').first().click();const downloadButton=page.locator('[data-fr=manuscript]').filter({hasText:'前往下载'}).first();await downloadButton.click();assert(await page.locator('[data-fr=download]').count()>0);
+  console.log('通过：搜索、项目状态筛选、空态、批量取消/必填/驳回/通过、移动端下拉筛选排序与前往下载');
   await load('fr-wen-005-pc.html');
   assert.equal(await page.locator('.directed-entry').count(),0,'看板不插入独立横卡');
   assert.equal(await page.locator('.request-stat .stat-link').innerText(),'待审核·查看记录');
