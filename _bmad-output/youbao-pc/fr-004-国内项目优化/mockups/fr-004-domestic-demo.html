@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>国内项目 · 优化稿</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #fff;
+      --ink: #303133;
+      --ink-2: #606266;
+      --muted: #909399;
+      --line: #ebeef5;
+      --line-strong: #e4e7ed;
+      --brand: #f56c6c;
+      --brand-btn: #f56c6c;
+      --brand-btn-hover: #f78989;
+      --brand-ink: #f56c6c;
+      --brand-soft: #fef0f0;
+      --brand-line: #f9b4b4;
+      --down: #67c23a;
+      --down-soft: #f0f9eb;
+      --danger: #f56c6c;
+      --danger-soft: #fef0f0;
+      --shadow: 0 12px 32px rgba(28, 32, 44, .12);
+      --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--font); }
+    button, input { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; }
+    button:focus-visible, input:focus-visible { outline: 2px solid var(--brand-btn); outline-offset: 2px; }
+    .app { min-height: 100%; display: flex; flex-direction: column; }
+    .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding: 16px 20px 12px; background: #fff; border-bottom: 1px solid var(--line); }
+    .crumb { margin: 0 0 4px; color: var(--muted); font-size: 12px; }
+    h1 { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 700; }
+    .sub { margin: 4px 0 0; color: var(--ink-2); font-size: 13px; }
+    .tools { display: flex; align-items: center; gap: 8px; }
+    .search { position: relative; }
+    .search input { width: 260px; height: 36px; padding: 0 12px 0 32px; border: 1px solid var(--line-strong); border-radius: 8px; background: #fff; }
+    .search input:hover { border-color: #d5d8e0; }
+    .search svg { position: absolute; left: 10px; top: 10px; }
+    .btn { height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid transparent; background: transparent; }
+    .btn-ghost { border-color: var(--line-strong); background: #fff; color: var(--ink); }
+    .btn-ghost:hover:not(:disabled) { border-color: var(--brand-line); color: var(--brand-ink); }
+    .btn-primary { background: var(--brand-btn); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--brand-btn-hover); }
+    .btn-primary:disabled { background: #e7e5e4; color: #78716c; }
+    .btn-text { height: 32px; padding: 0 8px; border: 0; background: transparent; color: var(--brand-ink); }
+    .btn-text:hover { background: var(--brand-soft); }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 20px; background: #fff; border-bottom: 1px solid var(--line); }
+    .chip { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 6px 12px; border: 1px solid var(--line-strong); border-radius: 999px; background: #fff; color: var(--ink-2); }
+    .chip:hover { border-color: var(--brand-line); color: var(--brand-ink); }
+    .chip[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand-line); color: var(--brand-ink); font-weight: 650; }
+    .mark { width: 20px; height: 20px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; background: var(--brand-soft); color: var(--brand-ink); font-size: 11px; font-weight: 700; }
+    .chip small { color: var(--muted); font-size: 12px; font-weight: 500; }
+    .chip[aria-pressed="true"] small { color: var(--brand-ink); }
+    .body { padding: 16px 20px 24px; }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 14px; text-align: left; vertical-align: middle; }
+    th { color: var(--muted); font-size: 12px; font-weight: 650; background: #fafbfc; border-bottom: 1px solid var(--line); }
+    td { border-bottom: 1px solid var(--line); }
+    tr:last-child td { border-bottom: 0; }
+    tbody tr:hover td { background: #fffaf8; }
+    tbody tr.is-open td { background: var(--brand-soft); }
+    .num, .money { text-align: right; font-variant-numeric: tabular-nums; }
+    .sort { display: inline-flex; align-items: center; gap: 4px; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 650; padding: 0; }
+    .project { display: flex; align-items: center; gap: 12px; min-width: 220px; width: 100%; border: 0; background: transparent; text-align: left; padding: 0; border-radius: 8px; }
+    .logo { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-weight: 700; flex: none; }
+    .name { font-weight: 650; }
+    .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .tag { padding: 0 6px; border-radius: 4px; background: #fdf6ec; color: #e6a23c; font-size: 12px; line-height: 20px; }
+    .tag.hot { background: #fdf6ec; color: #e6a23c; }
+    .tag.stop { background: var(--danger-soft); color: var(--danger); }
+    .level { display: inline-flex; align-items: center; gap: 6px; font-weight: 650; }
+    .lv { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 6px; display: inline-grid; place-items: center; font-size: 12px; }
+    .lv-S { background: var(--brand-soft); color: var(--brand-ink); }
+    .lv-A { background: #eef2ff; color: #3730a3; }
+    .lv-B { background: #f4f4f5; color: #44403c; }
+    .money b { color: var(--brand-ink); font-weight: 700; }
+    .trend { display: inline-flex; margin-left: 8px; font-size: 12px; font-weight: 650; }
+    .trend.up { color: #f56c6c; }
+    .trend.down { color: #67c23a; }
+    .trend.flat { color: var(--muted); }
+    .ops { display: flex; justify-content: flex-end; gap: 4px; white-space: nowrap; }
+    .empty { padding: 48px 20px; text-align: center; }
+    .empty h2 { margin: 0 0 6px; font-size: 16px; }
+    .empty p { margin: 0 0 14px; color: var(--ink-2); }
+    .pager { display: flex; justify-content: flex-end; align-items: center; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .pager button { min-width: 32px; height: 32px; border: 1px solid var(--line-strong); border-radius: 8px; background: #fff; }
+    .pager button[aria-current="page"] { background: var(--brand-soft); border-color: var(--brand-line); color: var(--brand-ink); font-weight: 700; }
+    .scrim { position: fixed; inset: 0; background: rgba(22, 24, 29, .38); }
+    .drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(440px, 100%); background: #fff; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+    .drawer-h, .drawer-f { padding: 16px 18px; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: flex-start; }
+    .drawer-f { border-bottom: 0; border-top: 1px solid var(--line); justify-content: flex-end; background: #fff; }
+    .drawer-b { flex: 1; min-height: 0; padding: 16px 18px 24px; overflow: auto; }
+    .drawer h2 { margin: 0; font-size: 18px; }
+    .meta { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+    .close { margin-left: auto; width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; font-size: 20px; line-height: 1; }
+    .close:hover { background: #f4f5f7; }
+    .banner { margin: 0 0 12px; padding: 10px 12px; border-radius: 8px; background: var(--danger-soft); color: var(--danger); font-size: 13px; }
+    .banner.ok { background: var(--down-soft); color: var(--down); }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+    .stat { padding: 10px 12px; border-radius: 8px; background: #f7f8fb; }
+    .stat span { display: block; color: var(--muted); font-size: 12px; }
+    .stat b { font-size: 16px; font-variant-numeric: tabular-nums; }
+    .stat b.pay { color: var(--brand-ink); }
+    .section-title { margin: 14px 0 8px; font-size: 13px; font-weight: 700; }
+    .prices { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .prices th, .prices td { padding: 8px 0; border-bottom: 1px solid var(--line); }
+    .prices th { color: var(--muted); font-weight: 600; }
+    .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .tabs button { height: 32px; padding: 0 10px; border: 0; border-radius: 8px; background: #f4f5f7; color: var(--ink-2); }
+    .tabs button[aria-selected="true"] { background: var(--brand-soft); color: var(--brand-ink); font-weight: 700; }
+    .note { margin: 8px 0 0; color: var(--ink-2); font-size: 13px; white-space: pre-wrap; }
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); padding: 8px 14px; border-radius: 8px; background: #1c1e23; color: #fff; font-size: 13px; }
+    .view-switch { display: inline-flex; padding: 3px; border-radius: 10px; background: #f2f3f5; }
+    .view-switch button { min-width: 64px; height: 30px; border: 0; border-radius: 8px; background: transparent; color: #606266; }
+    .view-switch button[aria-pressed="true"] { background: #fff; color: #f56c6c; box-shadow: 0 1px 4px rgba(0,0,0,.08); font-weight: 650; }
+    .grid-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .grid-bar button { height: 28px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 999px; background: #fff; color: #606266; }
+    .grid-bar button[aria-pressed="true"] { border-color: #f9b4b4; background: #fef0f0; color: #f56c6c; }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding: 12px; }
+    .gcard { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; text-align: left; }
+    .gcard.is-open { border-color: #f9b4b4; background: #fffafa; }
+    .gcard .project { align-items: flex-start; }
+    .gmeta { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin: 0; font-size: 12px; color: var(--muted); }
+    .gmeta b { display: block; color: #303133; font-size: 14px; font-weight: 650; font-variant-numeric: tabular-nums; }
+    .gmeta b.pay { color: #f56c6c; }
+    .gmeta .trend { font-style: normal; }
+    .gcard .ops { justify-content: flex-start; margin-top: auto; }
+    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 720px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 860px) {
+      .head { flex-direction: column; align-items: stretch; }
+      .search input { width: 100%; }
+      .ops { justify-content: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="head">
+      <div>
+        <p class="crumb">变现 / 国内项目</p>
+        <h1>国内项目</h1>
+        <p class="sub" id="summary"></p>
+      </div>
+      <div class="tools">
+        <div class="view-switch" role="group" aria-label="浏览方式">
+          <button type="button" data-view="list">列表</button>
+          <button type="button" data-view="grid">宫格</button>
+        </div>
+        <label class="search">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="#5e6573" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="#5e6573" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input id="q" type="search" placeholder="搜索项目名称 / 标签" aria-label="搜索项目名称或标签">
+        </label>
+        <button class="btn btn-ghost" id="refresh" type="button">刷新</button>
+      </div>
+    </header>
+    <div class="filters" id="chips" role="toolbar" aria-label="项目分类"></div>
+    <div class="body">
+      <div class="card" id="card"></div>
+    </div>
+  </div>
+  <div id="layer" hidden></div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script>
+    const categories = [
+      { id: 'novel', name: '小说推文' },
+      { id: 'drama', name: '短剧' },
+      { id: 'story', name: '故事会' },
+      { id: 'comic', name: '漫剧' },
+      { id: 'disk', name: '网盘' },
+      { id: 'knowledge', name: '知识' },
+      { id: 'game', name: '游戏' },
+      { id: 'tool', name: '工具' }
+    ];
+    const projects = [
+      { id: 1, cat: 'novel', name: '番茄小说', mark: '番', color: '#ff4d22', tags: ['女频', '长篇'], hot: true, level: 'S', share: '70%', tip: 'S 级 · 分成 70%', doing: 12840, month: 86000, week: 12400, trend: 'up', trendText: '+12%', can: true, backfill: false, white: false, mine: 1860, days: 7, prices: [['拉新', '新用户首日', '8.00'], ['拉活', '老用户回访', '1.20']], detail: '女频长篇为主，书单每周更新。', keyword: '提词后 7 天内有效，不可搜书名挂载。', back: '无需回填。', settle: '按有效拉新结算，周结。', special: '热门书优先派单。' },
+      { id: 2, cat: 'novel', name: '七猫小说', mark: '猫', color: '#ea580c', tags: ['男频'], level: 'A', share: '60%', tip: 'A 级 · 分成 60%', doing: 8600, month: 42000, week: 6200, trend: 'up', trendText: '+4%', can: true, backfill: false, white: false, mine: 420, days: 7, prices: [['拉新', '新用户', '6.00']], detail: '男频都市和玄幻占比高。', keyword: '一个内容对应一个口令。', back: '无需回填。', settle: '周结。', special: '无' },
+      { id: 3, cat: 'novel', name: '起点读书', mark: '起', color: '#b45309', tags: ['男频'], level: 'B', share: '50%', tip: 'B 级 · 分成 50%', doing: 2100, month: 18000, week: 980, trend: 'down', trendText: '-3%', can: false, deny: '项目名额已满', backfill: false, white: false, mine: 0, days: 5, prices: [['拉新', '新用户', '4.00']], detail: '当前不开放新接单。', keyword: '名额恢复后才能提词。', back: '无需回填。', settle: '周结。', special: '名额每日 10:00 刷新。' },
+      { id: 4, cat: 'novel', name: '知乎故事', mark: '知', color: '#0f766e', tags: ['故事'], level: 'A', share: '65%', tip: 'A 级 · 分成 65%', doing: 5400, month: 31000, week: 4100, trend: 'flat', trendText: '持平', can: true, backfill: true, white: false, mine: 260, days: 3, prices: [['拉新', '新用户', '5.50']], detail: '故事会向的短内容。', keyword: '口令 3 天有效。', back: '发布后 24 小时内回填链接。', settle: '周结。', special: '必须回填才能计收益。' },
+      { id: 5, cat: 'novel', name: '番茄畅听', mark: '听', color: '#c2410c', tags: ['听书'], level: 'A', share: '62%', tip: 'A 级 · 分成 62%', doing: 3800, month: 22000, week: 1900, trend: 'up', trendText: '+2%', can: true, backfill: false, white: false, mine: 90, days: 7, prices: [['拉新', '新用户', '5.00']], detail: '有声书推广。', keyword: '按专辑提词。', back: '无需回填。', settle: '周结。', special: '无' },
+      { id: 6, cat: 'novel', name: '掌阅小说', mark: '掌', color: '#57534e', tags: ['出版'], level: 'B', share: '48%', tip: 'B 级 · 分成 48%', doing: 900, month: 6000, week: 210, trend: 'down', trendText: '-1%', can: false, deny: '当前等级不足', backfill: false, white: false, mine: 0, days: 7, prices: [['拉新', '新用户', '3.00']], detail: '出版向书单。', keyword: '等级提升后开放。', back: '无需回填。', settle: '周结。', special: '无' },
+      { id: 7, cat: 'drama', name: '红果短剧', mark: '红', color: '#e11d48', tags: ['短剧'], hot: true, level: 'S', share: '70%', tip: 'S 级 · 分成 70%', doing: 9600, month: 72000, week: 9800, trend: 'up', trendText: '+18%', can: true, backfill: true, white: false, mine: 2400, days: 2, prices: [['播放', '有效播放', '0.80']], detail: '国内短剧，需回填作品链接。', keyword: '每部剧一个口令。', back: '发布当日回填。', settle: '周结。', special: '爆款剧优先。' },
+      { id: 8, cat: 'drama', name: '番茄短剧', mark: '剧', color: '#ff4d22', tags: ['短剧'], level: 'A', share: '55%', tip: 'A 级 · 分成 55%', doing: 4300, month: 26000, week: 2100, trend: 'down', trendText: '-6%', can: true, backfill: false, white: false, mine: 300, days: 2, prices: [['播放', '有效播放', '0.50']], detail: '短剧分销。', keyword: '口令 2 天有效。', back: '无需回填。', settle: '周结。', special: '无' },
+      { id: 9, cat: 'drama', name: '星图品牌短剧', mark: '星', color: '#1d4ed8', tags: ['品牌'], fresh: true, level: 'B', share: '45%', tip: 'B 级 · 分成 45%', doing: 800, month: 9000, week: 420, trend: 'flat', trendText: '持平', can: false, deny: '需先完成官方开白', backfill: false, white: true, mine: 0, days: 7, prices: [['品牌任务', '按条', '30.00']], detail: '品牌短剧，先开白再接单。', keyword: '开白通过后才能提词。', back: '无需回填。', settle: '任务结算。', special: '开白约 1 个工作日。' },
+      { id: 10, cat: 'story', name: '盐言故事', mark: '盐', color: '#0f766e', tags: ['故事'], level: 'A', share: '60%', tip: 'A 级 · 分成 60%', doing: 3200, month: 15000, week: 1600, trend: 'up', trendText: '+2%', can: true, backfill: true, white: false, mine: 140, days: 5, prices: [['拉新', '新用户', '4.50']], detail: '盐言故事会。', keyword: '按故事提词。', back: '回填发布链接。', settle: '周结。', special: '无' },
+      { id: 11, cat: 'comic', name: '红果漫剧', mark: '漫', color: '#c2410c', tags: ['漫剧'], hot: true, fresh: true, level: 'S', share: '68%', tip: 'S 级 · 分成 68%', doing: 4100, month: 28000, week: 5400, trend: 'up', trendText: '+9%', can: true, backfill: false, white: false, mine: 760, days: 7, prices: [['拉新', '新用户', '7.00']], detail: '漫剧新项目。', keyword: '按作品提词。', back: '无需回填。', settle: '周结。', special: '新品加权 7 天。' },
+      { id: 12, cat: 'disk', name: '夸克网盘', mark: '夸', color: '#0369a1', tags: ['网盘'], level: 'A', share: '40%', tip: 'A 级 · 分成 40%', doing: 2600, month: 11000, week: 730, trend: 'up', trendText: '+1%', can: true, backfill: true, white: false, mine: 80, days: 14, prices: [['转存', '有效转存', '1.00']], detail: '网盘拉新。', keyword: '口令 14 天有效。', back: '回填转存截图。', settle: '周结。', special: '无' }
+    ];
+    const params = new URLSearchParams(location.search);
+    const screen = params.get('screen') || 'list';
+    const state = { cat: 'novel', q: screen === 'empty' ? '不存在的项目' : '', sort: 'month', dir: 'desc', page: 1, size: 8, open: null, tab: 'detail', view: screen === 'grid' ? 'grid' : 'list' };
+    if (screen === 'detail') state.open = 1;
+    if (screen === 'denied') state.open = 3;
+
+    const yuan = n => '¥' + n.toLocaleString('zh-CN');
+    const people = n => n >= 10000 ? (n / 10000).toFixed(1) + '万' : String(n);
+    let toastTimer;
+    function toast(text) {
+      const el = document.getElementById('toast');
+      el.textContent = text;
+      el.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { el.hidden = true; }, 1600);
+    }
+    function catName(id) { return categories.find(c => c.id === id).name; }
+    function inCat(p) { return p.cat === state.cat; }
+    function matched() {
+      const q = state.q.trim().toLowerCase();
+      return projects.filter(p => inCat(p) && (!q || (p.name + p.tags.join('')).toLowerCase().includes(q)));
+    }
+    function sorted(list) {
+      const dir = state.dir === 'asc' ? 1 : -1;
+      const key = { level: p => ({ S: 3, A: 2, B: 1 }[p.level]), doing: p => p.doing, month: p => p.month, week: p => p.week }[state.sort];
+      return list.slice().sort((a, b) => (key(a) - key(b)) * dir);
+    }
+    function renderChips() {
+      document.getElementById('chips').innerHTML = categories.map(c => {
+        const n = projects.filter(p => p.cat === c.id).length;
+        const on = c.id === state.cat;
+        return `<button class="chip" type="button" data-cat="${c.id}" aria-pressed="${on}"><span>${c.name}</span><small>${n}</small></button>`;
+      }).join('');
+    }
+    function tagsOf(p) {
+      return `${p.hot ? '<span class="tag hot">热门</span>' : ''}${p.fresh ? '<span class="tag hot">新品</span>' : ''}${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}${p.can ? '' : '<span class="tag stop">暂不可接单</span>'}`;
+    }
+    function opsOf(p) {
+      return `<div class="ops"><button class="btn btn-ghost" type="button" data-open="${p.id}">详情</button><button class="btn btn-text" type="button" data-go="keyword" data-id="${p.id}">提词</button>${p.backfill ? `<button class="btn btn-text" type="button" data-go="backfill" data-id="${p.id}">回填</button>` : ''}</div>`;
+    }
+    function pagerOf(pages, total) {
+      return `<div class="pager"><span>共 ${total} 条</span>${Array.from({ length: pages }, (_, i) => `<button type="button" data-page="${i + 1}" ${state.page === i + 1 ? 'aria-current="page"' : ''}>${i + 1}</button>`).join('')}</div>`;
+    }
+    function renderViewSwitch() {
+      document.querySelectorAll('[data-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === state.view)));
+    }
+    function renderTable() {
+      const all = sorted(matched());
+      const pages = Math.max(1, Math.ceil(all.length / state.size));
+      if (state.page > pages) state.page = pages;
+      const rows = all.slice((state.page - 1) * state.size, state.page * state.size);
+      const totalInCat = projects.filter(inCat).length;
+      document.getElementById('summary').textContent = `${catName(state.cat)} · ${all.length} 个项目` + (state.q.trim() ? `，已按「${state.q.trim()}」筛选` : ` / 本分类 ${totalInCat} 个`);
+      if (!rows.length) {
+        document.getElementById('card').innerHTML = `<div class="empty"><h2>这个分类里没有匹配结果</h2><p>「${catName(state.cat)}」中没有「${state.q.trim()}」。可以清空搜索，或换一个分类。</p><button class="btn btn-primary" id="clear" type="button">清空搜索</button></div>`;
+        return;
+      }
+      const sortBtn = (key, label, align) => {
+        const on = state.sort === key;
+        const arrow = on ? (state.dir === 'desc' ? '↓' : '↑') : '';
+        return `<button class="sort" type="button" data-sort="${key}" aria-pressed="${on}">${label}${arrow ? ' ' + arrow : ''}</button>`;
+      };
+      if (state.view === 'grid') {
+        document.getElementById('card').innerHTML = `<div class="grid-bar"><span>排序</span>${['level', '等级', 'doing', '在做人数', 'month', '顶尖月入', 'week', '本周收益'].reduce((html, item, i, arr) => i % 2 ? html : html + sortBtn(arr[i], arr[i + 1]), '')}</div><div class="grid">${rows.map(p => `<article class="gcard ${state.open === p.id ? 'is-open' : ''}"><button class="project" type="button" data-open="${p.id}"><span class="logo" style="background:${p.color}" aria-hidden="true">${p.mark}</span><span><span class="name">${p.name}</span><span class="tags">${tagsOf(p)}</span></span></button><div class="gmeta"><span>等级<b>${p.level} · ${p.share}</b></span><span>在做人数<b>${people(p.doing)}</b></span><span>顶尖月入<b class="pay">${yuan(p.month)}</b></span><span>本周收益<b>${yuan(p.week)} <i class="trend ${p.trend}">${p.trendText}</i></b></span></div>${opsOf(p)}</article>`).join('')}</div>${pagerOf(pages, all.length)}`;
+        return;
+      }
+      const headSort = (key, label, align) => `<th class="${align || ''}" aria-sort="${state.sort === key ? (state.dir === 'desc' ? 'descending' : 'ascending') : 'none'}">${sortBtn(key, label)}</th>`;
+      document.getElementById('card').innerHTML = `<table><thead><tr><th>项目</th>${headSort('level', '等级')}${headSort('doing', '在做人数', 'num')}${headSort('month', '顶尖月入', 'money')}${headSort('week', '本周收益', 'money')}<th>操作</th></tr></thead><tbody>${rows.map(p => `<tr class="${state.open === p.id ? 'is-open' : ''}"><td><button class="project" type="button" data-open="${p.id}"><span class="logo" style="background:${p.color}" aria-hidden="true">${p.mark}</span><span><span class="name">${p.name}</span><span class="tags">${tagsOf(p)}</span></span></button></td><td><span class="level" title="${p.tip}"><span class="lv lv-${p.level}">${p.level}</span>${p.share}</span></td><td class="num">${people(p.doing)}</td><td class="money"><b>${yuan(p.month)}</b></td><td class="money">${yuan(p.week)}<span class="trend ${p.trend}">${p.trendText}</span></td><td>${opsOf(p)}</td></tr>`).join('')}</tbody></table>${pagerOf(pages, all.length)}`;
+    }
+    function project() { return projects.find(p => p.id === state.open); }
+    function renderDrawer(focusClose) {
+      const p = project();
+      const layer = document.getElementById('layer');
+      if (!p) { layer.hidden = true; layer.innerHTML = ''; return; }
+      const notes = { detail: p.detail, keyword: p.keyword, back: p.back, settle: p.settle, special: p.special };
+      const tabBtn = (id, label) => `<button type="button" role="tab" data-tab="${id}" aria-selected="${state.tab === id}">${label}</button>`;
+      layer.hidden = false;
+      layer.innerHTML = `<div class="scrim" data-close="1"></div><aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle"><div class="drawer-h"><span class="logo" style="background:${p.color}" aria-hidden="true">${p.mark}</span><div><h2 id="drawerTitle">${p.name}</h2><p class="meta">${catName(p.cat)} · ${p.tip}</p></div><button class="close" type="button" data-close="1" aria-label="关闭">×</button></div><div class="drawer-b">${p.can ? '<p class="banner ok">已准备接单</p>' : `<p class="banner">${p.deny}</p>`}<div class="stats"><div class="stat"><span>在做人数</span><b>${people(p.doing)}</b></div><div class="stat"><span>顶尖月入</span><b class="pay">${yuan(p.month)}</b></div><div class="stat"><span>本周收益</span><b class="pay">${yuan(p.week)}</b></div><div class="stat"><span>我的收益</span><b>${yuan(p.mine)}</b></div></div><div class="section-title">结算单价</div><table class="prices"><thead><tr><th>类型</th><th>说明</th><th>单价</th></tr></thead><tbody>${p.prices.map(row => `<tr><td>${row[0]}</td><td>${row[1]}</td><td>¥${row[2]}</td></tr>`).join('')}</tbody></table><div class="links"><button class="btn btn-text" type="button" data-go="books">查看书单</button><button class="btn btn-text" type="button" data-go="material">素材地址</button><span class="meta">提词有效期 ${p.days} 天</span></div><div class="tabs" role="tablist">${tabBtn('detail', '项目详情')}${tabBtn('keyword', '提词说明')}${tabBtn('back', '回填规则')}${tabBtn('settle', '结算说明')}${tabBtn('special', '特别说明')}</div><p class="note">${notes[state.tab]}</p><div class="links">${p.white ? '<button class="btn btn-ghost" type="button" data-go="white">去开白</button>' : ''}<button class="btn btn-ghost" type="button" data-go="keyword">去提词</button>${p.backfill ? '<button class="btn btn-ghost" type="button" data-go="backfill">去回填</button>' : ''}<button class="btn btn-ghost" type="button" data-go="profit">查看收益</button></div></div><div class="drawer-f"><button class="btn btn-ghost" type="button" data-close="1">关闭</button><button class="btn btn-primary" type="button" id="take" ${p.can ? '' : 'disabled'}>进入接单</button></div></aside>`;
+      if (focusClose) layer.querySelector('.close').focus();
+    }
+    function paint(focusClose) { renderChips(); renderViewSwitch(); renderTable(); renderDrawer(focusClose); }
+    document.getElementById('q').value = state.q;
+    document.getElementById('q').addEventListener('input', e => { state.q = e.target.value; state.page = 1; paint(); });
+    document.getElementById('refresh').addEventListener('click', () => toast('列表已刷新'));
+    document.body.addEventListener('click', e => {
+      const view = e.target.closest('[data-view]');
+      const cat = e.target.closest('[data-cat]');
+      const sort = e.target.closest('[data-sort]');
+      const page = e.target.closest('[data-page]');
+      const open = e.target.closest('[data-open]');
+      const go = e.target.closest('[data-go]');
+      const tab = e.target.closest('[data-tab]');
+      const close = e.target.closest('[data-close]');
+      if (e.target.id === 'clear') { state.q = ''; document.getElementById('q').value = ''; state.page = 1; paint(); return; }
+      if (view) { state.view = view.dataset.view; paint(); return; }
+      if (cat) { state.cat = cat.dataset.cat; state.page = 1; state.open = null; paint(); return; }
+      if (sort) { state.dir = state.sort === sort.dataset.sort && state.dir === 'desc' ? 'asc' : 'desc'; state.sort = sort.dataset.sort; state.page = 1; paint(); return; }
+      if (page) { state.page = Number(page.dataset.page); paint(); return; }
+      if (go) {
+        const map = { keyword: '将打开提词页', backfill: '将打开回填页', white: '将打开开白页', profit: '将打开收益页', books: '书单为示例，不打开外链', material: '素材地址为示例，不打开外链' };
+        toast(map[go.dataset.go] + '（示例）');
+        return;
+      }
+      if (open) { state.open = Number(open.dataset.open); state.tab = 'detail'; paint(true); return; }
+      if (tab) { state.tab = tab.dataset.tab; renderDrawer(false); return; }
+      if (close) { state.open = null; paint(); return; }
+      if (e.target.id === 'take') { toast('已进入接单（示例）'); state.open = null; paint(); }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && state.open) { state.open = null; paint(); }
+    });
+    paint(screen === 'detail' || screen === 'denied');
+  </script>
+</body>
+</html>

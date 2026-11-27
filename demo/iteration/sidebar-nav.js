@@ -2,7 +2,8 @@
   var LINES = [
     { id: 'youbao', label: '右豹主业务' },
     { id: 'mentor', label: '导师商务' },
-    { id: 'enterprise', label: '企业号' }
+    { id: 'enterprise', label: '企业号' },
+    { id: 'youbao-pc', label: '右豹PC' }
   ];
   var ITEMS = [
     { id: 'overview', label: '概览' },

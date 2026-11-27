@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FR-004 · 国内项目优化 · v1 当前</title>
+  <link rel="stylesheet" href="fr-003-fusion-task.css">
+  <style>
+    [hidden] { display: none !important; }
+    .page-header { align-items: flex-start; }
+    .page-header > div { min-width: 0; }
+    .page-desc { max-width: 760px; }
+    .page-header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .view#view-fe { display: flex; flex-direction: column; height: calc(100vh - 188px); min-height: 560px; }
+    .scene-list { display: flex; gap: 24px; overflow-x: auto; padding: 0 16px; border-bottom: 1px solid var(--border); }
+    .scene-btn { width: auto; min-height: 42px; padding: 10px 0; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; color: var(--text-secondary); white-space: nowrap; }
+    .scene-btn strong { font-size: 13px; }
+    .scene-btn.active { border-bottom-color: var(--primary); color: var(--primary); }
+    .scene-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+    .pc-stage { flex: 1; min-height: 0; background: #f6f7fb; }
+    .pc-stage iframe { display: block; width: 100%; height: 100%; border: 0; background: #f6f7fb; }
+    .view#view-flow { height: calc(100vh - 188px); min-height: 560px; overflow: auto; }
+    .flow-page { max-height: none; }
+    .flow-svg-wrap { max-height: 72vh; overflow: auto; }
+    .embedded .topnav, .embedded .sidebar { display: none; }
+    .embedded .main { top: 0; left: 0; }
+    .embedded .view#view-fe, .embedded .view#view-flow { height: calc(100vh - 146px); }
+    .tab-review-exit { display: none; position: fixed; top: 16px; right: 16px; z-index: 720; }
+    html.is-tab-review .tab-review-exit { display: inline-flex; }
+    html.is-tab-review .view:not([hidden]) { position: fixed; inset: 0; z-index: 640; height: 100vh; min-height: 0; margin: 0; padding: 64px 16px 16px; background: #f0f4f8; box-sizing: border-box; overflow: hidden; }
+    html.is-tab-review .view#view-flow:not([hidden]) { overflow: auto; }
+    html.is-tab-review .drawer-overlay { z-index: 760; }
+    html.is-tab-review .drawer { z-index: 761; }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer.open { transform: translateX(0); }
+  </style>
+</head>
+<body>
+  <header class="topnav" id="topnav"><a href="framework-shell.html#youbao-pc/overview" class="brand-text">BM-PM · 迭代需求</a><span class="business-line">右豹PC</span><span class="topnote">产品交互演示</span></header>
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><b>右豹PC</b><p class="brand-sub">需求与设计</p></div><nav class="sidebar-scroll" aria-label="项目导航"><a class="nav-item" href="framework-shell.html#youbao-pc/overview">概览</a><a class="nav-item" href="framework-shell.html#youbao-pc/components">组件规范</a></nav><div class="sidebar-foot">FR-004<br>国内项目优化 · v1</div></aside>
+  <main class="main" id="pageMain">
+    <nav class="breadcrumb"><a href="framework-shell.html#youbao-pc/overview">右豹PC</a> / 国内项目优化</nav>
+    <header class="page-header">
+      <div>
+        <h1>FR-004 · 国内项目优化 · v1 当前</h1>
+        <p class="page-desc">国内项目改成先扫收益和接单条件，再进详情。分类不再藏进一条滚不动的芯片。示例数据，不接线上接口。</p>
+      </div>
+      <div class="page-header-actions">
+        <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
+        <button class="btn btn-rule" id="rulesOpen" type="button" aria-expanded="false" aria-controls="rulesDrawer">需求规则</button>
+      </div>
+    </header>
+    <nav class="page-tabs" role="tablist" aria-label="需求视图">
+      <button class="btn btn-ghost active" id="tab-fe" type="button" role="tab" aria-selected="true" aria-controls="view-fe" data-tab="fe">前端交互</button>
+      <button class="btn btn-ghost" id="tab-flow" type="button" role="tab" aria-selected="false" aria-controls="view-flow" data-tab="flow">业务流程</button>
+    </nav>
+    <section id="view-fe" class="view" role="tabpanel" aria-labelledby="tab-fe">
+      <div class="scene-list" role="tablist" aria-label="场景">
+        <button class="scene-btn active" type="button" data-screen="list"><strong>列表</strong></button>
+        <button class="scene-btn" type="button" data-screen="grid"><strong>宫格</strong></button>
+        <button class="scene-btn" type="button" data-screen="detail"><strong>可接单详情</strong></button>
+        <button class="scene-btn" type="button" data-screen="denied"><strong>暂不可接单</strong></button>
+        <button class="scene-btn" type="button" data-screen="empty"><strong>无结果</strong></button>
+      </div>
+      <div class="pc-stage"><iframe id="screen" title="国内项目优化" src="fr-004-domestic-demo.html?embed=1&amp;screen=list"></iframe></div>
+    </section>
+    <section id="view-flow" class="view" role="tabpanel" aria-labelledby="tab-flow" hidden>
+      <div class="flow-page">
+        <p class="flow-page-intro">创作者在国内项目里筛选、打开项目。不能接单就回到列表改选。能接单后进入接单或去提词；要回填的项目再去回填。</p>
+        <div class="flow-svg-wrap">
+          <svg width="1120" height="900" viewBox="0 0 1120 900" role="img" aria-labelledby="flowTitle flowDesc">
+            <title id="flowTitle">国内项目优化业务流程</title>
+            <desc id="flowDesc">打开国内项目后加载分类和项目。换分类或搜索后再点开项目。不可接单则展示原因并回到列表。可接单则进入接单或提词。需要回填的项目再去回填。</desc>
+            <defs><marker id="flow-arrow-fr004" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8"/></marker></defs>
+            <g class="flow-edges" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#flow-arrow-fr004)">
+              <polyline points="590,72 590,104"/>
+              <polyline points="590,156 590,188"/>
+              <polyline points="590,300 590,340"/>
+              <polyline points="700,244 820,244"/>
+              <polyline points="940,268 940,364 730,364"/>
+              <polyline points="590,388 590,420"/>
+              <polyline points="480,476 280,476"/>
+              <polyline points="40,476 16,476 16,316 520,316 520,340"/>
+              <polyline points="590,532 590,560"/>
+              <polyline points="590,608 590,640"/>
+              <polyline points="590,752 590,800"/>
+              <polyline points="700,696 860,696"/>
+              <polyline points="970,720 970,776 700,776 700,800"/>
+            </g>
+            <g class="flow-nodes" font-family="PingFang SC, Microsoft YaHei, sans-serif" text-anchor="middle" fill="#18222f">
+              <rect x="450" y="24" width="280" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="590" y="53" font-size="12">前端：打开国内项目</text>
+              <rect x="450" y="104" width="280" height="52" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="590" y="126" font-size="12"><tspan x="590">后端：返回分类</tspan><tspan x="590" dy="16">和项目列表</tspan></text>
+              <polygon points="590,188 700,244 590,300 480,244" fill="#fffbeb" stroke="#d97706"/><text x="590" y="240" font-size="11"><tspan x="590">要换分类</tspan><tspan x="590" dy="14">或搜索？</tspan></text>
+              <text x="450" y="236" font-size="11" fill="#dc2626">否</text>
+              <text x="740" y="236" font-size="11" fill="#16a34a">是</text>
+              <rect x="820" y="220" width="240" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="940" y="249" font-size="12">前端：换分类或搜索</text>
+              <rect x="450" y="340" width="280" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="590" y="369" font-size="12">前端：点开一个项目</text>
+              <polygon points="590,420 700,476 590,532 480,476" fill="#fffbeb" stroke="#d97706"/><text x="590" y="480" font-size="12">当前可接单？</text>
+              <text x="430" y="468" font-size="11" fill="#dc2626">否</text>
+              <rect x="40" y="452" width="240" height="48" rx="8" fill="#fef2f2" stroke="#dc2626"/><text x="160" y="481" font-size="12">展示原因，不能接单</text>
+              <text x="740" y="520" font-size="11" fill="#16a34a">是</text>
+              <rect x="450" y="560" width="280" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="590" y="589" font-size="12">进入接单，或去提词</text>
+              <polygon points="590,640 700,696 590,752 480,696" fill="#fffbeb" stroke="#d97706"/><text x="590" y="692" font-size="11"><tspan x="590">这个项目</tspan><tspan x="590" dy="14">要回填？</tspan></text>
+              <text x="450" y="688" font-size="11" fill="#dc2626">否</text>
+              <text x="740" y="688" font-size="11" fill="#16a34a">是</text>
+              <rect x="860" y="672" width="220" height="48" rx="8" fill="#ffedd5" stroke="#ea580c"/><text x="970" y="701" font-size="12">去回填</text>
+              <rect x="450" y="800" width="280" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="590" y="829" font-size="12">离开本页，进入对应流程</text>
+            </g>
+          </svg>
+        </div>
+        <div class="flow-legend"><span><i style="background:#eff6ff;border:1px solid #2563eb"></i>前端</span><span><i style="background:#f0fdf4;border:1px solid #16a34a"></i>后端</span><span><i style="background:#fffbeb;border:1px solid #d97706"></i>校验</span><span><i style="background:#fef2f2;border:1px solid #dc2626"></i>阻断</span><span><i style="background:#ffedd5;border:1px solid #ea580c"></i>回填</span></div>
+      </div>
+    </section>
+  </main>
+  <button class="btn btn-ghost tab-review-exit" id="exitTabReview" type="button">退出全屏</button>
+  <div class="drawer-overlay" id="ruleMask" hidden></div>
+  <aside class="drawer rule" id="rulesDrawer" hidden role="dialog" aria-modal="true" aria-labelledby="ruleTitle">
+    <div class="drawer-header"><h2 id="ruleTitle">FR-004 · v1 当前 · 需求规则</h2><button class="drawer-close" id="rulesClose" type="button" aria-label="关闭需求规则">×</button></div>
+    <div class="rule-tab-bar" role="tablist" aria-label="规则类型">
+      <button class="active" type="button" role="tab" id="ruleTabFe" aria-selected="true">前端需求</button>
+      <button type="button" role="tab" id="ruleTabAdmin" aria-selected="false">后台需求</button>
+    </div>
+    <div class="drawer-body">
+      <section class="rule-panel" id="rulePanelFe">
+        <div class="rule-section"><h3>1 业务目标</h3><div class="rule-content"><p>创作者在国内项目里先判断哪个项目值得做、现在能不能接，再进入提词、回填或接单。分类和搜索不再互相挡住。</p></div></div>
+        <div class="rule-section"><h3>2 页面与入口</h3><div class="rule-content"><p>入口仍是变现下的国内项目。页上有分类、搜索、项目表和详情抽屉。表上能看到等级和分成、在做人数、顶尖月入、本周收益和涨跌。</p></div></div>
+        <div class="rule-section"><h3>3 交互规则</h3><div class="rule-content"><p>分类换行展示，不把超出的分类藏进没有滚动条的一行。搜索只在当前分类里匹配项目名和标签。数字列可排序。详情打开抽屉。提词、回填、开白、收益仍去原页面，本 Demo 只提示。进入接单是抽屉里的主按钮。</p></div></div>
+        <div class="rule-section"><h3>4 边界规则</h3><div class="rule-content"><p>不可接单时写明原因，进入接单不可点。回填只出现在需要回填的项目。开白只出现在需要开白的项目。国内项目不出现海外切换。</p></div></div>
+        <div class="rule-section"><h3>5 业务流程</h3><div class="rule-content"><p>见本页业务流程。</p></div></div>
+      </section>
+      <section class="rule-panel" id="rulePanelAdmin" hidden>
+        <div class="rule-section"><h3>1 业务目标</h3><div class="rule-content"><p>本增量不新增后台配置页。列表和详情仍读现有项目、分成、收益和接单资格。</p></div></div>
+        <div class="rule-section"><h3>2 数据表与字段</h3><div class="rule-content"><p>沿用项目名称、分类、标签、等级、分成、在做人数、顶尖月入、本周收益、涨跌、是否可接单、不可接单原因、是否需要回填、是否需要开白、结算单价和五段说明。</p></div></div>
+        <div class="rule-section"><h3>3 列表与筛选</h3><div class="rule-content"><p>筛选发生在创作者的国内项目页：分类、项目名、标签。没有新的后台列表。</p></div></div>
+        <div class="rule-section"><h3>4 边界规则</h3><div class="rule-content"><p>接单资格和名额仍由现有接口决定。Demo 用固定示例，不改结算口径。</p></div></div>
+      </section>
+    </div>
+  </aside>
+  <script>
+    if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embedded');
+    const frame = document.getElementById('screen');
+    const sceneButtons = [...document.querySelectorAll('[data-screen]')];
+    function selectScene(button) {
+      sceneButtons.forEach(item => { const on = item === button; item.classList.toggle('active', on); item.setAttribute('aria-selected', String(on)); });
+      frame.src = 'fr-004-domestic-demo.html?embed=1&screen=' + button.dataset.screen;
+    }
+    sceneButtons.forEach(button => button.addEventListener('click', () => selectScene(button)));
+    const tabButtons = [...document.querySelectorAll('[data-tab]')];
+    function showTab(name, updateUrl) {
+      if (name !== 'flow') name = 'fe';
+      tabButtons.forEach(button => { const on = button.dataset.tab === name; button.classList.toggle('active', on); button.setAttribute('aria-selected', String(on)); document.getElementById('view-' + button.dataset.tab).hidden = !on; });
+      if (updateUrl) { const url = new URL(location.href); url.searchParams.set('tab', name); history.replaceState(null, '', url); }
+    }
+    tabButtons.forEach(button => button.addEventListener('click', () => showTab(button.dataset.tab, true)));
+    showTab(new URLSearchParams(location.search).get('tab'), false);
+    const mask = document.getElementById('ruleMask');
+    const drawer = document.getElementById('rulesDrawer');
+    const openButton = document.getElementById('rulesOpen');
+    const closeButton = document.getElementById('rulesClose');
+    function showRuleTab(which) {
+      const fe = which === 'fe';
+      document.getElementById('rulePanelFe').hidden = !fe;
+      document.getElementById('rulePanelAdmin').hidden = fe;
+      document.getElementById('ruleTabFe').classList.toggle('active', fe);
+      document.getElementById('ruleTabAdmin').classList.toggle('active', !fe);
+      document.getElementById('ruleTabFe').setAttribute('aria-selected', String(fe));
+      document.getElementById('ruleTabAdmin').setAttribute('aria-selected', String(!fe));
+    }
+    document.getElementById('ruleTabFe').addEventListener('click', () => showRuleTab('fe'));
+    document.getElementById('ruleTabAdmin').addEventListener('click', () => showRuleTab('admin'));
+    let lastFocus = null;
+    function setBackgroundInert(value) { [document.getElementById('topnav'), document.getElementById('sidebar'), document.getElementById('pageMain')].forEach(node => { if (node) node.inert = value; }); }
+    function openRules() { lastFocus = document.activeElement; showRuleTab('fe'); mask.hidden = false; drawer.hidden = false; requestAnimationFrame(() => { mask.classList.add('open'); drawer.classList.add('open'); }); openButton.classList.add('active'); openButton.setAttribute('aria-expanded', 'true'); setBackgroundInert(true); closeButton.focus(); }
+    function closeRules() { mask.classList.remove('open'); drawer.classList.remove('open'); mask.hidden = true; drawer.hidden = true; openButton.classList.remove('active'); openButton.setAttribute('aria-expanded', 'false'); setBackgroundInert(false); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+    openButton.addEventListener('click', () => drawer.hidden ? openRules() : closeRules());
+    closeButton.addEventListener('click', closeRules);
+    mask.addEventListener('click', closeRules);
+    const openTabReviewButton = document.getElementById('openTabReview');
+    const exitTabReviewButton = document.getElementById('exitTabReview');
+    function setShellReview(on) { try { if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle('fr-review', on); } catch (error) {} }
+    function openTabReview() { if (!drawer.hidden) closeRules(); document.documentElement.classList.add('is-tab-review'); setShellReview(true); exitTabReviewButton.focus(); }
+    function closeTabReview() { if (!document.documentElement.classList.contains('is-tab-review')) return; document.documentElement.classList.remove('is-tab-review'); setShellReview(false); openTabReviewButton.focus(); }
+    openTabReviewButton.addEventListener('click', openTabReview);
+    exitTabReviewButton.addEventListener('click', closeTabReview);
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' && event.key !== 'Tab') return;
+      if (event.key === 'Escape' && drawer.hidden && document.documentElement.classList.contains('is-tab-review')) { event.preventDefault(); closeTabReview(); return; }
+      if (drawer.hidden) return;
+      if (event.key === 'Escape') { event.preventDefault(); closeRules(); return; }
+      const focusable = [...drawer.querySelectorAll('button:not([disabled]),[href],input:not([disabled])')];
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
+  </script>
+</body>
+</html>

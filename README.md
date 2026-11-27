@@ -18,6 +18,7 @@ python3 -m http.server 19889 --directory demo/iteration
 
 | 业务线 | 编号 | 需求 | 状态 | 页面 |
 |---|---|---|---|---|
+| 右豹PC | FR-004 | 国内项目优化 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao-pc/fr-004) |
 | 右豹主业务 | FR-XIAOYU-006 | 新增关键词查询操作 | 待开始 | [查看 Demo](demo/iteration/fr-xiaoyu-006.html) |
 | 右豹主业务 | FR-wen-006 | PC活动中心优化 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-wen-006) |
 | 右豹主业务 | FR-XIAOYU-004 | 批量传订单 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-004) |

@@ -159,6 +159,7 @@
       <button type="button" class="pnav-item" data-line="youbao">右豹主业务</button>
       <button type="button" class="pnav-item" data-line="mentor">导师商务</button>
       <button type="button" class="pnav-item" data-line="enterprise">企业号</button>
+      <button type="button" class="pnav-item" data-line="youbao-pc">右豹PC</button>
     </nav>
   </header>
 
@@ -187,6 +188,7 @@
             <tr><th>编号</th><th>需求</th><th>状态</th><th>页面</th></tr>
           </thead>
           <tbody data-bucket="pending">
+<tr data-id="fr-004" data-line="youbao-pc" data-demo="fr-004-domestic.html"><td>FR-004</td><td>国内项目优化</td><td><select class="status-select" aria-label="国内项目优化 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao-pc/fr-004">查看 Demo</a></td></tr>
 <tr data-id="fr-wen-006" data-line="youbao" data-demo="fr-wen-006-activities.html"><td>FR-wen-006</td><td>PC活动中心优化</td><td><select class="status-select" aria-label="FR-wen-006 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-wen-006">查看 Demo</a></td></tr>
 <tr data-id="fr-xiaoyu-006" data-line="youbao" data-demo="fr-xiaoyu-006.html"><td>FR-XIAOYU-006</td><td>新增关键词查询操作</td><td><select class="status-select" aria-label="新增关键词查询操作 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-xiaoyu-006">查看 UX</a></td></tr>
 <tr data-id="fr-xiaoyu-004" data-line="youbao" data-demo="fr-xiaoyu-004.html"><td>FR-XIAOYU-004</td><td>批量传订单</td><td><select class="status-select" aria-label="批量传订单 状态" data-status-select><option value="待开始" selected>待开始</option><option value="开发中">开发中</option><option value="已上线">已上线</option><option value="已暂停">已暂停</option></select></td><td><a class="link" href="#youbao/fr-xiaoyu-004">查看 Demo</a></td></tr>
@@ -270,7 +272,7 @@
     <iframe id="spec-frame" title="组件规范" hidden src="about:blank"></iframe>
   </main>
   </div>
-  <script src="sidebar-nav.js?v=20261120-status"></script>
+  <script src="sidebar-nav.js?v=20261125-youbao-pc"></script>
   <script>
     var EMPTY_TEXT = {
       pending: '还没有待开始的需求。',
@@ -354,7 +356,7 @@
     });
 
     document.addEventListener('click', function (event) {
-      var link = event.target.closest('a[href^="#youbao/"], a[href^="#mentor/"], a[href^="#enterprise/"]');
+      var link = event.target.closest('a[href^="#youbao/"], a[href^="#youbao-pc/"], a[href^="#mentor/"], a[href^="#enterprise/"]');
       if (!link || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       var target = link.getAttribute('href');
