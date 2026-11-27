@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FR-CoCo-006 · 收益分配迭代 · v1 当前</title>
+<link rel="stylesheet" href="fr-003-fusion-task.css">
+<style>
+.main{display:flex;flex-direction:column;min-height:0}
+.page-header{align-items:flex-start;flex:none}.page-header>div{min-width:0}.page-desc{max-width:720px}
+.breadcrumb,.page-tabs{flex:none}
+.view{flex:1 1 auto;min-height:0}
+.page-header-actions{display:flex;gap:8px;flex:none}
+.view#view-fe{display:grid;grid-template-columns:minmax(420px,46%) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"scenes scenes" "rules demo";gap:12px 16px;height:auto;min-height:0;min-width:0}
+.scene-panel{grid-area:scenes;flex:none!important;min-height:0!important;overflow:visible!important;border:0!important;border-bottom:1px solid var(--border)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.scene-panel h2,.scene-heading{display:none}
+.scene-list{display:flex;align-items:flex-end;gap:24px;overflow-x:auto;padding:0 16px}
+.scene-btn{width:auto!important;min-height:42px!important;margin:0!important;padding:10px 0!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:transparent!important;color:var(--text-secondary)!important;text-align:center;white-space:nowrap}
+.scene-btn strong{font-size:13px}.scene-btn span{display:none!important}.scene-btn.active{border-bottom-color:var(--primary)!important;background:transparent!important;color:var(--primary)!important}
+.scene-btn:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+.mockup-board{grid-area:demo;min-height:0;overflow:hidden}
+#view-fe .board-scroll{display:flex;overflow:hidden;align-items:flex-start;justify-content:center;padding-top:4px}
+.context-rules{grid-area:rules;flex:none;min-width:0;overflow:auto;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.78)}
+.context-rules-head{position:sticky;top:0;padding:14px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--border)}
+.context-rules-head span{color:var(--primary);font-size:11px;font-weight:700}
+.context-rules-head h2{margin:4px 0 0;font-size:16px}
+.context-rules-body{padding:4px 14px 16px}
+.context-rule-block{padding:12px 0;border-bottom:1px solid var(--border)}
+.context-rule-block h3{margin:0 0 6px;font-size:12px}
+.context-rule-block ul{margin:0;padding-left:18px;color:var(--text-secondary);font-size:12px;line-height:1.6}
+.phone-fit{position:relative;display:block;flex:none;overflow:hidden}
+.device.phone{height:auto;align-self:flex-start}
+.device.phone{width:auto;padding:11px;border-radius:48px;background:linear-gradient(165deg,#4a4e57 0%,#2a2d33 16%,#16181c 52%,#0c0d10 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.38),inset 0 0 0 3px #07080a,0 22px 44px rgba(22,32,52,.28);position:relative}
+.device.phone .hw{position:absolute;width:3px;border-radius:2px;background:#2c3036;box-shadow:inset 0 0 0 1px #111}
+.device.phone .hw-silent{left:0;top:92px;height:22px}
+.device.phone .hw-vol{left:0;top:128px;height:58px}
+.device.phone .hw-power{right:0;top:156px;height:78px}
+.phone-glass{border-radius:36px;overflow:hidden;background:#f5f5f5;display:flex;flex-direction:column}
+.phone-status{position:relative;height:48px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 18px 7px;background:#f5f5f5;color:#111;font:600 14px/1 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}
+.phone-island{position:absolute;top:8px;left:50%;width:102px;height:30px;margin-left:-51px;border-radius:16px;background:#0a0a0c;box-shadow:inset 0 0 0 1px #000}
+.phone-sys{display:flex;align-items:center;gap:6px}
+.phone-sys svg{display:block}
+.phone-home{height:20px;display:flex;align-items:center;justify-content:center;background:#f5f5f5}
+.phone-home i{width:118px;height:5px;border-radius:4px;background:#111}
+.device.phone iframe{width:390px;height:748px;border:0;border-radius:0;display:block;background:#f5f5f5}
+html.is-tab-review .sidebar,html.is-tab-review .topnav,html.is-tab-review .breadcrumb,html.is-tab-review .page-header,html.is-tab-review .page-tabs{display:none}
+html.is-tab-review .view#view-fe,html.is-tab-review.embedded .view#view-fe{display:grid;height:100vh;min-height:0;overflow:hidden;padding:56px 16px 12px;box-sizing:border-box;grid-template-columns:minmax(360px,46%) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"scenes scenes" "rules demo"}
+html.is-tab-review .context-rules{display:block;min-width:0;min-height:0}
+html.is-tab-review #view-fe .board-caption{display:none}
+html.is-tab-review #view-fe .board-scroll{overflow:hidden;align-items:flex-start;justify-content:center;padding:8px}
+html.is-tab-review #view-fe .mockup-board{min-height:0}
+#view-admin{overflow:auto;padding-bottom:24px}
+.rule-table.data-table{width:100%;min-width:0;table-layout:fixed}
+.rule-table td{vertical-align:top}
+#view-admin .rule-table th:first-child,#view-admin .rule-table td:first-child{width:220px}
+.rule-table th,.rule-table td{text-align:left}
+.rule-table .rule-op,.rule-table td:has([data-remove]){width:72px;text-align:right}
+.rule-table:not(.is-editing) .rule-op{display:none}
+.rule-actions{display:flex;align-items:center;gap:8px;flex:none}
+.rule-edit-status{margin:6px 14px 0;color:var(--text-secondary);font-size:11px;line-height:1.45}
+.rule-edit-status:empty{display:none}
+.context-rules-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.context-rules-body{padding:8px}
+.scene-rule-table th:first-child,.scene-rule-table td:first-child{width:108px}
+.scene-rule-table .rule-cell{min-height:64px;font-size:12px}
+.rule-table .module-cell,.rule-table .rule-cell{width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:7px;padding:8px;background:#fff;font:inherit;line-height:1.6;color:var(--text-primary)}
+.rule-table .rule-cell{min-height:72px;resize:vertical}
+.admin-block{margin:0 0 12px;padding:16px;border:1px solid var(--border);border-radius:14px;background:#fff}
+.admin-block h2,.table-heading h2{margin:0;font-size:15px}
+.table-heading h2{margin:0}
+.perm-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.check{display:flex;gap:8px;align-items:flex-start;margin:0 0 12px;color:var(--text-primary);font-size:13px}
+.check input{width:16px;height:16px;margin-top:2px}
+.tab-review-exit{display:none;position:fixed;top:16px;right:16px;z-index:720}
+html.is-tab-review .tab-review-exit{display:inline-flex}
+html.is-tab-review .view:not([hidden]){position:fixed;inset:0;z-index:640;height:100vh;min-height:0;margin:0;padding:64px 16px 16px;background:#f0f4f8;overflow:auto}
+html.is-tab-review .drawer-overlay{z-index:760}
+html.is-tab-review .drawer,html.is-tab-review .modal-overlay{z-index:761}
+html.embedded .topnav,html.embedded .sidebar{display:none}
+html.embedded .main{top:0;left:0}
+html.embedded .view,html.embedded .view#view-fe{height:calc(100vh - 146px)}
+@media(max-width:1100px){.view#view-fe{grid-template-columns:minmax(380px,1fr) minmax(280px,1fr);overflow:auto}}
+@media(max-width:760px){.view#view-fe{grid-template-columns:1fr;grid-template-rows:auto auto minmax(780px,1fr);grid-template-areas:"scenes" "rules" "demo";height:auto}.scene-list{gap:18px;padding:0 4px}.context-rules{max-height:360px}.mockup-board{min-height:780px}}
+</style>
+</head>
+<body>
+<header class="topnav" id="topnav"><a class="brand-text" href="framework-shell.html#youbao/overview">BM-PM · 迭代需求</a><span class="business-line">右豹主业务</span><span class="topnote">产品交互演示</span></header>
+<aside class="sidebar" id="sidebar"><div class="sidebar-brand"><b>右豹主业务</b><p class="brand-sub">需求与设计</p></div><nav class="sidebar-scroll" aria-label="项目导航"><a class="nav-item" href="framework-shell.html#youbao/overview">概览</a><a class="nav-item" href="framework-shell.html#youbao/components">组件规范</a></nav><div class="sidebar-foot">FR-CoCo-006<br>收益分配迭代 · v1</div></aside>
+<main class="main" id="pageMain">
+<nav class="breadcrumb"><a href="framework-shell.html#youbao/overview">右豹主业务</a> / 收益分配迭代</nav>
+<header class="page-header">
+  <div><h1>FR-CoCo-006 · 收益分配迭代 · v1 当前</h1><p class="page-desc">两项发起权限分开开通。分配我的收益分出自己的收益，邀请直属成员分配在对方接受后分出成员的收益。</p></div>
+  <div class="page-header-actions">
+    <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
+    <button class="btn btn-rule" id="rulesOpen" type="button" aria-expanded="false" aria-controls="rulesDrawer">需求规则</button>
+  </div>
+</header>
+<nav class="page-tabs" role="tablist" aria-label="需求视图">
+  <button class="btn btn-ghost active" id="tab-fe" type="button" data-tab="fe">前端交互</button>
+  <button class="btn btn-ghost" id="tab-admin" type="button" data-tab="admin">管理后台</button>
+  <button class="btn btn-ghost" id="tab-flow" type="button" data-tab="flow">业务流程</button>
+</nav>
+<section id="view-fe" class="view">
+  <aside class="scene-panel" aria-label="收益分配场景">
+    <h2>场景演示</h2>
+    <div class="scene-list" id="scenes" role="tablist" aria-label="需求场景">
+      <button class="scene-btn active" type="button" role="tab" aria-selected="true" data-screen="linchuan"><strong>分配成员</strong></button>
+      <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="records"><strong>分配记录</strong></button>
+      <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="renata"><strong>协议详情</strong></button>
+    </div>
+  </aside>
+  <aside class="context-rules" aria-live="polite"><div class="context-rules-head"><div><span>当前场景需求</span><h2 id="contextTitle">分配成员</h2></div><div class="rule-actions"><button class="btn btn-ghost btn-sm" id="addSceneRule" type="button" hidden>新增一行</button><button class="btn btn-primary btn-sm" id="editSceneRules" type="button">编辑</button></div></div><p class="rule-edit-status" id="sceneRuleStatus" role="status"></p><div class="context-rules-body"><table class="data-table rule-table scene-rule-table"><thead><tr><th>功能/模块</th><th>规则说明</th><th class="rule-op"></th></tr></thead><tbody id="contextRules"></tbody></table></div></aside>
+  <div class="mockup-board">
+    <div class="board-caption"><div><b id="sceneTitle">分配成员</b><p id="sceneDesc">林川。页头发起协议，上方是累计分配。</p></div><button class="btn btn-ghost btn-sm" id="resetDemo" type="button">重置演示</button></div>
+    <div class="board-scroll"><div class="phone-fit" id="phoneFit"><div class="device phone" id="phoneDevice"><span class="hw hw-silent"></span><span class="hw hw-vol"></span><span class="hw hw-power"></span><div class="phone-glass"><div class="phone-status" aria-hidden="true"><span id="phoneTime">9:41</span><span class="phone-island"></span><span class="phone-sys"><svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="0.6"/><rect x="4.5" y="5" width="3" height="7" rx="0.6"/><rect x="9" y="2.5" width="3" height="9.5" rx="0.6"/><rect x="13.5" y="0" width="3" height="12" rx="0.6"/></svg><svg width="15" height="12" viewBox="0 0 15 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1.5 4.2a8 8 0 0 1 12 0"/><path d="M4 7a4.5 4.5 0 0 1 7 0"/><path d="M6.4 9.6a1.6 1.6 0 0 1 2.2 0"/></svg><svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.6" y="0.6" width="21" height="10.8" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="2" width="14" height="8" rx="1" fill="currentColor"/><rect x="22.4" y="3.5" width="1.6" height="5" rx="0.6" fill="currentColor"/></svg></span></div><iframe id="phone" title="收益分配手机演示" src="fr-coco-006-phone.html?v=source17&amp;embed=1&amp;screen=linchuan"></iframe><div class="phone-home" aria-hidden="true"><i></i></div></div></div></div></div>
+  </div>
+</section>
+<section id="view-admin" class="view" hidden>
+  <div class="admin-block">
+    <div class="table-heading"><div><h2>后台需求规则</h2><p class="page-desc">按行维护功能模块和规则说明。这里不另做管理后台页面。</p></div><div class="rule-actions"><button class="btn btn-ghost" id="addRuleRow" type="button" hidden>新增一行</button><button class="btn btn-primary" id="editAdminRules" type="button">编辑</button></div></div><p class="rule-edit-status" id="adminRuleStatus" role="status"></p>
+    <div class="table-wrap"><table class="data-table rule-table" id="adminRuleTable"><thead><tr><th>功能/模块</th><th>规则说明</th><th class="rule-op"></th></tr></thead><tbody id="adminRuleRows"></tbody></table></div>
+  </div>
+</section>
+<section id="view-flow" class="view" hidden>
+  <div class="flow-page">
+    <p class="flow-page-intro">从已开通的入口提交协议。确认方接受后次日分配。校验不通过或拒绝回到打开页面。分配失败只重试这一笔。</p>
+    <div class="flow-svg-wrap">
+      <svg width="1220" height="1520" viewBox="0 0 1220 1520" role="img" aria-labelledby="flowTitle flowDesc">
+        <title id="flowTitle">收益分配业务流程</title>
+        <desc id="flowDesc">用户从已开通的入口发起协议。邀请要校验团长和直属 V2/V3。确认方接受后协议生效，次日分配。失败重试同一笔，拒绝和校验失败回到起点。</desc>
+        <defs><marker id="flow-arrow-coco006" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#94a3b8"/></marker></defs>
+        <g class="flow-edges" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#flow-arrow-coco006)">
+          <polyline points="560,72 560,102"/>
+          <polyline points="470,148 280,148"/>
+          <polyline points="40,148 16,148 16,24 420,24"/>
+          <polyline points="560,194 560,234"/>
+          <polyline points="650,280 840,280"/>
+          <polyline points="970,304 970,644 700,644"/>
+          <polyline points="560,326 560,366"/>
+          <polyline points="470,412 300,412"/>
+          <polyline points="40,412 16,412 16,24 420,24"/>
+          <polyline points="560,458 560,498"/>
+          <polyline points="450,544 300,544"/>
+          <polyline points="40,544 16,544 16,24 420,24"/>
+          <polyline points="560,590 560,620"/>
+          <polyline points="560,668 560,698"/>
+          <polyline points="670,744 1176,744 1176,24 700,24"/>
+          <polyline points="560,790 560,820"/>
+          <polyline points="700,844 840,844" stroke-dasharray="4 3"/>
+          <polyline points="970,868 970,932 700,932" stroke-dasharray="4 3"/>
+          <polyline points="560,868 560,908"/>
+          <polyline points="560,956 560,986"/>
+          <polyline points="470,1032 280,1032"/>
+          <polyline points="40,1032 16,1032 16,24 420,24"/>
+          <polyline points="560,1078 560,1108"/>
+          <polyline points="560,1164 560,1200"/>
+          <polyline points="560,1248 560,1278"/>
+          <polyline points="470,1324 280,1324"/>
+          <polyline points="160,1300 160,1224 420,1224" stroke-dasharray="4 3"/>
+          <polyline points="560,1370 560,1400"/>
+        </g>
+        <g class="flow-nodes" font-family="PingFang SC, Microsoft YaHei, sans-serif" text-anchor="middle">
+          <rect x="420" y="24" width="280" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="560" y="53" font-size="12" fill="#18222f">前端：打开分配成员</text>
+          <polygon points="560,102 650,148 560,194 470,148" fill="#fffbeb" stroke="#d97706"/><text x="560" y="144" font-size="11" fill="#18222f"><tspan x="560">该项权限</tspan><tspan x="560" dy="14">已开通？</tspan></text>
+          <text x="390" y="140" font-size="11" fill="#dc2626">否</text>
+          <rect x="40" y="124" width="240" height="48" rx="8" fill="#fef2f2" stroke="#dc2626"/><text x="160" y="153" font-size="12" fill="#18222f">不显示该入口</text>
+          <polygon points="560,234 650,280 560,326 470,280" fill="#fffbeb" stroke="#d97706"/><text x="560" y="276" font-size="11" fill="#18222f"><tspan x="560">是邀请直属</tspan><tspan x="560" dy="14">成员分配？</tspan></text>
+          <text x="700" y="272" font-size="11" fill="#2563eb">个人</text>
+          <rect x="840" y="256" width="260" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="970" y="276" font-size="12" fill="#18222f"><tspan x="970">后端：校验个人权限</tspan><tspan x="970" dy="16">和接收方资格</tspan></text>
+          <text x="620" y="356" font-size="11" fill="#16a34a">是</text>
+          <polygon points="560,366 650,412 560,458 470,412" fill="#fffbeb" stroke="#d97706"/><text x="560" y="408" font-size="11" fill="#18222f"><tspan x="560">发起方当前</tspan><tspan x="560" dy="14">是团长？</tspan></text>
+          <text x="400" y="404" font-size="11" fill="#dc2626">否</text>
+          <rect x="40" y="388" width="260" height="48" rx="8" fill="#fef2f2" stroke="#dc2626"/><text x="170" y="417" font-size="12" fill="#18222f">当前不是团长，不能发起</text>
+          <polygon points="560,498 670,544 560,590 450,544" fill="#fffbeb" stroke="#d97706"/><text x="560" y="540" font-size="11" fill="#18222f"><tspan x="560">对方是当前</tspan><tspan x="560" dy="14">直属 V2/V3？</tspan></text>
+          <text x="390" y="536" font-size="11" fill="#dc2626">否</text>
+          <rect x="40" y="520" width="260" height="48" rx="8" fill="#fef2f2" stroke="#dc2626"/><text x="170" y="549" font-size="12" fill="#18222f">不是当前直属 V2/V3</text>
+          <text x="620" y="612" font-size="11" fill="#16a34a">是</text>
+          <rect x="420" y="620" width="280" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="560" y="649" font-size="12" fill="#18222f">前端：填写比例并发送</text>
+          <polygon points="560,698 670,744 560,790 450,744" fill="#fffbeb" stroke="#d97706"/><text x="560" y="740" font-size="11" fill="#18222f"><tspan x="560">比例在 0.01</tspan><tspan x="560" dy="14">到 100？</tspan></text>
+          <text x="720" y="732" font-size="11" fill="#dc2626">否</text>
+          <rect x="420" y="820" width="280" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="560" y="849" font-size="12" fill="#18222f">后端：写入待确认协议</text>
+          <rect x="840" y="820" width="260" height="48" rx="8" fill="#f1f5f9" stroke="#94a3b8"/><text x="970" y="840" font-size="12" fill="#18222f"><tspan x="970">权限关闭后</tspan><tspan x="970" dy="16">待确认仍可接受</tspan></text>
+          <rect x="420" y="908" width="280" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/><text x="560" y="937" font-size="12" fill="#18222f">前端：确认方查看六项</text>
+          <polygon points="560,986 650,1032 560,1078 470,1032" fill="#fffbeb" stroke="#d97706"/><text x="560" y="1028" font-size="11" fill="#18222f"><tspan x="560">确认方</tspan><tspan x="560" dy="14">接受协议？</tspan></text>
+          <text x="400" y="1024" font-size="11" fill="#dc2626">否</text>
+          <rect x="40" y="1008" width="240" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="160" y="1037" font-size="12" fill="#18222f">后端：记为已拒绝</text>
+          <text x="620" y="1100" font-size="11" fill="#16a34a">是</text>
+          <rect x="420" y="1108" width="280" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="560" y="1132" font-size="12" fill="#18222f"><tspan x="560">后端：已生效</tspan><tspan x="560" dy="16">整笔收益待分配</tspan></text>
+          <rect x="420" y="1200" width="280" height="48" rx="8" fill="#fff7ed" stroke="#ea580c"/><text x="560" y="1229" font-size="12" fill="#18222f">异步：次日 00:00 分配</text>
+          <polygon points="560,1278 650,1324 560,1370 470,1324" fill="#fffbeb" stroke="#d97706"/><text x="560" y="1328" font-size="11" fill="#18222f">分配成功？</text>
+          <text x="390" y="1316" font-size="11" fill="#dc2626">否</text>
+          <rect x="40" y="1300" width="240" height="48" rx="8" fill="#fef2f2" stroke="#dc2626"/><text x="160" y="1329" font-size="12" fill="#18222f">分配失败，余额不变</text>
+          <text x="250" y="1216" font-size="11" fill="#ea580c">重试</text>
+          <text x="620" y="1392" font-size="11" fill="#16a34a">是</text>
+          <rect x="420" y="1400" width="280" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a"/><text x="560" y="1429" font-size="12" fill="#18222f">后端：更新双方可提现余额</text>
+        </g>
+      </svg>
+    </div>
+    <div class="flow-legend"><span><i style="background:#eff6ff;border:1px solid #2563eb"></i>前端 / 操作</span><span><i style="background:#f0fdf4;border:1px solid #16a34a"></i>后端 / 写入</span><span><i style="background:#fff7ed;border:1px solid #ea580c"></i>异步 / 重试</span><span><i style="background:#fffbeb;border:1px solid #d97706"></i>校验 / 分支</span><span><i style="background:#fef2f2;border:1px solid #dc2626"></i>阻断 / 失败</span><span><i style="background:#f1f5f9;border:1px solid #94a3b8"></i>跳过 / 关闭权限</span></div>
+  </div>
+</section>
+</main>
+<button class="btn btn-ghost tab-review-exit" id="exitTabReview" type="button">退出全屏</button>
+<div class="drawer-overlay" id="ruleMask" hidden></div>
+<aside class="drawer rule" id="rulesDrawer" hidden role="dialog" aria-modal="true" aria-labelledby="ruleTitle">
+  <div class="drawer-header"><h2 id="ruleTitle">FR-CoCo-006 · v1 需求规则</h2><button class="drawer-close" id="rulesClose" type="button" aria-label="关闭需求规则">×</button></div>
+  <div class="rule-tab-bar"><button type="button" id="ruleTabFe" class="active">前端需求</button><button type="button" id="ruleTabAdmin">后台需求</button></div>
+  <div class="drawer-body">
+    <section class="rule-panel active" id="rulePanelFe"></section>
+    <section class="rule-panel" id="rulePanelAdmin"></section>
+  </div>
+</aside>
+<div id="toast" class="toast" role="status"></div>
+<script>
+if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embedded');
+const phone = document.getElementById('phone');
+const ruleText = value => String(value).replace(/[&<>"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[char]));
+const sceneCopy = {
+  linchuan:{title:'分配成员', desc:'林川。页头发起协议，上方是累计分配。', rows:[
+    {module:'页头', rule:'1、发起协议:即之前的添加子用户入口\n1.1、入口权限:只有主帐号有\n2、页面权限:主用户有所有权限;子用户接受协议之后可以看到收益分配对应的页面权限'},
+    {module:'统计', rule:'1、累计分配金额调整为“净分配收益”\n2、净分配收益=收到的-分出的'},
+    {module:'筛选', rule:'1、分配类型默认全部，可选我分配的、我收到的。\n2、协议状态默认全部;可选生效中、待确认、已拒绝、已解绑。'},
+    {module:'成员卡片', rule:'点击成员卡片直接进入协议详情页'},
+    {module:'发起协议页面', rule:'协议类型和收益类型需要根据后台给主用户配置的权限进行展示'}
+  ]},
+  records:{title:'分配记录', desc:'筛选在左，查看零金额记录在右。', rows:[
+    {module:'筛选', rule:'类型默认全部类型，可选我分配的、我收到的。\n时间打开选择时间浮层：全部时间、今天、近7天、近30天、近90天、自定义时间。'},
+    {module:'0金额记录', rule:'默认收起所有0金额记录;点击可展开'},
+    {module:'数据列表', rule:'1、标题显示来自用户or分给用户\n2、副标题显示收益来源\n3、哎呀:自己看着发挥吧'}
+  ]},
+  renata:{title:'协议详情', desc:'Renata 的待确认协议，可接受或拒绝。', rows:[
+    {module:'分配归属', rule:'1、分配规则:取现有的字段rev_share_tips\n2、分配规则旁增加一个文字按钮“收益分配详细协议”;点击打开配置的收益分配协议内容查看'},
+    {module:'接收/拒绝/解绑', rule:'1、主用户可以看到所有页面权限\n2、子用户还是在站内信里面进行接受或拒绝\n2.1、子用户接受协议之后可以看到收益分配对应的页面权限'}
+  ]}
+};
+let phoneOverlay = false;
+let currentScene = 'linchuan';
+let sceneEditing = false;
+let adminEditing = false;
+let sceneBackup = null;
+let sceneRuleBase = null;
+let adminBackup = null;
+let adminRuleBase = null;
+function rowsFromGroups(groups){
+  const rows = [];
+  (groups || []).forEach(group => (group[1] || []).forEach(line => rows.push({module:group[0], rule:line})));
+  return rows;
+}
+function groupsFromRows(rows){
+  const groups = [];
+  rows.forEach(row => {
+    const moduleName = row.module.trim();
+    const text = row.rule.trim();
+    if (!moduleName && !text) return;
+    if (!moduleName || !text) throw Error('每一行都要填写功能/模块和规则说明');
+    const last = groups.at(-1);
+    if (last && last[0] === moduleName) last[1].push(text);
+    else groups.push([moduleName, [text]]);
+  });
+  if (!groups.length) throw Error('至少保留一行规则');
+  return groups;
+}
+async function saveRuleView(view, groups, base){
+  const response = await fetch('/__local/coco006-rules', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({view, groups, base})});
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({error:'保存服务不可用，请用 python3 scripts/preview_server.py 启动预览'}));
+    throw Error(error.error);
+  }
+}
+function ruleTableHtml(rows, editing){
+  if (!editing) return rows.map(row => `<tr><td>${ruleText(row.module) || '—'}</td><td>${ruleText(row.rule) || '—'}</td></tr>`).join('') || '<tr><td class="empty-cell" colspan="2">还没有规则。</td></tr>';
+  return rows.map((row, index) => `<tr>
+    <td><input class="module-cell" data-field="module" data-index="${index}" value="${ruleText(row.module)}" aria-label="功能/模块"></td>
+    <td><textarea class="rule-cell" data-field="rule" data-index="${index}" aria-label="规则说明">${ruleText(row.rule)}</textarea></td>
+    <td><button class="btn btn-ghost btn-sm" type="button" data-remove="${index}">删除</button></td>
+  </tr>`).join('') || '<tr><td class="empty-cell" colspan="3">还没有规则，点击新增一行。</td></tr>';
+}
+function ruleSections(rows){
+  return rows.filter(row => row.module || row.rule).map(row => `<div class="rule-section"><h3>${ruleText(row.module || '未命名')}</h3><div class="rule-content"><p>${ruleText(row.rule || '—')}</p></div></div>`).join('') || '<p class="page-desc">还没有规则。</p>';
+}
+function renderContext(screen, focusIndex){
+  const scene = sceneCopy[screen];
+  document.getElementById('contextTitle').textContent = scene.title;
+  document.getElementById('sceneTitle').textContent = scene.title;
+  document.getElementById('sceneDesc').textContent = scene.desc;
+  document.getElementById('contextRules').innerHTML = ruleTableHtml(scene.rows, sceneEditing);
+  document.querySelector('.scene-rule-table').classList.toggle('is-editing', sceneEditing);
+  document.getElementById('addSceneRule').hidden = !sceneEditing;
+  document.getElementById('editSceneRules').textContent = sceneEditing ? '保存' : '编辑';
+  document.getElementById('rulePanelFe').innerHTML = ruleSections(scene.rows);
+  if (focusIndex != null) {
+    const field = document.querySelector(`#contextRules [data-field="module"][data-index="${focusIndex}"]`);
+    if (field) field.focus();
+  }
+}
+function selectScene(screen){
+  if (sceneEditing && sceneBackup) sceneCopy[currentScene].rows = sceneBackup;
+  sceneEditing = false;
+  sceneBackup = null;
+  sceneRuleBase = null;
+  document.getElementById('sceneRuleStatus').textContent = '';
+  currentScene = screen;
+  document.querySelectorAll('[data-screen]').forEach(button => {
+    const on = button.dataset.screen === screen;
+    button.classList.toggle('active', on);
+    button.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  renderContext(screen);
+  phone.contentWindow.postMessage({type:'coco006', scene:screen}, '*');
+}
+document.getElementById('scenes').addEventListener('click', event => {
+  const button = event.target.closest('[data-screen]');
+  if (button) selectScene(button.dataset.screen);
+});
+document.getElementById('resetDemo').addEventListener('click', () => {
+  phone.src = 'fr-coco-006-phone.html?v=source17&embed=1&screen=' + currentScene + '&reset=' + Date.now();
+});
+const contextRules = document.getElementById('contextRules');
+contextRules.addEventListener('input', event => {
+  const field = event.target.dataset.field;
+  const index = Number(event.target.dataset.index);
+  const rows = sceneCopy[currentScene].rows;
+  if (!field || !rows[index]) return;
+  rows[index][field] = event.target.value;
+  document.getElementById('rulePanelFe').innerHTML = ruleSections(rows);
+});
+contextRules.addEventListener('click', event => {
+  const button = event.target.closest('[data-remove]');
+  if (!button) return;
+  sceneCopy[currentScene].rows.splice(Number(button.dataset.remove), 1);
+  renderContext(currentScene);
+});
+document.getElementById('addSceneRule').addEventListener('click', () => {
+  if (!sceneEditing) return;
+  sceneCopy[currentScene].rows.push({module:'', rule:''});
+  renderContext(currentScene, sceneCopy[currentScene].rows.length - 1);
+});
+document.getElementById('editSceneRules').addEventListener('click', async function () {
+  const status = document.getElementById('sceneRuleStatus');
+  if (!sceneEditing) {
+    sceneBackup = sceneCopy[currentScene].rows.map(row => ({module:row.module, rule:row.rule}));
+    try { sceneRuleBase = groupsFromRows(sceneBackup); }
+    catch (error) { status.textContent = error.message; sceneBackup = null; return; }
+    sceneEditing = true;
+    status.textContent = '';
+    renderContext(currentScene);
+    const first = document.querySelector('#contextRules input');
+    if (first) first.focus();
+    return;
+  }
+  try {
+    const groups = groupsFromRows(sceneCopy[currentScene].rows);
+    this.disabled = true;
+    await saveRuleView(currentScene, groups, sceneRuleBase);
+    sceneCopy[currentScene].rows = rowsFromGroups(groups);
+    sceneEditing = false;
+    sceneBackup = null;
+    sceneRuleBase = JSON.parse(JSON.stringify(groups));
+    renderContext(currentScene);
+    status.textContent = '已保存';
+  } catch (error) {
+    status.textContent = error.message;
+  } finally {
+    this.disabled = false;
+  }
+});
+renderContext('linchuan');
+
+function openDrawer(mask, drawer){mask.hidden = false; drawer.hidden = false; requestAnimationFrame(() => {mask.classList.add('open'); drawer.classList.add('open');});}
+function closeDrawer(mask, drawer){mask.classList.remove('open'); drawer.classList.remove('open'); mask.hidden = true; drawer.hidden = true;}
+const adminRules = [
+  {module:'字段调整/新增', rule:'主用户子用户定义:\n1、主用户即为发起协议方;子用户为接收协议方\n2、增加分配类型:主动分配收益、接收分配收益(需要选择,可多选;发起协议页面需要校验这里的权限);可编辑\n3、增加分配资金类型:项目收益、团队收益、平台发放收益(需要选择,可多选;发起协议页面需要校验这里的权限);可编辑'},
+  {module:'分配详情', rule:'增加字段:分配资金类型'},
+  {module:'历史数据写入', rule:'现有所有数据写入分配类型=主动分配收益、资金类型=项目收益'}
+];
+const adminRuleRows = document.getElementById('adminRuleRows');
+const rulePanelAdmin = document.getElementById('rulePanelAdmin');
+function paintAdminRules(){
+  rulePanelAdmin.innerHTML = ruleSections(adminRules);
+}
+function renderAdminRules(focusIndex){
+  adminRuleRows.innerHTML = ruleTableHtml(adminRules, adminEditing);
+  document.getElementById('adminRuleTable').classList.toggle('is-editing', adminEditing);
+  document.getElementById('addRuleRow').hidden = !adminEditing;
+  document.getElementById('editAdminRules').textContent = adminEditing ? '保存' : '编辑';
+  paintAdminRules();
+  if (focusIndex != null) {
+    const field = adminRuleRows.querySelector(`[data-field="module"][data-index="${focusIndex}"]`);
+    if (field) field.focus();
+  }
+}
+adminRuleRows.addEventListener('input', event => {
+  const field = event.target.dataset.field;
+  const index = Number(event.target.dataset.index);
+  if (!field || !adminRules[index]) return;
+  adminRules[index][field] = event.target.value;
+  paintAdminRules();
+});
+adminRuleRows.addEventListener('click', event => {
+  const button = event.target.closest('[data-remove]');
+  if (!button) return;
+  adminRules.splice(Number(button.dataset.remove), 1);
+  renderAdminRules();
+});
+document.getElementById('addRuleRow').addEventListener('click', () => {
+  if (!adminEditing) return;
+  adminRules.push({module:'', rule:''});
+  renderAdminRules(adminRules.length - 1);
+});
+document.getElementById('editAdminRules').addEventListener('click', async function () {
+  const status = document.getElementById('adminRuleStatus');
+  if (!adminEditing) {
+    adminBackup = adminRules.map(row => ({module:row.module, rule:row.rule}));
+    try { adminRuleBase = groupsFromRows(adminBackup); }
+    catch (error) { status.textContent = error.message; adminBackup = null; return; }
+    adminEditing = true;
+    status.textContent = '';
+    renderAdminRules();
+    const first = adminRuleRows.querySelector('input');
+    if (first) first.focus();
+    return;
+  }
+  try {
+    const groups = groupsFromRows(adminRules);
+    this.disabled = true;
+    await saveRuleView('admin', groups, adminRuleBase);
+    adminRules.splice(0, adminRules.length, ...rowsFromGroups(groups));
+    adminEditing = false;
+    adminBackup = null;
+    adminRuleBase = JSON.parse(JSON.stringify(groups));
+    renderAdminRules();
+    status.textContent = '已保存';
+  } catch (error) {
+    status.textContent = error.message;
+  } finally {
+    this.disabled = false;
+  }
+});
+renderAdminRules();
+fetch('/__local/coco006-rules').then(response => { if (!response.ok) throw Error(); return response.json(); }).then(data => {
+  if (!sceneEditing) {
+    Object.keys(sceneCopy).forEach(screen => { if (data[screen]) sceneCopy[screen].rows = rowsFromGroups(data[screen]); });
+    renderContext(currentScene);
+  }
+  if (!adminEditing && data.admin) {
+    adminRules.splice(0, adminRules.length, ...rowsFromGroups(data.admin));
+    renderAdminRules();
+  }
+}).catch(() => {
+  document.getElementById('sceneRuleStatus').textContent = '当前为只读预览；保存请使用 python3 scripts/preview_server.py 启动本地服务。';
+});
+
+const tabButtons = [...document.querySelectorAll('[data-tab]')];
+function showTab(name){
+  if (!['fe','admin','flow'].includes(name)) name = 'fe';
+  tabButtons.forEach(button => {
+    const selected = button.dataset.tab === name;
+    button.classList.toggle('active', selected);
+    document.getElementById('view-' + button.dataset.tab).hidden = !selected;
+  });
+  const url = new URL(location.href);
+  url.searchParams.set('tab', name);
+  history.replaceState(null, '', url);
+}
+tabButtons.forEach(button => button.addEventListener('click', () => showTab(button.dataset.tab)));
+showTab(new URLSearchParams(location.search).get('tab') || 'fe');
+
+const ruleMask = document.getElementById('ruleMask'), rulesDrawer = document.getElementById('rulesDrawer'), rulesOpen = document.getElementById('rulesOpen');
+function showRuleTab(which){
+  const fe = which !== 'admin';
+  document.getElementById('rulePanelFe').classList.toggle('active', fe);
+  document.getElementById('rulePanelAdmin').classList.toggle('active', !fe);
+  document.getElementById('ruleTabFe').classList.toggle('active', fe);
+  document.getElementById('ruleTabAdmin').classList.toggle('active', !fe);
+}
+document.getElementById('ruleTabFe').addEventListener('click', () => showRuleTab('fe'));
+document.getElementById('ruleTabAdmin').addEventListener('click', () => showRuleTab('admin'));
+function openRules(){
+  showRuleTab(document.getElementById('view-admin').hidden ? 'fe' : 'admin');
+  openDrawer(ruleMask, rulesDrawer);
+  rulesOpen.setAttribute('aria-expanded', 'true');
+  document.getElementById('rulesClose').focus();
+}
+function closeRules(){closeDrawer(ruleMask, rulesDrawer); rulesOpen.setAttribute('aria-expanded', 'false'); rulesOpen.focus();}
+rulesOpen.addEventListener('click', () => rulesDrawer.hidden ? openRules() : closeRules());
+document.getElementById('rulesClose').addEventListener('click', closeRules);
+ruleMask.addEventListener('click', closeRules);
+
+let phoneOverlayOpen = false;
+window.addEventListener('message', event => {
+  if (event.data && event.data.type === 'coco006' && typeof event.data.overlay === 'boolean') phoneOverlayOpen = event.data.overlay;
+});
+const exitTabReview = document.getElementById('exitTabReview');
+function setShellReview(on){try { if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle('fr-review', on); } catch (error) {}}
+let fitToken = 0;
+function fitPhone(){
+  const board = document.querySelector('#view-fe .board-scroll');
+  const device = document.getElementById('phoneDevice');
+  const fit = document.getElementById('phoneFit');
+  if (!board || !device || !fit) return;
+  const token = ++fitToken;
+  device.style.zoom = '';
+  device.style.position = 'absolute';
+  device.style.top = '0';
+  device.style.left = '0';
+  device.style.transform = 'none';
+  const naturalH = device.offsetHeight;
+  const naturalW = device.offsetWidth;
+  const rect = board.getBoundingClientRect();
+  const visibleH = Math.max(0, Math.min(rect.bottom, window.innerHeight - 16) - Math.max(rect.top, 0));
+  const visibleW = Math.max(0, Math.min(rect.right, window.innerWidth - 16) - Math.max(rect.left, 0));
+  let scale = Math.min(1, (visibleH - 8) / (naturalH || 1), (visibleW - 8) / (naturalW || 1));
+  scale = Math.max(scale, 0.35);
+  const apply = value => {
+    device.style.left = '50%';
+    device.style.transformOrigin = 'top center';
+    device.style.transform = 'translateX(-50%) scale(' + value + ')';
+    fit.style.width = Math.ceil(naturalW * value) + 'px';
+    fit.style.height = Math.ceil(naturalH * value) + 'px';
+  };
+  apply(scale);
+  requestAnimationFrame(() => {
+    if (token !== fitToken) return;
+    const box = fit.getBoundingClientRect();
+    const fix = Math.min(1, (window.innerHeight - 16 - box.top) / (box.height || 1), (window.innerWidth - 16 - box.left) / (box.width || 1));
+    if (fix < 0.995) apply(Math.max(scale * fix, 0.35));
+  });
+}
+function paintStatusTime(){
+  const now = new Date();
+  const el = document.getElementById('phoneTime');
+  if (el) el.textContent = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+}
+paintStatusTime();
+window.addEventListener('resize', fitPhone);
+phone.addEventListener('load', fitPhone);
+window.addEventListener('load', fitPhone);
+if (window.ResizeObserver) new ResizeObserver(fitPhone).observe(document.querySelector('#view-fe .board-scroll'));
+fitPhone();
+function openTabReview(){if (!rulesDrawer.hidden) closeRules(); document.documentElement.classList.add('is-tab-review'); setShellReview(true); exitTabReview.focus(); requestAnimationFrame(fitPhone);}
+function closeTabReview(){document.documentElement.classList.remove('is-tab-review'); setShellReview(false); document.getElementById('openTabReview').focus(); requestAnimationFrame(fitPhone);}
+document.getElementById('openTabReview').addEventListener('click', openTabReview);
+exitTabReview.addEventListener('click', closeTabReview);
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  if (phoneOverlayOpen) { phone.contentWindow.postMessage({type:'coco006', cmd:'escape'}, '*'); return; }
+  if (!rulesDrawer.hidden) { closeRules(); return; }
+  if (document.documentElement.classList.contains('is-tab-review')) closeTabReview();
+});
+</script>
+</body>
+</html>

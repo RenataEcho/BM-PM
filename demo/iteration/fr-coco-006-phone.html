@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f5f5">
+<title>收益分配 · 右豹</title>
+<style>
+:root{
+  color-scheme:light;
+  --ink:#202939;--muted:#929bad;--inactive:#747d8b;--brand:#ff6033;
+  --tint:#fff5ef;--line:#ebedf1;--surface:#fff;--bg:#f5f5f5;--panel:#f6f7f9;--track:#ebebec
+}
+*{box-sizing:border-box}
+body{margin:0;background:#efeff0;color:var(--ink);font:14px/1.5 "Songti SC","Noto Serif CJK SC","PingFang SC","Microsoft YaHei",serif;-webkit-font-smoothing:antialiased}
+body.is-embed .demo{display:none}
+body.is-embed main{padding-bottom:16px}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.shell{max-width:440px;margin:auto;min-height:100dvh;background:var(--bg)}
+header{position:relative;display:flex;align-items:center;justify-content:center;height:48px;padding:0 8px}
+h1{font-size:20px;margin:0;font-weight:750;line-height:1.2}
+.header-actions{position:absolute;right:8px;top:2px;bottom:2px;display:flex;align-items:center;gap:7px}
+.rules{display:grid;place-items:center;border:0;background:var(--tint);color:var(--brand);width:35px;height:35px;border-radius:10px;padding:0}
+.info-icon{height:18px;width:18px;border:1.6px solid currentColor;border-radius:50%;font:700 12px/15px system-ui,sans-serif}
+.add{border:0;background:transparent;color:var(--brand);padding:4px 0;min-height:35px;font-size:15px;white-space:nowrap}
+[hidden]{display:none!important}
+.tabs{display:flex;margin:0 8px;padding:3px;background:var(--track);border-radius:12px;min-height:45px}
+.tab{flex:1;border:0;border-radius:9px;background:transparent;min-height:39px;color:var(--inactive);font-size:16px;font-weight:650}
+.tab.active{background:var(--surface);color:var(--brand);box-shadow:0 2px 6px #2029390b}
+main{padding:13px 8px 65px}
+.toolbar{display:flex;align-items:center;gap:6px;margin-bottom:13px}
+.record-toolbar{justify-content:space-between;flex-wrap:nowrap;align-items:center;gap:8px}
+.record-toolbar .selects{flex-wrap:nowrap;min-width:0}
+.record-toolbar h2{margin:0;font-size:17px;white-space:nowrap}
+.selects,.filters{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.chip{background:transparent;border:0;padding:4px 8px;border-radius:6px;color:var(--inactive);font-size:12px;min-height:29px;white-space:nowrap}
+.chip.active{background:var(--tint);color:var(--brand);font-weight:650}
+.primary,.secondary{border:1px solid transparent;border-radius:7px;padding:8px 13px;min-height:38px;font-weight:650}
+.primary{color:#fff;background:var(--brand)}
+.secondary{background:var(--surface);border-color:var(--line)}
+select,input{border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:8px}
+.toolbar select,.date-trigger{font-size:12px;color:var(--inactive);border:0;background:transparent;max-width:none;min-height:29px;padding:3px 5px}
+.date-trigger{white-space:nowrap}
+.card,.record{display:block;width:100%;text-align:left;background:var(--surface);border:0;border-radius:14px;margin-bottom:13px}
+.card{padding:0;overflow:hidden}
+.card-open{display:block;width:100%;padding:0;border:0;background:transparent;text-align:left}
+.card-open:focus-visible{outline-offset:-3px}
+.card-top{display:flex;align-items:center;gap:10px;padding:14px 16px 15px}
+.avatar{display:grid;place-items:center;width:50px;height:50px;flex:none;border-radius:50%;background:var(--tint);color:var(--brand);font-weight:700;font-size:19px}
+.person{min-width:0}
+.person-line{display:flex;align-items:center;flex-wrap:wrap;gap:5px 7px}
+.person-name{font-size:16px;font-weight:750;overflow-wrap:anywhere}
+.meta{display:block;color:var(--muted);font-size:12px;line-height:1.45}
+.person .meta{margin-top:4px}
+.status{display:inline-block;font-size:11px;line-height:1.4;border-radius:99px;padding:2px 7px;background:var(--panel);color:var(--inactive);white-space:nowrap}
+.status.todo,.status.pending{background:var(--tint);color:var(--brand)}
+.status.live{background:#eaf8f0;color:#12bb77}
+.card-body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));text-align:center;border-top:1px solid var(--line);padding:13px 0}
+.card-body>span+span{border-left:1px solid var(--line)}
+.amount,.number{display:block;font-size:16px;font-weight:750;line-height:1.35;font-variant-numeric:tabular-nums;white-space:nowrap}
+.amount{color:var(--brand)}
+.card-foot{display:flex;justify-content:flex-end;align-items:center;border-top:1px solid var(--line);padding:2px 13px}
+.action{min-height:36px;padding:4px 3px;border:0;background:transparent;color:var(--brand);font-size:12px;font-weight:650}
+.record{margin-bottom:8px;padding:13px;border:1px solid #eaeaef;border-radius:11px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+.record-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:#222631;font-size:14px;font-weight:700}
+.record-top .amount{font-size:17px}
+.record.in .amount{color:#27704f}
+.record.out .amount{color:#bb3a1e}
+.record.neutral .amount{color:#666d7b}
+.record-fund{display:block;margin-top:6px;color:#5c6b82;font-size:12px;font-weight:650}
+.record .meta{margin-top:4px;color:#666d7b;font-size:12px}
+.empty,.end{color:var(--muted);text-align:center;padding:25px 10px}
+.zero{display:block;width:auto;flex:none;border:0;background:transparent;color:var(--muted);padding:4px 0;text-align:right;font-size:12px;white-space:nowrap}
+.demo{position:fixed;z-index:2;bottom:max(10px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px;max-width:calc(100% - 20px);padding:4px 7px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font:11px/1.4 system-ui,sans-serif;color:var(--inactive)}
+.demo label{white-space:nowrap}
+.demo select{min-width:0;max-width:180px;padding:3px 5px;border:0;background:var(--panel)}
+dialog{width:min(calc(100% - 24px),414px);padding:0;border:1px solid var(--line);border-radius:14px;color:var(--ink);max-height:calc(100dvh - 24px);overflow:auto}
+dialog::backdrop{background:#20293975}
+.dialog-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.dialog-head h2{font-size:17px;margin:0}
+.close{border:0;background:transparent;color:var(--inactive);font-size:22px;min-width:36px;min-height:36px}
+.dialog-body{padding:14px 16px 18px}
+.dialog-body p{margin:0 0 10px}
+.detail{margin:0 0 13px}
+.detail div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:8px 0}
+.detail dt{color:var(--inactive)}
+.detail dd{margin:0;text-align:right;font-weight:650}
+.note{padding:10px;background:var(--tint);border-radius:6px;font-size:12px}
+.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.field{display:grid;gap:5px;margin:0 0 12px}
+.choice{display:block;width:100%;text-align:left;margin-bottom:8px}
+.choice span{display:block;font-weight:400}
+.toast{position:fixed;bottom:54px;left:50%;transform:translateX(-50%);z-index:5;padding:8px 14px;border-radius:7px;background:var(--ink);color:#fff;white-space:nowrap}
+@media(max-width:350px){.record-toolbar h2{font-size:15px}.toolbar select{max-width:102px}.header-actions{gap:4px}.add{font-size:13px}.record{padding:13px}}
+
+dialog.agreement-sheet{position:fixed;inset:auto 0 0;margin:0 auto;width:min(100%,440px);max-width:none;max-height:min(88dvh,660px);border-radius:16px 16px 0 0}
+dialog.agreement-sheet[open]{display:flex;flex-direction:column;overflow:hidden}
+dialog.time-sheet{position:fixed;inset:auto 0 0;margin:0 auto;width:min(100%,440px);max-width:none;border:0;border-radius:18px 18px 0 0;box-shadow:0 -8px 28px rgba(32,41,57,.12)}
+dialog.time-sheet[open]{display:flex;flex-direction:column;overflow:hidden}
+.time-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.time-option{min-height:52px;border:0;border-radius:14px;background:#fff;box-shadow:0 1px 2px rgba(32,41,57,.04),0 6px 16px rgba(32,41,57,.06);color:#2c3340;font-size:15px;font-weight:650}
+.time-option.active{color:var(--brand)}
+.time-custom{display:grid;gap:8px;margin-top:14px}
+.time-custom label{display:grid;gap:4px;color:#5c6b82;font-size:12px}
+.time-custom input{height:40px;border:1px solid var(--line);border-radius:10px;padding:0 10px;background:#fff}
+.time-custom .primary{min-height:42px;margin-top:4px}
+.agreement-sheet .dialog-body{overflow:auto;min-height:0;padding-bottom:4px}
+.dialog-foot{flex:none;border-top:1px solid var(--line);padding:12px 16px max(12px,env(safe-area-inset-bottom));background:var(--surface)}
+.dialog-foot .primary{width:100%;min-height:42px}
+.agreement-page header{background:var(--surface);border-bottom:1px solid var(--line)}
+.agreement-page .page-content{padding:12px 8px 24px}
+.agreement-section{margin-bottom:10px;padding:12px 15px;background:var(--surface);border-radius:13px}
+.agreement-section h2{margin:0 0 4px;font-size:15px}
+.agreement-section .detail,.agreement-section p{margin:0}
+.agreement-section .detail div:last-child{border-bottom:0}
+.fund-types{text-align:right}
+.fund-tag{display:inline-block;margin:1px 0 1px 4px;padding:2px 6px;border-radius:5px;background:var(--tint);color:var(--brand);white-space:nowrap;font-size:12px}
+.fund-field{min-width:0;margin:0 0 12px;padding:0;border:0}
+.fund-field legend{padding:0;margin-bottom:5px}
+.fund-options{display:flex;flex-wrap:wrap;gap:6px}
+.fund-option{display:inline-flex;align-items:center;gap:4px;padding:5px 6px;border:1px solid var(--line);border-radius:7px;min-height:34px;cursor:pointer}
+.fund-option:has(input:checked){border-color:var(--brand);background:var(--tint)}
+.fund-option input{margin:0;accent-color:var(--brand)}
+.fund-error{display:block;margin-top:5px;color:#bb3a1e;font-size:12px}
+
+.stats{
+  margin:8px 8px 12px;padding:16px;color:#fff;border-radius:13px;
+  background:var(--brand);
+  background:linear-gradient(105deg,var(--brand),color-mix(in srgb,var(--brand) 91%,#fff));
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif
+}
+.stats h2{margin:0;font-size:13px;font-weight:600}
+.stats-total{display:block;margin-top:2px;font-size:29px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.stats dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:13px 0 0;padding-top:10px;border-top:1px solid #ffffff50}
+.stats dt{font-size:12px}
+.stats dd{margin:2px 0 0;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+
+.shell .left-header{justify-content:flex-start;gap:4px;padding:0 8px}
+.nav-back{display:grid;place-items:center;width:36px;height:40px;flex:none;padding:0;border:0;background:transparent;color:var(--ink)}
+.back-chevron{width:10px;height:10px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg)}
+.wallet-entry{display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px 16px;border:0;border-radius:13px;background:var(--surface);font-weight:650}
+.card-body>span{padding:0 4px;min-width:0}
+.card-body .amount,.card-body .number{white-space:normal;overflow-wrap:anywhere}
+.record-today{color:var(--brand);font-weight:650}
+@media(max-width:350px){.left-header h1{font-size:18px}.card-body .number,.card-body .amount{font-size:14px}}
+.create-page{display:flex;flex-direction:column;min-height:100dvh;background:linear-gradient(180deg,#f3f1fb 0%,#f7f8fb 32%,#f6f7f9 100%);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#1d2433}
+.create-nav{position:relative;display:flex;align-items:center;justify-content:center;height:48px;padding:0 8px;background:transparent}
+.create-nav h1{margin:0;font-size:17px;font-weight:650}
+.create-nav .nav-back{position:absolute;left:4px}
+.mp-capsule{position:absolute;right:10px;display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;border:1px solid #e4e5ea;border-radius:16px;background:rgba(255,255,255,.72)}
+.mp-capsule i{width:16px;height:4px;background:radial-gradient(circle,#222 1.3px,transparent 1.5px) 0 50%/5px 4px repeat-x}
+.mp-capsule b{width:16px;height:16px;border:1.6px solid #222;border-radius:50%;box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 4.5px #222}
+.create-scroll{flex:1;overflow:auto;padding:0 14px 12px}
+.create-hero{display:flex;align-items:center;gap:10px;text-align:left;padding:2px 2px 0}
+.create-badge{width:40px;height:40px;margin:0;border-radius:12px;display:grid;place-items:center;flex:none;background:linear-gradient(180deg,#ff8d57,#ff5528);color:#fff;font-size:18px;font-weight:700;box-shadow:0 6px 12px rgba(255,96,51,.22)}
+.create-hero h2{margin:0;font-size:16px;font-weight:700;line-height:1.3;color:#1b2740}
+.create-lead{margin:8px 2px 0;color:#8d95a3;font-size:12px;line-height:1.5}
+.create-owner{margin:2px 0 0;font-size:12px;color:#9aa1ad}
+.create-card{margin-top:10px;padding:16px;background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(30,40,80,.05)}
+.create-card h3{margin:0 0 12px;font-size:16px;color:#243044}
+.create-card label{display:block;margin:12px 0 8px;color:#5c6b82;font-size:13px}
+.create-card label:first-of-type{margin-top:0}
+.create-card select{width:100%;height:44px;border:0;border-radius:10px;background:#f4f5f8;padding:0 12px;color:#1d2433;font-size:15px}
+.type-note{margin:8px 0 0;color:#8d95a3;font-size:12px;line-height:1.55}
+.fund-picks{display:grid;gap:8px}
+.create-card .fund-pick{display:flex;align-items:center;gap:8px;min-height:40px;margin:0;padding:0 12px;border-radius:10px;background:#f4f5f8;color:#1d2433;font-size:14px}
+.fund-pick input{margin:0;accent-color:#ff6033}
+.phone-row{display:flex;gap:10px}
+.phone-row input,.rate-box{height:44px;border:0;border-radius:10px;background:#f4f5f8}
+.phone-row input{flex:1;min-width:0;padding:0 12px}
+.query{width:76px;height:44px;border:0;border-radius:10px;background:#ff6033;color:#fff;font-size:16px;font-weight:650}
+.lookup{margin:8px 0 0;font-size:12px}
+.lookup.ok{color:#27704f}
+.lookup.error{color:#bb3a1e}
+.demo-hint{margin:8px 0 0;color:#a0a7b4;font-size:12px;line-height:1.5}
+.rate-box{display:flex;align-items:center;padding:0 12px}
+.rate-box input{flex:1;min-width:0;height:44px;border:0;background:transparent;font-size:16px}
+.rate-box span{color:#98a0ad}
+.rule-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.rule-head h3{margin:0}
+.text-link{border:0;background:transparent;color:#ff6033;padding:0;font-size:13px;font-weight:650}
+.rule-step{display:flex;gap:10px;margin-top:14px}
+.rule-step b{display:block;font-size:14px;color:#1d2433}
+.rule-step p{margin:4px 0 0;color:#8d95a3;font-size:12px;line-height:1.55}
+.rule-no{width:22px;height:22px;border-radius:50%;background:#ff6033;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+.create-bar{padding:8px 16px 16px}
+.create-bar .submit{width:100%;height:48px;border:0;border-radius:12px;background:linear-gradient(90deg,#ff8a4a,#ff4d22);color:#fff;font-size:17px;font-weight:650}
+</style>
+</head>
+<body>
+<div class="shell" id="app-shell">
+  <header class="left-header">
+    <button class="nav-back" type="button" data-action="back-wallet" aria-label="返回钱包"><span class="back-chevron" aria-hidden="true"></span></button>
+    <h1 id="distribution-title" tabindex="-1">收益分配</h1>
+    <div class="header-actions">
+      <button class="rules" type="button" data-action="rules" aria-label="规则说明"><span class="info-icon" aria-hidden="true">i</span></button>
+      <button class="add" id="add" type="button" data-action="start" hidden>发起协议</button>
+    </div>
+  </header>
+  <section class="stats" id="distribution-stats" aria-label="收益分配统计"></section>
+  <nav class="tabs" aria-label="收益分配页面">
+    <button class="tab" type="button" data-action="tab" data-value="agreements">分配成员</button>
+    <button class="tab" type="button" data-action="tab" data-value="records">分配记录</button>
+  </nav>
+  <main id="content"></main>
+</div>
+<section class="shell" id="wallet-page" hidden aria-label="钱包">
+  <header class="left-header"><h1 id="wallet-title" tabindex="-1">我的钱包</h1></header>
+  <main><button class="wallet-entry" type="button" data-action="distribution">收益分配 <span aria-hidden="true">›</span></button></main>
+</section>
+<section class="shell create-page" id="create-page" hidden aria-label="自动分配收益">
+  <header class="create-nav">
+    <button class="nav-back" type="button" data-action="back-create" aria-label="返回收益分配"><span class="back-chevron" aria-hidden="true"></span></button>
+    <h1 tabindex="-1">自动分配收益</h1>
+    <span class="mp-capsule" aria-hidden="true"><i></i><b></b></span>
+  </header>
+  <div class="create-scroll">
+    <div class="create-hero">
+      <div class="create-badge" aria-hidden="true">主</div>
+      <div>
+        <h2>设置子用户收益分配关系</h2>
+        <p class="create-owner">主用户ID：<span id="create-owner-id"></span></p>
+      </div>
+    </div>
+    <p id="create-lead" class="create-lead"></p>
+    <section class="create-card">
+      <h3>添加子用户</h3>
+      <label for="create-type">发起协议类型</label>
+      <select id="create-type"></select>
+      <p id="create-type-note" class="type-note"></p>
+      <label>选择分配收益类型</label>
+      <div id="create-funds" class="fund-picks"></div>
+      <p id="create-fund-error" class="lookup error" hidden>请至少选择一种收益</p>
+      <label for="create-phone">子用户手机号</label>
+      <div class="phone-row">
+        <input id="create-phone" inputmode="numeric" maxlength="11" placeholder="输入子用户手机号" autocomplete="off">
+        <button class="query" type="button" data-action="lookup">查询</button>
+      </div>
+      <p id="create-lookup" class="lookup" hidden></p>
+      <p id="create-hint" class="demo-hint"></p>
+      <label id="create-rate-label" for="create-rate">分配给子用户的比例</label>
+      <div class="rate-box"><input id="create-rate" inputmode="decimal" value="50" autocomplete="off"><span>%</span></div>
+    </section>
+    <section class="create-card">
+      <div class="rule-head"><h3>分配规则</h3><button class="text-link" type="button" data-action="create-rules">查看协议</button></div>
+      <div class="rule-step"><span class="rule-no">1</span><div><b>填写子用户与比例</b><p id="create-rule-copy"></p></div></div>
+      <div class="rule-step"><span class="rule-no">2</span><div><b>推送系统通知</b><p>子用户收到「自动分配收益邀请」后进入确认页。</p></div></div>
+    </section>
+  </div>
+  <div class="create-bar"><button class="submit" type="button" data-action="submit-create">提交分配邀请</button></div>
+</section>
+<section class="shell agreement-page" id="agreement-page" hidden aria-label="协议详情页">
+  <header class="left-header">
+    <button class="nav-back" type="button" data-action="back-agreement" aria-label="返回收益分配"><span class="back-chevron" aria-hidden="true"></span></button>
+    <h1 id="agreement-title" tabindex="-1">协议详情</h1>
+  </header>
+  <main class="page-content" id="agreement-content"></main>
+</section>
+<div class="demo" id="demo-control"><label for="actor">演示账号</label><select id="actor"></select></div>
+<dialog id="dialog" aria-labelledby="dialog-title"></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<script>
+const people = {
+  captain: {name:'林川', label:'林川 · 团长', userId:'560188', phone:'13800001880', permissions:['own','team']},
+  member: {name:'Renata🦋1', label:'Renata🦋1 · 直属 V2 成员', userId:'560201', phone:'13800002001', tier:'V2', captain:'captain', permissions:['own']},
+  member3: {name:'小满', label:'小满 · 直属 V3 成员', userId:'560203', phone:'13800002003', tier:'V3', captain:'captain', permissions:[]},
+  user: {name:'阿禾', label:'阿禾 · 普通用户', userId:'560204', phone:'13800002004', permissions:['own']}
+}
+const types = {own:'分配我的收益',team:'邀请直属成员分配'}
+const fundTypes = {project:'项目收益',team:'团队收益',activity:'平台发放收益'}
+const recordFunds = {project:'项目收益分配',team:'团队奖励分配',activity:'平台发放收益分配'}
+const typeNotes = {own:'我分出收益，子用户接收。',team:'直属成员分出收益，我接收。'}
+const agreements = [
+  {id:101,funds:['project','team'],type:'team',from:'captain',to:'member',payer:'member',receiver:'captain',rate:30,status:'pending',created:'2026-11-25 14:08:00'},
+  {id:102,funds:['project'],type:'own',from:'captain',to:'member3',payer:'captain',receiver:'member3',rate:20,status:'live',created:'2026-11-20 14:00:00',effective:'2026-11-20 17:15:00'},
+  {id:103,funds:['project','team','activity'],type:'own',from:'user',to:'captain',payer:'user',receiver:'captain',rate:70,status:'live',created:'2026-08-29 20:00:00',effective:'2026-08-29 20:19:53'},
+  {id:104,funds:['team'],type:'team',from:'captain',to:'member3',payer:'member3',receiver:'captain',rate:15,status:'rejected',created:'2026-11-22 10:20:00'}
+]
+const records = [
+  {id:201,agreement:103,fund:'project',gross:100,rate:70,amount:70,time:'2026-11-25 00:30:01'},
+  {id:202,agreement:102,fund:'project',gross:180,rate:20,amount:36,time:'2026-11-25 00:30:01'},
+  {id:208,agreement:103,fund:'team',gross:40,rate:70,amount:28,time:'2026-11-20 00:30:01'},
+  {id:203,agreement:103,fund:'activity',gross:0,rate:70,amount:0,time:'2026-11-24 00:30:01'},
+  {id:204,agreement:103,fund:'project',gross:0,rate:70,amount:0,time:'2026-11-23 00:30:01'},
+  {id:205,agreement:103,fund:'activity',gross:90,rate:70,amount:63,time:'2026-11-17 00:30:01'}
+]
+const state = {actor:'captain',tab:'agreements',agreementFilter:'all',statusFilter:'live',recordFilter:'all',dateFilter:'all',customStart:'',customEnd:'',showZero:false,agreementPage:null,listScroll:0,wallet:false,walletScroll:0,create:null}
+const format = new Intl.NumberFormat('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})
+if(new URLSearchParams(location.search).get('embed')==='1') document.body.classList.add('is-embed')
+const dialog = document.querySelector('#dialog')
+const content = document.querySelector('#content')
+const distributionStats = document.querySelector('#distribution-stats')
+const actor = document.querySelector('#actor')
+const add = document.querySelector('#add')
+const appShell = document.querySelector('#app-shell')
+const walletPage = document.querySelector('#wallet-page')
+const agreementPage = document.querySelector('#agreement-page')
+const createPage = document.querySelector('#create-page')
+const agreementContent = document.querySelector('#agreement-content')
+const demoControl = document.querySelector('#demo-control')
+actor.innerHTML = Object.entries(people).map(([id,person])=>'<option value="'+id+'">'+person.label+'</option>').join('')
+const money = amount => '¥'+format.format(amount)
+const onDate = (record,date) => record.time.slice(0,10)===date
+const name = id => people[id].name
+const canSee = agreement => [agreement.from,agreement.to].includes(state.actor)
+const direction = agreement => agreement.payer === state.actor ? 'out' : 'in'
+const other = agreement => agreement.from === state.actor ? agreement.to : agreement.from
+const canRespond = agreement => agreement.to === state.actor && agreement.status === 'pending'
+const canEnd = agreement => canSee(agreement) && agreement.status === 'live'
+const canRestart = agreement => agreement.from === state.actor
+  && ['ended','rejected'].includes(agreement.status)
+  && people[state.actor].permissions.includes(agreement.type) && eligible(agreement.to,agreement.type)
+function durationDays(agreement){
+  const start = Date.parse(agreement.effective.slice(0,10)+'T00:00:00Z')
+  const until = Date.parse((agreement.endedAt || demoTime()).slice(0,10)+'T00:00:00Z')
+  return Math.max(0,(until-start)/86400000)
+}
+const durationLabel = agreement => '协议'+durationDays(agreement)+'天'
+function status(agreement){
+  const labels = {live:'已生效',rejected:'已拒绝',ended:'已解除'}
+  return labels[agreement.status] || (canRespond(agreement) ? '待你确认' : '待对方确认')
+}
+function directionText(agreement){
+  return (direction(agreement) === 'out' ? '我分出 ' : '我接收 ')+agreement.rate+'%'
+}
+function agreementCard(agreement,today){
+  const counterparty = other(agreement)
+  const outgoing = direction(agreement) === 'out'
+  const agreementRecords=records.filter(record=>record.agreement===agreement.id)
+  const total=agreementRecords.reduce((sum,record)=>sum+record.amount,0)
+  const todayAmount=agreementRecords.filter(record=>onDate(record,today)).reduce((sum,record)=>sum+record.amount,0)
+  const time = agreement.effective
+    ? '生效于：'+agreement.effective+'（'+durationLabel(agreement)+'）'
+    : '发起于：'+agreement.created
+  const amountLabel = outgoing ? '累计已分出' : '累计已收到'
+  const actions = [
+    {visible:canRespond(agreement), action:'agreement', label:'查看并处理 ›'},
+    {visible:canEnd(agreement), action:'end', label:'解除协议'},
+    {visible:canRestart(agreement), action:'restart', label:'发起协议'}
+  ].filter(item=>item.visible)
+  return `<article class="card">
+    <button class="card-open" type="button" data-action="agreement" data-value="${agreement.id}">
+      <span class="card-top">
+        <span class="avatar" aria-hidden="true">${name(counterparty).slice(0,1)}</span>
+        <span class="person">
+          <span class="person-line"><span class="person-name">${name(counterparty)}（${people[counterparty].userId}）</span><span class="status ${canRespond(agreement)?'todo':agreement.status}">${status(agreement)}</span></span>
+          <span class="meta">${time}</span>
+          ${agreement.endedAt?'<span class="meta">解绑时间：'+agreement.endedAt+'</span>':''}
+        </span>
+      </span>
+      <span class="card-body">
+        <span><span class="meta">${amountLabel}</span><span class="amount">${agreement.effective?money(total):'—'}</span></span>
+        <span><span class="meta">${outgoing?'今日分出':'今日收到'}</span><span class="number">${agreement.effective?money(todayAmount):'—'}</span></span>
+        <span><span class="meta">${outgoing?'分配比例':'接收比例'}</span><span class="number">${directionText(agreement)}</span></span>
+      </span>
+    </button>
+    ${actions.length?'<div class="card-foot">'+actions.map(item=>`<button class="action" type="button" data-action="${item.action}" data-value="${agreement.id}">${item.label}</button>`).join('')+'</div>':''}
+  </article>`
+}
+function matchesRelation(agreement){
+  if(state.agreementFilter==='all') return true
+  return direction(agreement)===(state.agreementFilter==='in'?'in':'out')
+}
+function renderAgreements(today){
+  const statusKey = agreement => agreement.status==='live' || agreement.status==='rejected' || agreement.status==='ended' ? agreement.status : 'pending'
+  const available = agreements.filter(agreement=>canSee(agreement) && matchesRelation(agreement) && statusKey(agreement)===state.statusFilter)
+    .sort((a,b)=>Number(canRespond(b))-Number(canRespond(a)) || b.created.localeCompare(a.created))
+  const relations = [['all','全部分配类型'],['out','我分配的'],['in','我收到的']]
+  const statuses = [['live','生效中'],['pending','待确认'],['rejected','已拒绝'],['ended','已解绑']]
+  const options = (items,current) => items.map(([value,label])=>`<option value="${value}" ${current===value?'selected':''}>${label}</option>`).join('')
+  return `<div class="toolbar"><div class="selects">
+    <select id="agreement-relation" aria-label="分配关系">${options(relations,state.agreementFilter)}</select>
+    <select id="agreement-status" aria-label="协议状态">${options(statuses,state.statusFilter)}</select>
+    </div></div>
+    ${available.length?available.map(agreement=>agreementCard(agreement,today)).join('')+'<div class="end">没有更多了</div>':'<div class="empty">暂无符合条件的协议</div>'}`
+}
+function recordCard(record,today){
+  const agreement = agreements.find(item=>item.id===record.agreement)
+  const outgoing = direction(agreement)==='out'
+  const label = outgoing?'分给 ':'来自 '
+  const sign = record.amount===0?'':outgoing?'−':'+'
+  return `<article class="record ${record.amount===0?'neutral':direction(agreement)}">
+    <span class="record-top"><span>${label+name(other(agreement))}</span><span class="amount">${sign+money(record.amount)}</span></span>
+    <span class="record-fund">${recordFunds[record.fund] || ''}</span>
+    <span class="meta">${onDate(record,today)?'<span class="record-today">今日</span> '+record.time.slice(11,16):record.time.slice(5,16)} · 参与分配 ${money(record.gross)} · 比例 ${record.rate}%</span>
+  </article>`
+}
+function shiftDate(day,delta){
+  const [year,month,date]=day.split('-').map(Number)
+  const next=new Date(Date.UTC(year,month-1,date+delta))
+  return next.toISOString().slice(0,10)
+}
+function matchesDate(record,today){
+  const day=record.time.slice(0,10)
+  if(state.dateFilter==='all') return true
+  if(state.dateFilter==='today') return day===today
+  if(state.dateFilter==='custom'){
+    if(state.customStart && day<state.customStart) return false
+    if(state.customEnd && day>state.customEnd) return false
+    return true
+  }
+  const span=Number(state.dateFilter)
+  return Boolean(span) && day>=shiftDate(today,1-span) && day<=today
+}
+function dateLabel(){
+  const labels={all:'全部时间',today:'今天','7':'近7天','30':'近30天','90':'近90天'}
+  if(state.dateFilter==='custom'){
+    const start=state.customStart?state.customStart.slice(5).replace('-','/'):''
+    const end=state.customEnd?state.customEnd.slice(5).replace('-','/'):''
+    if(start || end) return (start||'不限')+'–'+(end||'不限')
+    return '自定义时间'
+  }
+  return labels[state.dateFilter]||'全部时间'
+}
+function renderRecords(today){
+  const available = records.filter(record=>{
+    const agreement = agreements.find(item=>item.id===record.agreement)
+    return canSee(agreement) && (state.recordFilter==='all' || state.recordFilter===direction(agreement))
+      && matchesDate(record,today)
+  })
+  const zeros = available.filter(record=>record.amount===0)
+  const visible = available.filter(record=>record.amount!==0 || state.showZero)
+  const filters = [['all','全部类型'],['out','我分配的'],['in','我收到的']]
+  return `<div class="toolbar record-toolbar"><div class="selects">
+    <select id="record-filter" aria-label="分配类型">${filters.map(([value,label])=>`<option value="${value}" ${state.recordFilter===value?'selected':''}>${label}</option>`).join('')}</select>
+    <button class="date-trigger" id="date-filter" type="button" data-action="open-date" aria-haspopup="dialog">${dateLabel()}</button>
+    </div>${zeros.length?`<button type="button" class="zero" data-action="zeros">${state.showZero?'收起':'查看'}零金额记录（${zeros.length}）</button>`:''}</div>
+    ${visible.map(record=>recordCard(record,today)).join('') || '<div class="empty">暂无'+(zeros.length?'非零金额':'符合条件的')+'记录</div>'}`
+}
+function renderStats(){
+  const visibleAgreements=agreements.filter(canSee)
+  const agreementsById=new Map(visibleAgreements.map(agreement=>[agreement.id,agreement]))
+  const totals={out:0,in:0}
+  for(const record of records){
+    const agreement=agreementsById.get(record.agreement)
+    if(!agreement) continue
+    totals[direction(agreement)]+=Math.round(record.amount*100)
+  }
+  const activeCount=visibleAgreements.filter(agreement=>agreement.status==='live').length
+  distributionStats.innerHTML=`<div class="stats-head">
+    <div><h2>累计分配金额</h2><strong class="stats-total">${money((totals.out+totals.in)/100)}</strong></div>
+    </div>
+    <dl>
+      <div><dt>累计已分出</dt><dd>${money(totals.out/100)}</dd></div>
+      <div><dt>累计已收到</dt><dd>${money(totals.in/100)}</dd></div>
+      <div><dt>生效协议</dt><dd>${activeCount} 份</dd></div>
+    </dl>`
+}
+function render(){
+  const agreement=agreements.find(item=>item.id===state.agreementPage && canSee(item))
+  const creating=Boolean(state.create)
+  walletPage.hidden=!state.wallet
+  createPage.hidden=!creating
+  appShell.hidden=Boolean(agreement) || state.wallet || creating
+  demoControl.hidden=Boolean(agreement) || state.wallet || creating
+  agreementPage.hidden=!agreement
+  if(state.wallet) return
+  if(agreement){
+    agreementContent.innerHTML=renderAgreementPage(agreement)
+    return
+  }
+  if(creating){
+    if(state.create.paint) syncCreate()
+    return
+  }
+  const today=demoTime().slice(0,10)
+  renderStats()
+  add.hidden=state.tab!=='agreements' || !people[state.actor].permissions.length
+  document.querySelectorAll('.tab').forEach(button=>{
+    const active=button.dataset.value===state.tab
+    button.classList.toggle('active',active)
+    if(active) button.setAttribute('aria-current','page')
+    else button.removeAttribute('aria-current')
+  })
+  content.innerHTML=state.tab==='agreements'?renderAgreements(today):renderRecords(today)
+}
+function openDialog(title,html,footer=''){
+  dialog.classList.remove('time-sheet')
+  dialog.classList.toggle('agreement-sheet',Boolean(footer))
+  dialog.innerHTML=`<div class="dialog-head"><h2 id="dialog-title">${title}</h2><button class="close" type="button" data-action="close" aria-label="关闭">×</button></div>
+    <div class="dialog-body">${html}</div>${footer?'<div class="dialog-foot">'+footer+'</div>':''}`
+  if(!dialog.open) dialog.showModal()
+}
+function details(rows){
+  return '<dl class="detail">'+rows.map(([label,value])=>`<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')+'</dl>'
+}
+const settlementRule = '协议生效后，纳入协议的收益在分配完成前暂不可提现。系统次日凌晨自动分配，分配成功后剩余金额按钱包规则提现。'
+function agreementTimes(agreement){
+  const rows=[
+    ['发起时间',agreement.created],
+    ['生效时间',agreement.effective || '—'],
+    ['解绑时间',agreement.endedAt || '—']
+  ]
+  if(agreement.effective) rows.push(['协议时长',durationDays(agreement)+'天'])
+  return rows
+}
+function agreementFunds(agreement){
+  return `<span class="fund-types">${agreement.funds.map(key=>'<span class="fund-tag">'+fundTypes[key]+'</span>').join('')}</span>`
+}
+function agreementSummary(agreement){
+  return [['协议状态',status(agreement)],['资金方向',directionText(agreement)],['资金类型',agreementFunds(agreement)]]
+}
+function openTimeSheet(highlight){
+  const picked=highlight||state.dateFilter
+  const options=[['all','全部时间'],['today','今天'],['7','近7天'],['30','近30天'],['90','近90天'],['custom','自定义时间']]
+  dialog.classList.remove('agreement-sheet')
+  dialog.classList.add('time-sheet')
+  dialog.innerHTML=`<div class="dialog-head"><h2 id="dialog-title">选择时间</h2><button class="close" type="button" data-action="close" aria-label="关闭">×</button></div>
+    <div class="dialog-body"><div class="time-grid">${options.map(([value,label])=>`<button class="time-option${picked===value?' active':''}" type="button" data-action="date-pick" data-value="${value}">${label}</button>`).join('')}</div>
+    <div class="time-custom"${picked==='custom'?'':' hidden'}><label>开始日期<input id="date-start" type="date" value="${state.customStart||''}"></label><label>结束日期<input id="date-end" type="date" value="${state.customEnd||''}"></label><button class="primary" type="button" data-action="date-custom">确定</button></div></div>`
+  if(!dialog.open) dialog.showModal()
+}
+function renderAgreementPage(agreement){
+  const id=agreement.id
+  let actions=''
+  if(canRespond(agreement)){
+    actions=`<div class="actions"><button class="secondary" data-action="respond" data-value="${id}" data-status="rejected">拒绝</button><button class="primary" data-action="respond" data-value="${id}" data-status="live">接受协议</button></div>`
+  } else if(canEnd(agreement)){
+    actions=`<div class="actions"><button class="secondary" data-action="end" data-value="${id}">解除协议</button></div>`
+  } else if(canRestart(agreement)){
+    actions=`<div class="actions"><button class="primary" data-action="restart" data-value="${id}">发起协议</button></div>`
+  }
+  return `<section class="agreement-section"><h2>分配约定</h2>${details(agreementSummary(agreement))}</section>
+    <section class="agreement-section"><h2>协议双方</h2>${details([
+      ['收益分配方',name(agreement.payer)],['收益接收方',name(agreement.receiver)]
+    ])}</section>
+    <section class="agreement-section"><h2>协议时间</h2>${details(agreementTimes(agreement))}</section>
+    <section class="agreement-section"><h2>分配规则</h2><p>协议按约定比例分配所选资金类型中符合条件的收益。</p>
+      <p>${agreement.status==='ended'?'协议已解除，历史分配记录仍可查看。':settlementRule}</p></section>${actions}`
+}
+function enterAgreementPage(id){
+  if(!agreements.some(item=>item.id===id && canSee(item))) return
+  state.listScroll=window.scrollY
+  state.agreementPage=id
+  if(dialog.open) dialog.close()
+  render()
+  window.scrollTo(0,0)
+  document.querySelector('#agreement-title').focus()
+}
+function leaveAgreementPage(){
+  state.agreementPage=null
+  render()
+  window.scrollTo(0,state.listScroll)
+}
+function confirmEnd(agreement){
+  openDialog('解除协议',`<p>确认解除与 <strong>${name(other(agreement))}</strong> 的收益分配协议？</p>
+    <p class="note">解除后不再按这份协议分配新收益，历史分配记录仍可查看。</p>
+    <div class="actions"><button class="secondary" data-action="close">取消</button><button class="primary" data-action="confirm-end" data-value="${agreement.id}">确认解除</button></div>`)
+}
+function eligible(id,type){
+  return id!==state.actor && (type==='own' || (people[id].captain===state.actor && ['V2','V3'].includes(people[id].tier)))
+}
+function applyCreateCopy(type){
+  const own=type!=='team'
+  document.querySelector('#create-lead').textContent=own
+    ? '创建后，主账号当日收益会先进入待分配状态，次日 0 点后按协议比例自动拆分。'
+    : '创建后，直属成员当日收益会先进入待分配状态，次日 0 点后按协议比例自动拆分给主账号。'
+  document.querySelector('#create-rate-label').textContent=own?'分配给子用户的比例':'成员分出的比例'
+  document.querySelector('#create-rule-copy').textContent=own
+    ? '设置子用户的分配比例之后，结算到账户的余额将按此比例分配给子用户。'
+    : '设置分配比例之后，直属成员结算到账户的余额将按此比例分配给主账号。'
+  const hint=Object.entries(people).filter(([id])=>eligible(id,type)).map(([,person])=>person.phone+' '+person.name)
+  document.querySelector('#create-hint').textContent=hint.length?'演示号码：'+hint.join('、'):'当前类型没有可分配的子用户'
+  document.querySelector('#create-type-note').textContent=typeNotes[type] || ''
+}
+function showLookup(target){
+  const line=document.querySelector('#create-lookup')
+  if(!target || !people[target]){line.hidden=true; return}
+  line.hidden=false
+  line.className='lookup ok'
+  line.textContent='已找到：'+people[target].name
+}
+function syncCreate(){
+  const draft=state.create
+  document.querySelector('#create-owner-id').textContent=people[state.actor].userId
+  document.querySelector('#create-type').innerHTML=people[state.actor].permissions.map(type=>`<option value="${type}" ${draft.type===type?'selected':''}>${types[type]}</option>`).join('')
+  applyCreateCopy(draft.type)
+  const chosen=new Set(draft.funds)
+  document.querySelector('#create-funds').innerHTML=Object.entries(fundTypes).map(([key,label])=>`<label class="fund-pick"><input type="checkbox" name="create-fund" value="${key}" ${chosen.has(key)?'checked':''}>${label}</label>`).join('')
+  document.querySelector('#create-fund-error').hidden=draft.funds.length>0
+  document.querySelector('#create-phone').value=draft.phone||''
+  document.querySelector('#create-rate').value=draft.rate||'50'
+  showLookup(draft.target)
+  draft.paint=false
+}
+function openCreate(preset){
+  const permissions=people[state.actor].permissions
+  if(!permissions.length) return
+  const type=preset && permissions.includes(preset.type) ? preset.type : permissions[0]
+  const funds=preset && preset.funds && preset.funds.length ? preset.funds.filter(key=>fundTypes[key]) : Object.keys(fundTypes)
+  state.create={type, funds, target:preset && preset.target || '', phone:preset && preset.phone || '', rate:preset && preset.rate ? String(preset.rate) : '50', paint:true}
+  state.wallet=false
+  state.agreementPage=null
+  if(dialog.open) dialog.close()
+  render()
+  document.querySelector('#create-page h1').focus()
+}
+function leaveCreate(){
+  state.create=null
+  render()
+}
+function lookupChild(){
+  if(!state.create) return
+  const phone=document.querySelector('#create-phone').value.trim()
+  const found=Object.entries(people).find(([id,person])=>person.phone===phone && eligible(id,state.create.type))
+  const line=document.querySelector('#create-lookup')
+  line.hidden=false
+  if(!found){
+    state.create.target=''
+    line.className='lookup error'
+    line.textContent='未查询到可分配的子用户'
+    return
+  }
+  state.create.target=found[0]
+  state.create.phone=phone
+  line.className='lookup ok'
+  line.textContent='已找到：'+found[1].name
+}
+function submitCreate(){
+  if(!state.create) return
+  const type=state.create.type
+  const target=state.create.target
+  const rate=Number(document.querySelector('#create-rate').value)
+  const funds=(state.create.funds||[]).filter(key=>fundTypes[key])
+  if(!funds.length){document.querySelector('#create-fund-error').hidden=false; return}
+  if(!target){toast('请先查询子用户'); return}
+  if(!Number.isFinite(rate) || rate<=0 || rate>100){toast('比例需在 0.01 到 100 之间'); return}
+  if(!eligible(target,type) || !people[state.actor].permissions.includes(type)) return
+  const agreement={
+    id:Math.max(...agreements.map(item=>item.id))+1,type,from:state.actor,to:target,
+    payer:type==='team'?target:state.actor,receiver:type==='team'?state.actor:target,
+    rate,funds,status:'pending',created:demoTime()
+  }
+  agreements.unshift(agreement)
+  state.agreementFilter='all'
+  state.statusFilter='pending'
+  state.tab='agreements'
+  state.create=null
+  render()
+  toast('分配邀请已发送')
+}
+function demoTime(){
+  return new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai',dateStyle:'short',timeStyle:'medium'}).format(new Date())
+}
+let timer
+function toast(message){
+  const el=document.querySelector('#toast')
+  el.textContent=message
+  el.hidden=false
+  clearTimeout(timer)
+  timer=setTimeout(()=>{el.hidden=true},2400)
+}
+document.addEventListener('click',event=>{
+  const button=event.target.closest('[data-action]')
+  if(!button) return
+  const {action,value}=button.dataset
+  switch(action){
+    case 'back-wallet':
+      state.walletScroll=window.scrollY
+      state.wallet=true
+      render()
+      document.querySelector('#wallet-title').focus({preventScroll:true})
+      window.scrollTo(0,0)
+      break
+    case 'distribution':
+      state.wallet=false
+      render()
+      document.querySelector('#distribution-title').focus({preventScroll:true})
+      window.scrollTo(0,state.walletScroll)
+      break
+    case 'tab': state.tab=value; render(); break
+    case 'zeros': state.showZero=!state.showZero; render(); break
+    case 'rules': openDialog('规则说明','<p>收益归属方按协议比例分出收益，分配接收方获得对应金额。对方接受后，协议生效。</p><p>'+settlementRule+'</p><p>收到的分配收益单独入账，不进入下一份协议的分配基数。</p>'); break
+    case 'agreement':
+    case 'agreement-page': enterAgreementPage(Number(value)); break
+    case 'open-date': openTimeSheet(); break
+    case 'date-pick':
+      if(value==='custom') openTimeSheet('custom')
+      else { state.dateFilter=value; dialog.close(); render() }
+      break
+    case 'date-custom': {
+      const start=dialog.querySelector('#date-start').value
+      const end=dialog.querySelector('#date-end').value
+      if(start && end && start>end){ toast('开始日期不能晚于结束日期'); break }
+      state.customStart=start
+      state.customEnd=end
+      state.dateFilter='custom'
+      dialog.close()
+      render()
+      break
+    }
+    case 'back-agreement': leaveAgreementPage(); break
+    case 'start': openCreate(); break
+    case 'back-create': leaveCreate(); break
+    case 'lookup': lookupChild(); break
+    case 'submit-create': submitCreate(); break
+    case 'create-rules': openDialog('分配协议','<p>创建后，收益会先进入待分配状态，次日 0 点后按协议比例自动拆分。</p><p>'+settlementRule+'</p>'); break
+    case 'end': {
+      const agreement=agreements.find(item=>item.id===Number(value) && canEnd(item))
+      if(agreement) confirmEnd(agreement)
+      break
+    }
+    case 'confirm-end': {
+      const agreement=agreements.find(item=>item.id===Number(value) && canEnd(item))
+      if(!agreement) break
+      agreement.status='ended'
+      agreement.endedAt=demoTime()
+      dialog.close()
+      render()
+      toast('协议已解除')
+      break
+    }
+    case 'restart': {
+      const agreement=agreements.find(item=>item.id===Number(value) && canRestart(item))
+      if(agreement) openCreate({type:agreement.type, target:agreement.to, phone:people[agreement.to].phone, rate:agreement.rate, funds:agreement.funds})
+      break
+    }
+    case 'close': dialog.close(); break
+    case 'respond': {
+      const agreement=agreements.find(item=>item.id===Number(value) && canRespond(item))
+      if(!agreement) break
+      agreement.status=button.dataset.status
+      if(agreement.status==='live') agreement.effective=demoTime()
+      render()
+      toast(agreement.status==='live'?'协议已生效':'已拒绝协议')
+      break
+    }
+  }
+})
+document.addEventListener('input',event=>{
+  if(!state.create) return
+  if(event.target.id==='create-phone'){
+    state.create.target=''
+    state.create.phone=event.target.value.trim()
+    document.querySelector('#create-lookup').hidden=true
+  } else if(event.target.id==='create-rate') state.create.rate=event.target.value
+})
+document.addEventListener('change',event=>{
+  if(event.target===actor){
+    state.actor=actor.value
+    state.agreementFilter='all'
+    state.statusFilter='live'
+    state.create=null
+    state.recordFilter='all'
+    state.dateFilter='all'
+    state.customStart=''
+    state.customEnd=''
+    state.showZero=false
+    render()
+  } else if(event.target.id==='create-type' && state.create){
+    state.create.type=event.target.value
+    state.create.target=''
+    applyCreateCopy(state.create.type)
+    document.querySelector('#create-lookup').hidden=true
+  } else if(event.target.name==='create-fund' && state.create){
+    state.create.funds=[...document.querySelectorAll('input[name="create-fund"]:checked')].map(input=>input.value)
+    document.querySelector('#create-fund-error').hidden=state.create.funds.length>0
+  } else if(event.target.id==='create-phone' && state.create){
+    state.create.target=''
+    state.create.phone=event.target.value.trim()
+    document.querySelector('#create-lookup').hidden=true
+  } else if(event.target.name==='fund'){
+    if(dialog.querySelector('input[name="fund"]:checked')) dialog.querySelector('#fund-error').hidden=true
+  } else if(event.target.id==='agreement-relation'){
+    state.agreementFilter=event.target.value
+    render()
+    document.querySelector('#agreement-relation').focus()
+  } else if(event.target.id==='agreement-status'){
+    state.statusFilter=event.target.value
+    render()
+    document.querySelector('#agreement-status').focus()
+  } else if(event.target.id==='record-filter'){
+    state.recordFilter=event.target.value
+    render()
+    document.querySelector('#record-filter').focus()
+  }
+})
+dialog.addEventListener('submit',event=>{
+  if(event.target.id!=='create') return
+  event.preventDefault()
+  const form=event.target
+  const type=form.dataset.type
+  const values=new FormData(form)
+  const target=values.get('target')
+  const rate=Number(values.get('rate'))
+  const chosenFunds=values.getAll('fund')
+  const funds=Object.keys(fundTypes).filter(key=>chosenFunds.includes(key))
+  if(!funds.length){
+    form.querySelector('#fund-error').hidden=false
+    form.querySelector('input[name="fund"]').focus()
+    return
+  }
+  if(!people[target] || !eligible(target,type) || !Number.isFinite(rate) || rate<=0 || rate>100 || !people[state.actor].permissions.includes(type)) return
+  const agreement={
+    id:Math.max(...agreements.map(item=>item.id))+1,type,from:state.actor,to:target,
+    payer:type==='team'?target:state.actor,receiver:type==='team'?state.actor:target,
+    rate,funds,status:'pending',created:demoTime()
+  }
+  agreements.unshift(agreement)
+  state.agreementFilter='all'
+  state.tab='agreements'
+  dialog.close()
+  if(state.agreementPage!==null) leaveAgreementPage()
+  else render()
+  toast('协议已发送')
+})
+function publishOverlay(){
+  parent.postMessage({type:'coco006', overlay:dialog.open || Boolean(state.agreementPage) || Boolean(state.create)}, '*')
+}
+const originalRender = render
+render = function(){ originalRender(); publishOverlay() }
+dialog.addEventListener('toggle', publishOverlay)
+function applyScene(key){
+  const scene = {
+    linchuan:['captain','agreements',false,null],
+    records:['captain','records',false,null],
+    ahe:['user','agreements',false,null],
+    xiaoman:['member3','agreements',false,null],
+    renata:['member','agreements',false,101],
+    wallet:['captain','agreements',true,null]
+  }[key]
+  if(!scene) return
+  state.actor = scene[0]
+  state.tab = scene[1]
+  state.wallet = scene[2]
+  state.agreementPage = scene[3]
+  state.create = null
+  state.agreementFilter = 'all'
+  state.statusFilter = 'live'
+  state.recordFilter = 'all'
+  state.dateFilter = 'all'
+  state.customStart = ''
+  state.customEnd = ''
+  state.showZero = false
+  actor.value = scene[0]
+  if(dialog.open) dialog.close()
+  render()
+}
+window.addEventListener('message', event => {
+  const data = event.data || {}
+  if(data.type !== 'coco006') return
+  if(data.cmd === 'escape'){
+    if(dialog.open) dialog.close()
+    else if(state.create) leaveCreate()
+    else if(state.agreementPage) leaveAgreementPage()
+    publishOverlay()
+  } else if(data.scene) applyScene(data.scene)
+})
+render()
+applyScene(new URLSearchParams(location.search).get('screen') || 'linchuan')
+</script>
+</body>
+</html>

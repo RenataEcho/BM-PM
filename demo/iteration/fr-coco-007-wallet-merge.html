@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FR-CoCo-007 · 钱包合并 · v1 当前</title>
+  <link rel="stylesheet" href="fr-003-fusion-task.css">
+  <style>
+    [hidden]{display:none!important}
+    .main{display:flex;flex-direction:column;overflow:hidden;min-height:0}
+    .breadcrumb,.page-header,.page-tabs{flex:none}
+    .page-header{align-items:flex-start}.page-header>div{min-width:0}
+    .page-desc{max-width:720px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .view#view-fe,.view#view-flow{flex:1;min-height:0;height:auto}
+    .view#view-fe{display:grid;grid-template-columns:minmax(280px,46%) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"scenes scenes" "rules demo";gap:8px 16px;overflow:hidden}
+    .scene-panel{grid-area:scenes;min-height:0!important;overflow:visible!important;border:0!important;border-bottom:1px solid var(--border)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+    .scene-panel h2,.scene-help{display:none}.scene-list,.scene-panel #scenes{display:flex;align-items:flex-end;gap:16px;overflow-x:auto;flex:none;min-height:40px;padding:0 12px}
+    .scene-btn{width:auto!important;min-height:42px!important;padding:10px 0!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:transparent!important;color:var(--text-secondary)!important;white-space:nowrap}
+    .scene-btn strong{font-size:12px}.scene-btn span{display:none}.scene-btn.active{border-bottom-color:var(--primary)!important;color:var(--primary)!important}
+    .scene-btn:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+    .mockup-board{grid-area:demo;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}.board-caption{align-items:flex-start;flex:none;min-width:0;padding:8px 12px!important}.board-caption p{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}.board-caption span{font-size:11px;color:var(--text-muted);white-space:nowrap;flex:none}
+    .board-scroll{flex:1;min-height:0;padding:8px!important;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .device.phone{width:auto;height:auto;min-height:0;padding:8px;border-radius:30px;flex:none;overflow:hidden;box-sizing:border-box}
+    .device.phone iframe{display:block;width:390px;height:780px;border:0;border-radius:23px;background:#f6f4fb;transform-origin:top left}
+    #view-fe[data-scene="cards"] .board-scroll{align-items:stretch;justify-content:center;padding:8px 0!important;overflow:hidden}
+    #view-fe[data-scene="cards"] .device.phone{width:min(390px,100%)!important;height:100%!important;padding:0!important;border-radius:24px!important;background:#f7f8fa!important;box-shadow:none!important}
+    #view-fe[data-scene="cards"] .device.phone iframe{width:100%!important;height:100%!important;transform:none!important;border-radius:24px!important}
+    .context-rules{grid-area:rules;min-width:0;overflow:auto;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.78);box-shadow:0 8px 32px rgba(30,40,80,.06)}
+    .context-rules-head{position:sticky;top:0;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:10px 12px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--border)}
+    .context-rules-head h2{margin:0;font-size:15px}
+    .rule-actions{display:flex;align-items:center;gap:8px;flex:none}
+    .rule-edit-status{margin:6px 12px 0;color:var(--text-secondary);font-size:11px;line-height:1.45}
+    .rule-edit-status:empty{display:none}
+    .scene-rule-table{width:100%;min-width:0;border-collapse:collapse;table-layout:fixed}
+    .scene-rule-table th,.scene-rule-table td{padding:8px;text-align:left;vertical-align:top;font-size:12px;line-height:1.55;border-bottom:1px solid var(--border);white-space:pre-wrap;overflow-wrap:anywhere}
+    .scene-rule-table th{color:var(--text-primary);font-weight:700;background:#f8fafc}
+    .scene-rule-table th:first-child,.scene-rule-table td:first-child{width:108px}
+    .scene-rule-table .rule-op{width:64px;text-align:right;white-space:nowrap}
+    .scene-rule-table:not(.is-editing) .rule-op{display:none}
+    .scene-rule-table .module-cell,.scene-rule-table .rule-cell{width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:7px;padding:6px 8px;background:#fff;color:var(--text-primary);font:12px/1.55 inherit}
+    .scene-rule-table .rule-cell{min-height:32px;overflow:hidden;resize:none}
+    .context-rules-body{padding:0}
+    .rule-view{width:100%;border-collapse:collapse;table-layout:fixed}
+    .rule-view th,.rule-view td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top;font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;height:auto}
+    .rule-view th{background:#f8fafc;color:var(--text-primary);font-weight:700}
+    .rule-view td:first-child{width:32%;color:var(--text-primary);font-weight:600}
+    .rule-view td:last-child{color:var(--text-secondary)}
+    .rule-section .rule-view{margin-top:4px}
+    .view#view-flow{overflow:auto}.flow-page{padding:0}.flow-svg-wrap{max-height:none;overflow:auto}
+    .flow-edges line,.flow-edges polyline{stroke:#94a3b8;stroke-width:1.5;fill:none}
+    .flow-edges.flow-loop line,.flow-edges.flow-loop polyline{stroke:#64748b;stroke-dasharray:6 4}
+    .rule-panel{display:block}.rule-content p{margin:0 0 8px}.rule-content strong{color:var(--text-primary)}
+    .drawer-overlay.open{opacity:1;pointer-events:auto}.drawer.open{transform:translateX(0)}
+    html.embedded,html.embedded body{height:100%;overflow:hidden}
+    .embedded .topnav,.embedded .sidebar{display:none}.embedded .main{top:0;right:0;bottom:0;left:0;padding:8px 16px 12px}
+    .embedded .breadcrumb,.embedded .page-header,.embedded .page-tabs{margin-bottom:8px}
+    .embedded .page-header h1{font-size:16px}.embedded .page-desc{font-size:12px;line-height:1.45}
+    .page-header-actions{display:flex;gap:8px;flex-shrink:0}
+    .tab-review-exit{display:none;position:fixed;top:16px;right:16px;z-index:720}
+    html.is-tab-review .tab-review-exit{display:inline-flex}
+    html.is-tab-review .view:not([hidden]){position:fixed;inset:0;z-index:640;height:100vh;min-height:0;margin:0;padding:64px 16px 16px;background:#f0f4f8;box-sizing:border-box;overflow:hidden}
+    html.is-tab-review .view#view-fe:not([hidden]),html.is-tab-review .view#view-flow:not([hidden]){height:100vh;min-height:0}
+    html.is-tab-review .view#view-fe:not([hidden]){grid-template-columns:minmax(360px,46%) minmax(0,1fr)}
+    html.is-tab-review .view#view-flow:not([hidden]){overflow:auto}
+    html.is-tab-review .view#view-flow .flow-svg-wrap{max-height:none}
+    html.is-tab-review .drawer-overlay{z-index:760}
+    html.is-tab-review .drawer{z-index:761}
+    @media(max-width:860px){.view#view-fe{grid-template-columns:minmax(240px,42%) minmax(0,1fr)}}
+  </style>
+</head>
+<body>
+  <header class="topnav" id="topnav"><a href="framework-shell.html#youbao/overview" class="brand-text">BM-PM · 迭代需求</a><span class="business-line">右豹主业务</span><span class="topnote">产品交互演示</span></header>
+  <aside class="sidebar" id="sidebar"><div class="sidebar-brand"><b>右豹主业务</b><p class="brand-sub">需求与设计</p></div><nav class="sidebar-scroll" aria-label="项目导航"><a class="nav-item" href="framework-shell.html#youbao/overview">概览</a><a class="nav-item" href="framework-shell.html#youbao/components">组件规范</a></nav><div class="sidebar-foot">FR-CoCo-007<br>钱包合并 · v1</div></aside>
+
+  <main class="main" id="pageMain">
+    <nav class="breadcrumb"><a href="framework-shell.html#youbao/overview">右豹主业务</a> / 钱包合并</nav>
+    <header class="page-header">
+      <div><h1>FR-CoCo-007 · 钱包合并 · v1 当前</h1><p class="page-desc">三个钱包收成一个豹钱包，并增加零钱包。改版前的余额仍要用户主动划转。可提现余额划入零钱包后才能提现。</p></div>
+      <div class="page-header-actions">
+        <button class="btn btn-ghost" id="openTabReview" type="button">全屏预览</button>
+        <button class="btn btn-rule" id="rulesOpen" type="button" aria-expanded="false" aria-controls="rulesDrawer">需求规则</button>
+      </div>
+    </header>
+    <nav class="page-tabs" role="tablist" aria-label="需求视图">
+      <button class="btn btn-ghost active" id="tab-fe" type="button" role="tab" aria-selected="true" aria-controls="view-fe" data-tab="fe">前端交互</button>
+      <button class="btn btn-ghost" id="tab-flow" type="button" role="tab" aria-selected="false" aria-controls="view-flow" data-tab="flow">业务流程</button>
+    </nav>
+
+    <section id="view-fe" class="view" role="tabpanel" aria-labelledby="tab-fe">
+      <aside class="scene-panel" aria-label="钱包场景">
+        <h2>场景演示</h2>
+        <div class="scene-list" id="scenes" role="tablist" aria-label="需求场景">
+          <button class="scene-btn active" type="button" role="tab" aria-selected="true" data-screen="home"><strong>钱包首页</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="income"><strong>总收益</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="detail"><strong>收益明细</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="cards"><strong>明细卡片</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="bills"><strong>账单明细</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="coin"><strong>划转</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="coin-tax"><strong>应税划转</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="history"><strong>历史划转</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="agree"><strong>应税同意</strong></button>
+          <button class="scene-btn" type="button" role="tab" aria-selected="false" data-screen="books"><strong>账本对照</strong></button>
+        </div>
+      </aside>
+      <div class="mockup-board">
+        <div class="board-caption"><div><b id="sceneTitle">钱包首页</b><p id="sceneDesc">头图是可提现资金。三格是可划转余额、已提现、已划转。</p></div><span>右豹主业务</span></div>
+        <div class="board-scroll"><div class="device phone"><iframe id="phone" title="FR-CoCo-007 钱包手机演示" src="fr-coco-007-phone.html?embed=1&amp;screen=home&amp;v=20261127-card-layout"></iframe></div></div>
+      </div>
+      <aside class="context-rules" aria-label="需求规则" aria-live="polite">
+        <div class="context-rules-head">
+          <h2 id="contextTitle">钱包首页</h2>
+          <div class="rule-actions">
+            <button class="btn btn-ghost btn-sm" id="addSceneRule" type="button" hidden>新增一行</button>
+            <button class="btn btn-primary btn-sm" id="editSceneRules" type="button">编辑</button>
+          </div>
+        </div>
+        <p class="rule-edit-status" id="ruleEditStatus" role="status"></p>
+        <div class="context-rules-body">
+          <table class="scene-rule-table">
+            <thead><tr><th>功能/模块</th><th>规则说明</th><th class="rule-op"></th></tr></thead>
+            <tbody id="contextRules"></tbody>
+          </table>
+        </div>
+      </aside>
+    </section>
+
+    <section id="view-flow" class="view" role="tabpanel" aria-labelledby="tab-flow" hidden>
+      <div class="flow-page">
+        <p class="flow-page-intro">一张图走完：新收益直接进可提现；历史余额划转应税后也进可提现；再划入零钱包；只从零钱包提现。失败和拦截回到对应填单。</p>
+        <div class="flow-svg-wrap">
+          <svg width="1280" height="2320" viewBox="0 0 1280 2320" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="lw-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#94a3b8"/></marker>
+              <marker id="lw-arrow-loop" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#64748b"/></marker>
+            </defs>
+            <g class="flow-edges" marker-end="url(#lw-arrow)">
+              <line x1="560" y1="68" x2="560" y2="104" />
+              <line x1="560" y1="200" x2="560" y2="236" />
+              <line x1="560" y1="292" x2="560" y2="328" />
+              <line x1="560" y1="424" x2="560" y2="460" />
+              <line x1="560" y1="556" x2="560" y2="592" />
+              <line x1="560" y1="688" x2="560" y2="724" />
+              <line x1="560" y1="776" x2="560" y2="812" />
+              <line x1="560" y1="908" x2="560" y2="944" />
+              <line x1="560" y1="1008" x2="560" y2="1044" />
+              <line x1="560" y1="1108" x2="560" y2="1144" />
+              <line x1="560" y1="1192" x2="560" y2="1228" />
+              <line x1="560" y1="1324" x2="560" y2="1360" />
+              <line x1="560" y1="1416" x2="560" y2="1452" />
+              <line x1="560" y1="1500" x2="560" y2="1536" />
+              <line x1="560" y1="1632" x2="560" y2="1668" />
+              <line x1="560" y1="1724" x2="560" y2="1760" />
+              <line x1="560" y1="1804" x2="560" y2="1840" />
+              <line x1="560" y1="1936" x2="560" y2="1972" />
+              <line x1="560" y1="2068" x2="560" y2="2104" />
+              <line x1="560" y1="2200" x2="560" y2="2236" />
+              <line x1="642" y1="152" x2="880" y2="152" />
+              <polyline points="1090,152 1240,152 1240,976 760,976" />
+              <line x1="478" y1="376" x2="192" y2="376" />
+              <line x1="478" y1="508" x2="192" y2="508" />
+              <line x1="642" y1="640" x2="880" y2="640" />
+              <polyline points="1090,640 1240,640 1240,976" />
+              <line x1="478" y1="860" x2="192" y2="860" />
+              <line x1="478" y1="1276" x2="192" y2="1276" />
+              <line x1="478" y1="1584" x2="192" y2="1584" />
+            </g>
+            <g class="flow-edges flow-loop" marker-end="url(#lw-arrow-loop)">
+              <polyline points="16,376 8,376 8,264 360,264" />
+              <polyline points="16,508 8,508 8,264 360,264" />
+              <polyline points="16,860 8,860 8,1076 360,1076" />
+              <polyline points="16,1276 8,1276 8,1168 360,1168" />
+              <polyline points="16,1584 8,1584 8,1476 360,1476" />
+              <polyline points="642,1888 1240,1888 1240,264 760,264" />
+              <polyline points="642,2020 1240,2020 1240,1168 760,1168" />
+              <polyline points="642,2152 1240,2152 1240,1476 760,1476" />
+              <polyline points="760,2260 1240,2260 1240,8 560,8 560,20" />
+            </g>
+            <g class="flow-nodes" font-family="Inter, PingFang SC, sans-serif">
+              <rect x="360" y="20" width="400" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+              <text x="560" y="48" text-anchor="middle" font-size="12" fill="#18222f">收益入账到达</text>
+              <polygon points="560,104 642,152 560,200 478,152" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="156" text-anchor="middle" font-size="12" fill="#92400e">历史未划转?</text>
+              <text x="668" y="144" font-size="11" fill="#dc2626">否</text>
+              <text x="572" y="216" font-size="11" fill="#16a34a">是</text>
+              <rect x="880" y="124" width="210" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+              <text x="985" y="146" text-anchor="middle" font-size="12" fill="#18222f">新收益进可提现</text>
+              <text x="985" y="164" text-anchor="middle" font-size="10" fill="#64748b">不进三个口袋</text>
+              <rect x="360" y="236" width="400" height="56" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+              <text x="560" y="258" text-anchor="middle" font-size="12" fill="#18222f">历史划转：带入全部旧钱包余额</text>
+              <text x="560" y="276" text-anchor="middle" font-size="10" fill="#64748b">不能选账户 · 不能改金额</text>
+              <polygon points="560,328 642,376 560,424 478,376" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="380" text-anchor="middle" font-size="12" fill="#92400e">金额合法?</text>
+              <text x="400" y="368" font-size="11" fill="#dc2626">否</text>
+              <text x="572" y="440" font-size="11" fill="#16a34a">是</text>
+              <rect x="16" y="348" width="176" height="56" rx="8" fill="#fef2f2" stroke="#dc2626"/>
+              <text x="104" y="370" text-anchor="middle" font-size="12" fill="#991b1b">拦截</text>
+              <text x="104" y="388" text-anchor="middle" font-size="10" fill="#64748b">回历史划转</text>
+              <polygon points="560,460 642,508 560,556 478,508" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="512" text-anchor="middle" font-size="12" fill="#92400e">已同意协议?</text>
+              <text x="400" y="500" font-size="11" fill="#dc2626">否</text>
+              <text x="572" y="572" font-size="11" fill="#16a34a">是</text>
+              <rect x="16" y="472" width="176" height="72" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+              <text x="104" y="496" text-anchor="middle" font-size="12" fill="#18222f">弹出协议</text>
+              <text x="104" y="514" text-anchor="middle" font-size="10" fill="#64748b">不同意回填单</text>
+              <text x="104" y="530" text-anchor="middle" font-size="10" fill="#16a34a">同意后继续</text>
+              <polygon points="560,592 642,640 560,688 478,640" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="644" text-anchor="middle" font-size="12" fill="#92400e">对公账户?</text>
+              <text x="668" y="632" font-size="11" fill="#16a34a">是</text>
+              <text x="548" y="704" font-size="11" fill="#dc2626">否</text>
+              <rect x="880" y="612" width="210" height="56" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+              <text x="985" y="634" text-anchor="middle" font-size="12" fill="#334155">跳过应税</text>
+              <text x="985" y="652" text-anchor="middle" font-size="10" fill="#64748b">全额进可提现</text>
+              <rect x="360" y="724" width="400" height="52" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+              <text x="560" y="754" text-anchor="middle" font-size="12" fill="#18222f">调用云账户计算税额</text>
+              <polygon points="560,812 642,860 560,908 478,860" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="864" text-anchor="middle" font-size="12" fill="#92400e">应税成功?</text>
+              <text x="400" y="852" font-size="11" fill="#dc2626">否</text>
+              <text x="572" y="924" font-size="11" fill="#16a34a">是</text>
+              <rect x="16" y="832" width="176" height="56" rx="8" fill="#fef2f2" stroke="#dc2626"/>
+              <text x="104" y="854" text-anchor="middle" font-size="12" fill="#991b1b">划转失败</text>
+              <text x="104" y="872" text-anchor="middle" font-size="10" fill="#64748b">历史余额不扣</text>
+              <rect x="360" y="944" width="400" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+              <text x="560" y="970" text-anchor="middle" font-size="12" fill="#18222f">可提现余额增加</text>
+              <text x="560" y="990" text-anchor="middle" font-size="10" fill="#64748b">新收益全额 · 历史划转为税后</text>
+              <rect x="360" y="1044" width="400" height="64" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+              <text x="560" y="1070" text-anchor="middle" font-size="12" fill="#18222f">首页展示总收益与四个入口</text>
+              <text x="560" y="1090" text-anchor="middle" font-size="10" fill="#64748b">总收益、余额动账、历史划转</text>
+              <rect x="360" y="1144" width="400" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+              <text x="560" y="1172" text-anchor="middle" font-size="12" fill="#18222f">用户把可提现划入零钱包</text>
+              <polygon points="560,1228 642,1276 560,1324 478,1276" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="1280" text-anchor="middle" font-size="12" fill="#92400e">不超过可提现?</text>
+              <text x="390" y="1268" font-size="11" fill="#dc2626">否</text>
+              <text x="572" y="1340" font-size="11" fill="#16a34a">是</text>
+              <rect x="16" y="1248" width="176" height="56" rx="8" fill="#fef2f2" stroke="#dc2626"/>
+              <text x="104" y="1270" text-anchor="middle" font-size="12" fill="#991b1b">拦截</text>
+              <text x="104" y="1288" text-anchor="middle" font-size="10" fill="#64748b">回划入页</text>
+              <rect x="360" y="1360" width="400" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+              <text x="560" y="1382" text-anchor="middle" font-size="12" fill="#18222f">可提现减少，零钱包增加</text>
+              <text x="560" y="1400" text-anchor="middle" font-size="10" fill="#64748b">不再扣税</text>
+              <rect x="360" y="1452" width="400" height="48" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+              <text x="560" y="1480" text-anchor="middle" font-size="12" fill="#18222f">从零钱包发起提现</text>
+              <polygon points="560,1536 642,1584 560,1632 478,1584" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="1588" text-anchor="middle" font-size="12" fill="#92400e">不超过零钱包?</text>
+              <text x="390" y="1576" font-size="11" fill="#dc2626">否</text>
+              <text x="572" y="1648" font-size="11" fill="#16a34a">是</text>
+              <rect x="16" y="1556" width="176" height="56" rx="8" fill="#fef2f2" stroke="#dc2626"/>
+              <text x="104" y="1578" text-anchor="middle" font-size="12" fill="#991b1b">拦截</text>
+              <text x="104" y="1596" text-anchor="middle" font-size="10" fill="#64748b">回提现页</text>
+              <rect x="360" y="1668" width="400" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+              <text x="560" y="1690" text-anchor="middle" font-size="12" fill="#18222f">扣零钱包并打款</text>
+              <text x="560" y="1708" text-anchor="middle" font-size="10" fill="#64748b">可提现余额不变 · 不再扣税</text>
+              <rect x="360" y="1760" width="400" height="44" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+              <text x="560" y="1786" text-anchor="middle" font-size="12" fill="#18222f">回到豹钱包首页</text>
+              <polygon points="560,1840 642,1888 560,1936 478,1888" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="1892" text-anchor="middle" font-size="12" fill="#92400e">仍有历史?</text>
+              <text x="668" y="1880" font-size="11" fill="#16a34a">是</text>
+              <text x="572" y="1952" font-size="11" fill="#64748b">否</text>
+              <polygon points="560,1972 642,2020 560,2068 478,2020" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="2024" text-anchor="middle" font-size="12" fill="#92400e">仍有可提现?</text>
+              <text x="668" y="2012" font-size="11" fill="#16a34a">是</text>
+              <text x="572" y="2084" font-size="11" fill="#64748b">否</text>
+              <polygon points="560,2104 642,2152 560,2200 478,2152" fill="#fffbeb" stroke="#d97706"/>
+              <text x="560" y="2156" text-anchor="middle" font-size="12" fill="#92400e">仍有零钱包?</text>
+              <text x="668" y="2144" font-size="11" fill="#16a34a">是</text>
+              <text x="572" y="2216" font-size="11" fill="#64748b">否</text>
+              <rect x="360" y="2236" width="400" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+              <text x="560" y="2264" text-anchor="middle" font-size="12" fill="#18222f">本轮完成 · 可再入账</text>
+            </g>
+          </svg>
+        </div>
+        <div class="flow-legend"><span><i style="background:#eff6ff;border:1px solid #2563eb"></i>前端 / 操作</span><span><i style="background:#f0fdf4;border:1px solid #16a34a"></i>后端 / 写入</span><span><i style="background:#fff7ed;border:1px solid #ea580c"></i>异步 / 应税</span><span><i style="background:#fffbeb;border:1px solid #d97706"></i>校验 / 分支</span><span><i style="background:#fef2f2;border:1px solid #dc2626"></i>阻断</span><span><i style="background:#f1f5f9;border:1px solid #94a3b8"></i>跳过</span><span>虚线 = 回到主链</span></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="btn btn-ghost tab-review-exit" id="exitTabReview" type="button">退出全屏</button>
+  <div class="drawer-overlay" id="ruleMask" hidden></div>
+  <aside class="drawer rule" id="rulesDrawer" hidden role="dialog" aria-modal="true" aria-labelledby="ruleTitle">
+    <div class="drawer-header"><h2 id="ruleTitle">FR-CoCo-007 · v1 需求规则</h2><button class="drawer-close" id="rulesClose" type="button" aria-label="关闭需求规则">×</button></div>
+    <div class="rule-tab-bar" role="tablist" aria-label="规则类型">
+      <button class="active" type="button" role="tab" id="ruleTabFe" aria-selected="true">前端需求</button>
+      <button type="button" role="tab" id="ruleTabAdmin" aria-selected="false">后台需求</button>
+    </div>
+    <div class="drawer-body" style="padding:0">
+      <section class="rule-panel" id="rulePanelFe" aria-label="前端需求规则">
+        <div id="fullSceneRules"></div>
+        <div class="rule-section"><h3>业务流程</h3><div class="rule-content"><p>见本页业务流程。</p></div></div>
+      </section>
+      <section class="rule-panel" id="rulePanelAdmin" aria-label="后台需求规则" hidden>
+        <div class="rule-section"><h3>1 账本</h3><div class="rule-content"><p>可提现余额接收新收益和历史划转税后金额，划入零钱包时减少。提现不减少它。零钱包只接受从可提现划入，提现只减少零钱包。历史可划转只保留存量，新结算不再写入三个旧口袋。</p></div></div>
+        <div class="rule-section"><h3>2 动账字段</h3><div class="rule-content"><p>余额动账保留时间、标题、方向、金额、口袋、动账后余额、备注。收益动账保留时间、标题、方向、金额、分类、动账后该分类收益。列表按时间倒序。</p></div></div>
+        <div class="rule-section"><h3>3 应税</h3><div class="rule-content"><p>历史划转沿用 FR-016：个人调云账户，对公跳过。Demo 里的 3% 只是示例。划转有两套接口：当前接口不接收实名账户；换成钱包应税接口后，划入必须带上所选实名账户。</p></div></div>
+        <div class="rule-section"><h3>4 业务流程</h3><div class="rule-content"><p>见本页业务流程。</p></div></div>
+      </section>
+    </div>
+  </aside>
+
+  <script>
+    if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embedded');
+    const phone = document.getElementById('phone');
+    const sceneButtons = [...document.querySelectorAll('[data-screen]')];
+    const sceneTitles = {home:'钱包首页', income:'总收益', detail:'收益明细', cards:'明细卡片', bills:'账单明细', coin:'划转', 'coin-tax':'应税划转', history:'历史划转', agree:'应税同意', books:'账本对照'};
+    const sceneDesc = {
+      home:'头图是可提现资金。三格是可划转余额、已提现、已划转。',
+      income:'累计收益下是今日预估、今日结算、昨日结算、本月结算、累计已结算、待结算总额。可按项目、团队、平台，以及按周或按月看趋势。',
+      detail:'资金类型和标签只有项目收益、团队收益、平台发放。每条有结算时间、金额和收入或支出。',
+      cards:'四张卡片分开写：项目正常收益、项目活动收益、团队奖励、平台发放。',
+      bills:'累计提现、实际到账、预扣税额。可按收入或支出、个人或对公，以及时间筛选。',
+      coin:'当前接口不选择实名账户。只填划入金额。',
+      'coin-tax':'钱包应税接口下，先选实名账户，再填划入金额。',
+      history:'三个旧钱包的全部余额已填好。不能选账户，也不能改金额。',
+      agree:'首次确认历史划转时弹出。勾选协议后才发生划转。',
+      books:'总收入、可提现、零钱包、历史可划转对照。'
+    };
+    let sceneRules = {
+      home:[['钱包首页',['标题「我的钱包」靠左。头图大数字是可提现资金，带「安全保障中」。','三格为可划转余额、已提现、已划转。按钮是划转、提现。','点「提现」弹出开发规则：使用已经开发的钱包2.0提现页面样式即可。','头图下每项单独一张卡片：总收入、提现账户、收益明细、账单明细、历史余额划转。','收益明细和账单明细卡片右侧用灰色小字显示最新一条动态。']]],
+      income:[['总收益',['从首页「总收入」进入收益统计分析。','累计收益下依次为今日预估、今日结算、昨日结算、本月结算、累计已结算、待结算总额。累计已结算为全部已结算金额。今日预估和待结算总额不并进累计收益。','可切换全部、项目收益、团队收益、平台发放。趋势可按周或按月看。']]],
+      detail:[['筛选条件',['动账类型为收入、支出。','资金类型只有项目收益、团队收益、平台发放。']],['收益明细',['卡片不展示收益标签。','项目额外奖励写在正常结算描述里，并突出显示。','状态用灰色字：已结算、已扣回、已分配。每条都有结算时间和金额。']]],
+      cards:[['项目正常收益',['标题是项目名称加关键词或口令。','描述是「项目名称」打款订单日期 yy-mm-dd 结算收益到账 xxx元，并突出包含的项目额外奖励。']],['项目活动收益',['标题是项目活动收益「项目名称.关键词xxx」。','描述用奖励表导入的奖励描述。']],['团队奖励',['标题是团队奖励。','描述是订单来源:UC网盘团队奖励(直属成员:xxx)xx.xx元。']],['平台发放',['标题用奖励表的标题字段。','描述用奖励表的奖励描述字段。']],['共用字段',['卡片按真机宽度展示，不带收益标签。','状态是灰色的已结算、已扣回或已分配。每条都有结算时间和金额。']]],
+      bills:[['账单明细',['页头为累计提现、实际到账、预扣税额。云账户接口更换前，预扣税额为提现时产生的；更换后为划转时产生的。']],['筛选条件',['动账类型为收入、支出。提现类型为个人、对公。全部时间按现有的时间组件。']],['数据列表',['列表含划转到账、对公提现、个人提现。划转标题是划转至实名和脱敏身份，副标题是实际到账。']]],
+      coin:[['划转',['当前接口不展示实名账户，也不校验。','金额不超过可划转余额，可部分划入。金额为空、为 0 或超出余额时不能提交。','成功后可划转余额减少、可提现资金增加。动账标题不带实名。']]],
+      'coin-tax':[['应税划转',['后端换成钱包应税接口后，划入前必须选择实名账户。','未选账户、金额为空、为 0 或超出余额时不能提交。','成功后可划转余额减少、可提现资金增加。动账标题带上所选实名。']]],
+      history:[['历史划转',['项目、团队、活动三个旧钱包的全部余额直接填入。','不能选择实名账户，也不能输入或修改金额。','首次确认弹出协议，一次划完全部。']]],
+      agree:[['应税同意',['首次确认历史划转时弹出。勾选协议后才能划转。','不同意则回到填单，历史余额不扣。同意后不再弹出。','个人按云账户税额扣税，对公跳过。应税失败则历史余额不扣、可提现不加。']]],
+      books:[['账本对照',['对照总收益、待结算、可划转余额、可提现资金、已提现和历史可划转。','提现只减可提现资金。可划转余额要先划入。','历史余额划转成功后才进入可划转余额。']]]
+    };
+    let currentScreen = 'home';
+    let editingRules = false;
+    let ruleBase = null;
+    function escapeHtml(text){return text.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));}
+    function ruleTable(groups){
+      const rows = [];
+      (groups || []).forEach(group => group[1].forEach((line, index) => {
+        const moduleCell = index === 0 ? `<td rowspan="${group[1].length}">${escapeHtml(group[0])}</td>` : '';
+        rows.push(`<tr>${moduleCell}<td>${escapeHtml(line)}</td></tr>`);
+      }));
+      return `<table class="rule-view"><thead><tr><th>功能/模块</th><th>规则说明</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+    }
+    function rowsFromGroups(groups){
+      const rows = [];
+      (groups || []).forEach(group => (group[1] || []).forEach(line => rows.push({module:group[0], rule:line})));
+      return rows;
+    }
+    function groupsFromRows(rows){
+      const groups = [];
+      rows.forEach(row => {
+        const moduleName = row.module.trim();
+        const text = row.rule.trim();
+        if (!moduleName && !text) return;
+        if (!moduleName || !text) throw Error('每一行都要填写功能/模块和规则说明');
+        const last = groups.at(-1);
+        if (last && last[0] === moduleName) last[1].push(text);
+        else groups.push([moduleName, [text]]);
+      });
+      if (!groups.length) throw Error('至少保留一行规则');
+      return groups;
+    }
+    function ruleRowsHtml(rows, editing){
+      if (!editing) return rows.map(row => `<tr><td>${escapeHtml(row.module)}</td><td>${escapeHtml(row.rule)}</td></tr>`).join('') || '<tr><td colspan="2">还没有规则。</td></tr>';
+      return rows.map((row, index) => `<tr><td><input class="module-cell" data-field="module" data-index="${index}" value="${escapeHtml(row.module)}" aria-label="功能/模块"></td><td><textarea class="rule-cell" data-field="rule" data-index="${index}" rows="1" aria-label="规则说明">${escapeHtml(row.rule)}</textarea></td><td class="rule-op"><button class="btn btn-danger-ghost btn-sm" type="button" data-remove="${index}">删除</button></td></tr>`).join('') || '<tr><td colspan="3">还没有规则，点击新增一行。</td></tr>';
+    }
+    const contextRules = document.getElementById('contextRules');
+    const sceneRuleTable = document.querySelector('.scene-rule-table');
+    const addSceneRule = document.getElementById('addSceneRule');
+    const editSceneRules = document.getElementById('editSceneRules');
+    const editStatus = document.getElementById('ruleEditStatus');
+    let draftRows = null;
+    function fitRuleField(field){
+      field.style.height = '0';
+      field.style.height = field.scrollHeight + 'px';
+    }
+    function renderContext(screen){
+      const editing = editingRules && screen === currentScreen;
+      document.getElementById('contextTitle').textContent = sceneTitles[screen];
+      document.getElementById('sceneTitle').textContent = sceneTitles[screen];
+      document.getElementById('sceneDesc').textContent = sceneDesc[screen];
+      contextRules.innerHTML = ruleRowsHtml(editing ? draftRows : rowsFromGroups(sceneRules[screen]), editing);
+      sceneRuleTable.classList.toggle('is-editing', editing);
+      addSceneRule.hidden = !editing;
+      editSceneRules.textContent = editing ? '保存' : '编辑';
+      if (editing) requestAnimationFrame(() => contextRules.querySelectorAll('[data-field="rule"]').forEach(fitRuleField));
+    }
+    function renderFullRules(){
+      document.getElementById('fullSceneRules').innerHTML = Object.keys(sceneTitles).map(screen => `<section class="rule-section"><h3>${escapeHtml(sceneTitles[screen])}</h3>${ruleTable(sceneRules[screen])}</section>`).join('');
+    }
+    const PHONE_W = 390, PHONE_H = 780;
+    function fitPhone(){
+      const view = document.getElementById('view-fe');
+      const panel = view.querySelector('.mockup-board');
+      const board = view.querySelector('.board-scroll');
+      const device = view.querySelector('.device.phone');
+      if (!board || !device || view.hidden) return;
+      if (panel) panel.style.width = '';
+      const selected = document.querySelector('#scenes .scene-btn.active');
+      const screen = selected && selected.dataset.screen || currentScreen;
+      view.dataset.scene = screen;
+      if (screen === 'cards') {
+        phone.style.transform = 'none';
+        device.style.width = Math.min(390, board.clientWidth) + 'px';
+        device.style.height = '100%';
+        return;
+      }
+      const availW = board.clientWidth - 16;
+      const availH = board.clientHeight - 16;
+      if (availW < 80 || availH < 80) return;
+      const scale = Math.min(1, availW / (PHONE_W + 16), availH / (PHONE_H + 16));
+      phone.style.transform = 'scale(' + scale + ')';
+      device.style.width = Math.floor(PHONE_W * scale + 16) + 'px';
+      device.style.height = Math.floor(PHONE_H * scale + 16) + 'px';
+    }
+    function scheduleFit(){ requestAnimationFrame(() => requestAnimationFrame(fitPhone)); }
+    function postScreen(screen){
+      if (!phone.contentWindow) return;
+      phone.contentWindow.postMessage({type:'coco007', screen:screen}, '*');
+    }
+    function selectScene(button){
+      editingRules = false;
+      draftRows = null;
+      editStatus.textContent = '';
+      currentScreen = button.dataset.screen;
+      document.getElementById('view-fe').dataset.scene = currentScreen;
+      sceneButtons.forEach(item => {const selected = item === button; item.classList.toggle('active', selected); item.setAttribute('aria-selected', String(selected));});
+      renderContext(currentScreen);
+      postScreen(currentScreen);
+      scheduleFit();
+    }
+    sceneButtons.forEach(button => button.addEventListener('click', () => selectScene(button)));
+    phone.addEventListener('load', () => { postScreen(currentScreen); scheduleFit(); });
+    window.addEventListener('resize', scheduleFit);
+    if (window.ResizeObserver) new ResizeObserver(scheduleFit).observe(document.querySelector('#view-fe .board-scroll'));
+    contextRules.addEventListener('input', event => {
+      if (!editingRules || !draftRows) return;
+      const field = event.target.dataset.field;
+      const index = Number(event.target.dataset.index);
+      if (!field || !draftRows[index]) return;
+      draftRows[index][field] = event.target.value;
+      if (field === 'rule') fitRuleField(event.target);
+    });
+    contextRules.addEventListener('click', event => {
+      const button = event.target.closest('[data-remove]');
+      if (!button || !draftRows) return;
+      draftRows.splice(Number(button.dataset.remove), 1);
+      if (!draftRows.length) draftRows.push({module:'', rule:''});
+      renderContext(currentScreen);
+    });
+    addSceneRule.addEventListener('click', () => {
+      if (!editingRules || !draftRows) return;
+      const last = draftRows.at(-1);
+      draftRows.push({module:last ? last.module : '', rule:''});
+      renderContext(currentScreen);
+      const fields = contextRules.querySelectorAll('[data-field="module"]');
+      fields[fields.length - 1].focus();
+    });
+    editSceneRules.addEventListener('click', async function () {
+      if (!editingRules) {
+        editingRules = true;
+        ruleBase = JSON.parse(JSON.stringify(sceneRules[currentScreen]));
+        draftRows = rowsFromGroups(ruleBase);
+        if (!draftRows.length) draftRows.push({module:'', rule:''});
+        editStatus.textContent = '';
+        renderContext(currentScreen);
+        const first = contextRules.querySelector('input');
+        if (first) first.focus();
+        return;
+      }
+      try {
+        const groups = groupsFromRows(draftRows);
+        this.disabled = true;
+        const response = await fetch('/__local/coco007-rules', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({view:currentScreen, groups, base:ruleBase})});
+        if (!response.ok) {
+          const error = await response.json().catch(() => ({error:'保存服务不可用，请用 python3 scripts/preview_server.py 启动预览'}));
+          throw Error(error.error);
+        }
+        sceneRules[currentScreen] = groups;
+        ruleBase = JSON.parse(JSON.stringify(groups));
+        editingRules = false;
+        draftRows = null;
+        renderFullRules();
+        renderContext(currentScreen);
+        editStatus.textContent = '已保存';
+      } catch (error) {
+        editStatus.textContent = error.message;
+      } finally {
+        this.disabled = false;
+      }
+    });
+    scheduleFit();
+    renderContext('home');
+    renderFullRules();
+    fetch('/__local/coco007-rules').then(response => { if (!response.ok) throw Error(); return response.json(); }).then(data => {
+      if (editingRules) return;
+      sceneRules = data;
+      renderContext(currentScreen);
+      renderFullRules();
+    }).catch(() => { editStatus.textContent = '当前为只读预览；保存请使用 python3 scripts/preview_server.py 启动本地服务。'; });
+
+    const tabButtons = [...document.querySelectorAll('[data-tab]')];
+    function showTab(name, updateUrl){
+      if (name !== 'flow') name = 'fe';
+      tabButtons.forEach(button => {const selected = button.dataset.tab === name; button.classList.toggle('active', selected); button.setAttribute('aria-selected', String(selected)); document.getElementById('view-' + button.dataset.tab).hidden = !selected;});
+      if (updateUrl){const url = new URL(location.href); url.searchParams.set('tab', name); history.replaceState(null, '', url);}
+      scheduleFit();
+    }
+    tabButtons.forEach(button => button.addEventListener('click', () => showTab(button.dataset.tab, true)));
+    showTab(new URLSearchParams(location.search).get('tab'), false);
+
+    const mask = document.getElementById('ruleMask'), drawer = document.getElementById('rulesDrawer'), openButton = document.getElementById('rulesOpen'), closeButton = document.getElementById('rulesClose');
+    const ruleTabFe = document.getElementById('ruleTabFe'), ruleTabAdmin = document.getElementById('ruleTabAdmin');
+    function showRuleTab(which){
+      const fe = which === 'fe';
+      document.getElementById('rulePanelFe').hidden = !fe;
+      document.getElementById('rulePanelAdmin').hidden = fe;
+      ruleTabFe.classList.toggle('active', fe); ruleTabAdmin.classList.toggle('active', !fe);
+      ruleTabFe.setAttribute('aria-selected', String(fe)); ruleTabAdmin.setAttribute('aria-selected', String(!fe));
+    }
+    ruleTabFe.addEventListener('click', () => showRuleTab('fe'));
+    ruleTabAdmin.addEventListener('click', () => showRuleTab('admin'));
+    let lastFocus = null;
+    function setBackgroundInert(value){[document.getElementById('topnav'), document.getElementById('sidebar'), document.getElementById('pageMain')].forEach(node => {if (node) node.inert = value;});}
+    function openRules(){lastFocus = document.activeElement; showRuleTab(document.getElementById('view-flow').hidden ? 'fe' : 'fe'); mask.hidden = false; drawer.hidden = false; requestAnimationFrame(() => {mask.classList.add('open'); drawer.classList.add('open');}); openButton.classList.add('active'); openButton.setAttribute('aria-expanded', 'true'); setBackgroundInert(true); closeButton.focus();}
+    function closeRules(){mask.classList.remove('open'); drawer.classList.remove('open'); mask.hidden = true; drawer.hidden = true; openButton.classList.remove('active'); openButton.setAttribute('aria-expanded', 'false'); setBackgroundInert(false); if (lastFocus && lastFocus.focus) lastFocus.focus();}
+    openButton.addEventListener('click', () => drawer.hidden ? openRules() : closeRules());
+    closeButton.addEventListener('click', closeRules);
+    mask.addEventListener('click', closeRules);
+    const openTabReviewButton = document.getElementById('openTabReview'), exitTabReviewButton = document.getElementById('exitTabReview');
+    function setShellReview(on){try{if (window.parent && window.parent !== window) window.parent.document.documentElement.classList.toggle('fr-review', on);}catch (error){}}
+    function openTabReview(){if (!drawer.hidden) closeRules(); document.documentElement.classList.add('is-tab-review'); setShellReview(true); exitTabReviewButton.focus(); scheduleFit();}
+    function closeTabReview(){if (!document.documentElement.classList.contains('is-tab-review')) return; document.documentElement.classList.remove('is-tab-review'); setShellReview(false); openTabReviewButton.focus(); scheduleFit();}
+    openTabReviewButton.addEventListener('click', openTabReview);
+    exitTabReviewButton.addEventListener('click', closeTabReview);
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' && event.key !== 'Tab') return;
+      if (event.key === 'Escape' && drawer.hidden && document.documentElement.classList.contains('is-tab-review')){event.preventDefault(); closeTabReview(); return;}
+      if (drawer.hidden) return;
+      if (event.key === 'Escape'){event.preventDefault(); closeRules(); return;}
+      const focusable = [...drawer.querySelectorAll('button:not([disabled]),[href],input:not([disabled])')];
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first){event.preventDefault(); last.focus();}
+      else if (!event.shiftKey && document.activeElement === last){event.preventDefault(); first.focus();}
+    });
+  </script>
+</body>
+</html>

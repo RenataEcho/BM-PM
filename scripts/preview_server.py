@@ -26,6 +26,14 @@ ROUTES = {
         ROOT / '_bmad-output/youbao/fr-coco-005-团长数据优化/frontend-rules.json',
         ('data', 'team', 'memberList', 'serviceDetail', 'orders'),
     ),
+    '/__local/coco007-rules': (
+        ROOT / '_bmad-output/youbao/fr-coco-007-钱包合并/frontend-rules.json',
+        ('home', 'income', 'detail', 'cards', 'bills', 'coin', 'coin-tax', 'history', 'agree', 'books'),
+    ),
+    '/__local/coco006-rules': (
+        ROOT / '_bmad-output/youbao/fr-coco-006-收益分配迭代/frontend-rules.json',
+        ('linchuan', 'records', 'renata', 'admin'),
+    ),
 }
 
 class Handler(SimpleHTTPRequestHandler):
