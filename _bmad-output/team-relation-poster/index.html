@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>我的团队说明</title>
+<style>
+  :root {
+    --ink: #1c2b45;
+    --sub: #5d6d86;
+    --blue: #2f6bff;
+    --title: #1a46d6;
+    --green: #12a37a;
+    --purple: #6d5efc;
+    --orange: #ff8a1f;
+    --line: #e4ebf5;
+    --shadow: 0 8px 24px rgba(47, 107, 255, 0.06);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 1400px;
+    background: linear-gradient(180deg, #d7e6ff 0%, #e7f1ff 120px, #f4f9ff 280px, #f7fbff 100%);
+    color: var(--ink);
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-weight: 600;
+    -webkit-font-smoothing: auto;
+  }
+  .poster { width: 1400px; padding: 36px 40px 44px; }
+  header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
+  h1 { margin: 0; font-size: 48px; line-height: 1.15; letter-spacing: 0.5px; color: var(--title); font-weight: 800; }
+  .lead { margin: 10px 0 0; font-size: 24px; color: #4a5d78; font-weight: 600; }
+  .hero { width: 168px; height: 132px; flex: none; }
+  .panel {
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    padding: 22px 22px 20px;
+    margin-bottom: 18px;
+  }
+  .sec { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .num {
+    width: 46px; height: 46px; border-radius: 50%; color: #fff;
+    font-size: 18px; font-weight: 800; display: grid; place-items: center; flex: none;
+  }
+  .num.o { background: linear-gradient(180deg, #ffb15a, #ff8a1f); }
+  .num.b { background: linear-gradient(180deg, #5b8cff, #2f6bff); }
+  .num.g { background: linear-gradient(180deg, #3dce9a, #12a37a); }
+  .num.n { background: linear-gradient(180deg, #5aa2ff, #2f7cf6); }
+  h2 { margin: 0; font-size: 30px; font-weight: 800; color: #1a2744; }
+  .sec-sub { margin-left: 8px; color: #526480; font-size: 20px; font-weight: 600; }
+
+  .notice { background: linear-gradient(180deg, #fffaf4, #fff7ee); border: 1px solid #ffe3c4; }
+  .notice-head { display: flex; align-items: flex-start; gap: 14px; }
+  .warn {
+    width: 36px; height: 36px; border-radius: 10px; background: #fff1e4; color: #f97316;
+    display: grid; place-items: center; flex: none; margin-top: 4px;
+  }
+  .notice h3 { margin: 0 0 6px; font-size: 26px; color: #e07a12; font-weight: 800; }
+  .notice p { margin: 0; font-size: 21px; line-height: 1.65; color: #2f415c; font-weight: 600; }
+  .pill {
+    margin-top: 12px; background: #fff4e5; border-radius: 999px; padding: 10px 16px;
+    display: flex; gap: 8px; align-items: flex-start; color: #c2410c;
+    font-size: 20px; line-height: 1.55; font-weight: 650;
+  }
+  .pill b { color: #ea580c; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card { border-radius: 18px; padding: 16px 16px 14px; }
+  .card h3 { margin: 0; font-size: 24px; font-weight: 800; }
+  .card p { margin: 10px 0 0; font-size: 19px; line-height: 1.7; color: #24344c; font-weight: 600; }
+  .card .top { display: flex; align-items: center; gap: 10px; }
+  .icon-badge { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; flex: none; }
+  .c-blue { background: linear-gradient(180deg, #f4faff, #eaf5ff); border: 1px solid #d7ebff; }
+  .c-blue h3 { color: #1d4ed8; }
+  .c-green { background: linear-gradient(180deg, #f3fbf7, #e8f8f1); border: 1px solid #cfeedd; }
+  .c-green h3 { color: #0f9a6e; }
+  .rows { margin: 12px 0 0; padding: 0; list-style: none; }
+  .rows li {
+    display: flex; gap: 10px; align-items: center;
+    font-size: 18px; line-height: 1.45; color: #24344c; font-weight: 600; padding: 6px 0;
+  }
+  .chip { flex: none; border-radius: 999px; text-align: center; font-size: 16px; font-weight: 800; padding: 5px 12px; white-space: nowrap; }
+  .ch-b { background: #e8f1ff; color: #1d4ed8; }
+  .ch-g { background: #e8fbf3; color: #0f9a6e; }
+  .ch-o { background: #fff1e6; color: #ea6a0c; }
+  .ch-p { background: #eeeaff; color: #6d4aff; }
+  .ch-n { background: #eef2f7; color: #526480; }
+
+  .flow-title { font-size: 22px; font-weight: 800; color: #24324a; margin: 18px 0 10px; }
+  .pair { display: grid; grid-template-columns: 1fr 56px 1fr; gap: 12px; align-items: stretch; }
+  .col { background: #fff; border: 1px solid #dbe7f5; border-radius: 16px; padding: 14px 16px 8px; }
+  .col.after { border-color: #ffd7ae; background: linear-gradient(180deg, #fffaf4, #fff); }
+  .col h3 { margin: 0 0 8px; font-size: 20px; font-weight: 800; color: #1d4ed8; }
+  .col.after h3 { color: #ea6a0c; }
+  .chain { margin: 0; padding: 0; list-style: none; }
+  .chain li {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    margin: 0 0 8px; padding: 10px 12px; border-radius: 12px;
+    background: #f4f8ff; font-size: 18px; font-weight: 700; color: #1a2744;
+  }
+  .col.after .chain li { background: #fff6ea; }
+  .who { display: flex; align-items: center; gap: 8px; }
+  .lv {
+    font-style: normal; font-size: 14px; font-weight: 800; border-radius: 999px; padding: 2px 8px;
+  }
+  .lv1 { background: #eef2f7; color: #526480; }
+  .lv2 { background: #fff1e6; color: #ea6a0c; }
+  .lv2n { background: #ff8a1f; color: #fff; }
+  .pay { font-size: 16px; font-weight: 800; color: #c2410c; text-align: right; }
+  .pay.off { color: #7b8798; font-weight: 700; }
+  .shift {
+    width: 44px; height: 44px; border-radius: 50%; place-self: center;
+    display: grid; place-items: center; background: #ff8a1f; color: #fff;
+    font-size: 22px; font-weight: 800;
+  }
+
+  .banner {
+    margin-top: 14px; background: linear-gradient(90deg, #fff6ea, #fff9f2);
+    border: 1px solid #ffd7ae; border-radius: 14px; padding: 12px 16px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .banner .horn {
+    width: 36px; height: 36px; border-radius: 50%; background: #ff8a1f; color: #fff;
+    display: grid; place-items: center; flex: none;
+  }
+  .banner .t { font-size: 21px; font-weight: 800; color: #ea580c; }
+  .banner .d { margin-top: 4px; font-size: 18px; line-height: 1.65; color: #8a4e22; font-weight: 600; }
+
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .step { border-radius: 16px; padding: 14px 14px 12px; border: 1px solid transparent; min-height: 148px; }
+  .step b { display: block; font-size: 28px; font-weight: 800; line-height: 1.1; }
+  .step span { display: block; margin-top: 8px; font-size: 18px; line-height: 1.5; font-weight: 700; }
+  .step em { font-style: normal; display: block; margin-top: 6px; font-size: 16px; font-weight: 650; color: #526480; }
+  .s0 { background: #f3f8ff; border-color: #d7e6f8; }
+  .s0 b, .s0 span { color: #1d4ed8; }
+  .s1 { background: #fff7ee; border-color: #ffe3c2; }
+  .s1 b, .s1 span { color: #ea6a0c; }
+  .s2 { background: #f3fbf7; border-color: #d3f0e3; }
+  .s2 b, .s2 span { color: #0f9a6e; }
+  .s3 { background: #fff5f6; border-color: #ffd5dc; }
+  .s3 b, .s3 span { color: #e11d48; }
+  .hint { margin: 12px 0 0; font-size: 18px; line-height: 1.6; color: #3d4e68; font-weight: 600; }
+
+  .grid-bot { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { background: #fff; border: 1px solid #e6eef8; border-radius: 16px; padding: 14px 16px 12px; }
+  .box h3 { margin: 0 0 8px; font-size: 22px; font-weight: 800; color: #1a2744; }
+  .box p { margin: 0; font-size: 18px; line-height: 1.7; color: #24344c; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="poster">
+  <header>
+    <div>
+      <h1>我的团队说明</h1>
+      <p class="lead">下面的人升级后，人还在不在，奖励会不会变。</p>
+    </div>
+    <svg class="hero" viewBox="0 0 168 132" fill="none" aria-hidden="true">
+      <circle cx="84" cy="36" r="16" fill="#4C84FF"/>
+      <circle cx="46" cy="86" r="14" fill="#7EB0FF"/>
+      <circle cx="122" cy="86" r="14" fill="#FFB15A"/>
+      <path d="M84 52v18M70 78l-12 4M98 78l12 4" stroke="#93B4F5" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="132" cy="28" r="14" fill="#22C55E"/>
+      <path d="M126 28.2l4 4 8-9" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </header>
+
+  <section class="panel notice">
+    <div class="notice-head">
+      <div class="num o">01</div>
+      <div class="warn" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3.2l7.2 12.6H2.8L10 3.2z" stroke="#f97316" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 8.2v3.4" stroke="#f97316" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="13.6" r=".8" fill="#f97316"/></svg>
+      </div>
+      <div style="flex:1">
+        <h3>人不会离开你的团队</h3>
+        <p>下面的人升级，只是身份变了。他还是你邀请来的人。他再邀请的人，也还在他下面，不会被分到别人的团队。</p>
+        <div class="pill"><span>●</span><span><b>已经到手的奖励不变。</b>只有他升级之后新产生的收益，你拿到的奖励种类才可能变。</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="sec">
+      <div class="num b">02</div>
+      <h2>先看人，再看这笔奖励</h2>
+      <span class="sec-sub">列表里的称呼，和奖励名称不是一回事</span>
+    </div>
+    <div class="grid2">
+      <article class="card c-blue">
+        <div class="top">
+          <div class="icon-badge" style="background:#2f6bff">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.2" stroke="#fff" stroke-width="1.4"/><path d="M3.2 13c.8-2.4 2.4-3.4 4.8-3.4s4 1 4.8 3.4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <h3>这个人离你有多近</h3>
+        </div>
+        <ul class="rows">
+          <li><span class="chip ch-b">直属</span><span>你亲手邀请的</span></li>
+          <li><span class="chip ch-b">间属</span><span>你的直属邀请的</span></li>
+          <li><span class="chip ch-n">其他</span><span>再远一些的人</span></li>
+        </ul>
+        <p>达人只能看到自己亲手邀请的人。团长和合伙人能看到更远的人，更远的会标成「其他」。「直属团队」「间属团队」只是把已经升级的人标出来，人还是原来那些人。</p>
+      </article>
+      <article class="card c-green">
+        <div class="top">
+          <div class="icon-badge" style="background:#12a37a">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 11.5l3.2-3.4 2.2 1.8L13 4.8" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>这笔收益你拿哪种奖励</h3>
+        </div>
+        <ul class="rows">
+          <li><span class="chip ch-g">直属奖励</span><span>离你最近的人产生的</span></li>
+          <li><span class="chip ch-g">间属 / 归集奖励</span><span>隔得更远时</span></li>
+          <li><span class="chip ch-o">团队奖励</span><span>下面出现了和你同级的人</span></li>
+        </ul>
+        <p>归集是一种奖励名称，不是某一种成员。归集团队奖励只有合伙人能拿到。看列表里有这个人，不等于这笔收益一定有你的份。</p>
+      </article>
+    </div>
+
+    <p class="flow-title">举个例子：你是团长，小甲升级了，小丙又产生了一笔收益</p>
+    <div class="pair">
+      <div class="col">
+        <h3>小甲还是达人时</h3>
+        <ol class="chain">
+          <li><div class="who"><b>你</b><i class="lv lv2">团长</i></div><div class="pay">归集奖励</div></li>
+          <li class="none"><div class="who"><b>小甲</b><i class="lv lv1">达人</i></div><div class="pay off">这笔没有</div></li>
+          <li><div class="who"><b>小乙</b><i class="lv lv1">达人</i></div><div class="pay">直属奖励</div></li>
+          <li class="order"><div class="who"><b>小丙</b><i class="lv lv1">产生收益</i></div><div class="pay off">自己不拿</div></li>
+        </ol>
+      </div>
+      <div class="shift" aria-hidden="true">→</div>
+      <div class="col after">
+        <h3>小甲升级成团长之后</h3>
+        <ol class="chain">
+          <li><div class="who"><b>你</b><i class="lv lv2">团长</i></div><div class="pay">直属团队奖励</div></li>
+          <li><div class="who"><b>小甲</b><i class="lv lv2n">团长</i></div><div class="pay">间属奖励</div></li>
+          <li><div class="who"><b>小乙</b><i class="lv lv1">达人</i></div><div class="pay">直属奖励</div></li>
+          <li class="order"><div class="who"><b>小丙</b><i class="lv lv1">产生收益</i></div><div class="pay off">自己不拿</div></li>
+        </ol>
+      </div>
+    </div>
+    <div class="banner">
+      <div class="horn" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3.2l1.2 3.6H14l-3 2.2 1.2 3.6L9 10.6 5.8 12.6 7 9 4 6.8h3.8L9 3.2z" fill="#fff"/></svg>
+      </div>
+      <div>
+        <div class="t">人一个都没少</div>
+        <div class="d">小甲还在你的直属里。小乙、小丙还在小甲下面。变的只是新产生的这笔：你从「归集奖励」换成了「直属团队奖励」。上一笔已经到手的钱不动。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="sec">
+      <div class="num g">03</div>
+      <h2>和你级别一样时，再往下两层</h2>
+      <span class="sec-sub">更深的新收益，这笔就没有你的奖励了</span>
+    </div>
+    <div class="steps">
+      <div class="step s0"><b>他自己</b><span>直属奖励</span><em>同级的人自己产生收益</em></div>
+      <div class="step s1"><b>往下 1 层</b><span>直属团队奖励</span><em>他下面的人产生收益</em></div>
+      <div class="step s2"><b>往下 2 层</b><span>间属团队奖励</span><em>再下一个同级的下面</em></div>
+      <div class="step s3"><b>再更深</b><span>这笔没有了</span><em>人还在，只是没奖励</em></div>
+    </div>
+    <p class="hint">中间夹着几个达人，不会把你的奖励降一级。他下面那个同级的人自己产生收益，你拿的仍是直属团队奖励，不是间属团队奖励。</p>
+    <div class="grid2" style="margin-top:14px">
+      <article class="card c-blue">
+        <h3>你是团长</h3>
+        <p>按上面四格看其他团长。这条线上如果出现了合伙人，团长就不再拿这笔，改由那位合伙人拿。</p>
+      </article>
+      <article class="card c-green">
+        <h3>你是合伙人</h3>
+        <p>下面是团长时，再深也能拿到归集团队奖励。下面是其他合伙人时，深过两层，这笔新收益就没有你的奖励了。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="sec">
+      <div class="num n">04</div>
+      <h2>你是达人时</h2>
+    </div>
+    <div class="grid-bot">
+      <div class="box">
+        <h3>只有一种情况有奖励</h3>
+        <p>你亲手邀请的人自己产生了收益，而且他也是达人，你拿直属奖励。他一旦升级成团长或合伙人，他和再下面的人产生的新收益，你都没有奖励了。人还在你的直属列表里。</p>
+      </div>
+      <div class="box">
+        <h3>已经到手的不会变</h3>
+        <p>有人升级，不会改你以前已经拿到的奖励。产生这笔收益的人自己，不拿这笔团队奖励。</p>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
