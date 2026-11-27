@@ -1,0 +1,123 @@
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      height: 34px; padding: 0 14px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s; white-space: nowrap;
+    }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+    .btn-ghost { background: var(--surface); color: var(--text-secondary); border-color: var(--border); }
+    .btn-ghost:hover:not(:disabled) { background: var(--surface-hover); color: var(--text-primary); }
+    .btn-rule { background: var(--primary-light); color: var(--primary); border-color: var(--primary-border); }
+    .btn-rule:hover:not(:disabled) { background: #dbeafe; }
+    .btn-rule.active, .btn-rule[aria-expanded="true"] {
+      background: var(--primary); color: #fff; border-color: var(--primary);
+    }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover:not(:disabled) { background: var(--danger-hover); }
+    .btn-danger-ghost { background: var(--surface); color: var(--danger); border-color: var(--danger-border); }
+    .btn-danger-ghost:hover:not(:disabled) { background: var(--danger-bg); }
+    .btn-sm { height: 32px; padding: 0 12px; font-size: 12px; }
+
+    /* —— 文字链 / 表格操作 —— */
+    .link {
+      display: inline-flex; align-items: center; min-height: 28px; padding: 0 2px;
+      color: var(--primary); font-size: 12px; font-weight: 500; cursor: pointer;
+      text-decoration: none; border: none; background: none; transition: color 0.15s;
+    }
+    .link:hover { color: var(--primary-hover); text-decoration: underline; }
+    .link + .link { margin-left: 12px; }
+    .link-danger { color: var(--danger); }
+    .link-danger:hover { color: var(--danger-hover); }
+    .link-muted { color: var(--text-muted); font-weight: 400; }
+    .link-muted:hover { color: var(--text-secondary); }
+    .action-group { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0; }
+
+    /* —— Tag —— */
+    .tag { display: inline-flex; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .tag-ok { background: var(--success-bg); color: var(--success); }
+    .tag-warn { background: var(--warning-bg); color: var(--warning); }
+    .tag-del { background: var(--danger-bg); color: var(--danger); }
+
+    /* —— 表格操作列示例 —— */
+    .mini-table { width: 100%; border-collapse: collapse; }
+    .mini-table th, .mini-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .mini-table th { font-size: 11px; font-weight: 600; color: var(--text-muted); background: rgba(248,250,252,0.9); }
+    .mini-table tr:hover td { background: var(--surface-hover); }
+
+    /* —— 居中 Modal（确认 / 编辑） —— */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.4); z-index: 600;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity 0.22s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      width: 100%; max-width: 400px; background: var(--surface);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-modal);
+      transform: translateY(12px) scale(0.98); transition: transform 0.22s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal.modal-md { max-width: 480px; }
+    .modal-header { padding: 16px 20px 0; }
+    .modal-header h3 { font-size: 15px; font-weight: 700; }
+    .modal-header p { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.55; }
+    .modal-body { padding: 16px 20px; }
+    .modal-footer {
+      padding: 12px 20px 16px; display: flex; justify-content: flex-end; gap: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .form-field { margin-bottom: 12px; }
+    .form-field:last-child { margin-bottom: 0; }
+    .form-field label { display: block; font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 4px; }
+    .form-field input, .form-field select {
+      width: 100%; height: 34px; padding: 0 10px; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 13px;
+    }
+    .form-field input:focus, .form-field select:focus {
+      outline: none; border-color: var(--primary-border); box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    }
+
+    /* —— 右侧详情 Drawer —— */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.35); z-index: 500;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: var(--drawer-w); z-index: 501;
+      background: rgba(255,255,255,0.98); backdrop-filter: blur(12px);
+      box-shadow: -8px 0 40px rgba(30,40,60,0.18);
+      transform: translateX(100%); transition: transform 0.28s ease;
+      display: flex; flex-direction: column;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+    }
+    .drawer-header h2 { font-size: 15px; font-weight: 700; }
+    .drawer-close {
+      width: 28px; height: 28px; border: none; background: #f1f5f9;
+      border-radius: 6px; cursor: pointer; font-size: 16px; color: var(--text-secondary);
+    }
+/* PC 客户端色彩继承供稿截图；组件 class 复制自 component-spec-demo。 */
+:root{--primary:#ff7a16;--primary-hover:#ed6710;--surface:#fff;--surface-hover:#fff7ef;--text-primary:#1b2b40;--text-secondary:#596579;--text-muted:#8c97a8;--border:#e4e8f0;--radius-sm:7px;--radius-lg:12px;--shadow-modal:0 16px 60px #14263b30;--success:#369f63;--success-bg:#eef9f0;--warning:#e18320;--warning-bg:#fff5e7;--danger:#ef5266;--danger-hover:#d6384c;--danger-bg:#fff0f1;--danger-border:#ffd1d6;--drawer-w:440px}
+*{box-sizing:border-box}body{margin:0;font:13px 'Microsoft YaHei',sans-serif;color:var(--text-primary);background:#f5f7fb}button,input,select,textarea{font:inherit}h1{font-size:23px;margin:0 0 4px}h2{font-size:16px;margin:0 0 16px}h3{margin:0}p{line-height:1.7}.client{display:flex;min-height:100vh}aside{width:174px;flex-shrink:0;background:white;border-right:1px solid var(--border);padding:20px 10px}aside h3{font-size:13px;margin-bottom:30px}aside p{padding:8px 12px;margin:8px 0;font-size:12px}.selected{background:#e6f0ff;color:#2581ef;border-radius:7px}.workspace{min-width:0;flex:1}header{height:45px;padding:14px 20px;background:white;border-bottom:1px solid var(--border);font-size:12px}.crumb{padding:12px 20px;background:white;color:#768398;border-bottom:1px solid var(--border)}.crumb span{color:#3185df}main{padding:20px}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}.muted{color:var(--text-muted);font-size:12px}.banner{height:132px;background:linear-gradient(115deg,#101828,#293548 65%,#77472e);color:white;border-radius:12px;padding:28px;margin-bottom:20px}.banner strong{display:block;font-size:24px;margin:6px 0}.banner small{color:#ff982e}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.card{background:white;border:1px solid var(--border);border-radius:12px;padding:20px}.stats strong{display:block;font-size:28px;margin:12px 0}.dashboard-grid{display:grid;grid-template-columns:1fr 1.45fr;gap:14px}.empty{height:190px;display:grid;place-items:center;color:#a1a9b8}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th,td{text-align:left;padding:15px 10px;border-bottom:1px solid var(--border);font-size:12px}th{color:#939cad;font-weight:500}.cover{display:inline-grid;width:32px;height:43px;background:#f0f3f9;place-items:center;border:1px solid #e5e9f1;border-radius:4px;margin-right:8px;color:#a4afc0}.steps{display:flex;background:white;border:1px solid var(--border);border-radius:12px 12px 0 0;margin-top:18px}.step{flex:1;padding:19px 16px;border-top:3px solid transparent;font-weight:600;color:#8d99aa}.step.active{background:#fff9f3;border-color:var(--primary);color:#27334a}.step b{display:inline-grid;place-items:center;background:#e9edf3;border-radius:50%;width:23px;height:23px;margin-right:8px}.step.active b{background:var(--primary);color:white}.upload{background:white;border:1px solid var(--border);border-top:0;border-radius:0 0 12px 12px;min-height:450px;display:flex;flex-direction:column}.upload-body{padding:24px;flex:1}.upload-footer{border-top:1px solid var(--border);padding:16px 24px;display:flex;justify-content:flex-end;gap:10px;background:#fafbfd}.section{padding-bottom:20px;margin-bottom:20px;border-bottom:1px solid var(--border)}.field-label{font-weight:600;margin:20px 0 12px}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer}.choice:has(input:checked){color:var(--primary);border-color:var(--primary);background:#fff7ef}.choice input{accent-color:var(--primary)}.hint{padding:12px;border:1px solid var(--border);background:#f7f9fc;border-radius:7px;color:#718096;line-height:1.7;margin-top:12px}.summary{background:#fff8f0;border:1px solid #ffce9f;border-radius:9px;padding:14px;margin-bottom:20px;color:#a45a20}.book{background:#fafbfd;border:1px solid var(--border);border-radius:10px;padding:18px;margin-top:15px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:8px;margin:14px 0}.field input,.field select,.field textarea{width:100%;padding:9px;border:1px solid #dfe4ed;border-radius:7px;background:white;min-width:0}.error{color:var(--danger);line-height:1.7;margin:12px 0}.ok{color:#349c5d;margin:12px 0}.materials{min-height:110px;background:white;border:1px solid var(--border);padding:16px;margin-top:15px;border-radius:8px}.material{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding:8px 0}.drawer-body{padding:20px;overflow:auto}.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#263246;color:white;border-radius:8px;padding:12px 20px;display:none;z-index:800}.toast.open{display:block}.drawer-header{gap:12px}.wide{grid-column:1/-1}.status-box{padding:30px;background:white;border:1px solid var(--border);border-radius:12px;margin-top:20px}.status-box h2{font-size:21px}.status-box .btn{margin-top:12px}@media(max-width:1000px){aside{width:142px}main{padding:14px}.dashboard-grid{grid-template-columns:1fr}.stats{gap:7px}.stats .card{padding:12px}.fields{grid-template-columns:1fr}}@media(max-width:650px){aside{display:none}.stats{grid-template-columns:1fr 1fr}header{font-size:11px}.step{padding:14px 7px;font-size:11px}.upload-body{padding:16px}}
+.modal-overlay,.drawer-overlay,.drawer{visibility:hidden}.modal-overlay.open,.drawer-overlay.open,.drawer.open{visibility:visible}
+
+.book-restriction{margin:16px 0;padding:12px;border:1px solid #eceef3;border-radius:8px}.book-restriction .choices{margin:8px 0}.book+.book{margin-top:16px}.book .material{display:flex;justify-content:space-between;align-items:center}.pc-demo-scenes{display:flex;gap:8px;margin-bottom:16px}.upload-body select{padding:9px;border:1px solid #dce1e8;border-radius:6px}.upload-body .choice input{width:auto}.upload-body .field textarea{width:100%}
+
+/* FR005 定向约稿增量，沿用白色客户端组件。 */
+.directed-entry{display:flex;align-items:center;justify-content:space-between;margin:20px 0;padding:18px 20px;background:#fff;border:1px solid #eceef1;border-radius:8px}.directed-actions{display:flex;gap:8px;flex-wrap:wrap}.directed-table td{vertical-align:top}.directed-table small{display:block}.directed-note{padding:12px 16px;background:#fff7ed;color:#9a4d1b;border-radius:6px;margin:12px 0}.directed-meta{display:grid;grid-template-columns:110px 1fr;gap:12px}.directed-meta dt{color:#8c8f98}.directed-meta dd{margin:0;overflow-wrap:anywhere}.directed-error{color:#d84040}.client aside button{background:none;border:0;text-align:left;color:inherit;cursor:pointer;font:inherit;padding:12px 0;width:100%}input[readonly],select:disabled{background:#f6f7f9;color:#777}.directed-table{min-width:850px}
+
+/* 用户提供的现有PC工作台与定向供稿参考（2026-11-27）。 */
+.client>aside{width:220px;padding:12px 8px}.client>aside h3{font-size:17px;margin:2px 4px 28px}.client>aside p{margin:5px 0;padding:8px 15px}.client>aside .selected{background:#d8eaff}.workspace>header{height:50px}.crumb{height:40px}main{padding:18px 20px}.banner{position:relative;height:160px;background:#101c49 url('baselines/yijian-daifa/assets/fr014/bn-recruit.jpg') center/cover no-repeat;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:center}.banner:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#08122cdd,transparent 80%);z-index:-1}.banner strong{font-size:27px}.stats{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.stats .card{padding:18px 20px;min-width:0}.stats strong{font-size:30px;margin:12px 0}.request-stat{text-align:left;cursor:pointer;color:inherit}.request-stat:hover{border-color:var(--primary);background:#fffaf5}.stat-link,.book-link{color:var(--primary);font-size:12px}.dashboard-grid{grid-template-columns:1fr 1fr;align-items:stretch}.dashboard-grid>.card{display:flex;flex-direction:column;padding:18px;min-width:0;min-height:620px}.dashboard-grid h2{margin:0}.dashboard-grid>.card>.row{margin-bottom:15px}.dashboard-grid .table-wrap{flex:1;max-height:660px}.dashboard-grid table th,.dashboard-grid table td{padding:14px 12px}.dashboard-grid tbody tr:nth-child(even){background:#fafafa}.dashboard-grid .btn{padding:4px 10px;min-height:26px}.income-tabs{gap:0}.income-tabs .btn{border-radius:0}.income-tabs .btn:first-child{background:var(--primary);color:white;border-color:var(--primary)}.income-tabs .link{margin-left:12px}.dashboard-grid .link{font-size:12px;color:var(--primary)}.book-cell{display:flex;gap:10px;align-items:center}.book-cell img{width:36px;height:48px;object-fit:cover;border-radius:3px}.book-cell small{display:block;color:var(--text-muted);margin:7px 0}.book-link{display:block;max-width:180px;overflow:hidden;text-overflow:ellipsis}.dashboard-grid td>.tag{display:block;width:max-content;margin-top:6px}.dashboard-pagination{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--text-secondary)}.dashboard-pagination select{border:1px solid var(--border);border-radius:5px;padding:4px}.dashboard-pagination button{border:0;background:#f5f6f8;padding:4px 8px}.page-selected{background:#1682ee;color:white;padding:4px 8px}.direction-field{display:flex;align-items:center;gap:16px;margin:12px 0}.direction-field>span:first-child{width:80px;flex-shrink:0}.direction-field select{width:auto;color:var(--primary)}em{color:#ff526b;font-style:normal}.section .field-label{margin-top:4px}.upload-heading{margin:8px 0 16px}.request-summary{padding:15px;margin-bottom:14px;line-height:1.7;border:1px solid #ffd0a3;background:#fff5e7;color:#1b2b40}.request-summary+.steps{margin-top:0}.upload-body .book .fields{grid-template-columns:repeat(3,minmax(0,1fr))}.upload-body .book>.fields:nth-of-type(3){grid-template-columns:1fr 2fr}.upload-body .book .field{margin:8px 0;flex-direction:row;align-items:center;white-space:nowrap}.upload-body .book .field input,.upload-body .book .field textarea{flex:1}.upload-body .book>label.field{display:flex;flex-direction:row;align-items:center;gap:12px}.upload-body .book>label.field textarea{flex:1}.upload-body .book>.row{margin-top:16px}.upload-body .book .material{align-items:flex-start}.upload-body .book .material video,.upload-body .book .material img{display:block;width:130px;margin-top:10px;border-radius:7px}.steps{border-radius:12px 12px 0 0}.directed-table{min-width:1080px}.directed-table .book-link{max-width:160px}.upload-footer{background:white}
+@media(max-width:1100px){.client>aside{width:170px}.stats .card{padding:14px 10px}.stats strong{font-size:25px}.dashboard-grid{grid-template-columns:1fr}.upload-body .book .fields{grid-template-columns:1fr 1fr}.dashboard-grid>.card{min-height:400px}}
+
+.upload-body .book .notes-fields{grid-template-columns:1fr 1fr}.upload-body .book>.field{flex-direction:row;gap:12px}.upload-body .book>.field input{flex:1}
+
+/* 确认上传复用既有书籍分组稿件列表，收益按关键词合并展示。 */
+.project-permission-warning{margin:10px 0 0;color:#d66a0b;background:#fff5e7;border:1px solid #ffd0a3;border-radius:7px;padding:10px 12px;font-size:13px}.confirm-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:#f8f9fb;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px;color:#44607d}.confirm-toolbar .btn{font-size:12px;padding:4px 10px;min-height:26px}.confirm-toolbar label{white-space:nowrap}.confirm-book{border:1px solid var(--border);border-left:3px solid #ff8a37;border-radius:9px;overflow:hidden;margin-bottom:14px}.confirm-book-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 12px;background:#fff8f0;border-bottom:1px solid #ffd2ac}.confirm-book-head>span{font-size:12px;color:#b75b13;white-space:nowrap}.confirm-book-id{font-size:12px;color:#e88b16;background:white;border:1px solid #ffddb9;padding:2px 7px;border-radius:4px}.confirm-file{display:flex;align-items:center;gap:12px;padding:12px;background:white}.confirm-file+.confirm-file{border-top:1px solid var(--border)}.confirm-file-name{display:flex;align-items:center;flex-wrap:wrap;gap:7px;flex:0 1 380px;min-width:160px}.confirm-file-name label{display:flex;align-items:center;gap:6px;min-width:0}.confirm-file-name label b{overflow-wrap:anywhere}.confirm-file-name small{flex-basis:100%}.confirm-file .tag{font-size:11px;border-radius:4px;white-space:nowrap}.tag-type{color:#1d72e6;border:1px solid #d7e7ff;background:#f7faff}.tag-pending{background:#f1f3f5;color:#8792a4;border:1px solid #e1e5eb}.confirm-preview{width:42px;flex-shrink:0}.confirm-preview video,.confirm-preview img{display:block;max-width:42px!important;max-height:55px!important;border-radius:5px}.file-thumbnail{display:grid;place-items:center;width:40px;height:54px;background:#f6f7f9;border:1px solid var(--border);border-radius:5px;color:#b3bac5;font-size:24px}.confirm-tips{flex:1;min-width:140px}.confirm-tips input,.confirm-batch input{width:100%;border:1px solid #e0e4eb;border-radius:6px;padding:9px;font:inherit}.confirm-file input[type=checkbox],.confirm-book-head input,.confirm-toolbar input{accent-color:var(--primary)}.confirm-no-files{padding:24px;color:var(--text-muted)}.confirm-batch{display:flex;gap:10px;padding:12px;background:#fff8f0;border:1px solid #ffd2ac;border-radius:8px;margin-bottom:12px}.confirm-batch input{flex:1;min-width:0}.sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.income-drawer{width:min(900px,96vw)}.income-drawer .drawer-header{padding:20px;font-size:15px}.income-drawer .drawer-body{display:flex;flex-direction:column;gap:14px;overflow:auto}.income-summary{font-size:12px;color:#8895a9;margin:14px 0 0}.income-summary b{font-weight:400}.income-table-wrap{overflow:auto;flex:1}.income-detail-table th,.income-detail-table td{font-size:12px;padding:13px 12px}.income-detail-table td[rowspan]{vertical-align:middle;background:white}.income-detail-table tbody tr:nth-child(even){background:#fafafa}.income-detail-table td{border-bottom:1px solid #e1e5eb}.income-manuscript-title{max-width:180px;white-space:normal;overflow-wrap:anywhere}.income-keyword{font-weight:500}.income-amount{white-space:nowrap}.income-pagination{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 0;border-top:1px solid var(--border);font-size:12px}.income-pagination select{border:1px solid var(--border);border-radius:5px;padding:4px}.income-pagination .btn{padding:3px 9px;min-height:26px}
+@media(max-width:850px){.confirm-file{flex-wrap:wrap}.confirm-file-name{flex-basis:calc(100% - 60px)}.confirm-tips{flex-basis:75%}.income-detail-table th,.income-detail-table td{padding:10px 7px}}

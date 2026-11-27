@@ -6,7 +6,7 @@ window.renderFR005Flow=function(){
 
   let n='',e='';
   const box=(y,lines,type='fe')=>{n+=rect(340,y,260,64,lines,type)};
-  box(40,['已领—已回填稿件','显示用户已获收益与约稿']);
+  box(40,['已领—已回填稿件','右上收益；进入关键词约稿记录']);
   box(150,['只读带入项目、书籍、剪辑手','及原关键词；仅填写说明']);
   n+=diamond(470,300,['来源为本人已回填？']);
   box(400,['生成待审核申请','原卡片显示约稿记录'],'be');
@@ -24,10 +24,11 @@ window.renderFR005Flow=function(){
   box(1580,['稿件待领取：发送通知','原申请关联稿件详情'],'wait');
   n+=diamond(470,1730,['领取人为申请用户？']);
   n+=diamond(470,1880,['已被领取？']);
-  box(1990,['免费领取：申请结束为已领取稿件','已领新增未回填，沿用原关键词'],'be');
-  n+=diamond(470,2140,['24小时内完成回填？']);
-  n+=rect(800,2108,260,64,['超时未回填','沿用现有处理，保留已领稿件'],'stop');
-  box(2260,['已领中的新记录已回填','申请仍为已领取稿件'],'be');
+  n+=diamond(470,2020,['现有次数／积分校验通过？']);
+  n+=rect(800,1988,260,64,['确认积分／按现有档位兑换次数','积分不足或取消：不扣减'],'wait');
+  box(2160,['扣1次或配置积分：已领取稿件','不新增未回填，保留当前关键词'],'be');
+  box(2340,['发布新作品','在当前关键词追加回填']);
+  box(2520,['关键词累计回填与收益','申请仍为已领取稿件'],'be');
   const down=(a,b,label='')=>{e+=edge(`470,${a} 470,${b}`,label,490,(a+b)/2)};
   down(104,150);down(214,260);down(340,400,'是');down(464,510);
   e+=edge('365,300 130,300 130,20 470,20 470,40','否：返回来源',205,280,'#dc2626');
@@ -41,9 +42,11 @@ window.renderFR005Flow=function(){
   e+=edge('365,1470 100,1470 100,1035 470,1035 470,1060','否：修改原稿重送审',215,1450,'#dc2626');
   down(1644,1690);down(1770,1840,'是');
   e+=edge('365,1730 210,1730 210,1550 470,1550 470,1580','否：阻断领取',275,1710,'#dc2626');
-  down(1920,1990,'否');
+  down(1920,1980,'否');
+  down(2060,2160,'通过');
+  e+=edge('575,2020 800,2020','待确认／兑换',685,2005);
+  e+=edge('930,1988 930,1960 470,1960 470,1980','确认／兑换后重试',755,1950,'#94a3b8',true);
   n+=rect(800,1848,260,64,['已领取：阻止重复操作','不新增领取记录'],'skip');e+=edge('575,1880 800,1880','是',680,1865);
-  down(2054,2100);down(2180,2260,'是');
-  e+=edge('575,2140 800,2140','否：到期',680,2125);
-  document.querySelector('#flow-chart').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="2360" viewBox="0 0 1220 2360" role="img" aria-label="已回填原稿发起约稿至免费领取回填流程"><defs><marker id="fr005-flow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#94a3b8"/></marker></defs><style>text{font:13px 'Microsoft YaHei',sans-serif;text-anchor:middle;fill:#334155}polyline{fill:none;stroke-width:1.5}</style><g class="flow-edges">${e}</g><g class="flow-nodes">${n}</g></svg>`;
+  down(2224,2340);down(2404,2520);
+  document.querySelector('#flow-chart').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="2660" viewBox="0 0 1220 2660" role="img" aria-label="已回填原稿发起约稿至按现有收费领取回填流程"><defs><marker id="fr005-flow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#94a3b8"/></marker></defs><style>text{font:13px 'Microsoft YaHei',sans-serif;text-anchor:middle;fill:#334155}polyline{fill:none;stroke-width:1.5}</style><g class="flow-edges">${e}</g><g class="flow-nodes">${n}</g></svg>`;
 };
