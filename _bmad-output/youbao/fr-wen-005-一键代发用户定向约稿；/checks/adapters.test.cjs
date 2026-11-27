@@ -1,0 +1,97 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+let playwright;try{playwright=require('playwright')}catch{playwright=require(path.resolve(path.dirname(process.execPath),'../node_modules/playwright'));}
+const root=path.resolve(__dirname,'../../../../demo/iteration');
+(async()=>{
+ const browser=await playwright.chromium.launch({headless:true,executablePath:process.env.FR005_CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+ try{
+  const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.route(/^https?:/,async route=>{const url=new URL(route.request().url());if(url.hostname!=='fr005.test')return route.abort();const file=path.resolve(root,'.'+decodeURIComponent(url.pathname));if(!file.startsWith(root+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile())return route.fulfill({status:404,body:''});return route.fulfill({body:fs.readFileSync(file),contentType:({'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.jpg':'image/jpeg','.png':'image/png'})[path.extname(file)]||'application/octet-stream'});});
+  const load=async name=>{await page.goto('http://fr005.test/'+name);};
+  const pcScene=async screen=>{await page.evaluate(screen=>window.dispatchEvent(new MessageEvent('message',{source:parent,origin:location.origin,data:{type:'fr-wen-005:screen',role:'pc',screen}})),screen);};
+  const click=async(action,id)=>page.locator(`[data-action="${action}"]${id?`[data-id="${id}"]`:''}`).first().click();
+  await load('fr-wen-005-pc.html');
+  assert.equal(await page.locator('.directed-entry').count(),0,'看板不插入独立横卡');
+  assert.equal(await page.locator('.request-stat .stat-link').innerText(),'待审核·查看记录');
+  const dayRow=page.locator('.dashboard-grid section').first().locator('tbody tr').first();const dayTotal=Number((await dayRow.locator('td').nth(2).innerText()).replace('¥',''));
+  await dayRow.locator('[data-action="income-detail"]').click();
+  assert.equal(await page.locator('#detail.income-drawer').count(),1);
+  assert.equal(await page.locator('.income-detail-table .income-amount').evaluateAll(nodes=>Math.round(nodes.reduce((sum,n)=>sum+Number(n.textContent.replace('¥','')),0)*100)/100),dayTotal,'关联多个稿件不重复计入关键词收益');
+  assert(await page.locator('.income-keyword[rowspan="3"]').count()>0,'同关键词左侧展示原稿和多个定向稿');
+  assert.equal(await page.locator('.income-detail-table tbody tr').filter({hasText:'47254'}).count(),3,'同稿件在两个关键词组关联展示，含定向稿');
+  await page.locator('#income-page-size').selectOption('10');await click('income-next');assert.equal(await page.locator('.income-pagination').innerText().then(x=>/2 \/ 2/.test(x)),true);await page.keyboard.press('Escape');assert.equal(await page.locator('#detail.open').count(),0);
+
+  assert.equal(await page.locator('.stats .card').count(),5);await click('directed-list');assert.match(await page.locator('.directed-table thead').innerText(),/书籍链接/);assert.doesNotMatch(await page.locator('.directed-table').innerText(),/200861/);await click('directed-detail','A5100');assert.doesNotMatch(await page.locator('#detailBody').innerText(),/200861/);await click('closeDetail');
+  await pcScene('permission');assert(await page.locator('[data-action="next"]').isDisabled());assert.doesNotMatch(await page.locator('.request-summary').innerText(),/联系客服/);assert.match(await page.locator('.section').first().locator('.project-permission-warning').innerText(),/请联系客服开启项目权限后再上传/);
+  await pcScene('rejected');assert.equal(await page.evaluate(()=>FR005.get('A5104').status),'制作中');
+  await pcScene('upload');await click('next');
+  assert.equal(await page.locator('[data-field="title"],#directed-cover').count(),0,'无标题和封面填写项');
+  await page.locator('[data-field="tips"]').fill('发布技巧测试');
+  await page.evaluate(()=>{const input=document.querySelector('[data-folder]'),dt=new DataTransfer();dt.items.add(new File(['text'],'bad.txt',{type:'text/plain'}));input.files=dt.files;input.dispatchEvent(new Event('change',{bubbles:true}));});
+  assert.match(await page.locator('#upload-error').innerText(),/视频、图片或ZIP/);
+  assert.equal(await page.locator('.material').count(),0);
+  await page.locator('input[data-files]:not([data-folder])').setInputFiles({name:'clip.webm',mimeType:'video/webm',buffer:Buffer.from('local preview demo')});
+  assert.equal(await page.locator('video[src^="blob:"]').count(),1,'安全本地预览');
+  await click('next');assert.equal(await page.locator('.confirm-book').count(),1);assert.equal(await page.locator('.confirm-file').count(),1);
+  await page.locator('[data-confirm-all]').check();await click('batch-tips');await page.locator('#batch-publish-tips').fill('确认页发布技巧');await click('apply-batch-tips');assert.equal(await page.locator('[data-file-field="tips"]').inputValue(),'确认页发布技巧');await click('submit');
+  let r=await page.evaluate(()=>FR005.get('A5103'));
+  assert.equal(r.upload.metadata.title,'星河入梦 · 定向成片');assert.equal(r.upload.metadata.cover,'');assert.equal(r.upload.metadata.tips,'确认页发布技巧');assert.equal(r.upload.metadata.file,'clip.webm');
+  await click('directed-done','A5103');r=await page.evaluate(()=>FR005.get('A5103'));const manuscriptId=r.manuscript.id;
+  assert.equal(r.manuscript.title,'星河入梦 · 定向成片');
+  await page.evaluate(()=>FR005.act('A5103','auditReject'));await click('directed-upload','A5103');await click('next');
+  assert.equal(await page.locator('[data-field="title"],#directed-cover').count(),0);
+  await click('sample');await click('next');await click('submit');await click('directed-done','A5103');
+  assert.equal(await page.evaluate(()=>FR005.get('A5103').manuscript.id),manuscriptId,'重审保留稿件ID');
+  await page.evaluate(()=>{FR005.act('A5103','auditPass');FR005.act('A5103','claim');});await click('dashboard');
+  assert.equal(await page.locator('.stats .card').nth(2).locator('strong').innerText(),'6070','领取计数随模型变化');
+  await click('directed-list');await click('directed-reject','A5100');
+  await page.locator('#detail [data-action="closeDetail"]').focus();await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'directed-reason');
+  await click('closeDetail');await click('dashboard');await click('upload');await page.locator('#upload-type').selectOption('short');await click('next');
+  await page.locator('[data-field="name"]').fill('普通上传');await page.locator('[data-field="id"]').fill('B123');await click('sample');await click('next');await click('submit');
+  await page.evaluate(()=>FR005.reset());assert.equal(await page.locator('.stats .card').nth(1).locator('strong').innerText(),String(6198+await page.evaluate(()=>FR005.records.filter(r=>r.editorId==='100099'&&r.manuscript).length)));
+  await click('upload');assert.equal(await page.locator('.step.active b').innerText(),'1');await page.locator('#upload-type').selectOption('short');await click('next');assert.equal(await page.locator('[data-field="name"]').inputValue(),'');assert.equal(await page.locator('.material').count(),0);
+  console.log('通过：PC实际三步上传适配器、无标题封面输入/本地预览、格式校验、重审保留、重置/统计及抽屉焦点');
+  await load('fr-wen-005-mobile.html');
+  assert.equal(await page.evaluate(()=>claimRows.some(c=>c.id==='c2')),false,'删除错误的退婚卡片');
+  await page.evaluate(()=>window.dispatchEvent(new MessageEvent('message',{source:parent,origin:location.origin,data:{type:'fr-wen-005:screen',screen:'notifications'}})));
+  assert.equal(await page.locator('.fr-message-tabs button').count(),3);
+  assert.equal(await page.locator('.fr-notifications .card .desc').nth(1).innerText(),'你的定向约稿稿件已审核通过，稿件待领取，请前往约稿记录领取。');
+  await page.locator('[data-fr="notice-tab"][data-fr-id="活动"]').click();assert.match(await page.locator('.fr-message-empty').innerText(),/暂无消息/);
+  await page.locator('[data-fr="notice-tab"][data-fr-id="系统"]').click();await page.locator('#fr-notice-search input').fill('不存在的消息');await page.locator('#fr-notice-search button').click();assert.equal(await page.locator('.fr-notifications .card').count(),0);
+  await page.locator('#fr-notice-search input').fill('');await page.locator('#fr-notice-search button').click();await page.locator('[data-fr="notice-read"]').click();assert.equal(await page.locator('.fr-message-tabs sup').count(),0);
+  await page.evaluate(()=>window.dispatchEvent(new MessageEvent('message',{source:parent,origin:location.origin,data:{type:'fr-wen-005:screen',screen:'claimed'}})));
+
+  await page.evaluate(()=>{currentId='p10';view='detail-platform';draw();});
+  await page.locator('#openMode').click();
+  let balance=await page.evaluate(()=>({quota:FR005.wallet.quotaLeft,rows:claimRows.filter(c=>c.work==='p10').length}));
+  assert.equal(balance.quota,0);assert.equal(balance.rows,1,'广场原领取记录保留');
+  await page.evaluate(()=>{go('claims');claimStatus='未回填';draw();});
+  assert.equal(await page.locator('[data-go="detail-download"][data-id="p10"]').count(),1);
+  await page.evaluate(()=>window.dispatchEvent(new MessageEvent('message',{source:parent,origin:location.origin,data:{type:'fr-wen-005:screen',screen:'notifications'}})));
+  await page.locator('[data-fr="detail"][data-fr-id="A5106"]').click();await page.locator('[data-fr="manuscript"]').click();await page.locator('[data-fr="claim"]').click();
+  assert.equal(await page.locator('#buyOk').count(),1,'广场用掉次数后，定向稿按平台兑换流程');assert.equal(await page.evaluate(()=>FR005.get('A5106').status),'待领取');await page.locator('#buyClose').click();
+  await page.evaluate(()=>window.dispatchEvent(new MessageEvent('message',{source:parent,origin:location.origin,data:{type:'fr-wen-005:screen',screen:'claimed'}})));
+  await page.evaluate(()=>{FR005.getClaim('C4000').downloadDue=FR005.now-1;currentId='fr-C4000';view='detail-download';go('detail-download');});
+  assert(await page.locator('#dyPublish').isDisabled());
+  const before=await page.evaluate(()=>FR005.getClaim('C4000').downloadedAt);await page.evaluate(()=>startDownload('fr-C4000',false));assert.equal(await page.evaluate(()=>FR005.getClaim('C4000').downloadedAt),before);assert.match(await page.locator('#toast').innerText(),/失效/);
+  assert.equal(await page.evaluate(()=>claimRows.filter(c=>c.work==='p10').length),1);
+  console.log('通过：真实广场领取保留记录、定向共享余额、过期原稿详情下载阻断');
+  const openDirected=async id=>{
+   await page.evaluate(()=>window.dispatchEvent(new MessageEvent('message',{source:parent,origin:location.origin,data:{type:'fr-wen-005:screen',screen:'notifications'}})));
+   await page.locator(`[data-fr="detail"][data-fr-id="${id}"]`).click();await page.locator('[data-fr="manuscript"]').click();await page.locator('[data-fr="claim"]').click();
+  };
+  await openDirected('A5120');assert.match(await page.locator('.pay-rows').innerText(),/30/);await page.locator('#chargeCancel').click();assert.equal(await page.evaluate(()=>FR005.wallet.points),80);assert.equal(await page.evaluate(()=>FR005.get('A5120').status),'待领取');
+  await page.locator('[data-fr="claim"]').click();await page.locator('#chargeOk').click();assert.equal(await page.evaluate(()=>FR005.wallet.points),50);
+  await openDirected('A5121');assert.match(await page.locator('.pay-rows').innerText(),/50/);await page.locator('#chargeOk').click();assert.equal(await page.evaluate(()=>FR005.wallet.points),0);
+  await openDirected('A5122');assert.equal(await page.locator('#ptsGoBuy').count(),1);assert.match(await page.locator('.backfill-pop').innerText(),/积分不足/);assert.equal(await page.evaluate(()=>FR005.get('A5122').status),'待领取');
+  console.log('通过：可达苏晚30/陈予50积分待领取示例，确认取消、实际扣费与不足阻断');
+
+  await load('fr-wen-005-directed.html?tab=fe&role=pc');
+  const frame=page.frameLocator('#fr005-pc-native');
+  await page.locator('[data-scene=permission]').click();await frame.locator('.project-permission-warning').waitFor();assert(await frame.locator('[data-action=next]').isDisabled());
+  await page.locator('[data-scene=rejected]').click();await frame.locator('[data-action=next]:not(:disabled)').waitFor();await frame.locator('[data-action=next]').click();
+  assert.equal(await frame.locator('[data-field=name]').inputValue(),await page.evaluate(()=>FR005.get('A5104').book));
+  await page.locator('[data-scene=dashboard]').click();await frame.locator('.stats').waitFor();
+  console.log('通过：记录台iframe连续切换权限/驳回场景，普通看板入口保留');
+  assert.deepEqual(errors,[],'适配器不得出现脚本错误');
+ } finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1});

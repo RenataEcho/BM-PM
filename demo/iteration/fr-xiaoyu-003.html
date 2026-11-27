@@ -1,0 +1,575 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FR-XIAOYU-003 · 小程序推广计划</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f5f8;color:#202638;font:15px system-ui,sans-serif}header{background:white;border-bottom:1px solid #e3e5eb}header>div,main{max-width:1200px;margin:auto;padding:20px}h1{margin:0 0 16px;font-size:24px}h2{font-size:19px}button{font:inherit;cursor:pointer;border:1px solid #dedfe6;border-radius:8px;background:white;color:inherit;padding:9px 14px}button[aria-selected=true],.primary{background:#fff0ea;color:#a92d14;border-color:#ffa48e}.top,.toolbar,.steps{display:flex;gap:8px;flex-wrap:wrap}.top .primary{margin-left:auto}.steps button{flex:1;min-width:110px}.box{background:white;border:1px solid #e3e5eb;border-radius:12px;margin-top:16px;padding:18px}.layout{display:grid;grid-template-columns:178px 1fr;gap:16px}.menu button{width:100%;text-align:left;margin:4px 0}.stage{min-width:0}p,li{line-height:1.65}.muted{color:#626b80}.metrics{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.metrics span{background:#f4f5f8;border-radius:8px;padding:12px}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;margin-top:12px;white-space:nowrap}th,td{text-align:left;padding:10px;border-bottom:1px solid #eceef2}th{background:#f6f7fa}iframe{width:100%;height:900px;border:0}dialog{border:0;padding:24px;border-radius:12px;max-width:min(94vw,520px)}dialog::backdrop{background:#1b21365e}#rules{margin:0 0 0 auto;height:100%;max-height:none;width:min(550px,100vw);border-radius:0;overflow:auto}.flow{max-width:720px;margin:auto}.node{background:white;border:1px solid #dedfe6;padding:14px;border-radius:9px}.arrow{text-align:center;color:#d24929;padding:5px}input,select{font:inherit;padding:8px;max-width:100%}[hidden]{display:none!important}@media(max-width:700px){.layout{grid-template-columns:1fr}.menu{display:flex;flex-wrap:wrap;gap:5px}.menu button{width:auto}}
+
+body{font-family:Inter,"PingFang SC",system-ui,sans-serif;background:#f3f5f9;color:#242a3b;font-size:14px}
+header{background:#172237;color:white;border:0}
+header>div{max-width:1440px;padding:24px 32px 0}
+h1{font-size:23px;font-weight:600;letter-spacing:.5px}
+.top{align-items:center;gap:24px}
+.top button{border:0;border-radius:0;color:#bec8da;background:transparent;padding:16px 2px}
+.top button[aria-selected=true]{color:white;background:transparent;border-bottom:3px solid #ff794d}
+.top .primary{background:#fff;color:#172237;border-radius:6px;padding:9px 15px;margin-bottom:8px}
+main{max-width:1440px;padding:24px 32px}
+.steps{gap:0;background:white;border:1px solid #e4e8ef;border-radius:10px;padding:18px 10px}
+.steps button{border:0;border-right:1px solid #e8ebf1;border-radius:0;padding:13px 8px;font-size:13px;color:#737f94}
+.steps button:last-child{border:0}
+.steps button[aria-selected=true]{color:#d74723;background:#fff0e9;font-weight:650;border-radius:6px}
+#stepNote{background:transparent;border:0;padding:6px 0;margin:14px 0}
+#stepNote strong{font-size:19px;margin-right:12px}
+#stepNote p{margin:6px 0;color:#758097}
+.layout{grid-template-columns:190px minmax(0,1fr);gap:0;padding:0;overflow:hidden;min-height:490px}
+.menu{padding:24px 12px;background:#fbfcfe;border-right:1px solid #e6eaf0}
+.menu strong{display:block;padding:0 12px 20px;font-size:14px}
+.menu button{border:0;border-radius:6px;padding:13px 12px;color:#667188}
+.menu button[aria-selected=true]{background:#fff0e9;color:#d44c27;font-weight:600}
+.stage{padding:24px}
+.stage h2{margin:0 0 22px;font-size:20px}
+button{border-radius:5px;font-size:13px;padding:9px 15px}
+.toolbar{gap:10px;margin-bottom:18px}
+.metrics{gap:14px;margin:0 0 22px}
+.metrics span{flex:1;min-width:130px;padding:24px 16px;background:#f7f9fc;border:1px solid #e9edf5;color:#3d4b67;font-size:17px}
+th{font-weight:500;color:#738098;background:#f6f8fc}
+th,td{padding:17px 12px;font-size:13px}
+.scroll{border:1px solid #e9ecf2;border-radius:7px;margin-top:18px}
+table{margin:0}
+#rules{width:min(620px,100vw);padding:30px}
+#rules h3{padding-top:16px;border-top:1px solid #e8ebf1}
+#rules li{margin-bottom:12px;color:#526077}
+#mobile{padding:20px}
+.flow{max-width:1120px}
+.node{padding:22px 26px;border-left:4px solid #ff7954;box-shadow:0 3px 12px #26364d05}
+.node p{margin-bottom:0;color:#6a7589}
+dialog:not(#rules){width:600px;max-width:94vw}
+#editFields p{display:flex;flex-direction:column;margin:18px 0}
+#editFields input,#editFields select{display:block;margin-top:8px;width:100%;border:1px solid #dce1ea;border-radius:5px;padding:10px}
+@media(max-width:700px){main{padding:12px}.layout{grid-template-columns:1fr}.menu{border-right:0}.stage{padding:15px}.steps button{min-width:30%;border:0}}
+
+#admin{border:1px solid #e1e4ee;border-radius:2px;background:#f5f5f5;grid-template-columns:180px minmax(0,1fr);min-height:620px}
+#admin .menu{background:#fff;padding:0;border-color:#dfe3ef}
+#admin .menu strong{height:48px;padding:15px 20px;border-bottom:1px solid #e5e7ef;color:#444;font-weight:500}
+#admin .menu button{border-radius:0;margin:0;padding:16px 24px;color:#444;background:white}
+#admin .menu button[aria-selected=true]{color:#5558ff;background:#ededff;border-right:2px solid #5558ff;font-weight:500}
+#admin .stage{padding:0 16px 16px;color:#606266}
+#admin .stage h2{height:42px;margin:0 -16px 16px;padding:11px 20px;background:white;border-top:2px solid #5659ff;color:#5659ff;font-size:14px;font-weight:500}
+#admin .stage button{border:1px solid #dcdfea;border-radius:3px;color:#606266;background:white;padding:8px 15px}
+#admin .stage button[data-action=project],#admin .stage button[data-action=publish],#admin .stage button[data-action=queryLedger],#admin .stage button[data-action=filter]{background:#5558ff;color:#fff;border-color:#5558ff}
+#admin .stage button[data-action=rule]{background:#67c23a;color:white;border-color:#67c23a}
+#admin .stage button[data-action^=delete-]{border:0;color:#f56c6c;padding:0;background:transparent}
+#admin .stage .toolbar{background:#fff;padding:16px;margin:0}
+#admin .stage .toolbar button[aria-selected=true]{color:#5558ff;border:0;border-bottom:2px solid #5558ff;border-radius:0}
+#admin .metrics{background:white;margin:0 0 14px;padding:18px;gap:0}
+#admin .metrics span{border:0;border-right:1px solid #ebeef5;border-radius:0;background:white;color:#606266;font-size:15px}
+#admin .scroll{border:0;border-radius:0;margin:0;padding:0 20px 20px;background:white}
+#admin th{background:#f7f7f8;color:#303133;font-weight:500}
+#admin th,#admin td{font-size:13px;padding:15px 12px;border-bottom:1px solid #ebeef5}
+#admin input,#admin select{border:1px solid #dcdfea;border-radius:3px;color:#606266;padding:7px 10px;background:#fff}
+#admin input[type=checkbox]{accent-color:#5558ff}
+.filter-panel{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:white;padding:20px;margin-bottom:16px}
+.filter-panel label{display:flex;align-items:center;gap:10px;font-size:13px}
+.filter-panel input{width:170px}.filter-panel select{min-width:110px}
+#scenarioNext{margin-top:16px}
+@media(max-width:700px){#admin{grid-template-columns:1fr}}
+
+#business>#steps,#stepNote{display:none}
+#sceneGuide{padding:22px 24px;margin-bottom:20px;border-radius:8px}
+.scene-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.scene-heading small{color:#7c879a}.scene-heading h2{margin:5px 0 20px}
+.scene-label{background:#f0f2ff;color:#5558bb;padding:8px 12px;border-radius:4px;font-size:12px}
+.scene-path{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-bottom:20px}
+.scene-path button{border:0;background:#f5f6f9;color:#667188;padding:10px 14px}
+.scene-path button[aria-current=step]{background:#edeeff;color:#5356e9;font-weight:600}
+.scene-path button span{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:white;margin-right:8px}
+.scene-arrow{color:#a1a9b8}
+.scene-contract{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #e7eaf1;padding-top:18px;gap:24px}
+.scene-contract strong{font-size:13px;color:#36445c}.scene-contract p{font-size:13px;color:#6c7789;margin-bottom:0}
+.scene-detail{background:#f8f9fc;padding:12px;font-size:13px;color:#56627a}
+#scenarioNote{margin-bottom:0;font-size:13px}
+@media(max-width:760px){.scene-contract{grid-template-columns:1fr;gap:8px}.scene-heading{align-items:flex-start;flex-direction:column}.scene-label{margin-bottom:12px}}
+
+@media(min-width:1000px){
+ body:has(#business:not([hidden])) main{max-width:none;padding:22px 24px 24px 284px}
+ #business:not([hidden]) #sceneGuide{position:fixed;left:0;top:125px;bottom:0;width:260px;margin:0;padding:24px 18px;border-radius:0;border:0;border-right:1px solid #e2e6ee;overflow-y:auto;z-index:5;background:#fff}
+ #sceneGuide .scene-heading{display:block}
+ #sceneGuide .scene-heading h2{font-size:17px;margin:8px 0 16px}
+ #sceneGuide .scene-label{display:block;margin-bottom:18px;font-size:12px}
+ #sceneGuide .scene-path{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+ #sceneGuide .scene-path button{text-align:left;padding:12px}
+ #sceneGuide .scene-arrow{display:none}
+ #sceneGuide .scene-contract{display:block}
+ #sceneGuide .scene-contract>div{margin-bottom:20px}
+ #sceneGuide .scene-contract p{font-size:12px;margin-top:6px}
+ #sceneGuide .scene-detail{padding:10px;font-size:12px}
+}
+#admin .stage{min-width:0}
+#admin .stage .toolbar{padding:16px 20px;margin:0;background:#fff;align-items:center}
+#admin .scroll{padding:0 20px 20px;margin:0;background:#fff}
+#admin .scroll table{width:100%;table-layout:auto}
+#admin .stage h2{margin-bottom:16px}
+#admin .filter-panel{margin-bottom:16px;padding:20px}
+#admin #scenarioNext{padding:16px 20px;margin-top:16px;background:#fff}
+
+html,body{height:100%;overflow:hidden}
+header>div{padding-top:12px}h1{font-size:20px;margin-bottom:5px}
+main{height:calc(100dvh - 104px);overflow:hidden;padding-top:14px}
+#front{height:100%;display:flex;flex-direction:column;min-height:0}
+#front>.box{flex-shrink:0;padding:10px 16px;margin-bottom:8px}
+#front h2{display:none}#front p{margin:3px 0;font-size:12px}
+#frontFrame{flex:1;min-height:0;width:100%;height:auto!important}
+#business{height:100%;overflow:auto}
+#map{height:100%;overflow:auto}
+button{min-height:34px;border-radius:7px}
+#admin .stage button[data-action=rule]{background:#2852d9;color:white;border-color:#2852d9}
+#rules{width:min(480px,100vw);height:100dvh;padding:22px;overflow:auto;box-shadow:-10px 0 30px #17233a25}
+#rules::backdrop{background:#17233a35}
+#rules h2{font-size:17px}
+.rule-tabs{display:flex;gap:10px;position:sticky;top:0;background:white;padding:10px 0;z-index:1}
+.rule-tabs button[aria-selected=true]{color:#2852d9;background:#edf3ff;border-color:#a9bcee}
+#edit{width:480px;border-radius:10px}
+#edit:has(#editTitle) .primary{background:#2852d9;color:#fff}
+#edit:has(#editTitle) .primary:focus-visible{outline:2px solid #7b95ee}
+@media(min-width:1000px){#business:not([hidden]) #sceneGuide{top:104px}}
+
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#25334c;color:white;border-radius:7px;padding:12px 20px;z-index:100;box-shadow:0 5px 20px #17233a22;max-width:80vw}
+#edit.confirm-dialog{width:400px}
+#edit .primary.danger{background:#c72542!important;border-color:#c72542;color:white}
+#admin .stage button[data-action^=delete-]{min-height:auto;font-size:13px}
+#rules{overflow:hidden;display:none;flex-direction:column}
+#rules[open]{display:flex}
+#rules>h2,#rules>.rule-tabs,#rules>form{flex-shrink:0}
+#rules .rule-scroll{overflow:auto;min-height:0;flex:1}
+#scenarioNext:empty{display:none!important}#commissionHelp{margin:0 0 0 auto;height:100%;max-height:100%;width:480px;border-radius:0;overflow:auto}#commissionHelp p{color:#667188;font-size:14px}#edit{max-height:85vh;overflow:auto}.rule-preview{background:#f4f7fc;padding:16px;border-radius:8px}.rule-preview label{display:block;margin:10px 0}#trialFormula{color:#2852d9;font-weight:600}#admin button[data-action=commissionHelp]{margin-left:auto}
+/* Keep scene controls beside the device so the phone can use the full height. */
+@media(min-width:760px){
+ #front{display:grid;grid-template-columns:240px minmax(0,1fr);gap:16px}
+ #front>.box{align-self:start;margin:0;padding:16px}
+ #front>.box .toolbar{display:flex;flex-direction:column;margin-bottom:16px}
+ #front>.box .toolbar button{text-align:left;width:100%}
+ #frontFrame{height:100%!important}
+}
+.rule-relationship{background:#f8f9fc;border:1px solid #e4e8f1;border-radius:8px;padding:14px;margin:14px 0;font-size:13px;line-height:1.6}.rule-relationship p{margin:8px 0}.field-note{font-size:12px;color:#667188;margin-top:-4px}.trial-step{padding:10px 0;border-bottom:1px solid #e1e6f1}.trial-step strong{font-size:20px}#trialFormula small{display:block;font-weight:400;color:#667188;margin-top:12px}#trialDisplay,#trialScope{font-size:13px}#trialAgency:disabled{background:#e9edf3;color:#98a0af}
+.config-row,#editFields:has(#ruleMethod)>p>label,.rule-preview>label{display:grid;grid-template-columns:124px minmax(0,1fr);align-items:start;gap:12px;margin:16px 0}#editFields .config-row input,#editFields .config-row select{margin:0}#editFields .config-row input:is([type=radio],[type=checkbox]){display:inline;width:auto;margin:0 4px 0 0}.config-row label{display:inline-block;margin:4px}#rich{min-height:90px;padding:8px;border:1px solid #ccd2de;border-radius:5px;margin-top:6px}
+.rich-editor{border:1px solid #cad1df;border-radius:7px;overflow:hidden;background:white}.rich-editor:focus-within{border-color:#5369eb}.rich-tools{display:flex;flex-wrap:wrap;gap:2px;padding:5px;background:#f6f7fa;border-bottom:1px solid #dde2ec}#edit .rich-tools button{font-size:13px;background:transparent;border:0;min-height:28px;padding:4px 7px}#edit .rich-tools button:hover{background:#e4e9fb}.rich-editor #rich{margin:0;min-height:140px;padding:12px;border:0;outline:0;line-height:1.6}.rich-editor #rich:empty:before{content:attr(data-placeholder);color:#9098aa;pointer-events:none}
+</style></head><body>
+<header><div><h1>FR-XIAOYU-003 · 小程序推广计划 <span style="font-size:12px;font-weight:400;color:#a8b5cc;margin-left:14px">v2 · 优化草稿</span></h1><nav class="top" aria-label="需求视图"><button id="frontTab" aria-selected="true">前端</button><button id="businessTab" aria-selected="false">后台</button><button id="mapTab" aria-selected="false">流程图</button><button id="reviewFullscreen">全屏预览</button><button class="primary" id="openRules" aria-expanded="false">需求规则</button></nav></div></header>
+<main><section id="front"><div class="box" style="margin-top:0"><h2>前端交互</h2><nav class="toolbar" aria-label="前端场景"><button data-front-scene="list">项目列表</button><button data-front-scene="project">项目任务列表</button><button data-front-scene="detail">任务详情页</button></nav><div class="toolbar"><button data-order-scenario="none">项目无订单 · 隐藏月榜</button><button data-order-scenario="has">项目有订单 · 展示月榜</button></div><p id="frontLocation">当前页面 · 项目列表</p><p class="muted">点击项目的「查看」，选择任务进入详情，再获取参与入口。使用返回按钮逐页返回。</p></div><iframe id="frontFrame" title="设备前端连续交互" src="fr-xiaoyu-003-mobile.html" style="height:850px"></iframe></section><section id="business" hidden><div class="box" style="margin-top:0;margin-bottom:16px"><strong>场景演示</strong><div class="toolbar" style="margin-top:12px;margin-bottom:0"><button data-scenario="launch">管理后台配置并上架</button><button data-scenario="commission">调整分佣规则</button><button data-scenario="ledger">查询流水</button></div><p id="scenarioNote" class="muted">先在管理后台准备任务，再到设备前端查看和参与。</p></div><div id="sceneGuide" class="box"></div><nav id="steps" class="steps" aria-label="流程步骤"></nav><div class="box" id="stepNote"></div><section class="box layout" id="admin"><nav class="menu" id="menu" aria-label="后台菜单"></nav><div class="stage"><div id="stage"></div><div id="scenarioNext" class="toolbar" style="margin-top:20px"></div></div></section><section class="box" id="mobile" hidden><h2>设备前端</h2><p class="muted">从左侧手机选择项目，再在中间选择任务，右侧展示所选任务详情。数据均为交互演示。</p><iframe title="项目列表、项目页和任务详情页" src="fr-xiaoyu-003-mobile.html"></iframe></section></section>
+<section id="map" class="flow" hidden></section></main>
+<dialog id="rules"><form method="dialog"><button>关闭</button></form><h2>FR-XIAOYU-003 · 小程序推广计划 · v2 优化草稿需求规则</h2><nav class="rule-tabs"><button type="button" id="frontRulesTab">前端需求</button><button type="button" id="adminRulesTab">后台需求</button></nav><div class="rule-scroll"><p id="ruleContext" class="muted"></p>
+<h3>管理后台前端</h3><p>新建项目统一归属于“小程序推广计划”，项目方管理仅配置二级页面的项目名称、项目ID、展示状态、项目说明和排序。一级赛道和短剧链接由其他后台接口统一维护。任务管理获取撮合平台任务数据，流水管理获取撮合平台订单数据。比例设置同时支持前端展示和原始订单拉取后的达人收益计算，分佣计算规则解释公式与用户入账方式。</p><ul><li>项目 → 小程序推广计划下提供项目方管理、任务管理、分佣设置和流水管理。任务列表默认展示同步任务，按后端结果刷新归属和上架状态。</li><li>比例设置包含通用和任务自定义两页。已创建规则通过删除后重建调整，删除后原规则立即失效。</li></ul>
+<h3>后端</h3><ul><li>查询合作小程序任务 ID，再按 ID 拉取详情，按任务 ID 去重入库。ID 接口单次查询时间范围最长 7 天。手动新增时用任务路径查详情，取得 ID 后走同一入库流程。</li><li>后端处理任务与项目方关联及批量上架。重新同步更新抖音任务数据，保留右豹归属与上架配置。</li><li>有效任务自定义规则优先，未命中按订单类型和右豹用户身份匹配通用规则。删除时旧规则失效，新规则按创建时间生效。自定义规则删除后、重建前按通用规则计算。历史流水保留实际采用的比例及计算方式。</li><li>任务统计和流水逐项映射文档支持的返回参数。接待数、投稿数、逐笔订单及用户映射等字段的数据来源待确认。</li></ul>
+<h3>终端前端</h3><ul><li>展示后端返回的已上架任务。发现页进入项目列表，项目页展示项目方和任务卡片，任务详情展示结算方式、右豹前端分成和抖音分成，并提供参与入口。</li><li>达人在抖音完成绑定、接单和挂链投稿。右豹到抖音的正式跳转与二维码对接方式待确认。</li></ul></div></dialog>
+<dialog id="commissionHelp"><form method="dialog"><button>关闭</button></form><h2>计算与发放说明</h2><h3>比例与公式的关系</h3><p>一条分佣规则同时保存适用范围、结算比例、前端展示比例和计算方式。结算比例作用于计算基数；前端比例仅展示，不重复参与计算。新增弹窗中的试算只使用当前未保存的表单值。</p><h3>如何确定佣金</h3><p>任务自定义规则优先；未命中时按订单类型和用户身份匹配通用规则。</p><p>按官方流水计算：试算基数 × 用户结算比例。</p><p>按机构分佣后计算：试算基数 × 机构分成比例 × 用户结算比例。</p><p>试算暂用订单净额并四舍五入到分，正式金额字段与公式待确认。前端展示比例用于任务页展示，收益计算使用结算比例。</p><h3>动态试算如何变化</h3><p>输入净额或结算比例后实时重算；选择按机构分佣后计算时启用机构分成，并新增机构分佣计算步骤。选择按官方流水计算时禁用机构分成。空值和越界输入不输出金额，0 是有效值。修改前端比例只更新展示预览。</p><h3>如何给到用户</h3><p>应得佣金 → 结算校验 → 关联右豹用户 → 按确认后的发放条件入账。保存规则不触发打款，试算金额不等于已到账金额。未命中任何规则时标记待配置，不默认按 0 元结算（本版草稿建议）。</p><p>通过订单、任务和达人映射关联右豹用户 ID。到账账户、发放条件、到账时间和退款扣回规则待确认。</p><h3>何时生效</h3><p>新建规则按创建时间生效。删除自定义规则后按通用规则计算，历史流水保留原结果。</p></dialog><dialog id="edit"><form id="editForm"><h2 id="editTitle"></h2><div id="editFields"></div><p><button type="button" id="cancel">取消</button> <button class="primary">确定</button></p></form></dialog>
+<script>
+const model=[
+ ['合作与建任务','抖音侧','MCN 获取 ClientKey 并与小程序完成合作授权。爱奇艺运营方在抖音开放平台创建任务。',''],
+ ['配置项目方','右豹后台','维护二级页面项目名称及展示配置，供右豹终端展示。','项目方管理'],
+ ['同步与上架','右豹后台','查询任务 ID 和详情并入库。可按路径手动补录，由后端处理项目归属与上架。','任务管理'],
+ ['配置分佣','右豹后台','通用规则按订单类型与用户身份配置，任务例外按已同步任务 ID 配置。','分佣设置'],
+ ['浏览与参与','右豹终端 → 抖音','达人从项目列表进入项目页和任务详情，再进入抖音接单及挂链投稿。','终端'],
+ ['归因与流水','抖音侧 → 右豹后台','观众付费后关联任务、视频与渠道。右豹流水展示接口支持的数据及实际采用的分佣规则。','流水管理'],
+ ['查看分佣计算规则','右豹后台','查看任务规则匹配顺序、生效时间及历史流水处理。','分佣计算规则']
+];
+let scenario = 'launch';
+let synced = false;
+const scenarioSteps = {
+ launch: {label:'管理后台配置并上架',note:'管理后台：建项目方 → 同步任务 → 设分佣 → 上架。设备前端：选项目 → 选任务 → 看详情 → 参与。'},
+ commission: {label:'运营调整任务分佣',note:'查看自定义规则 → 删除旧记录 → 创建新规则。删除后的空档期按通用规则计算。'},
+ creator: {label:'设备前端查看并参与',note:'点击项目入口，搜索或选择任务，进入详情查看分成，再点击获取参与二维码。'},
+ ledger: {label:'运营查询订单流水',note:'按任务 ID 或用户 ID 查询流水，核对任务信息、三个分成比例和计算方式。'}
+};
+const by=id=>document.getElementById(id);
+const menus=['项目方管理','任务管理','分佣设置','流水管理'];
+let step=1, custom=false, published=false, nextRule=3;
+const publishedIds = new Set();
+// 开发维护的项目表在草稿中使用模拟数据。
+const catalog=['爱奇艺','原生剧场','微剧吧'];
+const sharedBooklists={IQY:'https://example.com/demo-booklist'};
+const notes={};
+function cleanRich(){
+ const copy=by('rich').cloneNode(true);
+ for(const el of copy.querySelectorAll('*')){
+ if(!['P','DIV','BR','STRONG','B','UL','OL','LI','I','EM','U','H3'].includes(el.tagName))el.replaceWith(...el.childNodes);
+ else for(const attr of [...el.attributes])el.removeAttribute(attr.name);
+ }
+ return copy.textContent.trim()?copy.innerHTML:'';
+}
+function sendProjects(){by('frontFrame').contentWindow.postMessage({type:'project-links',projects:projects.map(r=>({name:r[0],url:sharedBooklists[r[3]]||'',visible:r[4],description:r[5]})),notes,owners:Object.fromEntries(tasks.map(t=>[t[0],t[2]]))},'*')}
+by('frontFrame').addEventListener('load',sendProjects);
+const projects=[['爱奇艺',null,null,'IQY','是','<p>发布原创推广视频并挂载任务小程序。</p>',100]];
+const tasks=[['DEMO-001','首发AI真人剧《一辈子暖暖的》','爱奇艺'],['DEMO-002','精品AI漫剧《凤定九州》','爱奇艺']];
+const rules=[{id:2,custom:false,key:'CPS / 新人创作者',rate:'70',time:'示例配置'},{id:1,custom:true,key:'DEMO-001',rate:'71',time:'示例配置'}];
+const table=(heads,rows)=>'<div class="scroll"><table><thead><tr>'+heads.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map(value=>'<td>'+value+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
+const escapeText=value=>String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+const act=(label,action)=>'<button data-action="'+action+'">'+label+'</button>';
+
+const scenePaths = {
+ launch:[1,2,3,2],
+ commission:[3],
+ creator:[4],
+ ledger:[5]
+};
+const pageGuides = {
+ 6:['订单佣金计算与发放','输入订单金额、退款和分成比例，试算这笔钱如何分给用户。','确定计算基数，匹配结算规则并关联用户，按确认后的发放条件入账。','可以看到计算过程、用户应得佣金和待确认的到账规则。'],
+ 0:['完成合作接入','MCN 与小程序建立合作关系，运营方创建任务。','后端使用具备权限的凭证调用任务查询接口。','任务可通过接口查询。'],
+ 1:['建立项目展示信息','点击新增，选择项目名称并填写项目ID并保存。','保存项目方，提供给任务关联和终端展示。','列表出现新项目方，名称和ID与配置一致。'],
+ 2:['同步任务并提交上架','点击更新同步任务查看结果，勾选任务后点击任务批量上架。','查询任务 ID 和详情并去重入库，处理归属与上架，返回逐条结果。','同步任务出现在列表，上架成功的任务状态更新并可在终端展示。'],
+ 3:['确定任务使用的分佣规则','通用规则按订单类型和用户身份创建，特殊任务在自定义 Tab 中按已同步任务 ID 配置。','按创建时间启用规则，有效自定义优先，未命中时匹配通用规则。','新规则出现在列表，删除后从列表移除，历史流水保留原规则。'],
+ 4:['让达人找到并参与任务','从项目入口打开项目页，搜索任务，打开详情并点击参与入口。','提供已上架任务和用户对应展示比例，正式接入后提供参与链接。','任务信息与后台一致，详情展示右豹前端比例和抖音分成。'],
+ 5:['核对任务流水使用的规则','输入任务 ID 或用户 ID，点击查询，查看任务信息与比例。','返回文档支持的流水数据、用户关联和当时使用的规则快照。','可核对项目、任务、用户、三种比例、计算方式和创建时间。']
+};
+let scenePosition=0;
+function renderSceneGuide(index){
+ const current=pageGuides[index];
+ const path=scenePaths[scenario];
+ by('sceneGuide').innerHTML='<div class="scene-heading"><div><small>当前场景</small><h2>'+scenarioSteps[scenario].label+'</h2></div><span class="scene-label">当前页面 · '+model[index][0]+'</span></div>'+
+ '<div class="scene-path">'+path.map((item,i)=>'<button data-scene-position="'+i+'" aria-current="'+(i===scenePosition?'step':'false')+'"><span>'+(i+1)+'</span>'+(['配置项目方','同步任务','配置分佣','上架任务','查看终端'][i]&&scenario==='launch'?['配置项目方','同步任务','配置分佣','上架任务','查看终端'][i]:model[item][0])+'</button>').join('<span class="scene-arrow">→</span>')+'</div>'+
+ '<div class="scene-contract"><div><strong>操作人员做什么</strong><p>'+current[1]+'</p></div><div><strong>后端处理什么</strong><p>'+current[2]+'</p></div><div><strong>完成后看到什么</strong><p>'+current[3]+'</p></div></div>';
+ if(scenario==='commission')by('sceneGuide').innerHTML+='<p class="scene-detail">按顺序体验　自定义任务比例设置 → 删除旧规则 → 新增。删除后的新流水按通用规则计算。</p>';
+ if(scenario==='creator')by('sceneGuide').innerHTML+='<p class="scene-detail">下方从左到右展示项目列表、项目页、任务详情。点击查看和任务卡片体验对应页面。</p>';
+}
+function show(index){
+ step=index;
+ renderSceneGuide(index);
+ const [title,role,note,page]=model[index];
+ by('steps').innerHTML=model.map((item,i)=>'<button aria-selected="'+(i===index)+'" data-step="'+i+'">'+(i+1)+'. '+item[0]+'</button>').join('');
+ by('stepNote').innerHTML='<strong>'+title+'</strong> <span class="muted">'+role+'</span><p>'+note+'</p>';
+ by('admin').hidden=!page||page==='终端';
+ by('mobile').hidden=page!=='终端';
+ by('menu').innerHTML='<strong>小程序推广计划</strong>'+menus.map(name=>'<button aria-selected="'+(name===page)+'" data-step="'+model.findIndex(s=>s[3]===name)+'">'+name+'</button>').join('');
+ if(!by('admin').hidden) render(page);
+const next = by('scenarioNext');
+next.replaceChildren();
+if(scenario==='launch' && page){
+ const destinations = {'项目方管理':[2,'下一步 · 同步任务'],'任务管理':[3,'下一步 · 配置分佣'],'分佣设置':[2,'返回任务管理 · 上架任务']};
+ if(destinations[page]){
+ const [destination,label] = destinations[page];
+ const button=document.createElement('button');
+ button.className='primary';button.textContent=label;button.onclick=()=>{scenePosition=Math.min(scenePosition+1,scenePaths[scenario].length-1);show(destination)};next.append(button);
+ }
+ if(page==='任务管理' && publishedIds.size){
+ const button=document.createElement('button');button.textContent='查看达人端';button.onclick=()=>selectTab('front');next.append(button);
+ }
+}
+}
+function render(page){
+ let body='';
+
+ if(page==='分佣计算规则') body=
+ '<div style="background:white;padding:20px"><h3>一笔订单如何计算并给到用户</h3><p>订单收入 → 确定计算基数 → 匹配用户结算比例 → 计算用户佣金 → 关联用户 → 按发放条件入账</p><p class="muted">以下试算用于确认计算口径。实际取数字段、到账账户和发放条件待业务确认。</p></div>'+
+ '<form id="commissionCalculator" style="background:white;padding:20px"><div class="filter-panel"><label>订单金额（元）<input name="amount" type="number" min="0" step="0.01" value="100" required></label><label>退款金额（元）<input name="refund" type="number" min="0" step="0.01" value="0" required></label><label>机构分成（%）<input name="official" type="number" min="0" max="100" step="0.01" value="20" required></label><label>用户结算比例（%）<input name="userRate" type="number" min="0" max="100" step="0.01" value="70" required></label><label>计算方式<select name="basis"><option value="official">按官方流水计算</option><option value="agency">按机构分佣后计算</option></select></label><label>归属用户 ID<input name="user" value="演示用户-001" required></label><button class="primary" type="submit">试算佣金</button></div><div id="commissionResult" role="status" style="padding:16px;background:#f6f8fc">填写金额和比例后点击试算。</div></form>'+
+ table(['环节','规则与待确认项'],[
+ ['计算基数','试算暂按订单金额减退款金额得到净额；按机构分佣后计算时，再乘机构分成比例。正式公式及字段映射待确认。'],
+ ['用户佣金','试算基数 × 用户结算比例。试算四舍五入到分，正式精度与舍入规则待确认。'],
+ ['比例来源','优先匹配有效任务自定义规则，未命中时按订单类型和用户身份匹配通用规则。'],
+ ['归属用户','通过订单、任务和达人映射定位右豹用户 ID；实际映射数据来源待确认。'],
+ ['给到用户','需明确佣金进入哪个账户、何时变为可用余额，以及如何提现或打款。当前不模拟真实到账。'],
+ ['退款与历史流水','历史流水保留当时规则及计算结果；退款后的佣金扣回方式、时间和状态待确认。']
+ ]);
+ if(page==='项目方管理') body='<div class="toolbar">'+act('新增','project')+'</div>'+table(['归属业务','项目名称','项目ID','是否展示','排序','操作'],projects.map((row,index)=>['小程序推广计划',escapeText(row[0]),escapeText(row[3]),row[4],row[6],act('编辑','editProject-'+index)]));
+ if(page==='任务管理') body='<div class="metrics"><span>累计任务 '+tasks.length+'</span><span>每日新增 '+tasks.length+'</span><span>接待数量 —</span><span>投稿数量 —</span></div><div class="toolbar">'+act('任务批量上架','publish')+act('更新同步任务','sync')+act('新增','task')+'</div>'+table(['选择','任务 ID','任务名称','所属项目','右豹状态','操作'],tasks.map(row=>['<input type="checkbox" value="'+escapeText(row[0])+'" aria-label="选择任务">',...row.map(escapeText),publishedIds.has(row[0])?'已上架':'待上架',act('编辑项目说明','taskNote-'+row[0])]));
+ if(page==='分佣设置') body='<div class="toolbar"><button data-action="general" aria-selected="'+!custom+'">通用比例设置</button><button data-action="custom" aria-selected="'+custom+'">自定义任务比例设置</button>'+act('新增','rule')+act('计算与发放说明','commissionHelp')+(custom?act('导入数据','import'):'')+'</div>'+table([custom?'任务 ID':'订单类型 / 用户身份','右豹团队身份','结算比例','前端比例','计算方式','创建时间','操作'],rules.filter(r=>r.custom===custom).map(r=>[escapeText(r.key),escapeText(r.teams?.join('、')||'不限'),escapeText(r.rate)+'%',escapeText(r.front??r.rate)+'%',escapeText(r.method||'按官方流水计算'),r.time,act('删除','delete-'+r.id)]));
+ if(page==='流水管理') body='<div class="toolbar"><input id="ledgerQuery" placeholder="任务 ID / 用户 ID">'+act('查询','queryLedger')+'</div>'+'<div class="metrics"><span>累计流水 —</span><span>今日新增 —</span><span>待结算金额 —</span></div>'+table(['流水 ID','所属项目','用户 ID','任务名称 / ID','结算方式','小程序分成','右豹结算比例','右豹前端比例','计算方式','创建时间'],[])+'<p class="muted" style="text-align:center;padding:65px 0">暂无流水数据<br><small>接口同步后展示订单及对应结算规则</small></p>';
+ const filterFields = page==='项目方管理' ? ['项目名称','项目ID'] : page==='任务管理' ? ['任务 ID','任务名称','所属项目'] : page==='分佣设置' ? [custom?'任务 ID':'用户身份','计算方式'] : [];
+const filters = filterFields.length ? '<div class="filter-panel">'+filterFields.map(label=>'<label>'+label+'<input data-filter placeholder="请输入'+label+'"></label>').join('')+act('查询','filter')+act('重置','resetFilter')+'</div>' : '';
+by('stage').innerHTML='<h2>项目 / 小程序推广计划 / '+page+'</h2>'+filters+body+'<p class="muted" style="font-size:12px;margin-top:20px">预览数据 · 操作仅在本次页面会话生效</p><p id="status" role="status" class="muted"></p>';
+}
+let toastTimer;
+function toast(message){
+ let element=by('toast');
+ if(!element){element=document.createElement('div');element.id='toast';element.setAttribute('role','status');document.body.append(element)}
+ element.textContent=message;element.hidden=false;
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>element.hidden=true,2500);
+}
+function form(title,fields,submit){
+ const destructive=title==='删除分佣规则';
+ by('edit').classList.toggle('confirm-dialog',destructive);
+ const submitButton=by('editForm').querySelector('button.primary');
+ submitButton.textContent=destructive?'确认删除':'保存';
+ submitButton.classList.toggle('danger',destructive);
+ by('editTitle').textContent=title;
+ by('editFields').innerHTML=fields;
+ by('editForm').onsubmit=event=>{
+  event.preventDefault();
+  const message=submit(new FormData(event.currentTarget));
+  by('edit').close();
+  show(step);
+  by('status').textContent=message;toast(message);
+ };
+ by('edit').showModal();
+}
+const field=(name,label,type='text')=>'<p><label>'+label+' <input required name="'+name+'" type="'+type+'" '+(type==='number'?'min="0" max="100" step="0.01"':'')+'></label></p>';
+document.addEventListener('click',event=>{
+ const target=event.target.closest('button');
+ if(!target)return;
+ if(target.dataset.scenePosition!==undefined){
+ scenePosition=Number(target.dataset.scenePosition);
+ show(scenePaths[scenario][scenePosition]);return;
+}
+if(target.dataset.step!==undefined){tab(false);show(Number(target.dataset.step));return;}
+ if(target.dataset.scenario){
+ scenario=target.dataset.scenario;scenePosition=0;
+ by('scenarioNote').textContent=scenarioSteps[scenario].note;
+ custom=scenario==='commission';
+ tab(false);show({launch:1,commission:3,creator:4,ledger:5}[scenario]);return;
+}
+const action=target.dataset.action;
+ if(!action&&!target.dataset.format)return;
+ if(action==='commissionHelp'){by('commissionHelp').showModal();return;}
+ if(action==='filter'||action==='resetFilter'){
+  const inputs=[...by('stage').querySelectorAll('[data-filter]')];
+  if(action==='resetFilter')inputs.forEach(input=>input.value='');
+  const terms=inputs.map(input=>input.value.trim().toLowerCase()).filter(Boolean);
+  let count=0;
+  by('stage').querySelectorAll('tbody tr').forEach(row=>{
+   row.hidden=!terms.every(term=>row.textContent.toLowerCase().includes(term));
+   if(!row.hidden)count++;
+  });
+  by('status').textContent='共 '+count+' 条匹配记录';
+  return;
+ }
+ if(action==='queryLedger')by('status').textContent='查询完成，暂无匹配流水。当前原型未连接订单接口。';
+ if(action==='general'||action==='custom'){custom=action==='custom';show(step);}
+
+ const line=(label,control)=>'<div class="config-row"><span>'+label+'</span><div>'+control+'</div></div>';
+ const select=(name,options)=>'<select aria-label="'+name+'" name="'+name+'">'+options.map(v=>'<option>'+v+'</option>').join('')+'</select>';
+ const formats=[['formatBlock','小标题','H₂'],['bold','加粗','<b>B</b>'],['italic','斜体','<i>I</i>'],['underline','下划线','<u>U</u>'],['insertUnorderedList','无序列表','• 列表'],['insertOrderedList','有序列表','1. 列表'],['removeFormat','清除字符格式','清除格式']];
+ const formatTools=formats.map(([cmd,label,icon])=>'<button type="button" data-format="'+cmd+'" title="'+label+'" aria-label="'+label+'" onmousedown="event.preventDefault()">'+icon+'</button>').join('');
+ const rich=line('项目说明','<div class="rich-editor"><div class="rich-tools" role="toolbar" aria-label="文本格式">'+formatTools+'</div><div contenteditable="true" role="textbox" aria-multiline="true" aria-label="项目说明" id="rich" data-placeholder="输入项目说明…"></div></div>');
+ if(target.dataset.format){
+  const editor=by('rich');editor.focus();
+  const cmd=target.dataset.format;
+  const heading=String(document.queryCommandValue('formatBlock')).toLowerCase()==='h3';
+  document.execCommand(cmd,false,cmd==='formatBlock'?(heading?'p':'h3'):null);
+  return;
+ }
+ if(action==='project'||action.startsWith('editProject-')){
+ const index=action==='project'?-1:Number(action.split('-')[1]);
+ const row=projects[index]||[catalog[0],null,null,'','是','',0];
+ form(index<0?'新增项目方':'编辑项目方',line('项目名称',select('projectName',catalog))+line('项目ID','<input required name="pid">')+line('是否展示',['是','否'].map(v=>'<label><input type="radio" name="visible" value="'+v+'">'+v+'</label>').join(' '))+rich+line('排序','<input name="sort" type="number" required step="1"><small>数字越大越靠前</small>'),d=>{
+ const next=[d.get('projectName'),null,null,d.get('pid'),d.get('visible'),cleanRich(),Number(d.get('sort'))];
+ if(index<0)projects.push(next);else {tasks.forEach(t=>{if(t[2]===row[0])t[2]=next[0]});projects[index]=next}
+ projects.sort((a,b)=>b[6]-a[6]);sendProjects();return '项目配置已保存';
+ });
+ const f=by('editForm').elements;
+ f.projectName.value=row[0];f.pid.value=row[3];f.visible.value=row[4];by('rich').innerHTML=row[5];f.sort.value=row[6];
+ }
+ if(action.startsWith('taskNote-')){
+ const task=tasks.find(t=>t[0]===action.slice(9));
+ form('编辑任务项目说明',rich,()=>{const note=cleanRich();if(note)notes[task[0]]=note;else delete notes[task[0]];sendProjects();return '任务说明已保存'});
+ by('rich').innerHTML=notes[task[0]]||projects.find(r=>r[0]===task[2])?.[5]||'';
+ }
+ if(action==='task')form('按任务路径新增',field('path','抖音任务路径'),data=> {
+ const path=data.get('path');
+ const match=String(path).match(/taskId=([^&]+)/);
+ if(!match)return '路径中未识别到 taskId，请核对后重新提交。正式接入由接口查询确认。';
+ if(tasks.some(task=>task[0]===match[1]))return '该任务已存在，已按任务 ID 去重。';
+ tasks.push([match[1],'路径补录任务（演示）',projects[0][0]]);
+ return '演示任务已入库，等待上架。';
+});
+ if(action==='sync'){
+ synced=true;
+ by('status').textContent='演示同步成功 · 已查询 2 个任务 ID 并获取详情。可配置分佣后勾选任务上架。';
+}
+ if(action==='publish'){
+  if(!by('stage').querySelector('input:checked')){by('status').textContent='请勾选要上架的任务。';return;}
+  by('stage').querySelectorAll('input:checked').forEach(input=>publishedIds.add(input.value));show(step);by('status').textContent='示例任务已上架。';
+ }
+ if(action==='rule'){
+ form('新增分佣规则',
+ '<div class="rule-relationship"><strong>一条规则 = 适用范围 + 结算比例 + 展示比例 + 计算方式</strong><p>先确定订单用哪条规则，再按该规则的计算方式和结算比例算出达人应得。前端比例用于展示，不重复参与收益计算。</p><p>匹配顺序：有效任务自定义 → 按订单类型和用户身份匹配通用规则。均未命中时标记待配置，不默认按 0 元结算。</p></div>'+
+ (custom?'<p><label>任务 ID <select name="key">'+tasks.map(t=>'<option>'+escapeText(t[0])+'</option>').join('')+'</select></label></p>':line('订单类型',['CPS','CPA','CPM'].map(v=>'<label><input required type="radio" name="order" value="'+v+'">'+v+'</label>').join(' '))+line('右豹用户身份',['全部','L1','L2','L3','L4','L5','L6','L7'].map(v=>'<label><input type="checkbox" name="identity" value="'+v+'" '+(v==='全部'?'checked':'')+'>'+v+'</label>').join(' ')))+
+ line('右豹团队身份',['V1','V2','V3'].map(level=>'<label><input type="checkbox" name="teams" value="'+level+'">'+level+'</label>').join(' ')+'<small>可多选，留空表示不限团队身份</small>')+
+ field('rate','右豹结算比例（%）','number')+'<p class="field-note">用于计算达人收益；作用于下面计算方式确定的基数。</p>'+
+ field('front','右豹前端比例（%）','number')+'<p class="field-note">用于任务详情页展示，不与结算比例连乘。</p>'+
+ '<p><label>计算方式<select name="method" id="ruleMethod"><option>按官方流水计算</option><option>按机构分佣后计算</option></select></label></p>'+
+ '<div class="rule-preview"><strong>动态收益试算</strong><p class="muted">试算当前表单，不代表已生效规则。示例采用订单净额，正式接口字段及精度待确认。</p><p id="trialScope"></p><label>订单净额（元）<input id="trialAmount" type="number" min="0" step="0.01" value="100"></label><small>假设已扣除退款；已为机构分佣后金额时，不可再次乘机构分成。</small><label>机构分成（%）<input id="trialAgency" type="number" min="0" max="100" step="0.01" value="20"></label><p id="trialAgencyNote" class="field-note"></p><div id="trialFormula" role="status" aria-live="polite"></div><p id="trialDisplay"></p></div>'+
+ '<div class="rule-relationship"><strong>保存后如何给用户</strong><p>保存即按创建时间生效；通过订单、任务与达人映射找到右豹用户，记录规则及比例快照。计算出的应得佣金须经结算校验后再入账，不在保存规则时发钱。</p><p>到账账户、结算条件、发放时间及退款扣回规则待确认。删除自定义后，新流水回退通用规则；历史流水保留原计算结果。</p></div>',
+ data=>{rules.push({id:nextRule++,custom,teams:data.getAll('teams'),key:custom?data.get('key'):data.get('order')+' / '+data.getAll('identity').join('、'),rate:data.get('rate'),front:data.get('front'),method:data.get('method'),time:new Date().toLocaleString()});return '示例规则已创建，自创建时间生效。';});
+ updateRulePreview();
+ }
+ if(action.startsWith('delete-'))form('删除分佣规则','<p>确定删除此分佣规则？删除后立即停止用于新流水，自定义规则删除后按通用规则计算。</p>',()=>{const index=rules.findIndex(r=>r.id===Number(action.slice(7)));if(index>=0)rules.splice(index,1);return '规则已删除。';});
+ if(action==='import')form('导入自定义任务比例','<p><label>选择文件 <input type="file" required accept=".csv,.xlsx"></label></p>',()=> '预览已选择文件。正式导入由后端校验任务 ID 和比例。');
+});
+
+let activeTab='front';
+let frontPage='list';
+const frontNames={list:'项目列表',project:'项目任务列表',detail:'任务详情',participate:'参与任务'};
+function selectTab(name){
+ activeTab=name;
+ by('front').hidden=name!=='front';
+ by('business').hidden=name!=='business';
+ by('map').hidden=name!=='map';
+ [['frontTab','front'],['businessTab','business'],['mapTab','map']].forEach(([id,key])=>by(id).setAttribute('aria-selected',name===key));
+}
+
+document.addEventListener('submit',event=>{
+ if(event.target.id!=='commissionCalculator')return;
+ event.preventDefault();
+ const values=new FormData(event.target);
+ const amount=Number(values.get('amount')),refund=Number(values.get('refund'));
+ if(refund>amount){by('commissionResult').textContent='退款金额不能超过本次试算订单金额。';return}
+ const net=amount-refund,agency=net*Number(values.get('official'))/100;
+ const base=values.get('basis')==='agency'?agency:net;
+ const commission=base*Number(values.get('userRate'))/100;
+ by('commissionResult').textContent='试算净额 '+net.toFixed(2)+' 元 → 计算基数 '+base.toFixed(2)+' 元 × '+values.get('userRate')+'% = 用户佣金 '+commission.toFixed(2)+' 元。归属用户 '+values.get('user')+'。待确认发放条件后入账。';
+});
+
+document.addEventListener('input',event=>{
+ if(event.target.name==='identity'){
+ const boxes=[...by('editForm').querySelectorAll('[name=identity]')];
+ if(event.target.checked)boxes.filter(b=>(b.value==='全部')!==(event.target.value==='全部')).forEach(b=>b.checked=false);
+ boxes[0].setCustomValidity(boxes.some(b=>b.checked)?'':'请选择右豹用户身份');
+ }
+ updateRulePreview();
+});
+document.addEventListener('change',updateRulePreview);
+function updateRulePreview(){
+ if(!by('trialFormula'))return;
+ const form=by('editForm'),rateField=form.elements.rate,frontField=form.elements.front;
+ const amountField=by('trialAmount'),agencyField=by('trialAgency');
+ const useAgency=by('ruleMethod').value==='按机构分佣后计算';
+ agencyField.disabled=!useAgency;
+ by('trialAgencyNote').textContent=useAgency?'参与计算：先算机构分佣金额，再乘右豹结算比例。':'当前方式不使用机构分成，已禁用；切换方式后恢复。';
+ const scope=custom?'任务 '+form.elements.key.value:(form.elements.order.value||'待选择订单类型')+' / '+(new FormData(form).getAll('identity').join('、')||'待选择用户身份');
+ by('trialScope').textContent='当前试算范围：'+scope+' / 右豹团队身份 '+(new FormData(form).getAll('teams').join('、')||'不限')+'（'+(custom?'任务自定义规则':'通用规则')+'，尚未保存）';
+ const front=frontField.value;
+ by('trialDisplay').textContent=front===''?'任务页展示：请填写前端比例。':!frontField.validity.valid?'前端比例需为 0–100%。':'任务页展示 '+front+'%；该值不参与下方收益计算。'+(rateField.value!==''&&Number(front)!==Number(rateField.value)?' 展示比例与结算比例不同，请核对展示口径。':'');
+ const fields=[amountField,rateField,...(useAgency?[agencyField]:[])];
+ if(fields.some(f=>f.value===''||!f.validity.valid)){
+ by('trialFormula').textContent='请填写有效订单净额和结算比例'+(useAgency?'、机构分成':'')+'。净额不得小于 0，比例范围 0–100%。';return;
+ }
+ const amount=Number(amountField.value),agency=Number(agencyField.value),rate=Number(rateField.value);
+ const base=amount*(useAgency?agency/100:1),result=base*rate/100;
+ by('trialFormula').innerHTML='<div class="trial-step">① 订单净额：'+amount.toFixed(2)+' 元</div><div class="trial-step">② 计算基数：'+(useAgency?amount.toFixed(2)+' × '+agency+'% = '+base.toFixed(2)+' 元（机构分佣后）':amount.toFixed(2)+' 元（直接使用官方流水净额）')+'</div><div class="trial-step">③ 达人应得：'+base.toFixed(2)+' × '+rate+'% = <strong>'+result.toFixed(2)+' 元</strong></div><small>示例保留中间精度，最终结果四舍五入至分；这是应得金额，不表示已入账。</small>';
+}
+
+function tab(map){selectTab(map?'map':'business')}
+by('frontTab').onclick=()=>selectTab('front');show(3);
+by('businessTab').onclick=()=>selectTab('business');
+by('mapTab').onclick=()=>selectTab('map');
+document.querySelectorAll('[data-order-scenario]').forEach(button=>{
+ button.onclick=()=>by('frontFrame').contentWindow.postMessage({type:'order-scenario',hasOrders:button.dataset.orderScenario==='has'},'*');
+});
+document.querySelectorAll('[data-front-scene]').forEach(button=>{
+ button.onclick=()=>by('frontFrame').contentWindow.postMessage({type:'frontend-navigate',page:button.dataset.frontScene},'*');
+});
+window.addEventListener('message',event=>{
+ if(event.source!==by('frontFrame').contentWindow||event.data?.type!=='frontend-page')return;
+ frontPage=event.data.page;
+ by('frontLocation').textContent='当前页面 · '+(frontNames[frontPage]||'项目列表');
+});
+by('openRules').onclick=()=>{
+ const context=activeTab==='front'?'前端 / '+frontNames[frontPage]:activeTab==='business'?'后台 / '+model[step][0]:'整体业务流程';
+ by('ruleContext').textContent='当前查看 · '+context;
+ const old=by('contextRule');
+ if(old)old.remove();
+ const note=document.createElement('div');note.id='contextRule';note.className='box';
+ const frontRules={
+ list:'一级赛道读取统一配置，二级页面展示项目方管理选定的项目名称。点击查看，带项目标识进入该项目任务列表。',
+ project:'展示顶部搜索栏、项目名称、任务推荐区。月榜和剧单入口共用模块，左侧为已配置链接的「查看剧单」按钮，右侧为有订单时展示的月榜。无订单且未配置链接时隐藏整个模块。剧场数为 1，项目名称为爱奇艺。热门榜和任务推荐区按后台返回内容展示，点击任务进入任务详情。',
+ detail:'任务推荐区点击进入项目详情，展示任务内容及配置的分成比例。获取参与入口后衔接抖音绑定、接单和投稿。',
+ participate:'演示弹窗说明绑定、接单和挂链投稿。正式合作链接、二维码以及绑定状态接口仍待确认。'
+ };
+ note.textContent=activeTab==='front'?frontRules[frontPage]:activeTab==='business'?pageGuides[step].slice(1).join(' '):'四条泳道分别表示管理后台、右豹后端、设备前端和抖音侧。判断节点标注是与否的后续处理。';
+ by('ruleContext').after(note);by('rules').showModal();by('openRules').setAttribute('aria-expanded','true');
+};
+by('rules').addEventListener('close',()=>{by('openRules').setAttribute('aria-expanded','false');by('openRules').focus()});
+by('rules').addEventListener('click',event=>{if(event.target===by('rules')){const r=by('rules').getBoundingClientRect();if(event.clientX<r.left)by('rules').close()}});
+by('cancel').onclick=()=>by('edit').close();
+
+const flowLanes = ['管理后台 · 运营操作','右豹后端 · 数据与规则','终端前端 · 达人操作','抖音 / 第三方'];
+const flowNodes = [
+ ['partner',3,0,'合作授权与创建任务',0],
+ ['project',0,0,'配置二级页面项目名称',1],
+ ['saveProject',1,0,'保存项目方与关联配置',1],
+ ['sync',0,1,'更新同步任务 / 按路径新增',2],
+ ['fetch',1,1,'查询任务 ID → 查询任务详情',2],
+ ['success',1,2,'接口查询成功？',2,true],
+ ['error',0,2,'展示失败原因，重新同步',2],
+ ['exists',1,3,'任务 ID 已存在？',2,true],
+ ['update',1,4,'更新已有任务信息',2],
+ ['insert',1,5,'新增任务记录',2],
+ ['store',1,4,'任务入库，处理项目归属',2],
+ ['rule',0,5,'创建通用 / 任务自定义比例',3],
+ ['ruleSave',1,5,'保存规则，创建时间起生效',3],
+ ['publish',0,6,'勾选任务，批量上架',2],
+ ['isLive',1,6,'后端返回已上架？',2,true],
+ ['offline',0,7,'后台展示待上架 / 失败结果',2],
+ ['browse',2,7,'项目列表 → 项目页 → 任务详情',4],
+ ['join',2,8,'点击参与入口',4],
+ ['bound',3,8,'已完成所需绑定？',4,true],
+ ['bind',3,9,'通过合作链接绑定团长',4],
+ ['post',3,10,'接任务 → 发布挂链视频',4],
+ ['order',3,11,'观众付费 → 订单归因 / 数据提供',5],
+ ['ingest',1,11,'接收支持的数据，关联任务与用户',5],
+ ['customRule',1,12,'命中有效任务自定义规则？',3,true],
+ ['useCustom',0,13,'使用任务自定义比例',3],
+ ['generalRule',2,13,'匹配订单类型 × 用户身份通用规则',3],
+ ['calculate',1,14,'计算并保存当时规则与比例快照',5],
+ ['ledger',0,15,'流水管理展示与查询',5]
+];
+flowNodes.forEach(node=>{if(!['update','insert'].includes(node[0])&&node[2]>=4)node[2]+=2});
+const flowEdges = [
+ ['project','saveProject'],['partner','fetch'],['sync','fetch'],['fetch','success'],
+ ['success','error','否'],['error','sync','重试'],['success','exists','是'],
+ ['exists','update','是'],['exists','insert','否'],['update','store'],['insert','store'],
+ ['store','publish'],['rule','ruleSave'],['publish','isLive'],['isLive','offline','否'],
+ ['isLive','browse','是'],['browse','join'],['join','bound'],['bound','bind','否'],
+ ['bound','post','是'],['bind','post'],['post','order'],['order','ingest'],
+ ['ingest','customRule'],['customRule','useCustom','是'],['customRule','generalRule','否 / 已删除'],
+ ['useCustom','calculate'],['generalRule','calculate'],['calculate','ledger']
+];
+function renderFlow(){
+ const width=1120, lane=280, row=118, top=75;
+ const point=node=>({x:node[1]*lane+24,y:top+node[2]*row,w:232,h:62});
+ const nodes=new Map(flowNodes.map(node=>[node[0],node]));
+ const escape=escapeText;
+ const lines=flowEdges.map(([from,to,label])=>{
+  const a=point(nodes.get(from)), b=point(nodes.get(to));
+  let x1=a.x+a.w/2,y1=a.y+a.h,x2=b.x+b.w/2,y2=b.y;
+  if(a.y===b.y){x1=a.x+(b.x>a.x?a.w:0);y1=a.y+a.h/2;x2=b.x+(b.x>a.x?0:b.w);y2=b.y+b.h/2;}
+  if(to==='sync'){y1=a.y;y2=b.y+b.h}
+  const mid=(y1+y2)/2;
+  const skip=(from==='exists'&&to==='insert')||(from==='update'&&to==='store');
+  const side=a.x+(from==='exists'?a.w+14:-14);
+  const d=skip?'M'+(from==='exists'?a.x+a.w:a.x)+','+(a.y+31)+' H'+side+' V'+(b.y-15)+' H'+x2+' V'+y2:a.y===b.y?'M'+x1+','+y1+' H'+x2:'M'+x1+','+y1+' V'+mid+' H'+x2+' V'+y2;
+  return '<path d="'+d+'" fill="none" stroke="#8792a8" stroke-width="1.5" marker-end="url(#arrowhead)"/>'+
+  (label?'<text x="'+((x1+x2)/2)+'" y="'+(a.y===b.y?y1-9:mid-7)+'" text-anchor="middle" font-size="12" fill="#535f77" paint-order="stroke" stroke="white" stroke-width="5">'+escape(label)+'</text>':'');
+ }).join('');
+ const boxes=flowNodes.map(node=>{
+  const a=point(node);
+  const shape=node[5]?'<path d="M'+(a.x+18)+','+a.y+' H'+(a.x+a.w-18)+' L'+(a.x+a.w)+','+(a.y+31)+' L'+(a.x+a.w-18)+','+(a.y+62)+' H'+(a.x+18)+' L'+a.x+','+(a.y+31)+' Z" fill="#fff7e6" stroke="#e7b355"/>':'<rect x="'+a.x+'" y="'+a.y+'" width="'+a.w+'" height="'+a.h+'" rx="6" fill="white" stroke="#cbd3e3"/>';
+  return '<g>'+shape+'<foreignObject x="'+(a.x+14)+'" y="'+(a.y+5)+'" width="204" height="52"><div xmlns="http://www.w3.org/1999/xhtml" style="height:52px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;color:#28364d;line-height:1.5">'+escape(node[3])+'</div></foreignObject></g>';
+ }).join('');
+ by('map').innerHTML='<p class="muted">按角色查看操作与数据流向。浅黄色节点表示业务判断，箭头标注判断结果。</p><div style="overflow:auto;border:1px solid #dfe4ed;background:white"><svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="2220" viewBox="0 0 1120 2220" role="img" aria-label="管理后台、后端、终端前端与抖音侧业务流程图"><defs><marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#8792a8"/></marker></defs>'+flowLanes.map((name,i)=>'<rect x="'+(i*lane)+'" width="280" height="2220" fill="'+(i%2?'#f7f9fc':'#ffffff')+'"/><rect x="'+(i*lane)+'" width="280" height="52" fill="#eaf0fa"/><text x="'+(i*lane+140)+'" y="31" text-anchor="middle" fill="#28364d" font-size="14">'+name+'</text>').join('')+lines+boxes+'</svg></div><div class="box"><strong>规则变更路径</strong><p>后台删除任务自定义规则 → 后端停用已删除规则 → 后续流水匹配通用规则 → 后台新建自定义规则 → 后端按创建时间启用 → 后续流水优先匹配新规则。历史流水保留原规则快照。</p><p class="muted">订单明细、用户映射、二维码与绑定状态的具体接入方式待确认。无可用通用规则时的处理方式待确认。</p></div>';
+}
+renderFlow();
+
+const ruleDialog=by('rules');
+const ruleSections=[...ruleDialog.querySelectorAll('h3')];
+function switchRuleTab(front){
+ by('frontRulesTab').setAttribute('aria-selected',front);
+ by('adminRulesTab').setAttribute('aria-selected',!front);
+ ruleSections.forEach(title=>{
+  const visible=front?title.textContent==='终端前端':title.textContent!=='终端前端';
+  title.hidden=!visible;
+  if(title.nextElementSibling)title.nextElementSibling.hidden=!visible;
+ });
+}
+by('frontRulesTab').onclick=()=>{switchRuleTab(true);const context=by('contextRule');if(context)context.hidden=activeTab==='business'};
+by('adminRulesTab').onclick=()=>{switchRuleTab(false);const context=by('contextRule');if(context)context.hidden=activeTab!=='business'};
+by('reviewFullscreen').onclick=async()=>{
+ try {
+  if(document.fullscreenElement)await document.exitFullscreen();
+  else await document.documentElement.requestFullscreen();
+ }catch(error){toast('当前环境未支持全屏，请使用窗口最大化预览。')}
+};
+document.addEventListener('fullscreenchange',()=>by('reviewFullscreen').textContent=document.fullscreenElement?'退出全屏':'全屏预览');
+const originalOpenRules=by('openRules').onclick;
+by('openRules').onclick=()=>{switchRuleTab(activeTab!=='business');originalOpenRules()};
+
+
+by('scenarioNote').textContent=scenarioSteps.launch.note;
+show(1);
+selectTab('front');show(3);
+</script></body></html>

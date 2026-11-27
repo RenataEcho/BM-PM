@@ -18,9 +18,14 @@ python3 -m http.server 19889 --directory demo/iteration
 
 | 业务线 | 编号 | 需求 | 状态 | 页面 |
 |---|---|---|---|---|
+| 右豹主业务 | FR-XIAOYU-006 | 新增关键词查询操作 | 待开始 | [查看 Demo](demo/iteration/fr-xiaoyu-006.html) |
+| 右豹主业务 | FR-wen-006 | PC活动中心优化 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-wen-006) |
+| 右豹主业务 | FR-XIAOYU-004 | 批量传订单 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-004) |
+| 右豹主业务 | FR-XIAOYU-005 | 项目详情页新增工具列表 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-005) |
 | 右豹主业务 | FR-wen-005 | 一键代发用户定向约稿； | 开发中 | [查看 Demo](demo/iteration/fr-wen-005-directed.html?tab=fe) |
 | 右豹主业务 | FR-wen-004 | 代发素材类型领取门槛 | 开发中 | [查看 Demo](demo/iteration/fr-wen-004-claim.html?tab=fe) |
 | 右豹主业务 | FR-XIAOYU-002 | 推广文案 | 开发中 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-002) |
+| 右豹主业务 | FR-XIAOYU-003 | 小程序推广计划 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html#youbao/fr-xiaoyu-003) |
 | 右豹主业务 | FR-CoCo-003 | 团队项目数据分析 | 开发中 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-003) |
 | 右豹主业务 | FR-CoCo-007 | 钱包合并 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-007) |
 | 右豹主业务 | FR-CoCo-006 | 收益分配迭代 | 待开始 | [查看 Demo](demo/iteration/framework-shell.html?tab=fe#youbao/fr-coco-006) |
@@ -56,6 +61,8 @@ FR-CoCo-005 初始状态为「已上线」，属于「归档」。
 FR-CoCo-006 初始状态为「待开始」，属于「待开始」。页内需求规则可编辑并保存。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-coco-006)、[管理后台](http://127.0.0.1:19889/framework-shell.html?tab=admin#youbao/fr-coco-006)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-coco-006)。
 
 FR-CoCo-007 初始状态为「待开始」，属于「待开始」。手机画面按给定豹钱包 Demo 还原。页内需求规则可编辑并保存。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-coco-007)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-coco-007)。
+
+FR-wen-006 初始状态为「待开始」（2026-11-26 已确认），属于「待开始」；状态沿用上述 localStorage 保存范围。总览深链：[前端交互](http://127.0.0.1:19889/framework-shell.html?tab=fe#youbao/fr-wen-006)、[业务流程](http://127.0.0.1:19889/framework-shell.html?tab=flow#youbao/fr-wen-006)。本需求无管理后台增量；直接 Demo 为 [活动体验页](demo/iteration/fr-wen-006-activities.html?tab=fe)。
 
 ## 待编号需求草稿
 

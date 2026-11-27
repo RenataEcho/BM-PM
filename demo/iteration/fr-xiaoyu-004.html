@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>待分配编号 · FR-XIAOYU-004 · 批量传订单 · v1 当前</title>
+<style>
+:root{--blue:#2563eb;--blue-bg:#eff6ff;--border:#e8edf3;--bg:#f0f4f8;--text:#18222f;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;font:13px/1.55 Inter,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text)}button{font:inherit;cursor:pointer}
+.topnav{height:54px;display:flex;align-items:center;gap:22px;padding:0 20px;background:#fff;border-bottom:1px solid var(--border)}.brand{font-weight:700;color:var(--blue);text-decoration:none}.business{color:var(--muted)}
+.sidebar{position:fixed;top:54px;bottom:0;left:0;width:210px;background:#fff;border-right:1px solid var(--border);padding:16px 12px}.sidehead{font-weight:700;padding:8px 10px 16px}.nav{display:block;padding:9px 10px;text-decoration:none;color:#475569;border-radius:6px}.nav.active{background:var(--blue-bg);color:var(--blue);font-weight:600}.sidefoot{position:absolute;bottom:16px;color:#94a3b8;padding:8px 10px;font-size:11px}
+.main{margin-left:210px;padding:20px 24px 40px}.crumb{font-size:12px;color:#94a3b8;margin:0 0 12px}.head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}.head h1{font-size:19px;margin:0 0 3px}.head p{margin:0;color:var(--muted)}.draft{white-space:nowrap;border:1px solid #fed7aa;background:#fff7ed;color:#b45309;padding:4px 9px;border-radius:6px}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:14px}.tab{border:0;background:transparent;padding:10px 14px;color:#64748b;border-bottom:2px solid transparent}.tab[aria-selected=true]{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.view{background:#fff;border:1px solid var(--border);border-radius:10px;min-height:260px;overflow:hidden}.view[hidden]{display:none}.view-title{padding:14px 18px;border-bottom:1px solid var(--border);font-weight:700}.view-desc{font-size:12px;color:var(--muted);font-weight:400;margin-left:8px}.demo-frame{width:100%;height:1100px;border:0;display:block;background:#f5f6fa}.flow-wrap{height:calc(100vh - 250px);min-height:0;padding:8px;display:flex;align-items:center;justify-content:center;overflow:auto}.flow{display:block;width:auto;height:auto;max-width:100%;max-height:100%;aspect-ratio:1500/780;object-fit:contain}
+.viewbar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-right:16px}.viewbar .view-title{border:0}.dev-button{height:32px;padding:0 12px;border:1px solid #bfdbfe;background:#eff6ff;color:#2563eb;border-radius:6px}.dev-button:hover{background:#dbeafe}
+.drawer-overlay{position:fixed;inset:0;background:rgba(15,23,42,.38);z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}.drawer-overlay.open{opacity:1;pointer-events:auto}.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,92vw);background:#fff;z-index:51;box-shadow:-12px 0 36px #0f172a24;transform:translateX(100%);transition:transform .24s ease;display:flex;flex-direction:column}.drawer.open{transform:translateX(0)}.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}.drawer-head h2{font-size:16px;margin:0}.drawer-close{width:30px;height:30px;border:0;background:#f1f5f9;border-radius:6px;font-size:20px;color:#475569}.drawer-tabs{display:flex;gap:6px;padding:10px 20px 0;border-bottom:1px solid var(--border)}.drawer-tab{border:0;border-bottom:2px solid transparent;background:none;padding:9px 12px;color:#64748b}.drawer-tab[aria-selected=true]{color:var(--blue);border-color:var(--blue);font-weight:600}.drawer-body{padding:18px 20px;overflow:auto}.drawer-body[hidden]{display:none}.drawer-body h3{font-size:14px;margin:16px 0 7px}.drawer-body h3:first-child{margin-top:0}.drawer-body p,.drawer-body li{color:#475569}.drawer-body ul{padding-left:20px;margin:6px 0 16px}.doclinks{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}.doclinks a{color:var(--blue);text-decoration:none;padding:7px 10px;border:1px solid var(--border);border-radius:6px}.doclinks a:hover{background:var(--blue-bg)}body.drawer-open{overflow:hidden}
+@media(max-width:760px){.sidebar{width:64px;padding:12px 5px}.sidehead{font-size:0}.nav{font-size:0;text-align:center}.nav::first-letter{font-size:16px}.sidefoot{display:none}.main{margin-left:64px;padding:14px 10px}.head{align-items:flex-start}.draft{font-size:11px}.demo-frame{height:1200px}}
+</style>
+</head>
+<body>
+<header class="topnav"><a class="brand" href="framework-shell.html#youbao/overview">BM-PM · 迭代需求</a><span class="business">右豹主业务</span><span>本地交互原型</span></header>
+<aside class="sidebar"><div class="sidehead">右豹主业务</div><a class="nav" href="framework-shell.html#youbao/overview">概览</a><a class="nav" href="framework-shell.html#youbao/components">组件规范</a><a class="nav active" href="#interaction">批量传订单</a><div class="sidefoot">FR-XIAOYU-004<br>待开始 · 交互原型</div></aside>
+<main class="main">
+<p class="crumb">右豹主业务 / 迭代需求 / 批量传订单</p>
+<div class="head"><div><h1>FR-XIAOYU-004 · 批量传订单 · v1 当前</h1><p>批量上传订单表单，审核后由后台按项目分流。</p></div><span class="draft">待开始</span></div>
+<nav class="tabs" aria-label="需求视图"><button class="tab" aria-selected="true" data-view="interaction">后台交互流程</button><button class="tab" aria-selected="false" data-view="flow">流程图</button></nav>
+<section class="view" id="interaction"><div class="viewbar"><div class="view-title">后台交互流程<span class="view-desc">示例数据 · 本地演示</span></div><button class="dev-button" id="devOpen" aria-expanded="false" aria-controls="devDrawer">开发说明</button></div><iframe class="demo-frame" title="批量传订单交互页面" src="assets/fr-xiaoyu-004/index.html"></iframe></section>
+<section class="view" id="flow" hidden><div class="view-title">流程图<span class="view-desc">按前端页面操作与后端服务处理分层</span></div><div class="flow-wrap"><img class="flow" src="assets/fr-xiaoyu-004/docs/路径图.svg?v=20261116-3" alt="批量传订单前端与后端处理路径图"></div></section>
+<div class="drawer-overlay" id="devOverlay"></div>
+<aside class="drawer" id="devDrawer" role="dialog" aria-modal="true" aria-label="开发说明" aria-hidden="true">
+<div class="drawer-head"><h2>开发说明</h2><button class="drawer-close" id="devClose" aria-label="关闭开发说明">×</button></div>
+<nav class="drawer-tabs" aria-label="开发说明分类"><button class="drawer-tab" aria-selected="true" data-dev-tab="frontend">前端</button><button class="drawer-tab" aria-selected="false" data-dev-tab="backend">后端</button></nav>
+<article class="drawer-body" id="dev-frontend">
+<h3>前端交互</h3><ul><li>操作人员可一次选择单个或多个表单，在临时清单确认项目和文件后，通过一个「一键处理」入口提交全部表单。</li><li>按文件名映射项目；无法映射时，操作人员可为单条表单从已有项目中单选项目。</li><li>一键处理后每个表单在订单处理列表独立显示。处理中表示订单仍在校验，进度跟随后台校验结果更新。</li><li>仅处理完成表单提供「一键审核分发」；审核成功后后台按项目分流。部分失败、处理失败可下载带逐行失败原因的表单并重传，重传进度和结果更新原记录。</li><li>分发列表按每个审核成功表单组记录一行，展示分发成功或失败。成功行编辑为空，失败行提供重传并更新原组。</li><li>若分发重传前校验发现订单审核未完成，先显示二次确认；取消不改变记录。</li></ul><h3>待确认</h3><p>文件名映射规则、失败表单重传时成功订单的合并与去重策略、未审核重传确认的触发条件与权限文案。</p>
+<div class="doclinks"><a href="assets/fr-xiaoyu-004/docs/需求单.md">需求单</a><a href="assets/fr-xiaoyu-004/docs/EXPERIENCE.md">交互约定</a><a href="assets/fr-xiaoyu-004/docs/DESIGN.md">界面说明</a></div>
+</article>
+<article class="drawer-body" id="dev-backend" hidden>
+<h3>后端职责</h3><ul><li>校验文件、项目映射结果、项目权限和每个文件独立任务，保存源文件与上传审计。</li><li>解析 CSV/XLS/XLSX，返回成功与失败数据、订单量、金额、失败原因及可查询的校验进度。</li><li>部分失败、处理失败需区分上传失败与关键词归因校验异常，并为失败行返回可读原因。</li><li>仅处理完成表单可进入一键审核分发；审核通过后按项目 ID 分流整组审核成功订单。</li><li>分发列表按表单组记录一行，只有审核成功订单表单进入列表。审核状态与分发状态独立维护。</li><li>接口报错或订单分流异常造成分发失败时支持重传，关联并更新原分发组，保证幂等。</li><li>若重传校验发现审核未完成，后端返回状态供前端二次确认；服务端仍需重新校验权限和状态。</li></ul>
+<h3>待研发评审</h3><p>上传及任务接口、进度推送方式、文件解析规则、订单去重键、失败行格式、审核幂等、分发重试与审计字段。</p><h3>规范状态</h3><p>复用需求池组件示例中的按钮、状态标签、表格和弹窗模式。工作区未提供正式后台 UI 规范文件，视觉合规需在规范补齐后复核。</p>
+<div class="doclinks"><a href="assets/fr-xiaoyu-004/docs/BUILD.md">完整开发说明</a><a href="assets/fr-xiaoyu-004/docs/SPEC.md">数据与行为合同</a><a href="assets/fr-xiaoyu-004/docs/prd.md">PRD 草稿</a></div>
+</article>
+</aside>
+</main>
+<script>
+const tabs=[...document.querySelectorAll('.tab')];
+tabs.forEach(tab=>tab.addEventListener('click',()=>{tabs.forEach(item=>item.setAttribute('aria-selected',item===tab?'true':'false'));document.querySelectorAll('.view').forEach(view=>view.hidden=view.id!==tab.dataset.view);}));
+const initialTab=new URLSearchParams(location.search).get('tab');
+if(initialTab==='flow')document.querySelector('[data-view=flow]').click();
+const drawer=document.querySelector('#devDrawer');const overlay=document.querySelector('#devOverlay');const openButton=document.querySelector('#devOpen');let previousFocus;
+function openDrawer(){previousFocus=document.activeElement;drawer.classList.add('open');overlay.classList.add('open');drawer.setAttribute('aria-hidden','false');document.body.classList.add('drawer-open');openButton.setAttribute('aria-expanded','true');document.querySelector('#devClose').focus();}
+function closeDrawer(){drawer.classList.remove('open');overlay.classList.remove('open');drawer.setAttribute('aria-hidden','true');document.body.classList.remove('drawer-open');openButton.setAttribute('aria-expanded','false');if(previousFocus)previousFocus.focus();}
+openButton.addEventListener('click',openDrawer);document.querySelector('#devClose').addEventListener('click',closeDrawer);overlay.addEventListener('click',closeDrawer);document.addEventListener('keydown',event=>{if(event.key==='Escape'&&drawer.classList.contains('open'))closeDrawer();});
+const devTabs=[...document.querySelectorAll('.drawer-tab')];devTabs.forEach(tab=>tab.addEventListener('click',()=>{devTabs.forEach(item=>item.setAttribute('aria-selected',item===tab?'true':'false'));document.querySelectorAll('.drawer-body').forEach(body=>body.hidden=body.id!=='dev-'+tab.dataset.devTab);}));
+</script>
+</body></html>
